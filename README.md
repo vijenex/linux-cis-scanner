@@ -6,8 +6,8 @@
  ╚████╔╝ ██║╚█████╔╝███████╗██║ ╚████║███████╗██╔╝ ██╗
   ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
 
-                    Linux CIS Audit Platform
-           Powered by Vijenex Security Platform
+                 Vijenex CIS Scanner
+           Enterprise Linux Security Compliance
 ```
 
 # Linux CIS Audit Platform
@@ -30,6 +30,9 @@ This platform provides automated security compliance auditing for Linux systems 
 - **🚫 Audit-Only**: No system modifications - safe to run in production
 - **⚡ Automated**: Minimal user interaction required
 - **🐍 Python-Based**: Cross-platform compatibility and easy maintenance
+- **🎨 Colorful Interface**: Professional CLI with color-coded results and progress indicators
+- **🚀 Enterprise Installation**: OpenSCAP-style system-wide installation with man pages
+- **📊 Real-time Progress**: Live scan progress with emoji status indicators
 
 ### 🎯 Supported Check Types
 
@@ -77,35 +80,40 @@ This platform provides automated security compliance auditing for Linux systems 
 #### System-wide Installation (Recommended)
 ```bash
 # Clone the repository
-git clone https://github.com/Vijenex/Linux-CIS-Audit.git
-cd Linux-CIS-Audit
+git clone https://github.com/vijenex/linux-cis-scanner.git
+cd linux-cis-scanner
 
-# Install system-wide (creates vijenex-cis command)
+# Make installer executable and install
+chmod +x install.sh
 sudo ./install.sh
 ```
 
 ### Usage
 
-#### Enterprise CLI Commands
+#### 🚀 Enterprise CLI Commands
 ```bash
-# Complete compliance scan
+# Complete compliance scan with colorful output
 sudo vijenex-cis
 
-# Scan with Level 2 profile (more stringent)
+# Level 2 profile scan (more stringent security controls)
 sudo vijenex-cis --profile Level2
 
-# Custom output directory
+# Custom output directory for reports
 sudo vijenex-cis --output /var/log/security-audit
 
-# Generate specific report format
-sudo vijenex-cis --format html
-sudo vijenex-cis --format csv
+# Generate specific report formats
+sudo vijenex-cis --format html    # HTML report only
+sudo vijenex-cis --format csv     # CSV report only
+sudo vijenex-cis --format both    # Both formats (default)
 
-# Scan specific milestones
+# Scan specific milestone sections
 sudo vijenex-cis --milestones milestone-1.json milestone-2.json
 
-# Help and options
+# Get help and view all options
 vijenex-cis --help
+
+# View manual page
+man vijenex-cis
 ```
 
 #### Alternative Usage (without installation)
@@ -135,6 +143,14 @@ sudo python3 scripts/vijenex-cis.py --format csv --output-dir ./reports
 ## 📊 Report Output
 
 The tool generates comprehensive reports with detailed system information:
+
+### 🎨 **Colorful CLI Output**
+- **🔵 Beautiful ASCII Banner**: Professional Vijenex branding
+- **🟢 Green ✓**: PASSED controls
+- **🔴 Red ✗**: FAILED controls  
+- **🟡 Yellow ⚠**: MANUAL verification required
+- **🔵 Cyan ?**: SKIPPED controls
+- **📊 Real-time Progress**: Live scan status with emojis
 
 ### 📄 HTML Report (`linux-cis-report.html`)
 - **System Information**: Distribution, kernel, IP address, scan date
