@@ -2712,25 +2712,65 @@ class LinuxCISScanner:
         if milestone_files is None:
             milestone_files = [f for f in os.listdir(self.milestones_dir) if f.endswith('.json')]
         
-        print(f"Starting Linux CIS compliance scan...")
-        print(f"Profile: {self.profile}")
-        print(f"Distribution: {self.system_info['distribution']}")
-        print(f"Milestones: {len(milestone_files)}")
-        print("-" * 60)
+        # Color codes
+        GREEN = '\033[92m'
+        BLUE = '\033[94m'
+        YELLOW = '\033[93m'
+        RED = '\033[91m'
+        CYAN = '\033[96m'
+        BOLD = '\033[1m'
+        RESET = '\033[0m'
+        
+        # Display signature
+        print(f"{CYAN}{BOLD}")
+        print("██╗   ██╗██╗     ██╗███████╗███╗   ██╗███████╗██╗  ██╗")
+        print("██║   ██║██║     ██║██╔════╝████╗  ██║██╔════╝╚██╗██╔╝")
+        print("██║   ██║██║     ██║█████╗  ██╔██╗ ██║█████╗   ╚███╔╝ ")
+        print("╚██╗ ██╔╝██║██   ██║██╔══╝  ██║╚██╗██║██╔══╝   ██╔██╗ ")
+        print(" ╚████╔╝ ██║╚█████╔╝███████╗██║ ╚████║███████╗██╔╝ ██╗")
+        print("  ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝")
+        print(f"{RESET}")
+        print(f"{BOLD}{BLUE}                 Vijenex CIS Scanner{RESET}")
+        print(f"{YELLOW}           Enterprise Linux Security Compliance{RESET}")
+        print(f"{CYAN}═" * 60 + f"{RESET}")
+        
+        print(f"{BOLD}🔍 Starting CIS Compliance Scan...{RESET}")
+        print(f"{BLUE}📋 Profile:{RESET} {YELLOW}{self.profile}{RESET}")
+        print(f"{BLUE}🐧 Distribution:{RESET} {GREEN}{self.system_info['distribution']}{RESET}")
+        print(f"{BLUE}📁 Milestones:{RESET} {CYAN}{len(milestone_files)}{RESET}")
+        print(f"{CYAN}─" * 60 + f"{RESET}")
         
         for milestone_file in milestone_files:
-            print(f"Processing {milestone_file}...")
+            print(f"{BOLD}{BLUE}📄 Processing {milestone_file}...{RESET}")
             controls = self.load_milestone(milestone_file)
             
             for control in controls:
                 result = self.execute_control(control)
                 self.results.append(result)
                 
-                status_symbol = "✓" if result["status"] == "PASS" else "✗" if result["status"] == "FAIL" else "?"
-                print(f"  {status_symbol} {result['id']}: {result['title'][:50]}...")
+                if result["status"] == "PASS":
+                    status_symbol = f"{GREEN}✓{RESET}"
+                elif result["status"] == "FAIL":
+                    status_symbol = f"{RED}✗{RESET}"
+                elif result["status"] == "MANUAL":
+                    status_symbol = f"{YELLOW}⚠{RESET}"
+                else:
+                    status_symbol = f"{CYAN}?{RESET}"
+                
+                print(f"  {status_symbol} {CYAN}{result['id']}{RESET}: {result['title'][:50]}...")
         
-        print("-" * 60)
-        print(f"Scan completed. Total controls: {len(self.results)}")
+        print(f"{CYAN}─" * 60 + f"{RESET}")
+        
+        # Summary with colors
+        pass_count = sum(1 for r in self.results if r["status"] == "PASS")
+        fail_count = sum(1 for r in self.results if r["status"] == "FAIL")
+        manual_count = sum(1 for r in self.results if r["status"] == "MANUAL")
+        
+        print(f"{BOLD}🎯 Scan Completed Successfully!{RESET}")
+        print(f"{GREEN}✓ Passed:{RESET} {GREEN}{pass_count}{RESET}")
+        print(f"{RED}✗ Failed:{RESET} {RED}{fail_count}{RESET}")
+        print(f"{YELLOW}⚠ Manual:{RESET} {YELLOW}{manual_count}{RESET}")
+        print(f"{BOLD}📊 Total Controls:{RESET} {CYAN}{len(self.results)}{RESET}")
     
     def generate_html_report(self) -> str:
         """Generate HTML compliance report"""
@@ -2872,17 +2912,23 @@ def main():
     scanner = LinuxCISScanner(args.output_dir, args.profile)
     scanner.scan_milestones(args.milestones)
     
-    print("\nGenerating reports...")
+    GREEN = '\033[92m'
+    BLUE = '\033[94m'
+    YELLOW = '\033[93m'
+    BOLD = '\033[1m'
+    RESET = '\033[0m'
+    
+    print(f"\n{BOLD}{BLUE}📊 Generating reports...{RESET}")
     
     if args.format in ['html', 'both']:
         html_report = scanner.generate_html_report()
-        print(f"HTML report: {html_report}")
+        print(f"{GREEN}📄 HTML report:{RESET} {html_report}")
     
     if args.format in ['csv', 'both']:
         csv_report = scanner.generate_csv_report()
-        print(f"CSV report: {csv_report}")
+        print(f"{GREEN}📊 CSV report:{RESET} {csv_report}")
     
-    print("\nScan completed successfully!")
+    print(f"\n{BOLD}{GREEN}🎉 Vijenex CIS scan completed successfully!{RESET}")
 
 if __name__ == "__main__":
     main()
