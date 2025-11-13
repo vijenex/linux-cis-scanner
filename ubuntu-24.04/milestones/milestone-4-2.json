@@ -1,0 +1,98 @@
+{
+  "milestone": "4.2",
+  "title": "Configure UncomplicatedFirewall",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 4.2: Configure UncomplicatedFirewall",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "4.2.1",
+      "title": "Ensure ufw is installed",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "The Uncomplicated Firewall (ufw) is a frontend for iptables and is particularly well-suited for host-based firewalls.",
+      "impact": "If a firewall utility is not installed, then the ports and services on the machine will be accessible to any source.",
+      "remediation": "Install ufw: apt install ufw",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Package",
+      "package_name": "ufw",
+      "should_be_installed": true
+    },
+    {
+      "id": "4.2.2",
+      "title": "Ensure iptables-persistent is not installed with ufw",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "The iptables-persistent package allows for saving of iptables rules so that they will be automatically loaded when the system boots.",
+      "impact": "Running both ufw and the services included in the iptables-persistent package may lead to conflict.",
+      "remediation": "Remove iptables-persistent: apt purge iptables-persistent",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Package",
+      "package_name": "iptables-persistent",
+      "should_be_installed": false
+    },
+    {
+      "id": "4.2.3",
+      "title": "Ensure ufw service is enabled",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "UncomplicatedFirewall (ufw) is a frontend for iptables. ufw provides a framework for managing netfilter, as well as a command-line and available graphical user interface for manipulating the firewall.",
+      "impact": "Without a firewall, the system would be more susceptible to malicious activity from users and programs.",
+      "remediation": "Enable ufw: ufw --force enable",
+      "profile": "Level1",
+      "automated": true,
+      "type": "UFWStatus",
+      "expected_status": "active"
+    },
+    {
+      "id": "4.2.4",
+      "title": "Ensure ufw loopback traffic is configured",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network.",
+      "impact": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system. The loopback interface is the only place that loopback network traffic should be seen, all other interfaces should ignore traffic on this network as an anti-spoofing measure.",
+      "remediation": "Run the following commands to implement the loopback rules: ufw allow in on lo && ufw allow out on lo && ufw deny in from 127.0.0.0/8 && ufw deny in from ::1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "UFWLoopback",
+      "expected_rules": ["allow in on lo", "allow out on lo", "deny in from 127.0.0.0/8", "deny in from ::1"]
+    },
+    {
+      "id": "4.2.5",
+      "title": "Ensure ufw outbound connections are configured",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "Configure the firewall rules for new outbound connections.",
+      "impact": "If rules are not in place for new outbound connections all packets will be dropped by the default policy preventing network usage.",
+      "remediation": "Configure ufw in accordance with site policy. The following commands will implement a policy to allow all outbound connections on all interfaces: ufw allow out on all",
+      "profile": "Level1",
+      "automated": false,
+      "type": "Manual",
+      "expected": "UFW outbound connections configured according to site policy"
+    },
+    {
+      "id": "4.2.6",
+      "title": "Ensure ufw firewall rules exist for all open ports",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "Any ports that have been opened on non-loopback addresses need firewall rules to govern traffic.",
+      "impact": "Without a firewall rule configured for open ports, the firewall will be bypassed and the port will behave as if there were no firewall running.",
+      "remediation": "For each port identified in the audit which should not have a service listening on it, determine what program is using the port and stop and disable the associated service. If the port is required, configure a firewall rule to allow the service.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "UFWOpenPorts",
+      "check_open_ports": true
+    },
+    {
+      "id": "4.2.7",
+      "title": "Ensure ufw default deny firewall policy",
+      "section": "4.2 Configure UncomplicatedFirewall",
+      "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.",
+      "impact": "With a default accept policy the firewall will accept any packet that is not configured to be denied. It is easier to white list acceptable usage than to black list unacceptable usage.",
+      "remediation": "Run the following commands to implement a default deny policy: ufw default deny incoming && ufw default deny outgoing && ufw default deny routed",
+      "profile": "Level1",
+      "automated": true,
+      "type": "UFWDefaultPolicy",
+      "expected_policies": {
+        "incoming": "deny",
+        "outgoing": "deny", 
+        "routed": "deny"
+      }
+    }
+  ]
+}

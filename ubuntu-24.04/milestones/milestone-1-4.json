@@ -1,0 +1,37 @@
+{
+  "milestone": "1.4",
+  "title": "Configure Bootloader",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 1.4: Configure Bootloader",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "1.4.1",
+      "title": "Ensure bootloader password is set",
+      "section": "1.4 Configure Bootloader",
+      "description": "Setting the boot loader password will require that anyone rebooting with modified boot parameters will require the boot loader password to do so.",
+      "impact": "Requiring a boot password upon execution of the boot loader will prevent an unauthorized user from entering user single mode or changing the boot parameters during the boot process.",
+      "remediation": "Create an encrypted password with grub-mkpasswd-pbkdf2 and configure GRUB to use it.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ConfigFile",
+      "file_path": "/boot/grub/grub.cfg",
+      "pattern": "set superusers=",
+      "expected_match": true
+    },
+    {
+      "id": "1.4.2",
+      "title": "Ensure access to bootloader config is configured",
+      "section": "1.4 Configure Bootloader",
+      "description": "Setting the permissions to read and write for root only prevents non-root users from seeing the boot parameters or changing them.",
+      "impact": "Setting the permissions to read and write for root only prevents non-root users from seeing the boot parameters or changing them.",
+      "remediation": "Run the following commands to set permissions on your grub configuration files.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FilePermission",
+      "file_path": "/boot/grub/grub.cfg",
+      "expected_mode": "600",
+      "expected_owner": "root",
+      "expected_group": "root"
+    }
+  ]
+}

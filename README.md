@@ -1,0 +1,301 @@
+```
+██╗   ██╗██╗     ██╗███████╗███╗   ██╗███████╗██╗  ██╗
+██║   ██║██║     ██║██╔════╝████╗  ██║██╔════╝╚██╗██╔╝
+██║   ██║██║     ██║█████╗  ██╔██╗ ██║█████╗   ╚███╔╝ 
+╚██╗ ██╔╝██║██   ██║██╔══╝  ██║╚██╗██║██╔══╝   ██╔██╗ 
+ ╚████╔╝ ██║╚█████╔╝███████╗██║ ╚████║███████╗██╔╝ ██╗
+  ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+
+                    Linux CIS Audit Platform
+           Powered by Vijenex Security Platform
+```
+
+# Linux CIS Audit Platform
+
+A comprehensive Python-based security auditing platform for Linux systems based on official Center for Internet Security (CIS) benchmarks. Supports multiple Linux distributions with dedicated audit modules.
+
+## 🔓 **OPEN SOURCE SOFTWARE**
+This repository contains open source software under MIT License. **CONTRIBUTIONS WELCOME**. See [LICENSE](LICENSE) for full terms.
+
+## 📋 Overview
+
+This platform provides automated security compliance auditing for Linux systems against official CIS (Center for Internet Security) benchmarks. It performs comprehensive security assessments without making any system changes - **audit-only mode**.
+
+### ✨ Key Features
+
+- **🐧 Multi-Distribution Support**: Dedicated modules for Ubuntu, RHEL, CentOS, Debian
+- **📋 Official CIS Compliance**: Strictly follows official CIS benchmark documentation
+- **🛡️ Multiple Check Types**: File permissions, services, kernel parameters, packages, configurations
+- **📊 Detailed Reporting**: Generates HTML and CSV reports with remediation guidance
+- **🚫 Audit-Only**: No system modifications - safe to run in production
+- **⚡ Automated**: Minimal user interaction required
+- **🐍 Python-Based**: Cross-platform compatibility and easy maintenance
+
+### 🎯 Supported Check Types
+
+| Type | Description | Coverage |
+|------|-------------|----------|
+| **FilePermission** | File and directory permissions/ownership | System files, configs, executables |
+| **Service** | Systemd service status and configuration | Critical services, unnecessary services |
+| **KernelParameter** | Kernel runtime parameters via sysctl | Network security, memory protection |
+| **Package** | Installed package verification | Required/prohibited software |
+| **ConfigFile** | Configuration file content validation | Security settings, policy enforcement |
+| **Manual** | Human verification required | Complex configurations, policy reviews |
+
+## 🗂️ Repository Structure
+
+```
+├── ubuntu-24.04/              # Ubuntu 24.04 LTS CIS audit tools
+│   ├── scripts/
+│   │   └── vijenex-cis.py           # Main scanner engine
+│   ├── milestones/                  # CIS control definitions
+│   │   ├── milestone-1.json         # Initial Setup
+│   │   ├── milestone-2.json         # Services
+│   │   ├── milestone-3.json         # Network Configuration
+│   │   ├── milestone-4.json         # Logging and Auditing
+│   │   ├── milestone-5.json         # Access, Authentication
+│   │   └── milestone-6.json         # System Maintenance
+│   ├── documentation/               # Official CIS benchmark PDF
+│   └── reports/                     # Generated audit reports
+├── ubuntu-22.04/              # Ubuntu 22.04 LTS tools
+├── rhel-8/                    # Red Hat Enterprise Linux 8 tools
+├── rhel-9/                    # Red Hat Enterprise Linux 9 tools
+├── centos-7/                  # CentOS 7 tools
+├── debian-11/                 # Debian 11 tools
+└── LICENSE                    # MIT License
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Supported Linux distribution (see distribution-specific folders)
+- Python 3.6 or later
+- **Root privileges** (recommended for complete scanning)
+
+### Installation
+
+#### System-wide Installation (Recommended)
+```bash
+# Clone the repository
+git clone https://github.com/Vijenex/Linux-CIS-Audit.git
+cd Linux-CIS-Audit
+
+# Install system-wide (creates vijenex-cis command)
+sudo ./install.sh
+```
+
+### Usage
+
+#### Enterprise CLI Commands
+```bash
+# Complete compliance scan
+sudo vijenex-cis
+
+# Scan with Level 2 profile (more stringent)
+sudo vijenex-cis --profile Level2
+
+# Custom output directory
+sudo vijenex-cis --output /var/log/security-audit
+
+# Generate specific report format
+sudo vijenex-cis --format html
+sudo vijenex-cis --format csv
+
+# Scan specific milestones
+sudo vijenex-cis --milestones milestone-1.json milestone-2.json
+
+# Help and options
+vijenex-cis --help
+```
+
+#### Alternative Usage (without installation)
+```bash
+# Navigate to your distribution folder (e.g., ubuntu-24.04)
+cd ubuntu-24.04
+
+# Run directly with Python
+sudo python3 scripts/vijenex-cis.py --output-dir ./reports --profile Level1
+
+# Generate only HTML report
+sudo python3 scripts/vijenex-cis.py --format html --output-dir ./reports
+
+# Generate only CSV report
+sudo python3 scripts/vijenex-cis.py --format csv --output-dir ./reports
+```
+
+### Parameters
+
+| Parameter | Description | Default | Example |
+|-----------|-------------|---------|---------|
+| `--output-dir` | Report output directory | `./reports` | `--output-dir /var/log/audit` |
+| `--profile` | CIS profile level | `Level1` | `--profile Level2` |
+| `--format` | Report format | `both` | `--format html` or `--format csv` |
+| `--milestones` | Specific milestone files | All files | `--milestones milestone-1.json` |
+
+## 📊 Report Output
+
+The tool generates comprehensive reports with detailed system information:
+
+### 📄 HTML Report (`linux-cis-report.html`)
+- **System Information**: Distribution, kernel, IP address, scan date
+- **Visual dashboard** with pass/fail summary
+- **Detailed findings** with descriptions and impact
+- **Remediation guidance** for each control
+- **Color-coded results** for easy identification
+
+### 📈 CSV Report (`linux-cis-results.csv`)
+- **Structured data** for analysis and tracking
+- **Import-friendly** format for spreadsheet applications
+- **Compliance tracking** over time
+- **Integration** with security dashboards
+
+### 📚 CIS Documentation
+- **Official CIS benchmark guide** reference
+- **Detailed remediation steps** for each control
+- **Best practice recommendations**
+
+## 🎯 CIS Coverage
+
+### Currently Supported Distributions
+
+#### Ubuntu 20.04 LTS
+| Section | Controls | Coverage |
+|---------|----------|----------|
+| **1** Initial Setup | 20+ | Filesystem, updates, integrity, boot security |
+| **2** Services | 15+ | Service configuration and hardening |
+| **3** Network Configuration | 25+ | Network parameters and firewall |
+| **4** Logging and Auditing | 20+ | System logging and audit configuration |
+| **5** Access, Authentication | 30+ | User accounts, SSH, PAM configuration |
+| **6** System Maintenance | 10+ | System file permissions and maintenance |
+
+**Total: 120+ Security Controls**
+
+### Planned Distributions
+
+- **Ubuntu 22.04 LTS** - Coming soon
+- **Red Hat Enterprise Linux 8** - Coming soon
+- **Red Hat Enterprise Linux 9** - Coming soon
+- **CentOS 7** - Coming soon
+- **Debian 11** - Coming soon
+
+> All implementations strictly follow official CIS benchmark documentation for each respective distribution version.
+
+## 🔧 Understanding Results
+
+### Result Status
+- ✅ **PASS**: Control is properly configured
+- ❌ **FAIL**: Control needs attention or configuration
+- ⚠️ **MANUAL**: Requires human verification (not a failure)
+- ⏭️ **SKIPPED**: Not applicable to selected profile
+
+### Common "FAIL" Reasons
+1. **Default Linux Settings**: Fresh installations lack security hardening
+2. **Missing Packages**: Security tools not installed (AIDE, fail2ban, etc.)
+3. **Permissive Permissions**: Default file permissions too open
+4. **Disabled Security Features**: ASLR, core dump restrictions not configured
+5. **Service Configuration**: Unnecessary services enabled
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+#### Permission Denied Errors
+```bash
+# Run with sudo for complete scanning
+sudo python3 scripts/linux-cis-scanner.py
+```
+
+#### Python Not Found
+```bash
+# Install Python 3
+sudo apt update && sudo apt install python3  # Ubuntu/Debian
+sudo yum install python3                     # RHEL/CentOS
+```
+
+#### Missing Dependencies
+```bash
+# Most checks use built-in Python modules
+# No additional dependencies required
+```
+
+#### High Failure Rate
+- **Expected behavior** for default Linux installations
+- Use reports to identify actual security gaps
+- Focus on "PASS" vs "MANUAL" vs genuine "FAIL" items
+- Prioritize based on your security requirements
+
+## 📋 Best Practices
+
+### Before Running
+1. **Backup system** (recommended for production)
+2. **Review scope** - start with specific milestones
+3. **Plan remediation** - have change management process ready
+4. **Test in non-production** first
+
+### After Running
+1. **Review HTML report** for executive summary
+2. **Analyze CSV data** for detailed findings
+3. **Prioritize fixes** based on risk and impact
+4. **Document exceptions** for accepted risks
+5. **Schedule regular scans** for compliance monitoring
+
+### Security Considerations
+- **Run as root** for complete system access
+- **Secure report files** - contain sensitive system information
+- **Regular updates** - keep CIS benchmarks current
+- **Validate findings** in your specific environment
+
+## 🤝 Contributing
+
+### 🐛 Issue Reporting
+We welcome issue reports and feature requests:
+
+1. **Search existing issues** before creating new ones
+2. **Use issue templates** when available
+3. **Provide detailed information**:
+   - Linux distribution and version
+   - Python version
+   - Error messages (full text)
+   - Steps to reproduce
+   - Expected vs actual behavior
+
+### 📝 Issue Guidelines
+- **Security vulnerabilities**: Contact maintainers privately
+- **Feature requests**: Describe use case and business value
+- **Bug reports**: Include system information and logs
+- **Questions**: Check documentation first
+
+## 📞 Support
+
+- **Issues**: Use GitHub Issues for bug reports and feature requests
+- **Documentation**: Refer to included CIS benchmark guides
+- **Updates**: Watch repository for new releases
+
+## ⚖️ Legal
+
+### License
+This software is open source under MIT License. See [LICENSE](LICENSE) for complete terms.
+
+### Disclaimer
+- **No warranty** provided - use at your own risk
+- **Audit-only tool** - makes no system changes
+- **CIS compliance** - based on official CIS benchmarks
+- **Your responsibility** - validate findings in your environment
+
+### CIS Benchmarks
+This tool implements controls from CIS (Center for Internet Security) benchmarks. CIS benchmarks are developed by cybersecurity experts and are freely available at [cisecurity.org](https://www.cisecurity.org/).
+
+---
+
+## 🏷️ Version Information
+
+- **Platform Version**: 1.0.0
+- **Supported Distributions**: Ubuntu 20.04 LTS (more coming soon)
+- **CIS Compliance**: Based on official CIS benchmark documentation
+- **Last Updated**: November 2024
+
+---
+
+**⭐ If this tool helps secure your Linux environment, please star the repository!**
+
+**🔓 Remember: This is open source software under MIT License - contributions welcome!**

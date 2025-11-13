@@ -1,0 +1,171 @@
+{
+  "milestone": "3.3",
+  "title": "Configure Network Kernel Parameters",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 3.3: Configure Network Kernel Parameters",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "3.3.1",
+      "title": "Ensure ip forwarding is disabled",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "The net.ipv4.ip_forward and net.ipv6.conf.all.forwarding flags are used to tell the system whether it can forward packets or not.",
+      "impact": "Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.ip_forward = 0 and net.ipv6.conf.all.forwarding = 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.ip_forward", "expected_value": "0"},
+        {"name": "net.ipv6.conf.all.forwarding", "expected_value": "0"}
+      ]
+    },
+    {
+      "id": "3.3.2",
+      "title": "Ensure packet redirect sending is disabled",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "ICMP Redirects are used to send routing information to other hosts.",
+      "impact": "An attacker could use a compromised host to send invalid ICMP redirects to other router devices in an attempt to corrupt routing and have users access a system set up by the attacker as opposed to a valid system.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.conf.all.send_redirects = 0 and net.ipv4.conf.default.send_redirects = 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.conf.all.send_redirects", "expected_value": "0"},
+        {"name": "net.ipv4.conf.default.send_redirects", "expected_value": "0"}
+      ]
+    },
+    {
+      "id": "3.3.3",
+      "title": "Ensure bogus icmp responses are ignored",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "Setting net.ipv4.icmp_ignore_bogus_error_responses to 1 prevents the kernel from logging bogus responses (RFC-1122 non-compliant) from broadcast reframes, keeping file systems from filling up with useless log messages.",
+      "impact": "Some routers (and some attackers) will send responses that violate RFC-1122 and attempt to fill up a log file system with many useless error messages.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.icmp_ignore_bogus_error_responses = 1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelParameter",
+      "parameter": "net.ipv4.icmp_ignore_bogus_error_responses",
+      "expected_value": "1"
+    },
+    {
+      "id": "3.3.4",
+      "title": "Ensure broadcast icmp requests are ignored",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "Setting net.ipv4.icmp_echo_ignore_broadcasts to 1 prevents the system from responding to ICMP pings and timestamp requests from networks.",
+      "impact": "Accepting ICMP echo and timestamp requests with broadcast or multicast destinations for your network could be used to trick your host into starting (or participating) in a Smurf attack.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.icmp_echo_ignore_broadcasts = 1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelParameter",
+      "parameter": "net.ipv4.icmp_echo_ignore_broadcasts",
+      "expected_value": "1"
+    },
+    {
+      "id": "3.3.5",
+      "title": "Ensure icmp redirects are not accepted",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "ICMP redirect messages are packets that convey routing information and tell your host (acting as a router) to send packets via an alternate path.",
+      "impact": "Attackers could use bogus ICMP redirect messages to maliciously alter the system routing tables and get them to send packets to incorrect networks and allow your system packets to be captured.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.conf.all.accept_redirects = 0, net.ipv4.conf.default.accept_redirects = 0, net.ipv6.conf.all.accept_redirects = 0, net.ipv6.conf.default.accept_redirects = 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.conf.all.accept_redirects", "expected_value": "0"},
+        {"name": "net.ipv4.conf.default.accept_redirects", "expected_value": "0"},
+        {"name": "net.ipv6.conf.all.accept_redirects", "expected_value": "0"},
+        {"name": "net.ipv6.conf.default.accept_redirects", "expected_value": "0"}
+      ]
+    },
+    {
+      "id": "3.3.6",
+      "title": "Ensure secure icmp redirects are not accepted",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "Secure ICMP redirects are the same as ICMP redirects, except they come from gateways listed on the default gateway list.",
+      "impact": "It is still possible for even known gateways to be compromised. Setting net.ipv4.conf.all.secure_redirects to 0 protects the system from routing table updates by possibly compromised known gateways.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.conf.all.secure_redirects = 0 and net.ipv4.conf.default.secure_redirects = 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.conf.all.secure_redirects", "expected_value": "0"},
+        {"name": "net.ipv4.conf.default.secure_redirects", "expected_value": "0"}
+      ]
+    },
+    {
+      "id": "3.3.7",
+      "title": "Ensure reverse path filtering is enabled",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "Setting net.ipv4.conf.all.rp_filter and net.ipv4.conf.default.rp_filter to 1 forces the Linux kernel to utilize reverse path filtering on a received packet to determine if the packet was valid.",
+      "impact": "Setting these flags is a good way to deter attackers from sending your system bogus packets that cannot be responded to. One instance where this feature breaks down is if asymmetrical routing is employed.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.conf.all.rp_filter = 1 and net.ipv4.conf.default.rp_filter = 1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.conf.all.rp_filter", "expected_value": "1"},
+        {"name": "net.ipv4.conf.default.rp_filter", "expected_value": "1"}
+      ]
+    },
+    {
+      "id": "3.3.8",
+      "title": "Ensure source routed packets are not accepted",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "In networking, source routing allows a sender to partially or fully specify the route packets take through a network.",
+      "impact": "Setting net.ipv4.conf.all.accept_source_route, net.ipv4.conf.default.accept_source_route, net.ipv6.conf.all.accept_source_route and net.ipv6.conf.default.accept_source_route to 0 disables the system from accepting source routed packets.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.conf.all.accept_source_route = 0, net.ipv4.conf.default.accept_source_route = 0, net.ipv6.conf.all.accept_source_route = 0, net.ipv6.conf.default.accept_source_route = 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.conf.all.accept_source_route", "expected_value": "0"},
+        {"name": "net.ipv4.conf.default.accept_source_route", "expected_value": "0"},
+        {"name": "net.ipv6.conf.all.accept_source_route", "expected_value": "0"},
+        {"name": "net.ipv6.conf.default.accept_source_route", "expected_value": "0"}
+      ]
+    },
+    {
+      "id": "3.3.9",
+      "title": "Ensure suspicious packets are logged",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "When enabled, this feature logs packets with un-routable source addresses to the kernel log.",
+      "impact": "Enabling this feature and logging these packets allows an administrator to investigate the possibility that an attacker is sending spoofed packets to their system.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.conf.all.log_martians = 1 and net.ipv4.conf.default.log_martians = 1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv4.conf.all.log_martians", "expected_value": "1"},
+        {"name": "net.ipv4.conf.default.log_martians", "expected_value": "1"}
+      ]
+    },
+    {
+      "id": "3.3.10",
+      "title": "Ensure tcp syn cookies is enabled",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "When tcp_syncookies is set, the kernel will handle TCP SYN packets normally until the half-open connection queue is full, at which time, the kernel will begin dropping SYN packets from open connections.",
+      "impact": "Attackers use SYN flood attacks to perform a denial of service attacked on a system by sending many SYN packets without completing the three way handshake.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv4.tcp_syncookies = 1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelParameter",
+      "parameter": "net.ipv4.tcp_syncookies",
+      "expected_value": "1"
+    },
+    {
+      "id": "3.3.11",
+      "title": "Ensure ipv6 router advertisements are not accepted",
+      "section": "3.3 Configure Network Kernel Parameters",
+      "description": "This setting controls whether the system will accept IPv6 router advertisements.",
+      "impact": "It is recommended that systems do not accept router advertisements as they could be tricked into routing traffic to compromised machines.",
+      "remediation": "Set the following parameters in /etc/sysctl.conf or a /etc/sysctl.d/* file: net.ipv6.conf.all.accept_ra = 0 and net.ipv6.conf.default.accept_ra = 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MultiKernelParameter",
+      "parameters": [
+        {"name": "net.ipv6.conf.all.accept_ra", "expected_value": "0"},
+        {"name": "net.ipv6.conf.default.accept_ra", "expected_value": "0"}
+      ]
+    }
+  ]
+}

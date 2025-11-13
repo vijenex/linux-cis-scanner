@@ -1,0 +1,60 @@
+{
+  "milestone": "1.3",
+  "title": "Mandatory Access Control",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 1.3: Mandatory Access Control",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "1.3.1.1",
+      "title": "Ensure AppArmor is installed",
+      "section": "1.3.1 Configure AppArmor",
+      "description": "AppArmor provides Mandatory Access Controls.",
+      "impact": "Without a Mandatory Access Control system installed only the default Discretionary Access Control system will be available.",
+      "remediation": "Install AppArmor: apt install apparmor-utils",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Package",
+      "package_name": "apparmor",
+      "should_be_installed": true
+    },
+    {
+      "id": "1.3.1.2",
+      "title": "Ensure AppArmor is enabled in the bootloader configuration",
+      "section": "1.3.1 Configure AppArmor",
+      "description": "Configure AppArmor to be enabled at boot time and verify that it is not overwritten by the bootloader boot parameters.",
+      "impact": "AppArmor must be enabled at boot time in your bootloader configuration to ensure that the controls it provides are not overridden.",
+      "remediation": "Edit /etc/default/grub and add apparmor=1 and security=apparmor to GRUB_CMDLINE_LINUX parameters.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "BootParameter",
+      "parameters": ["apparmor=1", "security=apparmor"],
+      "config_file": "/etc/default/grub"
+    },
+    {
+      "id": "1.3.1.3",
+      "title": "Ensure all AppArmor Profiles are in enforce or complain mode",
+      "section": "1.3.1 Configure AppArmor",
+      "description": "AppArmor profiles define what resources applications and processes may access.",
+      "impact": "Security configuration requirements vary from site to site. Some sites may mandate a policy that is stricter than the default policy, which is perfectly acceptable.",
+      "remediation": "Run aa-enforce or aa-complain commands to set profiles to enforce or complain mode.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "AppArmorProfile",
+      "expected_modes": ["enforce", "complain"],
+      "check_unconfined": true
+    },
+    {
+      "id": "1.3.1.4",
+      "title": "Ensure all AppArmor Profiles are enforcing",
+      "section": "1.3.1 Configure AppArmor",
+      "description": "AppArmor profiles define what resources applications and processes may access.",
+      "impact": "Security configuration requirements vary from site to site. Some sites may mandate a policy that is stricter than the default policy, which is perfectly acceptable.",
+      "remediation": "Run aa-enforce commands to set all profiles to enforce mode.",
+      "profile": "Level2",
+      "automated": true,
+      "type": "AppArmorProfile",
+      "expected_modes": ["enforce"],
+      "check_unconfined": true
+    }
+  ]
+}

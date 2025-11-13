@@ -1,0 +1,74 @@
+{
+  "milestone": "1.5",
+  "title": "Configure Additional Process Hardening",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 1.5: Configure Additional Process Hardening",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "1.5.1",
+      "title": "Ensure address space layout randomization is enabled",
+      "section": "1.5 Configure Additional Process Hardening",
+      "description": "Address space layout randomization (ASLR) is an exploit mitigation technique which randomly arranges the address space of key data areas of a process.",
+      "impact": "Randomly placing virtual memory regions will make it difficult to write memory page exploits as the memory placement will be consistently shifting.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: kernel.randomize_va_space = 2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelParameter",
+      "parameter": "kernel.randomize_va_space",
+      "expected_value": "2"
+    },
+    {
+      "id": "1.5.2",
+      "title": "Ensure ptrace_scope is restricted",
+      "section": "1.5 Configure Additional Process Hardening",
+      "description": "The ptrace() system call allows a parent process to observe and control the execution of another process.",
+      "impact": "Restricting the use of ptrace to only root will help mitigate potential privilege escalation weaknesses.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: kernel.yama.ptrace_scope = 1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelParameter",
+      "parameter": "kernel.yama.ptrace_scope",
+      "expected_value": "1"
+    },
+    {
+      "id": "1.5.3",
+      "title": "Ensure core dumps are restricted",
+      "section": "1.5 Configure Additional Process Hardening",
+      "description": "A core dump is the memory of an executable program. It is generally used to determine why a program aborted.",
+      "impact": "Setting a hard limit of 0 prevents users from overriding the soft variable. If core dumps are required, consider setting limits for user groups.",
+      "remediation": "Add the following line to /etc/security/limits.conf or a /etc/security/limits.d/* file: * hard core 0",
+      "profile": "Level1",
+      "automated": true,
+      "type": "CoreDumpRestriction",
+      "limits_files": ["/etc/security/limits.conf", "/etc/security/limits.d/*"],
+      "expected_setting": "* hard core 0"
+    },
+    {
+      "id": "1.5.4",
+      "title": "Ensure prelink is not installed",
+      "section": "1.5 Configure Additional Process Hardening",
+      "description": "prelink is a program that modifies ELF shared libraries and ELF dynamically linked binaries in such a way that the time needed for the dynamic linker to perform relocations at startup significantly decreases.",
+      "impact": "The prelinking feature can interfere with the operation of AIDE, because it changes binaries. Prelinking can also increase the vulnerability of the system if a malicious user is able to compromise a common library such as libc.",
+      "remediation": "Run the following commands to restore binaries to normal and uninstall prelink: prelink -ua && apt purge prelink",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Package",
+      "package_name": "prelink",
+      "should_be_installed": false
+    },
+    {
+      "id": "1.5.5",
+      "title": "Ensure Automatic Error Reporting is not enabled",
+      "section": "1.5 Configure Additional Process Hardening",
+      "description": "apport collects potentially sensitive data, such as core dumps, stack traces, and log files.",
+      "impact": "Apport can leak sensitive information from a system when it crashes.",
+      "remediation": "Edit /etc/default/apport and set enabled=0, or remove the apport package.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ConfigFile",
+      "file_path": "/etc/default/apport",
+      "pattern": "enabled=0",
+      "expected_match": true
+    }
+  ]
+}

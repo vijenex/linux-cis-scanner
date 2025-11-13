@@ -1,0 +1,44 @@
+{
+  "milestone": "1.2",
+  "title": "Package Management",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 1.2: Package Management",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "1.2.1.1",
+      "title": "Ensure GPG keys are configured",
+      "section": "1.2.1 Configure Package Repositories",
+      "description": "Most package managers implement GPG key signing to verify package integrity during installation.",
+      "impact": "It is important to ensure that updates are obtained from a valid source to protect against spoofing that could lead to the inadvertent installation of malware on the system.",
+      "remediation": "Update your package manager GPG keys in accordance with site policy.",
+      "profile": "Level1",
+      "automated": false,
+      "type": "Manual",
+      "expected": "GPG keys properly configured for package repositories"
+    },
+    {
+      "id": "1.2.1.2",
+      "title": "Ensure package manager repositories are configured",
+      "section": "1.2.1 Configure Package Repositories",
+      "description": "Systems need to have package manager repositories configured to ensure they receive the latest patches and updates.",
+      "impact": "If a system's package repositories are misconfigured important patches may not be identified or a rogue repository could introduce compromised software.",
+      "remediation": "Configure your package manager repositories according to site policy.",
+      "profile": "Level1",
+      "automated": false,
+      "type": "Manual",
+      "expected": "Package repositories properly configured"
+    },
+    {
+      "id": "1.2.2.1",
+      "title": "Ensure updates, patches, and additional security software are installed",
+      "section": "1.2.2 Configure Package Updates",
+      "description": "Periodically patches are released for included software either due to security flaws or to include additional functionality.",
+      "impact": "Newer patches may contain security enhancements that would not be available through the latest full update. As a result, it is recommended that the latest software patches be used to take advantage of the latest functionality.",
+      "remediation": "Use your package manager to update all packages on the system according to site policy.",
+      "profile": "Level1",
+      "automated": false,
+      "type": "Manual",
+      "expected": "System packages are up to date"
+    }
+  ]
+}

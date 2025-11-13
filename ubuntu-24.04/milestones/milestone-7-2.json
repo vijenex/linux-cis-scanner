@@ -1,0 +1,133 @@
+{
+  "milestone": "7.2",
+  "title": "Local User and Group Settings",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 7.2: Local User and Group Settings",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "7.2.1",
+      "title": "Ensure accounts in /etc/passwd use shadowed passwords",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Local accounts can use either shadowed or non-shadowed passwords. With shadowed passwords, The passwords are stored in a separate file, /etc/shadow, that is readable only by root.",
+      "impact": "The /etc/passwd file also contains information like user ID's and group ID's that are used by many system programs. Therefore, the /etc/passwd file must remain world readable. In spite of encoding the password with a randomly-generated one-way hash function, an attacker could still break the system by using widely-available password cracking programs.",
+      "remediation": "If any accounts in the /etc/passwd file do not have password shadowing, run the following command to investigate: awk -F: '($2 != \"x\" ) { print $1 \" is not set to shadowed passwords \"}' /etc/passwd",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ShadowedPasswords",
+      "passwd_file": "/etc/passwd"
+    },
+    {
+      "id": "7.2.2",
+      "title": "Ensure /etc/shadow password fields are not empty",
+      "section": "7.2 Local User and Group Settings",
+      "description": "An account with an empty password field means that anybody may log in as that user without providing a password.",
+      "impact": "All accounts must have passwords or be locked to prevent the account from being used by an unauthorized user.",
+      "remediation": "If any accounts in the /etc/shadow file do not have a password, run the following command to lock the account until it can be determined why it does not have a password: passwd -l <username>",
+      "profile": "Level1",
+      "automated": true,
+      "type": "EmptyPasswords",
+      "shadow_file": "/etc/shadow"
+    },
+    {
+      "id": "7.2.3",
+      "title": "Ensure all groups in /etc/passwd exist in /etc/group",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Over time, system administration errors and changes can lead to groups being defined in /etc/passwd but not in /etc/group.",
+      "impact": "Groups defined in the /etc/passwd file but not in the /etc/group file pose a threat to system security since group permissions are not properly managed.",
+      "remediation": "Analyze the output of the Audit step above and perform the appropriate action to correct any discrepancies found.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "GroupConsistency",
+      "passwd_file": "/etc/passwd",
+      "group_file": "/etc/group"
+    },
+    {
+      "id": "7.2.4",
+      "title": "Ensure shadow group is empty",
+      "section": "7.2 Local User and Group Settings",
+      "description": "The shadow group allows system programs which require access the ability to read the /etc/shadow file.",
+      "impact": "Any users assigned to the shadow group would be granted read access to the /etc/shadow file. If attackers can gain read access to the /etc/shadow file, they can easily run a password cracking program against the hashed passwords to break them.",
+      "remediation": "Remove any users from the shadow group, and change the primary group of any users with shadow as their primary group.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "EmptyGroup",
+      "group_name": "shadow",
+      "group_file": "/etc/group"
+    },
+    {
+      "id": "7.2.5",
+      "title": "Ensure no duplicate UIDs exist",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Although the useradd program will not let you create a duplicate User ID (UID), it is possible for an administrator to manually edit the /etc/passwd file and change the UID field.",
+      "impact": "Users must be assigned unique UIDs for accountability and to ensure appropriate access protections.",
+      "remediation": "Based on the results of the audit procedure, establish unique UIDs and review all files owned by the shared UIDs to determine which UID they are supposed to belong to.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "DuplicateUIDs",
+      "passwd_file": "/etc/passwd"
+    },
+    {
+      "id": "7.2.6",
+      "title": "Ensure no duplicate GIDs exist",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Although the groupadd program will not let you create a duplicate Group ID (GID), it is possible for an administrator to manually edit the /etc/group file and change the GID field.",
+      "impact": "If a group is assigned a duplicate GID, it will create and have access to files with the first GID and the files with the second GID.",
+      "remediation": "Based on the results of the audit procedure, establish unique GIDs and review all files owned by the shared GID to determine which group they are supposed to belong to.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "DuplicateGIDs",
+      "group_file": "/etc/group"
+    },
+    {
+      "id": "7.2.7",
+      "title": "Ensure no duplicate user names exist",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Although the useradd program will not let you create a duplicate user name, it is possible for an administrator to manually edit the /etc/passwd file and change the user name.",
+      "impact": "If a user is assigned a duplicate user name, it will create and have access to files with the first user name and the files with the second user name.",
+      "remediation": "Based on the results of the audit procedure, establish unique user names for the users. File ownerships will automatically reflect the change.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "DuplicateUsernames",
+      "passwd_file": "/etc/passwd"
+    },
+    {
+      "id": "7.2.8",
+      "title": "Ensure no duplicate group names exist",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Although the groupadd program will not let you create a duplicate group name, it is possible for an administrator to manually edit the /etc/group file and change the group name.",
+      "impact": "If a group is assigned a duplicate group name, it will create and have access to files with the first group name and the files with the second group name.",
+      "remediation": "Based on the results of the audit procedure, establish unique names for the groups. File group ownerships will automatically reflect the change.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "DuplicateGroupnames",
+      "group_file": "/etc/group"
+    },
+    {
+      "id": "7.2.9",
+      "title": "Ensure local interactive user home directories are configured",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Local interactive users on the system must be assigned a home directory in the /etc/passwd file.",
+      "impact": "If local interactive users are not assigned a valid home directory, there is no place for the storage and control of files they should own.",
+      "remediation": "Change the assigned home directory of any users identified as not having an assigned home directory to a directory that the user has read, write, and execute permissions to.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "UserHomeDirs",
+      "passwd_file": "/etc/passwd",
+      "min_uid": 1000
+    },
+    {
+      "id": "7.2.10",
+      "title": "Ensure local interactive user dot files access is configured",
+      "section": "7.2 Local User and Group Settings",
+      "description": "Local interactive user dot files are used to set environment variables and may contain sensitive information.",
+      "impact": "If a local interactive user's dot files are not configured correctly, unauthorized users may be able to modify them to insert malicious code that will be executed whenever the user logs in.",
+      "remediation": "Making global modifications to user dot files without alerting the user community can result in unexpected outages and unhappy users. Therefore, it is recommended that a monitoring policy be established to report dot file permissions and determine the action to be taken in accordance with site policy.",
+      "profile": "Level1",
+      "automated": true,
+      "type": "UserDotFiles",
+      "passwd_file": "/etc/passwd",
+      "min_uid": 1000,
+      "max_permissions": "go-w"
+    }
+  ]
+}

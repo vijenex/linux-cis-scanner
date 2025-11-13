@@ -1,0 +1,12 @@
+# Linux CIS Scanner Requirements
+# No external dependencies required - uses Python standard library only
+
+# Optional: For enhanced reporting (not required for basic functionality)
+# jinja2>=3.0.0  # For advanced HTML templating
+# pandas>=1.3.0  # For advanced CSV analysis
+# matplotlib>=3.5.0  # For charts and graphs
+
+# Development dependencies (optional)
+# pytest>=6.0.0  # For unit testing
+# black>=22.0.0  # For code formatting
+# flake8>=4.0.0  # For code linting

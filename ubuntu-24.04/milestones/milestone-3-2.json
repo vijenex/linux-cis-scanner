@@ -1,0 +1,60 @@
+{
+  "milestone": "3.2",
+  "title": "Configure Network Kernel Modules",
+  "description": "CIS Ubuntu Linux 24.04 LTS Benchmark - Section 3.2: Configure Network Kernel Modules",
+  "version": "1.0.0",
+  "controls": [
+    {
+      "id": "3.2.1",
+      "title": "Ensure dccp kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "description": "The Datagram Congestion Control Protocol (DCCP) is a transport layer protocol that supports streaming media and telephony.",
+      "impact": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
+      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add: install dccp /bin/true",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "module_name": "dccp",
+      "expected_status": "not_available"
+    },
+    {
+      "id": "3.2.2",
+      "title": "Ensure tipc kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "description": "The Transparent Inter-Process Communication (TIPC) protocol is designed to provide communication between cluster nodes.",
+      "impact": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
+      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add: install tipc /bin/true",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "module_name": "tipc",
+      "expected_status": "not_available"
+    },
+    {
+      "id": "3.2.3",
+      "title": "Ensure rds kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "description": "The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to provide low-latency, high-bandwidth communications between cluster nodes.",
+      "impact": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
+      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add: install rds /bin/true",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "module_name": "rds",
+      "expected_status": "not_available"
+    },
+    {
+      "id": "3.2.4",
+      "title": "Ensure sctp kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "description": "The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to support message oriented communication, with several streams of messages in one connection.",
+      "impact": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
+      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add: install sctp /bin/true",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "module_name": "sctp",
+      "expected_status": "not_available"
+    }
+  ]
+}
