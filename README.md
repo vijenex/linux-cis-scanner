@@ -78,12 +78,35 @@ This platform provides automated security compliance auditing for Linux systems 
 ### Installation
 
 #### System-wide Installation (Recommended)
+
+**Latest Release (Stable):**
+```bash
+# Download latest release
+wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.0.tar.gz
+tar -xzf v1.0.0.tar.gz
+cd linux-cis-scanner-1.0.0
+
+# Install
+chmod +x install.sh
+sudo ./install.sh
+```
+
+**Development Version:**
 ```bash
 # Clone the repository
 git clone https://github.com/vijenex/linux-cis-scanner.git
 cd linux-cis-scanner
 
 # Make installer executable and install
+chmod +x install.sh
+sudo ./install.sh
+```
+
+**Specific Version:**
+```bash
+# Install specific version (replace v1.0.0 with desired version)
+git clone --branch v1.0.0 https://github.com/vijenex/linux-cis-scanner.git
+cd linux-cis-scanner
 chmod +x install.sh
 sudo ./install.sh
 ```
@@ -303,12 +326,30 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 
 ---
 
-## 🏷️ Version Information
+## 🏷️ Releases
 
-- **Platform Version**: 1.0.0
-- **Supported Distributions**: Ubuntu 20.04 LTS (more coming soon)
+### Current Stable Release
+- **v1.0.0** - Ubuntu 24.04 LTS CIS Scanner
+  - Complete CIS benchmark implementation (120+ controls)
+  - Professional CLI with colorful output
+  - Enterprise installation with man pages
+  - HTML and CSV reporting
+  - Zero false positive design
+
+### Download Options
+```bash
+# Latest stable release
+wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.0.tar.gz
+
+# All releases
+# Visit: https://github.com/vijenex/linux-cis-scanner/releases
+```
+
+### Version Information
+- **Current Version**: v1.0.0
+- **Supported Distributions**: Ubuntu 24.04 LTS
 - **CIS Compliance**: Based on official CIS benchmark documentation
-- **Last Updated**: November 2024
+- **Release Date**: November 2024
 
 ---
 
