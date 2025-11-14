@@ -35,26 +35,31 @@ class LinuxCISScanner:
             # Detect Ubuntu version and use appropriate directory
             ubuntu_version = self._detect_ubuntu_version()
             
-            # Try to find the main scanner directory by looking for ubuntu-* folders
-            current_path = Path(__file__).parent
-            scanner_root = None
-            
-            # Search up the directory tree for the main scanner directory
-            for parent in [current_path.parent, current_path.parent.parent, current_path.parent.parent.parent]:
-                if any((parent / f"ubuntu-{v}").exists() for v in ["20.04", "22.04", "24.04"]):
-                    scanner_root = parent
-                    break
-            
-            if scanner_root:
-                version_dir = scanner_root / f"ubuntu-{ubuntu_version}"
-                if version_dir.exists():
-                    output_dir = str(version_dir / "reports")
-                else:
-                    # Create OS-specific reports directory in scanner root
-                    output_dir = str(scanner_root / f"ubuntu-{ubuntu_version}-reports")
+            # Check if running from global installation
+            if str(Path(__file__).parent).startswith('/usr/share/vijenex-cis'):
+                # Global installation - create reports in /var/log/vijenex-cis with OS-specific subdirectory
+                output_dir = f"/var/log/vijenex-cis/ubuntu-{ubuntu_version}-reports"
             else:
-                # Fallback: create reports in current working directory
-                output_dir = f"./ubuntu-{ubuntu_version}-reports"
+                # Local installation - try to find the main scanner directory
+                current_path = Path(__file__).parent
+                scanner_root = None
+                
+                # Search up the directory tree for the main scanner directory
+                for parent in [current_path.parent, current_path.parent.parent, current_path.parent.parent.parent]:
+                    if any((parent / f"ubuntu-{v}").exists() for v in ["20.04", "22.04", "24.04"]):
+                        scanner_root = parent
+                        break
+                
+                if scanner_root:
+                    version_dir = scanner_root / f"ubuntu-{ubuntu_version}"
+                    if version_dir.exists():
+                        output_dir = str(version_dir / "reports")
+                    else:
+                        # Create OS-specific reports directory in scanner root
+                        output_dir = str(scanner_root / f"ubuntu-{ubuntu_version}-reports")
+                else:
+                    # Fallback: create reports in current working directory with OS-specific name
+                    output_dir = f"./ubuntu-{ubuntu_version}-reports"
         
         # Validate and normalize output directory path
         if not self._validate_output_path(output_dir):
@@ -131,8 +136,8 @@ class LinuxCISScanner:
             normalized_path = os.path.normpath(output_path)
             resolved_path = os.path.realpath(normalized_path)
             
-            # Allow system-wide installation directory
-            if normalized_path.startswith('/usr/share/vijenex-cis'):
+            # Allow system-wide installation directories
+            if normalized_path.startswith('/usr/share/vijenex-cis') or normalized_path.startswith('/var/log/vijenex-cis'):
                 return True
             
             # Allow paths within the scanner directory structure
