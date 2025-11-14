@@ -1,0 +1,119 @@
+{
+  "milestone": "1.7",
+  "title": "Configure GNOME Display Manager",
+  "description": "Configure GNOME Display Manager security settings",
+  "controls": [
+    {
+      "id": "1.7.1",
+      "title": "Ensure GDM is removed",
+      "description": "GNOME Display Manager (GDM) is a program that manages graphical display servers and handles graphical user logins.",
+      "rationale": "If a graphical login is not needed, removing it will reduce the potential attack surface.",
+      "impact": "Removing the GNOME Display Manager will prevent graphical logins to the system.",
+      "remediation": "Run the following command to remove gdm3: apt purge gdm3",
+      "profile": "Level1",
+      "type": "Package",
+      "package": "gdm3",
+      "expected_state": "not_installed"
+    },
+    {
+      "id": "1.7.2",
+      "title": "Ensure GDM login banner is configured",
+      "description": "GDM can be configured to display a login banner.",
+      "rationale": "Warning messages inform users who are attempting to login to the system of their legal status and may assist the prosecution of intruders.",
+      "impact": "None.",
+      "remediation": "Configure GDM login banner in /etc/gdm3/greeter.dconf-defaults",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.3",
+      "title": "Ensure GDM disable-user-list option is enabled",
+      "description": "GDM can be configured to disable the user list at login time.",
+      "rationale": "Disabling the user list makes it more difficult for an attacker to enumerate valid user accounts.",
+      "impact": "None.",
+      "remediation": "Configure disable-user-list=true in GDM configuration",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.4",
+      "title": "Ensure GDM screen locks when the user is idle",
+      "description": "GDM can be configured to automatically lock the screen when the user is idle.",
+      "rationale": "Locking the screen when the user is idle helps prevent unauthorized access.",
+      "impact": "None.",
+      "remediation": "Configure screen lock settings in GDM",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.5",
+      "title": "Ensure GDM screen locks cannot be overridden",
+      "description": "GDM screen lock settings should not be overridable by users.",
+      "rationale": "Ensuring that screen lock settings cannot be overridden helps maintain security policy.",
+      "impact": "None.",
+      "remediation": "Configure GDM to prevent screen lock override",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.6",
+      "title": "Ensure GDM automatic mounting of removable media is disabled",
+      "description": "GDM can be configured to disable automatic mounting of removable media.",
+      "rationale": "Disabling automatic mounting reduces the risk of malicious media being automatically processed.",
+      "impact": "Users will need to manually mount removable media.",
+      "remediation": "Configure GDM to disable automatic mounting",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.7",
+      "title": "Ensure GDM disabling automatic mounting of removable media is not overridden",
+      "description": "GDM automatic mounting settings should not be overridable by users.",
+      "rationale": "Ensuring that automatic mounting settings cannot be overridden helps maintain security policy.",
+      "impact": "None.",
+      "remediation": "Configure GDM to prevent automatic mounting override",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.8",
+      "title": "Ensure GDM autorun-never is enabled",
+      "description": "GDM can be configured to never automatically run programs from removable media.",
+      "rationale": "Disabling autorun prevents malicious programs from automatically executing when removable media is inserted.",
+      "impact": "Programs on removable media will not automatically execute.",
+      "remediation": "Configure GDM autorun-never setting",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.9",
+      "title": "Ensure GDM autorun-never is not overridden",
+      "description": "GDM autorun settings should not be overridable by users.",
+      "rationale": "Ensuring that autorun settings cannot be overridden helps maintain security policy.",
+      "impact": "None.",
+      "remediation": "Configure GDM to prevent autorun override",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.10",
+      "title": "Ensure XDMCP is not enabled",
+      "description": "X Display Manager Control Protocol (XDMCP) is designed to provide authenticated access to display management services for remote displays.",
+      "rationale": "XDMCP is not a secure protocol and should not be used in security-conscious environments.",
+      "impact": "Remote graphical logins will not be possible via XDMCP.",
+      "remediation": "Ensure XDMCP is disabled in GDM configuration",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.7.11",
+      "title": "Ensure Xwayland is configured",
+      "description": "Xwayland provides X11 compatibility for Wayland compositors.",
+      "rationale": "Proper Xwayland configuration helps maintain security in graphical environments.",
+      "impact": "May affect X11 application compatibility.",
+      "remediation": "Configure Xwayland settings appropriately",
+      "profile": "Level2",
+      "type": "Manual"
+    }
+  ]
+}

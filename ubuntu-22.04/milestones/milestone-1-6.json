@@ -1,0 +1,79 @@
+{
+  "milestone": "1.6",
+  "title": "Configure Command Line Warning Banners",
+  "description": "Configure warning banners for command line access",
+  "controls": [
+    {
+      "id": "1.6.1",
+      "title": "Ensure /etc/motd is configured",
+      "description": "The contents of the /etc/motd file are displayed to users after login and function as a message of the day for authenticated users.",
+      "rationale": "Warning messages inform users who are attempting to login to the system of their legal status and may assist the prosecution of intruders.",
+      "impact": "None.",
+      "remediation": "Edit the /etc/motd file with the appropriate contents according to your site policy.",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.6.2",
+      "title": "Ensure /etc/issue is configured",
+      "description": "The contents of the /etc/issue file are displayed to users prior to login for local terminals.",
+      "rationale": "Warning messages inform users who are attempting to login to the system of their legal status and may assist the prosecution of intruders.",
+      "impact": "None.",
+      "remediation": "Edit the /etc/issue file with the appropriate contents according to your site policy.",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.6.3",
+      "title": "Ensure /etc/issue.net is configured",
+      "description": "The contents of the /etc/issue.net file are displayed to users prior to login for remote connections from configured services.",
+      "rationale": "Warning messages inform users who are attempting to login to the system of their legal status and may assist the prosecution of intruders.",
+      "impact": "None.",
+      "remediation": "Edit the /etc/issue.net file with the appropriate contents according to your site policy.",
+      "profile": "Level1",
+      "type": "Manual"
+    },
+    {
+      "id": "1.6.4",
+      "title": "Ensure access to /etc/motd is configured",
+      "description": "The /etc/motd file contains the message of the day banner.",
+      "rationale": "If the /etc/motd file does not have the correct ownership it could be modified by unauthorized users with unintended results.",
+      "impact": "None.",
+      "remediation": "Run the following commands to set ownership and permissions on /etc/motd: chown root:root /etc/motd && chmod u-x,go-wx /etc/motd",
+      "profile": "Level1",
+      "type": "FilePermission",
+      "file_path": "/etc/motd",
+      "expected_mode": "644",
+      "expected_owner": "root",
+      "expected_group": "root"
+    },
+    {
+      "id": "1.6.5",
+      "title": "Ensure access to /etc/issue is configured",
+      "description": "The /etc/issue file contains the local login warning banner.",
+      "rationale": "If the /etc/issue file does not have the correct ownership it could be modified by unauthorized users with unintended results.",
+      "impact": "None.",
+      "remediation": "Run the following commands to set ownership and permissions on /etc/issue: chown root:root /etc/issue && chmod u-x,go-wx /etc/issue",
+      "profile": "Level1",
+      "type": "FilePermission",
+      "file_path": "/etc/issue",
+      "expected_mode": "644",
+      "expected_owner": "root",
+      "expected_group": "root"
+    },
+    {
+      "id": "1.6.6",
+      "title": "Ensure access to /etc/issue.net is configured",
+      "description": "The /etc/issue.net file contains the remote login warning banner.",
+      "rationale": "If the /etc/issue.net file does not have the correct ownership it could be modified by unauthorized users with unintended results.",
+      "impact": "None.",
+      "remediation": "Run the following commands to set ownership and permissions on /etc/issue.net: chown root:root /etc/issue.net && chmod u-x,go-wx /etc/issue.net",
+      "profile": "Level1",
+      "type": "FilePermission",
+      "file_path": "/etc/issue.net",
+      "expected_mode": "644",
+      "expected_owner": "root",
+      "expected_group": "root"
+    }
+  ]
+}

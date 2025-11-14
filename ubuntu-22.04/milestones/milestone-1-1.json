@@ -195,6 +195,97 @@
       "type": "MountOption",
       "mount_point": "/tmp",
       "required_option": "noexec"
+    },
+    {
+      "id": "1.1.2.2.1",
+      "title": "Ensure /dev/shm is tmpfs or a separate partition",
+      "section": "Initial Setup",
+      "description": "The /dev/shm directory is a world-writable directory used for shared memory.",
+      "rationale": "Making /dev/shm its own file system allows an administrator to set mount options for enhanced security.",
+      "impact": "None if /dev/shm is already properly configured.",
+      "remediation": "Configure /dev/shm as tmpfs or separate partition.",
+      "profile": "Level1",
+      "type": "MountPoint",
+      "mount_point": "/dev/shm",
+      "expected_status": "separate_partition"
+    },
+    {
+      "id": "1.1.2.2.2",
+      "title": "Ensure nodev option set on /dev/shm partition",
+      "section": "Initial Setup",
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "rationale": "Since the /dev/shm filesystem is not intended to support devices, set this option to ensure that users cannot attempt to create block or character special devices.",
+      "impact": "None.",
+      "remediation": "Edit /etc/fstab and add nodev to the fourth field for the /dev/shm partition.",
+      "profile": "Level1",
+      "type": "MountOption",
+      "mount_point": "/dev/shm",
+      "required_option": "nodev"
+    },
+    {
+      "id": "1.1.2.2.3",
+      "title": "Ensure nosuid option set on /dev/shm partition",
+      "section": "Initial Setup",
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+      "rationale": "Since the /dev/shm filesystem is only intended for shared memory, set this option to ensure that users cannot create setuid files.",
+      "impact": "None.",
+      "remediation": "Edit /etc/fstab and add nosuid to the fourth field for the /dev/shm partition.",
+      "profile": "Level1",
+      "type": "MountOption",
+      "mount_point": "/dev/shm",
+      "required_option": "nosuid"
+    },
+    {
+      "id": "1.1.2.2.4",
+      "title": "Ensure noexec option set on /dev/shm partition",
+      "section": "Initial Setup",
+      "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+      "rationale": "Since the /dev/shm filesystem is only intended for shared memory, set this option to ensure that users cannot run executable binaries.",
+      "impact": "None.",
+      "remediation": "Edit /etc/fstab and add noexec to the fourth field for the /dev/shm partition.",
+      "profile": "Level1",
+      "type": "MountOption",
+      "mount_point": "/dev/shm",
+      "required_option": "noexec"
+    },
+    {
+      "id": "1.1.2.3.1",
+      "title": "Ensure separate partition exists for /home",
+      "section": "Initial Setup",
+      "description": "The /home directory is used to support user home directories.",
+      "rationale": "Making /home its own file system allows an administrator to set disk quotas and mount options for enhanced security.",
+      "impact": "None if /home is already a separate partition.",
+      "remediation": "Configure /home as a separate partition or logical volume.",
+      "profile": "Level2",
+      "type": "MountPoint",
+      "mount_point": "/home",
+      "expected_status": "separate_partition"
+    },
+    {
+      "id": "1.1.2.3.2",
+      "title": "Ensure nodev option set on /home partition",
+      "section": "Initial Setup",
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "rationale": "Since the /home filesystem is not intended to support devices, set this option to ensure that users cannot attempt to create block or character special devices.",
+      "impact": "None.",
+      "remediation": "Edit /etc/fstab and add nodev to the fourth field for the /home partition.",
+      "profile": "Level1",
+      "type": "MountOption",
+      "mount_point": "/home",
+      "required_option": "nodev"
+    },
+    {
+      "id": "1.1.2.3.3",
+      "title": "Ensure nosuid option set on /home partition",
+      "section": "Initial Setup",
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+      "rationale": "Since the /home filesystem is only intended for user home directories, set this option to ensure that users cannot create setuid files.",
+      "impact": "None.",
+      "remediation": "Edit /etc/fstab and add nosuid to the fourth field for the /home partition.",
+      "profile": "Level1",
+      "type": "MountOption",
+      "mount_point": "/home",
+      "required_option": "nosuid"
     }
   ]
 }

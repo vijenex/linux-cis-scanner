@@ -1,0 +1,17 @@
+🚨 MISSING CONTROLS ANALYSIS 🚨
+
+UBUNTU 22.04 MISSING:
+- Mount partition controls: 1.1.2.2.x, 1.1.2.3.x, 1.1.2.4.x, 1.1.2.5.x, 1.1.2.6.x, 1.1.2.7.x
+- Warning banners: 1.6.1-1.6.6  
+- GNOME Display Manager: 1.7.1-1.7.11
+- PAM controls: 5.3.3.1.3, 5.3.3.2.3-2.8, 5.3.3.3.2-3.3, 5.3.3.4.1-4.4
+- Additional user controls: 5.4.1.2, 5.4.1.6, 5.4.2.2-2.8
+- Audit controls: 6.2.3.2-3.21, 6.2.4.2-4.10
+
+UBUNTU 24.04 MISSING:
+- Milestone files: 2-3.json, 5-3.json, 5-4.json  
+- Section 4.4: iptables controls (4.4.1.1-4.4.3.4)
+- Some mount partition controls
+- Some PAM controls
+
+TOTAL MISSING: ~100+ controls across both versions
