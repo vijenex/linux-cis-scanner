@@ -1,0 +1,24 @@
+# Test files - exclude from releases
+test-*.sh
+*test*.py
+vijenex-test-reports/
+
+# Development files
+*.pyc
+__pycache__/
+.pytest_cache/
+.coverage
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Reports (should be generated locally)
+reports/
+*-reports/

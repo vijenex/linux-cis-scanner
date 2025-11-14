@@ -136,12 +136,26 @@ fi
 # Clean any existing reports directories
 find /usr/share/vijenex-cis -name "reports" -type d -exec rm -rf {} + 2>/dev/null || true
 
-# Create single OS-specific reports directory
-mkdir -p "/var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports"
+# Check if user provided custom output directory
+CUSTOM_OUTPUT=false
+for arg in "\$@"; do
+    if [[ "\$arg" == "--output-dir" ]] || [[ "\$arg" == "--output" ]]; then
+        CUSTOM_OUTPUT=true
+        break
+    fi
+done
 
-# Run scanner with OS-specific output directory
+# Use system directory only if no custom output specified
+if [ "\$CUSTOM_OUTPUT" = false ]; then
+    mkdir -p "/var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports"
+    OUTPUT_ARG="--output-dir /var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports"
+else
+    OUTPUT_ARG=""
+fi
+
+# Run scanner
 cd "\${SCANNER_DIR}"
-exec python3 scripts/vijenex-cis.py --output-dir "/var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports" "\$@"
+exec python3 scripts/vijenex-cis.py \$OUTPUT_ARG "\$@"
 EOF
 
 # Make executable

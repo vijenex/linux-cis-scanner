@@ -80,19 +80,28 @@ This platform provides automated security compliance auditing for Linux systems 
 
 ### Installation
 
-#### System-wide Installation (Recommended)
+#### Option 1: Local Execution (Recommended for Downloads)
 
 **Latest Release (Stable):**
 ```bash
-# Download latest release
+# Download and extract
 wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.7.tar.gz
 tar -xzf v1.0.7.tar.gz
 cd linux-cis-scanner-1.0.7
 
-# Install globally with OS-specific report directories
+# Run locally (reports stored in ./reports/)
+sudo ./run-local.sh
+```
+
+#### Option 2: System-wide Installation
+
+```bash
+# After downloading and extracting (see above)
+# Install globally with OS-specific report directories in /var/log
 chmod +x install.sh
 sudo ./install.sh
 
+# Run from anywhere
 vijenex-cis
 ```
 
@@ -118,32 +127,42 @@ sudo ./install.sh
 
 ### Usage
 
-#### CLI Commands
+#### Local Execution (from downloaded release)
 ```bash
-# Complete compliance scan with colorful output
+# Complete compliance scan (reports in ./reports/)
+sudo ./run-local.sh
+
+# Level 2 profile scan
+sudo ./run-local.sh --profile Level2
+
+# Custom output directory
+sudo ./run-local.sh --output-dir /tmp/my-reports
+
+# Specific report formats
+sudo ./run-local.sh --format html
+sudo ./run-local.sh --format csv
+
+# Get help
+./run-local.sh --help
+```
+
+#### System-wide Installation Commands
+```bash
+# Complete compliance scan (reports in /var/log/vijenex-cis/)
 sudo vijenex-cis
 
-# Level 2 profile scan (more stringent security controls)
+# Level 2 profile scan
 sudo vijenex-cis --profile Level2
 
-# Custom output directory for reports
-sudo vijenex-cis --output /var/log/security-audit
+# Custom output directory
+sudo vijenex-cis --output-dir /tmp/my-reports
 
 # Generate specific report formats
-sudo vijenex-cis --format html    # HTML report only
-sudo vijenex-cis --format csv     # CSV report only
-sudo vijenex-cis --format both    # Both formats (default)
+sudo vijenex-cis --format html
+sudo vijenex-cis --format csv
 
-# Scan specific milestone sections
-sudo vijenex-cis --milestones milestone-1.json milestone-2.json
-
-# Clean up scanner files after scan (keeps reports only)
-sudo vijenex-cis --cleanup
-
-# Get help and view all options
+# Get help and manual
 vijenex-cis --help
-
-# View manual page
 man vijenex-cis
 ```
 
