@@ -34,12 +34,28 @@ class LinuxCISScanner:
         if output_dir is None:
             # Detect Ubuntu version and use appropriate directory
             ubuntu_version = self._detect_ubuntu_version()
-            base_dir = Path(__file__).parent.parent.parent  # Go up to main directory
-            version_dir = base_dir / f"ubuntu-{ubuntu_version}"
-            if version_dir.exists():
-                output_dir = str(version_dir / "reports")
+            
+            # Try to find the main scanner directory by looking for ubuntu-* folders
+            current_path = Path(__file__).parent
+            scanner_root = None
+            
+            # Search up the directory tree for the main scanner directory
+            for parent in [current_path.parent, current_path.parent.parent, current_path.parent.parent.parent]:
+                if any((parent / f"ubuntu-{v}").exists() for v in ["20.04", "22.04", "24.04"]):
+                    scanner_root = parent
+                    break
+            
+            if scanner_root:
+                version_dir = scanner_root / f"ubuntu-{ubuntu_version}"
+                if version_dir.exists():
+                    output_dir = str(version_dir / "reports")
+                else:
+                    # Create OS-specific reports directory in scanner root
+                    output_dir = str(scanner_root / f"ubuntu-{ubuntu_version}-reports")
             else:
-                output_dir = str(Path(__file__).parent.parent / "reports")
+                # Fallback: create reports in current working directory
+                output_dir = f"./ubuntu-{ubuntu_version}-reports"
+        
         # Validate and normalize output directory path
         if not self._validate_output_path(output_dir):
             raise ValueError(f"Invalid output directory path: {output_dir}")
@@ -48,14 +64,19 @@ class LinuxCISScanner:
         self.results = []
         self.system_info = self._get_system_info()
         
-        # Set milestones directory - use correct Ubuntu version
+        # Set milestones directory - find the correct Ubuntu version milestones
         ubuntu_version = self._detect_ubuntu_version()
-        base_dir = Path(__file__).parent.parent.parent
-        version_dir = base_dir / f"ubuntu-{ubuntu_version}"
-        if version_dir.exists():
-            self.milestones_dir = version_dir / "milestones"
+        current_path = Path(__file__).parent
+        
+        # Search for milestones directory
+        for parent in [current_path.parent, current_path.parent.parent, current_path.parent.parent.parent]:
+            version_dir = parent / f"ubuntu-{ubuntu_version}"
+            if version_dir.exists() and (version_dir / "milestones").exists():
+                self.milestones_dir = version_dir / "milestones"
+                break
         else:
-            self.milestones_dir = Path(__file__).parent.parent / "milestones"
+            # Fallback to current script's milestones
+            self.milestones_dir = current_path.parent / "milestones"
         
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
