@@ -30,9 +30,12 @@ class LinuxCISScanner:
     """Main Linux CIS compliance scanner engine"""
     
     def __init__(self, output_dir: str = None, profile: str = "Level1"):
-        # Default to reports directory in parent folder
+        # Default to reports directory - use /usr/share/vijenex-cis/reports if installed, otherwise local
         if output_dir is None:
-            output_dir = str(Path(__file__).parent.parent / "reports")
+            if os.path.exists('/usr/share/vijenex-cis'):
+                output_dir = '/usr/share/vijenex-cis/reports'
+            else:
+                output_dir = str(Path(__file__).parent.parent / "reports")
         # Validate and normalize output directory path
         if not self._validate_output_path(output_dir):
             raise ValueError(f"Invalid output directory path: {output_dir}")
@@ -40,7 +43,12 @@ class LinuxCISScanner:
         self.profile = profile
         self.results = []
         self.system_info = self._get_system_info()
-        self.milestones_dir = Path(__file__).parent.parent / "milestones"
+        
+        # Set milestones directory - use /usr/share/vijenex-cis/milestones if installed, otherwise local
+        if os.path.exists('/usr/share/vijenex-cis/milestones'):
+            self.milestones_dir = Path('/usr/share/vijenex-cis/milestones')
+        else:
+            self.milestones_dir = Path(__file__).parent.parent / "milestones"
         
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -82,6 +90,10 @@ class LinuxCISScanner:
             # Normalize and resolve the path
             normalized_path = os.path.normpath(output_path)
             resolved_path = os.path.realpath(normalized_path)
+            
+            # Allow system-wide installation directory
+            if normalized_path.startswith('/usr/share/vijenex-cis'):
+                return True
             
             # Check for path traversal attempts
             if '..' in normalized_path or normalized_path.startswith('/'):

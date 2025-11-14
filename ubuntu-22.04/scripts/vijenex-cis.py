@@ -31,14 +31,22 @@ class LinuxCISScanner:
     """Main Linux CIS compliance scanner engine"""
     
     def __init__(self, output_dir: str = None, profile: str = "Level1"):
-        # Default to reports directory in parent folder
+        # Default to reports directory - use /usr/share/vijenex-cis/reports if installed, otherwise local
         if output_dir is None:
-            output_dir = str(Path(__file__).parent.parent / "reports")
+            if os.path.exists('/usr/share/vijenex-cis'):
+                output_dir = '/usr/share/vijenex-cis/reports'
+            else:
+                output_dir = str(Path(__file__).parent.parent / "reports")
         self.output_dir = Path(output_dir)
         self.profile = profile
         self.results = []
         self.system_info = self._get_system_info()
-        self.milestones_dir = Path(__file__).parent.parent / "milestones"
+        
+        # Set milestones directory - use /usr/share/vijenex-cis/milestones if installed, otherwise local
+        if os.path.exists('/usr/share/vijenex-cis/milestones'):
+            self.milestones_dir = Path('/usr/share/vijenex-cis/milestones')
+        else:
+            self.milestones_dir = Path(__file__).parent.parent / "milestones"
         
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
