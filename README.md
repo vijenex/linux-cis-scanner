@@ -37,20 +37,7 @@ This platform provides automated security compliance auditing for Linux systems 
 - **🔍 Auto OS Detection**: Automatically detects Ubuntu version and stores reports in dedicated OS folders
 - **📁 Smart Directory Management**: Uses correct milestone files and report directories based on detected OS version
 
-### 🔍 OS Detection Examples
-```bash
-# Local development - automatically detects OS and uses correct directory
-sudo python3 ubuntu-22.04/scripts/vijenex-cis.py
-# Reports stored in: ubuntu-22.04/reports/vijenex-cis-report.html
 
-# Global installation - detects OS and creates OS-specific reports
-sudo ./install.sh && vijenex-cis
-# Reports stored in: /var/log/vijenex-cis/ubuntu-22.04-reports/vijenex-cis-report.html
-
-# Works from any directory after installation
-cd /tmp && vijenex-cis
-# Still stores in: /var/log/vijenex-cis/ubuntu-{detected-version}-reports/
-```
 
 ### 🎯 Supported Check Types
 

@@ -30,7 +30,7 @@ class LinuxCISScanner:
     """Main Linux CIS compliance scanner engine"""
     
     def __init__(self, output_dir: str = None, profile: str = "Level1"):
-        # Always use OS-specific directory structure
+        # Use explicit output_dir if provided, otherwise auto-detect
         if output_dir is None:
             # Detect Ubuntu version and use appropriate directory
             ubuntu_version = self._detect_ubuntu_version()
@@ -69,19 +69,9 @@ class LinuxCISScanner:
         self.results = []
         self.system_info = self._get_system_info()
         
-        # Set milestones directory - find the correct Ubuntu version milestones
-        ubuntu_version = self._detect_ubuntu_version()
+        # Set milestones directory - use current script's milestones directory
         current_path = Path(__file__).parent
-        
-        # Search for milestones directory
-        for parent in [current_path.parent, current_path.parent.parent, current_path.parent.parent.parent]:
-            version_dir = parent / f"ubuntu-{ubuntu_version}"
-            if version_dir.exists() and (version_dir / "milestones").exists():
-                self.milestones_dir = version_dir / "milestones"
-                break
-        else:
-            # Fallback to current script's milestones
-            self.milestones_dir = current_path.parent / "milestones"
+        self.milestones_dir = current_path.parent / "milestones"
         
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
