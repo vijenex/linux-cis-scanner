@@ -135,11 +135,13 @@ class LinuxCISScanner:
             if normalized_path.startswith('/usr/share/vijenex-cis'):
                 return True
             
+            # Allow paths within the scanner directory structure
+            if 'Linux-CIS-Audit-code' in normalized_path or 'ubuntu-' in normalized_path:
+                return True
+            
             # Check for path traversal attempts
-            if '..' in normalized_path or normalized_path.startswith('/'):
-                # Only allow relative paths within current working directory
-                if normalized_path.startswith('/'):
-                    return False
+            if '..' in normalized_path:
+                return False
             
             # Ensure path doesn't contain null bytes or other dangerous characters
             if '\x00' in output_path or any(c in output_path for c in ['<', '>', '|', '*', '?']):
