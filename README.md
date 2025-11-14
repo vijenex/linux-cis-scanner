@@ -7,7 +7,7 @@
   ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
 
                  Vijenex CIS Scanner
-           Enterprise Linux Security Compliance
+           Linux Security Compliance
 ```
 
 # Linux CIS Audit Platform
@@ -30,9 +30,8 @@ This platform provides automated security compliance auditing for Linux systems 
 - **🚫 Audit-Only**: No system modifications - safe to run in production
 - **⚡ Automated**: Minimal user interaction required
 - **🐍 Python-Based**: Cross-platform compatibility and easy maintenance
-- **🎨 Colorful Interface**: Professional CLI with color-coded results and progress indicators
-- **🚀 Enterprise Installation**: OpenSCAP-style system-wide installation with man pages
-- **📊 Real-time Progress**: Live scan progress with emoji status indicators
+- **🎨 Colorful Interface**: Professional CLI with color-coded results
+- **📊 Real-time Progress**: Live scan progress with status indicators
 
 ### 🎯 Supported Check Types
 
@@ -111,7 +110,7 @@ sudo ./install.sh
 
 ### Usage
 
-#### 🚀 Enterprise CLI Commands
+#### CLI Commands
 ```bash
 # Complete compliance scan with colorful output
 sudo vijenex-cis
@@ -168,13 +167,13 @@ sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-5-
 
 The tool generates comprehensive reports with detailed system information:
 
-### 🎨 **Colorful CLI Output**
-- **🔵 Beautiful ASCII Banner**: Professional Vijenex branding
-- **🟢 Green ✓**: PASSED controls
-- **🔴 Red ✗**: FAILED controls  
-- **🟡 Yellow ⚠**: MANUAL verification required
-- **🔵 Cyan ?**: SKIPPED controls
-- **📊 Real-time Progress**: Live scan status with emojis
+🎨 Colorful CLI Output
+🔵 Beautiful ASCII Banner: Professional Vijenex branding
+🟢 Green ✓: PASSED controls
+🔴 Red ✗: FAILED controls
+🟡 Yellow ⚠: MANUAL verification required
+🔵 Cyan ?: SKIPPED controls
+📊 Real-time Progress: Live scan status with emojis
 
 ### 📄 HTML Report (`vijenex-cis-report.html`)
 - **System Information**: Distribution, kernel, IP address, scan date
@@ -346,7 +345,7 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 - **v1.0.1** - Ubuntu 22.04 LTS CIS Scanner
   - Complete CIS benchmark implementation (290+ controls)
   - Professional CLI with colorful output
-  - Enterprise installation with man pages
+  - System-wide installation with man pages
   - HTML and CSV reporting with proper Vijenex branding
   - Automatic reports folder creation
   - Zero false positive design
