@@ -48,19 +48,17 @@ This platform provides automated security compliance auditing for Linux systems 
 ## 🗂️ Repository Structure
 
 ```
-├── ubuntu-24.04/              # Ubuntu 24.04 LTS CIS audit tools
+├── ubuntu-22.04/              # Ubuntu 22.04 LTS CIS audit tools ✅ COMPLETE
 │   ├── scripts/
 │   │   └── vijenex-cis.py           # Main scanner engine
-│   ├── milestones/                  # CIS control definitions
-│   │   ├── milestone-1.json         # Initial Setup
-│   │   ├── milestone-2.json         # Services
-│   │   ├── milestone-3.json         # Network Configuration
-│   │   ├── milestone-4.json         # Logging and Auditing
-│   │   ├── milestone-5.json         # Access, Authentication
-│   │   └── milestone-6.json         # System Maintenance
-│   ├── documentation/               # Official CIS benchmark PDF
-│   └── reports/                     # Generated audit reports
-├── ubuntu-22.04/              # Ubuntu 22.04 LTS tools
+│   ├── milestones/                  # CIS control definitions (19 files)
+│   │   ├── milestone-1-1.json       # Filesystem Configuration
+│   │   ├── milestone-1-2.json       # Package Management
+│   │   ├── milestone-2-1.json       # Server Services
+│   │   ├── milestone-5-1.json       # SSH Configuration
+│   │   └── ...                      # 15 more milestone files
+│   └── README.md                    # Ubuntu 22.04 specific documentation
+├── ubuntu-24.04/              # Ubuntu 24.04 LTS tools (planned)
 ├── rhel-8/                    # Red Hat Enterprise Linux 8 tools
 ├── rhel-9/                    # Red Hat Enterprise Linux 9 tools
 ├── centos-7/                  # CentOS 7 tools
@@ -141,8 +139,8 @@ man vijenex-cis
 
 #### Alternative Usage (without installation)
 ```bash
-# Navigate to your distribution folder (e.g., ubuntu-24.04)
-cd ubuntu-24.04
+# Navigate to your distribution folder (e.g., ubuntu-22.04)
+cd ubuntu-22.04
 
 # Run directly with Python
 sudo python3 scripts/vijenex-cis.py --output-dir ./reports --profile Level1
@@ -152,6 +150,9 @@ sudo python3 scripts/vijenex-cis.py --format html --output-dir ./reports
 
 # Generate only CSV report
 sudo python3 scripts/vijenex-cis.py --format csv --output-dir ./reports
+
+# Run specific milestones
+sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-5-1.json
 ```
 
 ### Parameters
@@ -161,7 +162,7 @@ sudo python3 scripts/vijenex-cis.py --format csv --output-dir ./reports
 | `--output-dir` | Report output directory | `./reports` | `--output-dir /var/log/audit` |
 | `--profile` | CIS profile level | `Level1` | `--profile Level2` |
 | `--format` | Report format | `both` | `--format html` or `--format csv` |
-| `--milestones` | Specific milestone files | All files | `--milestones milestone-1.json` |
+| `--milestones` | Specific milestone files | All files | `--milestones milestone-1-1.json milestone-5-1.json` |
 
 ## 📊 Report Output
 
@@ -197,7 +198,7 @@ The tool generates comprehensive reports with detailed system information:
 
 ### Currently Supported Distributions
 
-#### Ubuntu 20.04 LTS
+#### Ubuntu 20.04 LTS (Planned)
 | Section | Controls | Coverage |
 |---------|----------|----------|
 | **1** Initial Setup | 20+ | Filesystem, updates, integrity, boot security |
@@ -223,6 +224,8 @@ The tool generates comprehensive reports with detailed system information:
 **Total: 290+ Security Controls**
 
 ### Planned Distributions
+- **Ubuntu 24.04 LTS** - In development
+- **Ubuntu 20.04 LTS** - In development
 - **Red Hat Enterprise Linux 8** - In development
 - **Red Hat Enterprise Linux 9** - In development  
 - **CentOS 7** - In development
@@ -340,12 +343,13 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 ## 🏷️ Releases
 
 ### Current Stable Release
-- **v1.0.0** - Ubuntu 24.04 LTS CIS Scanner
-  - Complete CIS benchmark implementation (120+ controls)
+- **v1.0.0** - Ubuntu 22.04 LTS CIS Scanner
+  - Complete CIS benchmark implementation (290+ controls)
   - Professional CLI with colorful output
   - Enterprise installation with man pages
   - HTML and CSV reporting
   - Zero false positive design
+  - 19 milestone files covering 7 major CIS sections
 
 ### Download Options
 ```bash
@@ -358,7 +362,7 @@ wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.0.tar.g
 
 ### Version Information
 - **Current Version**: v1.0.0
-- **Supported Distributions**: Ubuntu 24.04 LTS
+- **Supported Distributions**: Ubuntu 22.04 LTS
 - **CIS Compliance**: Based on official CIS benchmark documentation
 - **Release Date**: November 2024
 

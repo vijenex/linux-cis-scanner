@@ -77,7 +77,12 @@ sudo python3 scripts/vijenex-cis.py
 ```
 
 ### Basic Usage
+
+#### System-wide Installation (Recommended)
 ```bash
+# Install scanner system-wide
+sudo bash /path/to/Linux-CIS-Audit-code/install.sh
+
 # Run complete Level 1 scan
 sudo vijenex-cis --profile Level1
 
@@ -89,29 +94,50 @@ sudo vijenex-cis --format html
 sudo vijenex-cis --format csv
 ```
 
+#### Direct Usage (without installation)
+```bash
+# Navigate to ubuntu-22.04 directory
+cd ubuntu-22.04
+
+# Run complete scan
+sudo python3 scripts/vijenex-cis.py
+
+# Run with specific options
+sudo python3 scripts/vijenex-cis.py --profile Level1 --format both
+
+# Run specific milestones
+sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-5-1.json
+
+# Custom output directory
+sudo python3 scripts/vijenex-cis.py --output-dir /custom/reports/
+```
+
 ### Advanced Options
 ```bash
 # Level 2 profile (more restrictive)
-sudo vijenex-cis --profile Level2
+sudo python3 scripts/vijenex-cis.py --profile Level2
 
-# Custom output directory
-sudo vijenex-cis --output-dir /custom/reports/
+# Multiple specific milestones
+sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-2-1.json milestone-5-1.json
 
-# Multiple formats
-sudo vijenex-cis --format both
+# All report formats
+sudo python3 scripts/vijenex-cis.py --format both
 ```
 
 ## Report Formats
 
 ### HTML Report
-- **Location**: `./reports/linux-cis-report.html`
+- **Default Location**: `./linux-cis-report.html` (current directory)
+- **Custom Location**: Use `--output-dir` parameter
 - **Features**: Interactive dashboard, system information, detailed findings
 - **Sections**: Executive summary, compliance metrics, detailed control results
+- **System Info**: IP address, machine ID, distribution, scan timestamp
 
 ### CSV Report  
-- **Location**: `./reports/linux-cis-results.csv`
+- **Default Location**: `./linux-cis-results.csv` (current directory)
+- **Custom Location**: Use `--output-dir` parameter
 - **Features**: Spreadsheet-compatible, filterable data
-- **Columns**: ID, Control, Section, Status, Description, Impact, Remediation
+- **Columns**: Control ID, Title, Section, Status, Current State, Expected State, Evidence
 
 ## System Requirements
 
@@ -179,10 +205,31 @@ This scanner implements controls from:
 - **Level 1**: Foundational security controls (recommended for all systems)
 - **Level 2**: Enhanced security controls (for high-security environments)
 
+## Command Line Options
+
+```bash
+usage: vijenex-cis.py [-h] [--output-dir OUTPUT_DIR] [--profile {Level1,Level2}]
+                      [--milestones MILESTONES [MILESTONES ...]]
+                      [--format {html,csv,both}]
+
+Vijenex CIS - Ubuntu 22.04 LTS Security Compliance Scanner
+
+options:
+  -h, --help            show this help message and exit
+  --output-dir OUTPUT_DIR
+                        Output directory for reports
+  --profile {Level1,Level2}
+                        CIS profile level
+  --milestones MILESTONES [MILESTONES ...]
+                        Specific milestone files to scan
+  --format {html,csv,both}
+                        Report format
+```
+
 ## Support
 
 For issues, questions, or contributions:
-- **Repository**: [Vijenex Linux CIS Audit](https://github.com/vijenex/Linux-CIS-Audit)
+- **Repository**: [Vijenex Linux CIS Scanner](https://github.com/vijenex/linux-cis-scanner)
 - **Documentation**: See main repository README
 - **License**: MIT License
 
