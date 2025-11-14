@@ -8,13 +8,17 @@
       "id": "4.1.1",
       "title": "Ensure a single firewall configuration utility is in use",
       "section": "4.1 Configure a single firewall utility",
-      "description": "On Ubuntu, ufw, nftables, and iptables are all available. Either ufw or nftables should be used to configure a firewall.",
-      "impact": "Running multiple firewall utilities concurrently may lead to conflict, therefore only one should be used and configured.",
-      "remediation": "Configure either ufw or nftables to be the firewall utility in use on the system.",
       "profile": "Level1",
       "automated": true,
       "type": "SingleFirewall",
-      "firewall_utilities": ["ufw", "nftables", "iptables"]
+      "firewall_utilities": [
+        "ufw",
+        "nftables",
+        "iptables"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

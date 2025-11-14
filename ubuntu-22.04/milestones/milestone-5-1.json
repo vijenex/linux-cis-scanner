@@ -7,350 +7,407 @@
       "id": "5.1.1",
       "title": "Ensure access to /etc/ssh/sshd_config is configured",
       "section": "Access Control",
-      "description": "The /etc/ssh/sshd_config file contains configuration specifications for sshd. The command below sets the owner and group of the file to root.",
-      "rationale": "The /etc/ssh/sshd_config file needs to be protected from unauthorized changes by non-privileged users.",
-      "impact": "None.",
-      "remediation": "Run the following commands to set ownership and permissions on /etc/ssh/sshd_config: chown root:root /etc/ssh/sshd_config, chmod og-rwx /etc/ssh/sshd_config",
       "profile": "Level1",
       "type": "FilePermission",
       "file_path": "/etc/ssh/sshd_config",
       "expected_mode": "600",
       "expected_owner": "root",
-      "expected_group": "root"
+      "expected_group": "root",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.2",
       "title": "Ensure access to SSH private host key files is configured",
       "section": "Access Control",
-      "description": "An SSH private key is one of two files used in SSH public/private key authentication. In this authentication method, The possession of the private key is proof of identity. Only a private key that corresponds to a public key will be able to authenticate successfully.",
-      "rationale": "If an unauthorized user obtains the private SSH host key file, the host could be impersonated.",
-      "impact": "None.",
-      "remediation": "Run the following commands to set permissions and ownership on the SSH host private keys: find /etc/ssh -xtype f -name 'ssh_host_*_key' -exec chown root:root {} \\;, find /etc/ssh -xtype f -name 'ssh_host_*_key' -exec chmod 0600 {} \\;",
       "profile": "Level1",
       "type": "SSHPrivateKeys",
       "key_pattern": "/etc/ssh/ssh_host_*_key",
       "expected_mode": "600",
       "expected_owner": "root",
-      "expected_group": "root"
+      "expected_group": "root",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.3",
       "title": "Ensure access to SSH public host key files is configured",
       "section": "Access Control",
-      "description": "An SSH public key is one of two files used in SSH public/private key authentication. In this authentication method, a public key is a key that can be used for verifying digital signatures generated using a corresponding private key.",
-      "rationale": "If a public host key file is modified by an unauthorized user, the SSH service may be compromised.",
-      "impact": "None.",
-      "remediation": "Run the following commands to set permissions and ownership on the SSH host public keys: find /etc/ssh -xtype f -name 'ssh_host_*_key.pub' -exec chmod 0644 {} \\;, find /etc/ssh -xtype f -name 'ssh_host_*_key.pub' -exec chown root:root {} \\;",
       "profile": "Level1",
       "type": "SSHPublicKeys",
       "key_pattern": "/etc/ssh/ssh_host_*_key.pub",
       "expected_mode": "644",
       "expected_owner": "root",
-      "expected_group": "root"
+      "expected_group": "root",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.4",
       "title": "Ensure sshd access is configured",
       "section": "Access Control",
-      "description": "There are several options available to limit which users and group can access the system via SSH. It is recommended that at least one of the following options be leveraged: AllowUsers, AllowGroups, DenyUsers, DenyGroups.",
-      "rationale": "Restricting which users can remotely access the system via SSH will help ensure that only authorized users access the system.",
-      "impact": "You will need to ensure that any users that require SSH access are part of the group specified in AllowGroups or are specified in AllowUsers.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set one or more of the parameter as follows: AllowUsers <userlist>, AllowGroups <grouplist>, DenyUsers <userlist>, DenyGroups <grouplist>",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["AllowUsers", "AllowGroups", "DenyUsers", "DenyGroups"],
+      "check_parameters": [
+        "AllowUsers",
+        "AllowGroups",
+        "DenyUsers",
+        "DenyGroups"
+      ],
       "expected_values": {},
       "require_one_of": true,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.5",
       "title": "Ensure sshd Banner is configured",
       "section": "Access Control",
-      "description": "The Banner parameter specifies a file whose contents are sent to the remote user before authentication is allowed.",
-      "rationale": "Banners are used to warn connecting users of the particular site's policy regarding connection. Presenting a warning message prior to the normal user login may assist the prosecution of trespassers on the computer system.",
-      "impact": "None.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: Banner /etc/issue.net",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["Banner"],
-      "expected_values": {"Banner": "/etc/issue.net"},
+      "check_parameters": [
+        "Banner"
+      ],
+      "expected_values": {
+        "Banner": "/etc/issue.net"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.5",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.6",
       "title": "Ensure sshd Ciphers are configured",
       "section": "Access Control",
-      "description": "This variable limits the ciphers that SSH can use during communication.",
-      "rationale": "Weak ciphers that are used for authentication to the cryptographic module cannot be relied upon to provide confidentiality or integrity, and system information may be compromised. The DES, Triple DES, and Blowfish ciphers, as used in SSH, have a birthday bound of approximately four billion blocks, which make them vulnerable to a birthday attack.",
-      "impact": "Some legacy SSH clients may not support these ciphers.",
-      "remediation": "Edit the /etc/ssh/sshd_config file add/modify the Ciphers line to contain a comma separated list of the site approved ciphers Example: Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["Ciphers"],
-      "expected_values": {"Ciphers": "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"},
+      "check_parameters": [
+        "Ciphers"
+      ],
+      "expected_values": {
+        "Ciphers": "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+      },
       "require_one_of": false,
-      "validate_crypto": true
+      "validate_crypto": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.6",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.7",
       "title": "Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured",
       "section": "Access Control",
-      "description": "The two options ClientAliveInterval and ClientAliveCountMax control the timeout of ssh sessions.",
-      "rationale": "Having no timeout value associated with a connection could allow an unauthorized user access to another user's ssh session (e.g. user walks away from their computer and doesn't lock the screen). Setting a timeout value at least reduces the risk of this happening.",
-      "impact": "The ssh session will be terminated after the ClientAliveInterval * ClientAliveCountMax seconds of inactivity.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameters according to site policy: ClientAliveInterval 15, ClientAliveCountMax 3",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["ClientAliveInterval", "ClientAliveCountMax"],
-      "expected_values": {"ClientAliveInterval": "15", "ClientAliveCountMax": "3"},
+      "check_parameters": [
+        "ClientAliveInterval",
+        "ClientAliveCountMax"
+      ],
+      "expected_values": {
+        "ClientAliveInterval": "15",
+        "ClientAliveCountMax": "3"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.7",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.8",
       "title": "Ensure sshd DisableForwarding is enabled",
       "section": "Access Control",
-      "description": "SSH port forwarding is a mechanism in SSH for tunneling application ports from the client to the server, or servers to clients. It can be used for adding encryption to legacy applications, going through firewalls, and some system administrators and IT professionals use it for opening backdoors into the internal network from their home machines.",
-      "rationale": "Leaving port forwarding enabled can expose the organization to security risks and back-doors.",
-      "impact": "SSH tunneling will be disabled.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: DisableForwarding yes",
       "profile": "Level2",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["DisableForwarding"],
-      "expected_values": {"DisableForwarding": "yes"},
+      "check_parameters": [
+        "DisableForwarding"
+      ],
+      "expected_values": {
+        "DisableForwarding": "yes"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.8",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.9",
       "title": "Ensure sshd GSSAPIAuthentication is disabled",
       "section": "Access Control",
-      "description": "GSSAPI authentication is used to provide additional authentication mechanisms to applications.",
-      "rationale": "Unless needed, SSH should not permit extraneous authentication methods as it may increase the attack surface of the service.",
-      "impact": "GSSAPI authentication will be disabled.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: GSSAPIAuthentication no",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["GSSAPIAuthentication"],
-      "expected_values": {"GSSAPIAuthentication": "no"},
+      "check_parameters": [
+        "GSSAPIAuthentication"
+      ],
+      "expected_values": {
+        "GSSAPIAuthentication": "no"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.9",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.10",
       "title": "Ensure sshd HostbasedAuthentication is disabled",
       "section": "Access Control",
-      "description": "The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts, or /etc/hosts.equiv, along with successful public key client host authentication.",
-      "rationale": "Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf, disabling the ability to use .rhosts files in SSH provides an additional layer of protection.",
-      "impact": "Host-based authentication will be disabled.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: HostbasedAuthentication no",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["HostbasedAuthentication"],
-      "expected_values": {"HostbasedAuthentication": "no"},
+      "check_parameters": [
+        "HostbasedAuthentication"
+      ],
+      "expected_values": {
+        "HostbasedAuthentication": "no"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.10",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.11",
       "title": "Ensure sshd IgnoreRhosts is enabled",
       "section": "Access Control",
-      "description": "The IgnoreRhosts parameter specifies that .rhosts and .shosts files will not be used in RhostsRSAAuthentication or HostbasedAuthentication.",
-      "rationale": "Setting this parameter forces users to enter a password when authenticating with ssh.",
-      "impact": ".rhosts and .shosts files will be ignored during authentication.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: IgnoreRhosts yes",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["IgnoreRhosts"],
-      "expected_values": {"IgnoreRhosts": "yes"},
+      "check_parameters": [
+        "IgnoreRhosts"
+      ],
+      "expected_values": {
+        "IgnoreRhosts": "yes"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.11",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.12",
       "title": "Ensure sshd KexAlgorithms is configured",
       "section": "Access Control",
-      "description": "Key exchange is any method in cryptography by which cryptographic keys are exchanged between two parties, allowing use of a cryptographic algorithm.",
-      "rationale": "Key exchange methods that are considered weak should be removed. A key exchange method may be weak because too few bits were used, or the hashing algorithm is considered too weak, or there are concerns about how the random numbers were generated or how the encryption operation was performed.",
-      "impact": "Some legacy SSH clients may not support these key exchange algorithms.",
-      "remediation": "Edit the /etc/ssh/sshd_config file add/modify the KexAlgorithms line to contain a comma separated list of the site approved key exchange algorithms Example: KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["KexAlgorithms"],
-      "expected_values": {"KexAlgorithms": "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"},
+      "check_parameters": [
+        "KexAlgorithms"
+      ],
+      "expected_values": {
+        "KexAlgorithms": "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+      },
       "require_one_of": false,
-      "validate_crypto": true
+      "validate_crypto": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.12",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.13",
       "title": "Ensure sshd LoginGraceTime is configured",
       "section": "Access Control",
-      "description": "The LoginGraceTime parameter specifies the time allowed for successful authentication to the SSH server.",
-      "rationale": "Setting the LoginGraceTime parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. It will also limit the number of concurrent SSH connections.",
-      "impact": "Users will have a limited time to authenticate to SSH.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: LoginGraceTime 60",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["LoginGraceTime"],
-      "expected_values": {"LoginGraceTime": "60"},
+      "check_parameters": [
+        "LoginGraceTime"
+      ],
+      "expected_values": {
+        "LoginGraceTime": "60"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.13",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.14",
       "title": "Ensure sshd LogLevel is configured",
       "section": "Access Control",
-      "description": "INFO level is the basic level that only records login activity of SSH users. In many situations, such as Incident Response, it is important to determine when a particular user was active on a system.",
-      "rationale": "SSH provides several logging levels with varying amounts of verbosity. DEBUG is specifically not recommended other than strictly for debugging SSH communications since it provides so much data that it is difficult to identify important security information.",
-      "impact": "SSH will log at the specified level.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: LogLevel VERBOSE or LogLevel INFO",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["LogLevel"],
-      "expected_values": {"LogLevel": "VERBOSE"},
+      "check_parameters": [
+        "LogLevel"
+      ],
+      "expected_values": {
+        "LogLevel": "VERBOSE"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.14",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.15",
       "title": "Ensure sshd MACs are configured",
       "section": "Access Control",
-      "description": "This variable limits the types of MAC algorithms that SSH can use during communication.",
-      "rationale": "MD5 and 96-bit MAC algorithms are considered weak and have been shown to increase exploitability in SSH downgrade attacks. Weak algorithms continue to have a great deal of attention as a weak spot that can be exploited with expanded computing power. An attacker that breaks the algorithm could take advantage of a MiTM position to decrypt the SSH tunnel and capture credentials or other information.",
-      "impact": "Some legacy SSH clients may not support these MACs.",
-      "remediation": "Edit the /etc/ssh/sshd_config file and add/modify the MACs line to contain a comma separated list of the site approved MACs Example: MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["MACs"],
-      "expected_values": {"MACs": "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"},
+      "check_parameters": [
+        "MACs"
+      ],
+      "expected_values": {
+        "MACs": "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
+      },
       "require_one_of": false,
-      "validate_crypto": true
+      "validate_crypto": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.15",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.16",
       "title": "Ensure sshd MaxAuthTries is configured",
       "section": "Access Control",
-      "description": "The MaxAuthTries parameter specifies the maximum number of authentication attempts permitted per connection.",
-      "rationale": "Setting the MaxAuthTries parameter to a low number will minimize the risk of successful brute force attacks to the SSH server.",
-      "impact": "Users will have a limited number of attempts to authenticate to SSH.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: MaxAuthTries 4",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["MaxAuthTries"],
-      "expected_values": {"MaxAuthTries": "4"},
+      "check_parameters": [
+        "MaxAuthTries"
+      ],
+      "expected_values": {
+        "MaxAuthTries": "4"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.16",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.17",
       "title": "Ensure sshd MaxSessions is configured",
       "section": "Access Control",
-      "description": "The MaxSessions parameter specifies the maximum number of open sessions permitted from a given connection.",
-      "rationale": "To protect a system from denial of service due to a large number of concurrent sessions, use the rate limiting function of MaxSessions to protect availability of sshd logins and prevent overwhelming the daemon.",
-      "impact": "Users will be limited in the number of simultaneous sessions they can have.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: MaxSessions 10",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["MaxSessions"],
-      "expected_values": {"MaxSessions": "10"},
+      "check_parameters": [
+        "MaxSessions"
+      ],
+      "expected_values": {
+        "MaxSessions": "10"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.17",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.18",
       "title": "Ensure sshd MaxStartups is configured",
       "section": "Access Control",
-      "description": "The MaxStartups parameter specifies the maximum number of concurrent unauthenticated connections to the SSH daemon.",
-      "rationale": "To protect a system from denial of service due to a large number of pending authentication connection attempts, use the rate limiting function of MaxStartups to protect availability of sshd logins and prevent overwhelming the daemon.",
-      "impact": "Concurrent unauthenticated connections will be limited.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: MaxStartups 10:30:60",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["MaxStartups"],
-      "expected_values": {"MaxStartups": "10:30:60"},
+      "check_parameters": [
+        "MaxStartups"
+      ],
+      "expected_values": {
+        "MaxStartups": "10:30:60"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.18",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.19",
       "title": "Ensure sshd PermitEmptyPasswords is disabled",
       "section": "Access Control",
-      "description": "The PermitEmptyPasswords parameter specifies if the SSH server allows login to accounts with empty password strings.",
-      "rationale": "Disallowing remote shell access to accounts that have an empty password reduces the probability of unauthorized access to the system.",
-      "impact": "Users with empty passwords will not be able to authenticate via SSH.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: PermitEmptyPasswords no",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["PermitEmptyPasswords"],
-      "expected_values": {"PermitEmptyPasswords": "no"},
+      "check_parameters": [
+        "PermitEmptyPasswords"
+      ],
+      "expected_values": {
+        "PermitEmptyPasswords": "no"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.19",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.20",
       "title": "Ensure sshd PermitRootLogin is disabled",
       "section": "Access Control",
-      "description": "The PermitRootLogin parameter specifies if the root user can log in using ssh.",
-      "rationale": "Disallowing root logins over SSH requires system admins to authenticate using their own individual account, then escalating to root via sudo or su. This in turn limits opportunity for non-repudiation and provides a clear audit trail in the event of a security incident.",
-      "impact": "Root will not be able to authenticate via SSH.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: PermitRootLogin no",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["PermitRootLogin"],
-      "expected_values": {"PermitRootLogin": "no"},
+      "check_parameters": [
+        "PermitRootLogin"
+      ],
+      "expected_values": {
+        "PermitRootLogin": "no"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.20",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.21",
       "title": "Ensure sshd PermitUserEnvironment is disabled",
       "section": "Access Control",
-      "description": "The PermitUserEnvironment option allows users to present environment options to the ssh daemon.",
-      "rationale": "Permitting users the ability to set environment variables through the SSH daemon could potentially allow users to bypass security controls (e.g. setting an execution path that could execute malicious code).",
-      "impact": "Users will not be able to set environment variables through SSH.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: PermitUserEnvironment no",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["PermitUserEnvironment"],
-      "expected_values": {"PermitUserEnvironment": "no"},
+      "check_parameters": [
+        "PermitUserEnvironment"
+      ],
+      "expected_values": {
+        "PermitUserEnvironment": "no"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.21",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "5.1.22",
       "title": "Ensure sshd UsePAM is enabled",
       "section": "Access Control",
-      "description": "UsePAM Enables the Pluggable Authentication Module interface. If set to 'yes' this will enable PAM authentication using ChallengeResponseAuthentication and PasswordAuthentication in addition to PAM account and session module processing for all authentication types.",
-      "rationale": "When usePAM is set to yes, PAM runs through account and session types properly. This is important if you want to restrict access to services based off of IP, time or other factors of the account. Additionally, you can make sure users inherit certain environment variables on login or disallow access to the server.",
-      "impact": "PAM will be used for authentication.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: UsePAM yes",
       "profile": "Level1",
       "type": "SSHDConfig",
       "config_file": "/etc/ssh/sshd_config",
-      "check_parameters": ["UsePAM"],
-      "expected_values": {"UsePAM": "yes"},
+      "check_parameters": [
+        "UsePAM"
+      ],
+      "expected_values": {
+        "UsePAM": "yes"
+      },
       "require_one_of": false,
-      "validate_crypto": false
+      "validate_crypto": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.1.22",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     }
   ]
 }

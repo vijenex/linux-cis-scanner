@@ -7,89 +7,86 @@
       "id": "3.1.1",
       "title": "Ensure IPv6 status is identified",
       "section": "Network Configuration",
-      "description": "IPv6 provides an virtually unlimited number of IP addresses as well as improving on the feature set of IPv4. With the increasing number of devices, systems, and appliances that are found in the modern enterprise IPv6 will become the standard way systems will communicate.",
-      "rationale": "If IPv6 or dual stack is not to be used, it is recommended that IPv6 be disabled to reduce the attack surface of the system.",
-      "impact": "Many IPv4 security monitoring tools are not compatible with IPv6 environments. Also, the ip6tables command that is used to configure IPv6 firewalls has significantly different syntax than iptables.",
-      "remediation": "Review the output of the command and determine if IPv6 is required in your environment. If IPv6 is required, ensure that all security tools that monitor IPv4 traffic are also configured to monitor IPv6 traffic. If IPv6 is not required, disable it.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "3.1.2",
       "title": "Ensure wireless interfaces are not available",
       "section": "Network Configuration",
-      "description": "Wireless networking is used when wired networks are unavailable.",
-      "rationale": "If wireless is not to be used, wireless devices can be disabled to reduce the potential attack surface.",
-      "impact": "Disabling wireless will prevent the system from connecting to wireless networks.",
-      "remediation": "Run the following script to disable wireless interfaces: if command -v nmcli >/dev/null 2>&1 ; then nmcli radio all off; else if [ -n \"$(find /sys/class/net/*/ -name wireless 2>/dev/null)\" ]; then mname=$(for driverdir in $(find /sys/class/net/*/ -name wireless 2>/dev/null | xargs -0 dirname); do basename \"$(readlink -f \"$driverdir\"/device/driver/module)\";done | sort -u); for dm in $mname; do echo \"install $dm /bin/true\" >> /etc/modprobe.d/disable-wireless.conf; done; fi; fi",
       "profile": "Level1",
       "type": "WirelessInterface",
-      "expected_status": "disabled"
+      "expected_status": "disabled",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "3.1.3",
       "title": "Ensure bluetooth services are not in use",
       "section": "Network Configuration",
-      "description": "Bluetooth is a wireless technology standard used for exchanging data between fixed and mobile devices over short distances using UHF radio waves.",
-      "rationale": "If Bluetooth is not to be used, it should be disabled to reduce the potential attack surface.",
-      "impact": "Disabling Bluetooth will prevent the system from connecting to Bluetooth devices.",
-      "remediation": "Run the following commands to disable bluetooth: systemctl --now disable bluetooth.service, apt purge bluez",
       "profile": "Level1",
       "type": "ServiceNotInUse",
-      "service_names": ["bluetooth"],
-      "package_names": ["bluez"]
+      "service_names": [
+        "bluetooth"
+      ],
+      "package_names": [
+        "bluez"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.1.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "3.2.1",
       "title": "Ensure dccp kernel module is not available",
       "section": "Network Configuration",
-      "description": "The Datagram Congestion Control Protocol (DCCP) is a transport layer protocol that supports streaming media and telephony.",
-      "rationale": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
-      "impact": "Disabling DCCP will prevent applications that require DCCP from functioning.",
-      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf Example: vi /etc/modprobe.d/dccp.conf and add the following line: install dccp /bin/true",
       "profile": "Level1",
       "type": "KernelModule",
       "module_name": "dccp",
-      "expected_status": "not_available"
+      "expected_status": "not_available",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "3.2.2",
       "title": "Ensure tipc kernel module is not available",
       "section": "Network Configuration",
-      "description": "The Transparent Inter-Process Communication (TIPC) protocol is designed to provide communication between cluster nodes.",
-      "rationale": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
-      "impact": "Disabling TIPC will prevent applications that require TIPC from functioning.",
-      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf Example: vi /etc/modprobe.d/tipc.conf and add the following line: install tipc /bin/true",
       "profile": "Level1",
       "type": "KernelModule",
       "module_name": "tipc",
-      "expected_status": "not_available"
+      "expected_status": "not_available",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "3.2.3",
       "title": "Ensure rds kernel module is not available",
       "section": "Network Configuration",
-      "description": "The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to provide low-latency, high-bandwidth communications between cluster nodes.",
-      "rationale": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
-      "impact": "Disabling RDS will prevent applications that require RDS from functioning.",
-      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf Example: vi /etc/modprobe.d/rds.conf and add the following line: install rds /bin/true",
       "profile": "Level1",
       "type": "KernelModule",
       "module_name": "rds",
-      "expected_status": "not_available"
+      "expected_status": "not_available",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "3.2.4",
       "title": "Ensure sctp kernel module is not available",
       "section": "Network Configuration",
-      "description": "The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to support message oriented communication, with several streams of messages in one connection.",
-      "rationale": "If the protocol is not being used, it is recommended that kernel module not be loaded, disabling the service to reduce the potential attack surface.",
-      "impact": "Disabling SCTP will prevent applications that require SCTP from functioning.",
-      "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf Example: vi /etc/modprobe.d/sctp.conf and add the following line: install sctp /bin/true",
       "profile": "Level1",
       "type": "KernelModule",
       "module_name": "sctp",
-      "expected_status": "not_available"
+      "expected_status": "not_available",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "3.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     }
   ]
 }

@@ -8,124 +8,143 @@
       "id": "4.3.1",
       "title": "Ensure nftables is installed",
       "section": "4.3 Configure nftables",
-      "description": "nftables provides a new in-kernel packet classification framework that is based on a network-specific Virtual Machine (VM) and a new nft userspace command line tool.",
-      "impact": "nftables is a replacement for iptables, ip6tables, ebtables and arptables.",
-      "remediation": "Install nftables: apt install nftables",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "nftables",
-      "should_be_installed": true
+      "should_be_installed": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.2",
       "title": "Ensure ufw is uninstalled or disabled with nftables",
       "section": "4.3 Configure nftables",
-      "description": "ufw is a frontend for iptables and is incompatible with nftables.",
-      "impact": "Running both ufw and nftables may lead to conflict, therefore only one should be used and configured.",
-      "remediation": "Remove ufw: apt purge ufw OR disable ufw: ufw --force disable",
       "profile": "Level1",
       "automated": true,
       "type": "UFWWithNftables",
-      "expected_status": "ufw_disabled_or_removed"
+      "expected_status": "ufw_disabled_or_removed",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.3",
       "title": "Ensure iptables are flushed with nftables",
       "section": "4.3 Configure nftables",
-      "description": "nftables is a replacement for iptables, ip6tables, ebtables and arptables.",
-      "impact": "It is possible to mix iptables and nftables. However, this increases complexity and also the chance to introduce loopholes in the firewall ruleset.",
-      "remediation": "Run the following commands to flush iptables: iptables -F && ip6tables -F",
       "profile": "Level1",
       "automated": false,
       "type": "Manual",
-      "expected": "iptables rules flushed when using nftables"
+      "expected": "iptables rules flushed when using nftables",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.4",
       "title": "Ensure a nftables table exists",
       "section": "4.3 Configure nftables",
-      "description": "Tables hold chains. Each table only has one address family and only applies to packets of this family.",
-      "impact": "nftables doesn't have any default tables. Without a table being build, nftables will not filter network traffic.",
-      "remediation": "Run the following command to create a table in nftables: nft create table inet <table_name>",
       "profile": "Level1",
       "automated": true,
       "type": "NftablesTable",
-      "expected_families": ["inet", "ip", "ip6"]
+      "expected_families": [
+        "inet",
+        "ip",
+        "ip6"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.5",
       "title": "Ensure nftables base chains exist",
       "section": "4.3 Configure nftables",
-      "description": "Chains are containers for rules. They exist in two kinds, base chains and regular chains.",
-      "impact": "If a base chain doesn't exist with a hook for input, forward, and delete, packets that would flow through those chains will not be touched by nftables.",
-      "remediation": "Run the following command to create the base chains: nft create chain inet <table_name> <chain_name> { type filter hook <(input|forward|output)> priority 0 \\; }",
       "profile": "Level1",
       "automated": true,
       "type": "NftablesBaseChains",
-      "required_hooks": ["input", "forward", "output"]
+      "required_hooks": [
+        "input",
+        "forward",
+        "output"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.5",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.6",
       "title": "Ensure nftables loopback traffic is configured",
       "section": "4.3 Configure nftables",
-      "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network.",
-      "impact": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system.",
-      "remediation": "Run the following commands to implement the loopback rules: nft add rule inet <table_name> <chain_name> iif lo accept && nft add rule inet <table_name> <chain_name> ip saddr 127.0.0.0/8 counter drop",
       "profile": "Level1",
       "automated": true,
       "type": "NftablesLoopback",
-      "expected_rules": ["iif lo accept", "ip saddr 127.0.0.0/8", "ip6 saddr ::1"]
+      "expected_rules": [
+        "iif lo accept",
+        "ip saddr 127.0.0.0/8",
+        "ip6 saddr ::1"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.6",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.7",
       "title": "Ensure nftables outbound and established connections are configured",
       "section": "4.3 Configure nftables",
-      "description": "Configure the firewall rules for new outbound and established connections.",
-      "impact": "If rules are not in place for new outbound and established connections all packets will be dropped by the default policy preventing network usage.",
-      "remediation": "Configure nftables in accordance with site policy.",
       "profile": "Level1",
       "automated": false,
       "type": "Manual",
-      "expected": "nftables outbound and established connections configured according to site policy"
+      "expected": "nftables outbound and established connections configured according to site policy",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.7",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.8",
       "title": "Ensure nftables default deny firewall policy",
       "section": "4.3 Configure nftables",
-      "description": "Base chain policy is the default verdict that will be applied to packets reaching the end of the chain.",
-      "impact": "There are two policies: accept (default) and drop. If the policy is set to accept, the firewall will accept any packet that is not configured to be denied and the packet will continue transversing the network stack.",
-      "remediation": "Run the following command for the base chains with the input, forward, and output hooks: nft chain <table_family> <table_name> <chain_name> { policy drop \\; }",
       "profile": "Level1",
       "automated": true,
       "type": "NftablesDefaultPolicy",
       "expected_policy": "drop",
-      "required_chains": ["input", "forward", "output"]
+      "required_chains": [
+        "input",
+        "forward",
+        "output"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.8",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.9",
       "title": "Ensure nftables service is enabled",
       "section": "4.3 Configure nftables",
-      "description": "The nftables service allows for the loading of nftables rulesets during boot, or starting of the nftables service.",
-      "impact": "The nftables service restores the nftables rules from the rules files, ensuring that the rules are not lost between reboots or if the nftables service is restarted.",
-      "remediation": "Enable nftables service: systemctl enable nftables",
       "profile": "Level1",
       "automated": true,
       "type": "Service",
       "service_name": "nftables",
-      "expected_status": "enabled"
+      "expected_status": "enabled",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.9",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.3.10",
       "title": "Ensure nftables rules are permanent",
       "section": "4.3 Configure nftables",
-      "description": "nftables rules should be saved to a file so that they persist across reboots.",
-      "impact": "Changes made to nftables rules using nft will be lost when the system is rebooted.",
-      "remediation": "Save nftables rules to configuration file: nft list ruleset > /etc/nftables.conf",
       "profile": "Level1",
       "automated": true,
       "type": "NftablesPersistent",
-      "config_files": ["/etc/nftables.conf", "/etc/nftables/*.nft"]
+      "config_files": [
+        "/etc/nftables.conf",
+        "/etc/nftables/*.nft"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.3.10",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

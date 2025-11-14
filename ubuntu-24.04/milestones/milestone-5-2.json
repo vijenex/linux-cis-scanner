@@ -8,92 +8,107 @@
       "id": "5.2.1",
       "title": "Ensure sudo is installed",
       "section": "5.2 Configure privilege escalation",
-      "description": "sudo allows a permitted user to execute a command as the superuser or another user, as specified by the security policy.",
-      "impact": "sudo supports a plugin architecture for security policies and input/output logging. Third parties can develop and distribute their own policy and I/O logging plugins to work seamlessly with the sudo front end.",
-      "remediation": "Install sudo: apt install sudo",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "sudo",
-      "should_be_installed": true
+      "should_be_installed": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "5.2.2",
       "title": "Ensure sudo commands use pty",
       "section": "5.2 Configure privilege escalation",
-      "description": "sudo can be configured to run only from a pseudo-pty",
-      "impact": "Attackers can run a malicious program using sudo which would fork a background process that remains even when the main program has finished executing.",
-      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line: Defaults use_pty",
       "profile": "Level1",
       "automated": true,
       "type": "SudoConfig",
-      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
-      "required_setting": "Defaults use_pty"
+      "config_files": [
+        "/etc/sudoers",
+        "/etc/sudoers.d/*"
+      ],
+      "required_setting": "Defaults use_pty",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "5.2.3",
       "title": "Ensure sudo log file exists",
       "section": "5.2 Configure privilege escalation",
-      "description": "sudo can use a custom log file",
-      "impact": "A sudo log file simplifies auditing of sudo commands",
-      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line: Defaults logfile=\"<PATH TO LOGFILE>\"",
       "profile": "Level1",
       "automated": true,
       "type": "SudoConfig",
-      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
-      "required_setting": "Defaults logfile="
+      "config_files": [
+        "/etc/sudoers",
+        "/etc/sudoers.d/*"
+      ],
+      "required_setting": "Defaults logfile=",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "5.2.4",
       "title": "Ensure users must provide password for privilege escalation",
       "section": "5.2 Configure privilege escalation",
-      "description": "The sudo NOPASSWD tag, when specified, allows a user to execute commands using sudo without having to authenticate.",
-      "impact": "Without re-authenticating, it is possible that an attacker can abuse sudo access that is available in a current session.",
-      "remediation": "Remove any occurrences of NOPASSWD tags in the file /etc/sudoers and files in /etc/sudoers.d/",
       "profile": "Level1",
       "automated": true,
       "type": "SudoConfig",
-      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
-      "prohibited_setting": "NOPASSWD"
+      "config_files": [
+        "/etc/sudoers",
+        "/etc/sudoers.d/*"
+      ],
+      "prohibited_setting": "NOPASSWD",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "5.2.5",
       "title": "Ensure re-authentication for privilege escalation is not disabled globally",
       "section": "5.2 Configure privilege escalation",
-      "description": "The sudo !authenticate tag, when specified, allows a user to execute commands using sudo without having to authenticate.",
-      "impact": "Without re-authenticating, it is possible that an attacker can abuse sudo access that is available in a current session.",
-      "remediation": "Remove any occurrences of !authenticate tags in the file /etc/sudoers and files in /etc/sudoers.d/",
       "profile": "Level1",
       "automated": true,
       "type": "SudoConfig",
-      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
-      "prohibited_setting": "!authenticate"
+      "config_files": [
+        "/etc/sudoers",
+        "/etc/sudoers.d/*"
+      ],
+      "prohibited_setting": "!authenticate",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.5",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "5.2.6",
       "title": "Ensure sudo authentication timeout is configured correctly",
       "section": "5.2 Configure privilege escalation",
-      "description": "The sudo timestamp_timeout tag sets the amount of time sudo password prompt waits.",
-      "impact": "Setting a timeout value reduces the window of opportunity for unauthorized privileged access to another user.",
-      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line: Defaults timestamp_timeout=15",
       "profile": "Level1",
       "automated": true,
       "type": "SudoConfig",
-      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
-      "required_setting": "Defaults timestamp_timeout=15"
+      "config_files": [
+        "/etc/sudoers",
+        "/etc/sudoers.d/*"
+      ],
+      "required_setting": "Defaults timestamp_timeout=15",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.6",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "5.2.7",
       "title": "Ensure access to the su command is restricted",
       "section": "5.2 Configure privilege escalation",
-      "description": "The su command allows a user to run a command or shell as another user.",
-      "impact": "Restricting the use of su, and using sudo in its place, provides system administrators better control of the escalation of user privileges to execute privileged commands.",
-      "remediation": "Create a comma separated list of users in the sudo group: grep sudo /etc/group. Add the following line to the /etc/pam.d/su file: auth required pam_wheel.so use_uid group=sudo",
       "profile": "Level1",
       "automated": true,
       "type": "PAMConfig",
       "config_file": "/etc/pam.d/su",
-      "required_setting": "auth required pam_wheel.so use_uid group=sudo"
+      "required_setting": "auth required pam_wheel.so use_uid group=sudo",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "5.2.7",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

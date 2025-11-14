@@ -6,75 +6,73 @@
     {
       "id": "4.2.1",
       "title": "Ensure ufw is installed",
-      "description": "The Uncomplicated Firewall (ufw) is a frontend for iptables and is particularly well-suited for host-based firewalls.",
-      "rationale": "A firewall utility is required to configure the Linux kernel's netfilter framework via the iptables or nftables back-end.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "Package",
       "package": "ufw",
-      "expected_state": "installed"
+      "expected_state": "installed",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "4.2.2",
       "title": "Ensure iptables-persistent is not installed with ufw",
-      "description": "The iptables-persistent package should not be installed with ufw.",
-      "rationale": "Running both ufw and the services included in the iptables-persistent package may lead to conflict.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "Package",
       "package": "iptables-persistent",
-      "expected_state": "not_installed"
+      "expected_state": "not_installed",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "4.2.3",
       "title": "Ensure ufw service is enabled",
-      "description": "UncomplicatedFirewall (ufw) is a program for managing a netfilter firewall.",
-      "rationale": "The ufw service must be enabled and running in order for ufw to protect the system.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "UFWStatus",
-      "expected_state": "active"
+      "expected_state": "active",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "4.2.4",
       "title": "Ensure ufw loopback traffic is configured",
-      "description": "Configure the loopback interface to accept traffic.",
-      "rationale": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "UFWLoopback",
-      "expected_state": "configured"
+      "expected_state": "configured",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "4.2.5",
       "title": "Ensure ufw outbound connections are configured",
-      "description": "Configure the outbound rules for new outbound connections.",
-      "rationale": "If rules are not in place for new outbound connections all packets will be dropped by the default policy preventing network usage.",
-      "impact": "Manual review required.",
       "profile": "Level1",
       "type": "Manual",
-      "description": "Review outbound connection rules"
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.5",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "4.2.6",
       "title": "Ensure ufw firewall rules exist for all open ports",
-      "description": "Any ports that have been opened on non-loopback addresses need firewall rules to govern traffic.",
-      "rationale": "Without a firewall rule configured for open ports default firewall policy will drop all packets to these ports.",
-      "impact": "Manual review required.",
       "profile": "Level1",
       "type": "Manual",
-      "description": "Review firewall rules for open ports"
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.6",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "4.2.7",
       "title": "Ensure ufw default deny firewall policy",
-      "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.",
-      "rationale": "With a default accept policy the firewall will accept any packet that is not configured to be denied.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "UFWDefaultPolicy",
       "direction": "incoming",
-      "expected_policy": "deny"
+      "expected_policy": "deny",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.2.7",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     }
   ]
 }

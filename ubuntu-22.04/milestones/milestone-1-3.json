@@ -7,112 +7,114 @@
       "id": "1.2.1.1",
       "title": "Ensure GPG keys are configured",
       "section": "Initial Setup",
-      "description": "Most packages managers implement GPG key signing to verify package integrity during installation.",
-      "rationale": "It is important to ensure that updates are obtained from a valid source to protect against spoofing that could lead to the inadvertent installation of malware on the system.",
-      "impact": "Many of the Ubuntu packages are signed with GPG keys. Removing or modifying GPG keys could prevent updates from being applied.",
-      "remediation": "Update the package manager GPG keys in accordance with site policy.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.2.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.2.1.2",
       "title": "Ensure package manager repositories are configured",
       "section": "Initial Setup",
-      "description": "Systems need to have package manager repositories configured to ensure they receive the latest patches and updates.",
-      "rationale": "If a system's package repositories are misconfigured important patches may not be identified or a rogue repository could introduce compromised software.",
-      "impact": "Configuring package manager repositories may require coordination with an organization's IT department.",
-      "remediation": "Configure your package manager repositories according to site policy.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.2.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.2.2.1",
       "title": "Ensure updates, patches, and additional security software are installed",
       "section": "Initial Setup",
-      "description": "Periodically patches are released for included software either due to security flaws or to include additional functionality.",
-      "rationale": "Newer patches may contain security enhancements that would not be available through the latest full update. As a result, it is recommended that the latest software patches be used to take advantage of the latest functionality.",
-      "impact": "Site policy may mandate a testing period before install updates in a production environment.",
-      "remediation": "Use your package manager to update all packages on the system according to site policy. The following command will install all available security updates: apt update && apt upgrade",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.2.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.3.1.1",
       "title": "Ensure the apparmor packages are installed",
       "section": "Initial Setup",
-      "description": "AppArmor provides Mandatory Access Controls.",
-      "rationale": "Without a Mandatory Access Control system installed only the default Discretionary Access Control system will be available.",
-      "impact": "AppArmor must be available before it can be configured.",
-      "remediation": "Install AppArmor. Run the following command to install apparmor: apt install apparmor apparmor-utils",
       "profile": "Level1",
       "type": "MultiPackage",
-      "package_names": ["apparmor", "apparmor-utils"],
-      "should_be_installed": true
+      "package_names": [
+        "apparmor",
+        "apparmor-utils"
+      ],
+      "should_be_installed": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.3.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.3.1.2",
       "title": "Ensure AppArmor is enabled",
       "section": "Initial Setup",
-      "description": "AppArmor must be enabled at boot time in /etc/default/grub to ensure that the controls it provides are not overridden.",
-      "rationale": "AppArmor must be enabled at boot time to ensure that the controls it provides are in effect at all times.",
-      "impact": "AppArmor requires a reboot to enable.",
-      "remediation": "Edit /etc/default/grub and add the apparmor=1 and security=apparmor parameters to the GRUB_CMDLINE_LINUX= line. Run the following command to update the grub2 configuration: update-grub",
       "profile": "Level1",
       "type": "BootParameter",
-      "parameters": ["apparmor=1", "security=apparmor"],
-      "config_file": "/etc/default/grub"
+      "parameters": [
+        "apparmor=1",
+        "security=apparmor"
+      ],
+      "config_file": "/etc/default/grub",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.3.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.3.1.3",
       "title": "Ensure all AppArmor Profiles are not disabled",
       "section": "Initial Setup",
-      "description": "AppArmor profiles define what resources applications and processes may access.",
-      "rationale": "Security configuration requirements vary from site to site. Some sites may mandate a \"default deny\" approach while others may be more concerned with usability. AppArmor profiles should be configured to the specific needs of your organization.",
-      "impact": "Enabling AppArmor profiles may cause applications to stop functioning if the profiles are not configured correctly.",
-      "remediation": "Run the following command to enable all profiles: aa-enforce /etc/apparmor.d/*",
       "profile": "Level1",
       "type": "AppArmorProfile",
-      "expected_modes": ["enforce", "complain"],
-      "check_unconfined": false
+      "expected_modes": [
+        "enforce",
+        "complain"
+      ],
+      "check_unconfined": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.3.1.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.3.1.4",
       "title": "Ensure all AppArmor Profiles are enforcing",
       "section": "Initial Setup",
-      "description": "AppArmor profiles can be in one of two modes: enforcing and complain. Enforcing mode will enforce the AppArmor policy on the system and report policy violation attempts (either via syslog or auditd). Complain mode will not enforce the AppArmor policy but will report policy violation attempts.",
-      "rationale": "Security configuration requirements vary from site to site. Some sites may mandate a \"default deny\" approach while others may be more concerned with usability. AppArmor profiles should be configured to the specific needs of your organization. In complain mode, violations of AppArmor policy are logged but not prevented. This option is useful for developing profiles as well as testing them before enforcing. This recommendation is intended to ensure that any policies that exist on the system are enforced.",
-      "impact": "Changing AppArmor profiles from complain mode to enforce mode will cause AppArmor to enforce policies that may prevent certain applications from operating correctly. Before changing to enforce mode, ensure that policies are configured correctly for your environment.",
-      "remediation": "Run the following command to set all profiles to enforce mode: aa-enforce /etc/apparmor.d/*",
       "profile": "Level2",
       "type": "AppArmorProfile",
-      "expected_modes": ["enforce"],
-      "check_unconfined": true
+      "expected_modes": [
+        "enforce"
+      ],
+      "check_unconfined": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.3.1.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.4.1",
       "title": "Ensure bootloader password is set",
       "section": "Initial Setup",
-      "description": "Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters.",
-      "rationale": "Requiring a boot password upon execution of the boot loader will prevent an unauthorized user from entering boot parameters or changing the boot partition. This prevents users from weakening security (e.g. turning off SELinux at boot time).",
-      "impact": "System administrators will need to be informed of the bootloader password, if set, and will need to enter the password to make changes to the system boot parameters.",
-      "remediation": "Create an encrypted password with grub-mkpasswd-pbkdf2. Add the following into a custom /etc/grub.d configuration file: set superusers=\"<username>\" password_pbkdf2 <username> <encrypted-password>. If there is a requirement to be able to boot/reboot without entering the password, edit /etc/grub.d/10_linux and add --unrestricted to the line CLASS=\"--class gnu-linux --class gnu --class os\". Run the following command to update the grub2 configuration: update-grub",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.4.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "1.4.2",
       "title": "Ensure access to bootloader config is configured",
       "section": "Initial Setup",
-      "description": "The grub configuration file contains information on boot settings and passwords for unlocking boot options.",
-      "rationale": "Setting the permissions to read and write for root only prevents non-root users from seeing the boot parameters or changing them. Non-root users who read the boot parameters may be able to identify weaknesses in security upon boot and be able to exploit them.",
-      "impact": "Setting the permissions restricts the ability to run grub-mkconfig. The ability to make changes to the grub configuration require root privileges which is the intended behavior.",
-      "remediation": "Run the following commands to set permissions on your grub configuration files: chown root:root /boot/grub/grub.cfg, chmod og-rwx /boot/grub/grub.cfg",
       "profile": "Level1",
       "type": "FilePermission",
       "file_path": "/boot/grub/grub.cfg",
       "expected_mode": "600",
       "expected_owner": "root",
-      "expected_group": "root"
+      "expected_group": "root",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "1.4.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     }
   ]
 }

@@ -6,107 +6,107 @@
     {
       "id": "4.4.1.1",
       "title": "Ensure iptables packages are installed",
-      "description": "iptables is a user space application program that allows a system administrator to configure the tables provided by the Linux kernel firewall.",
-      "rationale": "A firewall utility is required to configure the Linux kernel's netfilter framework via the iptables back-end.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "Package",
       "package": "iptables",
-      "expected_state": "installed"
+      "expected_state": "installed",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.1.2",
       "title": "Ensure nftables is not in use with iptables",
-      "description": "nftables is a replacement for iptables and should not be used concurrently.",
-      "rationale": "Running both iptables and nftables may lead to conflict.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "Package",
       "package": "nftables",
-      "expected_state": "not_installed"
+      "expected_state": "not_installed",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.1.3",
       "title": "Ensure ufw is not in use with iptables",
-      "description": "ufw is a program for managing a netfilter firewall and should not be used with iptables.",
-      "rationale": "Running both ufw and iptables may lead to conflict.",
-      "impact": "None.",
       "profile": "Level1",
       "type": "Service",
       "service": "ufw",
-      "expected_state": "disabled"
+      "expected_state": "disabled",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.1.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.2.1",
       "title": "Ensure iptables default deny firewall policy",
-      "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.",
-      "rationale": "With a default accept policy the firewall will accept any packet that is not configured to be denied.",
-      "impact": "None.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.2.2",
       "title": "Ensure iptables loopback traffic is configured",
-      "description": "Configure the loopback interface to accept traffic.",
-      "rationale": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system.",
-      "impact": "None.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.2.3",
       "title": "Ensure iptables outbound and established connections are configured",
-      "description": "Configure the outbound and established rules.",
-      "rationale": "If rules are not in place for new outbound, and established connections all packets will be dropped by the default policy preventing network usage.",
-      "impact": "Manual review required.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.2.4",
       "title": "Ensure iptables firewall rules exist for all open ports",
-      "description": "Any ports that have been opened on non-loopback addresses need firewall rules to govern traffic.",
-      "rationale": "Without a firewall rule configured for open ports default firewall policy will drop all packets to these ports.",
-      "impact": "Manual review required.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.3.1",
       "title": "Ensure ip6tables default deny firewall policy",
-      "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.",
-      "rationale": "With a default accept policy the firewall will accept any packet that is not configured to be denied.",
-      "impact": "None.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.3.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.3.2",
       "title": "Ensure ip6tables loopback traffic is configured",
-      "description": "Configure the loopback interface to accept traffic.",
-      "rationale": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system.",
-      "impact": "None.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.3.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.3.3",
       "title": "Ensure ip6tables outbound and established connections are configured",
-      "description": "Configure the outbound and established rules.",
-      "rationale": "If rules are not in place for new outbound, and established connections all packets will be dropped by the default policy preventing network usage.",
-      "impact": "Manual review required.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.3.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "4.4.3.4",
       "title": "Ensure ip6tables firewall rules exist for all open ports",
-      "description": "Any ports that have been opened on non-loopback addresses need firewall rules to govern traffic.",
-      "rationale": "Without a firewall rule configured for open ports default firewall policy will drop all packets to these ports.",
-      "impact": "Manual review required.",
       "profile": "Level1",
-      "type": "Manual"
+      "type": "Manual",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "4.4.3.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

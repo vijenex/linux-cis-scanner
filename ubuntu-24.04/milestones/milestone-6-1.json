@@ -8,133 +8,145 @@
       "id": "6.1.1.1",
       "title": "Ensure journald service is enabled and active",
       "section": "6.1.1.1 Configure systemd-journald service",
-      "description": "The systemd-journald service is an essential component of systemd.",
-      "impact": "In the event of a system failure, the availability of systemd-journald has a high impact on troubleshooting system issues.",
-      "remediation": "Run the following command to enable and start systemd-journald: systemctl --now enable systemd-journald.service",
       "profile": "Level1",
       "automated": true,
       "type": "Service",
       "service_name": "systemd-journald",
-      "expected_status": "enabled"
+      "expected_status": "enabled",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.1.2",
       "title": "Ensure journald log file access is configured",
       "section": "6.1.1.2 Configure systemd-journald service",
-      "description": "The systemd-journald service saves log data either to /run/log/journal or to /var/log/journal.",
-      "impact": "If log data is written to /run/log/journal, the log data will not persist across reboots. Additionally, /run/log/journal is only accessible by users in the systemd-journal group.",
-      "remediation": "Review systemd-journald configuration and ensure log file access is properly configured.",
       "profile": "Level1",
       "automated": false,
       "type": "Manual",
-      "expected": "Journald log file access properly configured"
+      "expected": "Journald log file access properly configured",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.1.4",
       "title": "Ensure only one logging system is in use",
       "section": "6.1.1.4 Configure systemd-journald service",
-      "description": "The systemd-journald service can coexist with rsyslog or syslog-ng, but only one should be configured to avoid conflicts.",
-      "impact": "Having multiple logging systems can lead to conflicts and missed log entries.",
-      "remediation": "Configure either systemd-journald with rsyslog OR systemd-journald standalone, but not multiple conflicting systems.",
       "profile": "Level1",
       "automated": true,
       "type": "SingleLoggingSystem",
-      "logging_services": ["systemd-journald", "rsyslog", "syslog-ng"]
+      "logging_services": [
+        "systemd-journald",
+        "rsyslog",
+        "syslog-ng"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.1.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.2.2",
       "title": "Ensure journald ForwardToSyslog is disabled",
       "section": "6.1.2.2 Configure journald",
-      "description": "The ForwardToSyslog option controls whether log messages received by the journal daemon will be forwarded to a traditional syslog daemon.",
-      "impact": "Storing log data in multiple locations increases storage consumption and can complicate log analysis.",
-      "remediation": "Edit /etc/systemd/journald.conf and set: ForwardToSyslog=no",
       "profile": "Level1",
       "automated": true,
       "type": "JournaldConfig",
       "config_file": "/etc/systemd/journald.conf",
       "parameter": "ForwardToSyslog",
-      "expected_value": "no"
+      "expected_value": "no",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.2.3",
       "title": "Ensure journald Compress is configured",
       "section": "6.1.2.3 Configure journald",
-      "description": "The Compress option controls whether log files are compressed.",
-      "impact": "Compressing logs saves storage space and can improve performance.",
-      "remediation": "Edit /etc/systemd/journald.conf and set: Compress=yes",
       "profile": "Level1",
       "automated": true,
       "type": "JournaldConfig",
       "config_file": "/etc/systemd/journald.conf",
       "parameter": "Compress",
-      "expected_value": "yes"
+      "expected_value": "yes",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.2.4",
       "title": "Ensure journald Storage is configured",
       "section": "6.1.2.4 Configure journald",
-      "description": "The Storage option controls where log data is stored.",
-      "impact": "Proper storage configuration ensures logs persist across reboots and are available for analysis.",
-      "remediation": "Edit /etc/systemd/journald.conf and set: Storage=persistent",
       "profile": "Level1",
       "automated": true,
       "type": "JournaldConfig",
       "config_file": "/etc/systemd/journald.conf",
       "parameter": "Storage",
-      "expected_value": "persistent"
+      "expected_value": "persistent",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.3.1",
       "title": "Ensure rsyslog is installed",
       "section": "6.1.3.1 Configure rsyslog",
-      "description": "The rsyslog software is a recommended replacement for the original syslogd daemon.",
-      "impact": "If rsyslog is not installed, log files may not be created or rotated properly.",
-      "remediation": "Install rsyslog: apt install rsyslog",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "rsyslog",
-      "should_be_installed": true
+      "should_be_installed": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.3.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.3.2",
       "title": "Ensure rsyslog service is enabled and active",
       "section": "6.1.3.2 Configure rsyslog",
-      "description": "Once the rsyslog package is installed it needs to be activated.",
-      "impact": "If the rsyslog service is not activated the system may not be logging events, which could make auditing and forensic investigation impossible.",
-      "remediation": "Run the following command to enable rsyslog: systemctl --now enable rsyslog",
       "profile": "Level1",
       "automated": true,
       "type": "Service",
       "service_name": "rsyslog",
-      "expected_status": "enabled"
+      "expected_status": "enabled",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.3.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.3.7",
       "title": "Ensure rsyslog is not configured to receive logs from a remote client",
       "section": "6.1.3.7 Configure rsyslog",
-      "description": "The $ModLoad imtcp and $InputTCPServerRun directives enable rsyslog to receive messages from remote hosts.",
-      "impact": "If the system is not intended to be a log aggregation server, accepting remote log messages could fill up the system's storage device or enable a denial of service attack.",
-      "remediation": "Edit the /etc/rsyslog.conf and /etc/rsyslog.d/*.conf files and remove or comment out any lines that enable remote log reception.",
       "profile": "Level1",
       "automated": true,
       "type": "RsyslogConfig",
-      "config_files": ["/etc/rsyslog.conf", "/etc/rsyslog.d/*.conf"],
-      "prohibited_directives": ["$ModLoad imtcp", "$InputTCPServerRun", "$ModLoad imudp", "$UDPServerRun"]
+      "config_files": [
+        "/etc/rsyslog.conf",
+        "/etc/rsyslog.d/*.conf"
+      ],
+      "prohibited_directives": [
+        "$ModLoad imtcp",
+        "$InputTCPServerRun",
+        "$ModLoad imudp",
+        "$UDPServerRun"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.3.7",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.1.4.1",
       "title": "Ensure access to all logfiles has been configured",
       "section": "6.1.4.1 Configure Logfiles",
-      "description": "Log files stored in /var/log/ should have appropriate permissions and ownership set to ensure that sensitive log data cannot be accessed by unauthorized users.",
-      "impact": "If log files are not properly protected, sensitive information could be compromised.",
-      "remediation": "Run the following commands to set appropriate permissions on log files: find /var/log -type f -exec chmod g-wx,o-rwx {} + && find /var/log -type d -exec chmod g-w,o-rwx {} +",
       "profile": "Level1",
       "automated": true,
       "type": "LogFilePermissions",
       "log_directory": "/var/log",
       "expected_file_permissions": "640",
-      "expected_dir_permissions": "750"
+      "expected_dir_permissions": "750",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.1.4.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

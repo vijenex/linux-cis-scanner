@@ -8,89 +8,93 @@
       "id": "6.2.1.1",
       "title": "Ensure auditd packages are installed",
       "section": "6.2.1.1 Configure auditd Service",
-      "description": "auditd is the userspace component to the Linux Auditing System.",
-      "impact": "The capturing of system events provides system administrators with information to allow them to determine if unauthorized access to their system is occurring.",
-      "remediation": "Install auditd: apt install auditd audispd-plugins",
       "profile": "Level2",
       "automated": true,
       "type": "MultiPackage",
-      "package_names": ["auditd", "audispd-plugins"],
-      "should_be_installed": true
+      "package_names": [
+        "auditd",
+        "audispd-plugins"
+      ],
+      "should_be_installed": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.1.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.1.2",
       "title": "Ensure auditd service is enabled and active",
       "section": "6.2.1.2 Configure auditd Service",
-      "description": "Turn on the auditd daemon to record system events.",
-      "impact": "The capturing of system events provides system administrators with information to allow them to determine if unauthorized access to their system is occurring.",
-      "remediation": "Run the following command to enable auditd: systemctl --now enable auditd",
       "profile": "Level2",
       "automated": true,
       "type": "Service",
       "service_name": "auditd",
-      "expected_status": "enabled"
+      "expected_status": "enabled",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.1.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.1.3",
       "title": "Ensure auditing for processes that start prior to auditd is enabled",
       "section": "6.2.1.3 Configure auditd Service",
-      "description": "Configure grub so that processes that are capable of being audited can be audited even if they start up prior to auditd startup.",
-      "impact": "Audit events need to be captured on processes that start up prior to auditd, so that potential malicious activity cannot escape detection.",
-      "remediation": "Edit /etc/default/grub and add audit=1 to GRUB_CMDLINE_LINUX parameter.",
       "profile": "Level2",
       "automated": true,
       "type": "BootParameter",
-      "parameters": ["audit=1"],
-      "config_file": "/etc/default/grub"
+      "parameters": [
+        "audit=1"
+      ],
+      "config_file": "/etc/default/grub",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.1.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.1.4",
       "title": "Ensure audit_backlog_limit is sufficient",
       "section": "6.2.1.4 Configure auditd Service",
-      "description": "The backlog limit has a default setting of 64",
-      "impact": "During boot if audit=1, then the backlog will hold 64 records. If more than 64 records are created during boot, auditd records will be lost and potential malicious activity could go undetected.",
-      "remediation": "Edit /etc/default/grub and add audit_backlog_limit=8192 to GRUB_CMDLINE_LINUX parameter.",
       "profile": "Level2",
       "automated": true,
       "type": "BootParameter",
-      "parameters": ["audit_backlog_limit=8192"],
-      "config_file": "/etc/default/grub"
+      "parameters": [
+        "audit_backlog_limit=8192"
+      ],
+      "config_file": "/etc/default/grub",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.1.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.2.1",
       "title": "Ensure audit log storage size is configured",
       "section": "6.2.2.1 Configure Data Retention",
-      "description": "Configure the maximum size of the audit log file.",
-      "impact": "It is important that an appropriate size is determined for log files so that they are large enough to capture important log information, but not so large that the log files consume too much space on the system.",
-      "remediation": "Set the following parameter in /etc/audit/auditd.conf: max_log_file = <MB>",
       "profile": "Level2",
       "automated": true,
       "type": "AuditdConfig",
       "config_file": "/etc/audit/auditd.conf",
       "parameter": "max_log_file",
-      "check_configured": true
+      "check_configured": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.2.2",
       "title": "Ensure audit logs are not automatically deleted",
       "section": "6.2.2.2 Configure Data Retention",
-      "description": "The max_log_file_action setting determines how to handle the audit log file reaching the max file size.",
-      "impact": "In high security contexts, the benefits of maintaining a long audit history exceed the cost of storing the audit history.",
-      "remediation": "Set the following parameter in /etc/audit/auditd.conf: max_log_file_action = keep_logs",
       "profile": "Level2",
       "automated": true,
       "type": "AuditdConfig",
       "config_file": "/etc/audit/auditd.conf",
       "parameter": "max_log_file_action",
-      "expected_value": "keep_logs"
+      "expected_value": "keep_logs",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.3.1",
       "title": "Ensure changes to system administration scope (sudoers) is collected",
       "section": "6.2.3.1 Configure auditd Rules",
-      "description": "Monitor scope changes for system administrations.",
-      "impact": "Changes to /etc/sudoers and /etc/sudoers.d/ should be monitored.",
-      "remediation": "Add the following lines to /etc/audit/rules.d/50-scope.rules: -w /etc/sudoers -p wa -k scope && -w /etc/sudoers.d/ -p wa -k scope",
       "profile": "Level2",
       "automated": true,
       "type": "AuditRule",
@@ -98,15 +102,15 @@
       "expected_rules": [
         "-w /etc/sudoers -p wa -k scope",
         "-w /etc/sudoers.d/ -p wa -k scope"
-      ]
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.3.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.3.4",
       "title": "Ensure events that modify date and time information are collected",
       "section": "6.2.3.4 Configure auditd Rules",
-      "description": "Capture events where the system date and/or time has been modified.",
-      "impact": "Unexpected changes in system date and/or time could be a sign of malicious activity on the system.",
-      "remediation": "Add audit rules to monitor date/time modifications.",
       "profile": "Level2",
       "automated": true,
       "type": "AuditRule",
@@ -117,35 +121,40 @@
         "-a always,exit -F arch=b64 -S clock_settime -k time-change",
         "-a always,exit -F arch=b32 -S clock_settime -k time-change",
         "-w /etc/localtime -p wa -k time-change"
-      ]
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.3.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.3.20",
       "title": "Ensure the audit configuration is immutable",
       "section": "6.2.3.20 Configure auditd Rules",
-      "description": "Set system audit so that audit rules cannot be modified with auditctl.",
-      "impact": "In immutable mode, unauthorized users cannot execute changes to the audit system to potentially hide malicious activity and then put the audit rules back.",
-      "remediation": "Add the following line to the end of /etc/audit/rules.d/99-finalize.rules: -e 2",
       "profile": "Level2",
       "automated": true,
       "type": "AuditRule",
       "rule_file": "/etc/audit/rules.d/99-finalize.rules",
-      "expected_rules": ["-e 2"]
+      "expected_rules": [
+        "-e 2"
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.3.20",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.2.4.1",
       "title": "Ensure audit log files mode is configured",
       "section": "6.2.4.1 Configure auditd File Access",
-      "description": "Audit log files contain information about the system and system activity.",
-      "impact": "Unauthorized disclosure of audit records can reveal system and configuration data to attackers, thus compromising its confidentiality.",
-      "remediation": "Run the following command to set mode on audit log files: chmod g-rwx,o-rwx /var/log/audit/*",
       "profile": "Level2",
       "automated": true,
       "type": "AuditLogPermissions",
       "log_directory": "/var/log/audit",
       "expected_file_mode": "600",
       "expected_owner": "root",
-      "expected_group": "root"
+      "expected_group": "root",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.2.4.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

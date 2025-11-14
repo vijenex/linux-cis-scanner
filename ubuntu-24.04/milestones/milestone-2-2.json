@@ -8,79 +8,79 @@
       "id": "2.2.1",
       "title": "Ensure NIS Client is not installed",
       "section": "2.2 Configure Client Services",
-      "description": "The Network Information Service (NIS), formerly known as Yellow Pages, is a client-server directory service protocol used to distribute system configuration files.",
-      "impact": "The NIS service is inherently an insecure system that has been vulnerable to DOS attacks, buffer overflows and has poor authentication for querying NIS maps.",
-      "remediation": "Uninstall nis: apt purge nis",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "nis",
-      "should_be_installed": false
+      "should_be_installed": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "2.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "2.2.2",
       "title": "Ensure rsh client is not installed",
       "section": "2.2 Configure Client Services",
-      "description": "The rsh package contains the client commands for the rsh services.",
-      "impact": "These legacy clients contain numerous security exposures and have been replaced with the more secure SSH package.",
-      "remediation": "Uninstall rsh: apt purge rsh-client",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "rsh-client",
-      "should_be_installed": false
+      "should_be_installed": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "2.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "2.2.3",
       "title": "Ensure talk client is not installed",
       "section": "2.2 Configure Client Services",
-      "description": "The talk software makes it possible for users to send and receive messages across systems through a terminal session.",
-      "impact": "The software presents a security risk as it uses unencrypted protocols for communication.",
-      "remediation": "Uninstall talk: apt purge talk",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "talk",
-      "should_be_installed": false
+      "should_be_installed": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "2.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "2.2.4",
       "title": "Ensure telnet client is not installed",
       "section": "2.2 Configure Client Services",
-      "description": "The telnet package contains the telnet client, which allows users to start connections to other systems via the telnet protocol.",
-      "impact": "The telnet protocol is insecure and unencrypted. The use of an unencrypted transmission medium could allow an unauthorized user to steal credentials.",
-      "remediation": "Uninstall telnet: apt purge telnet",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "telnet",
-      "should_be_installed": false
+      "should_be_installed": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "2.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "2.2.5",
       "title": "Ensure ldap client is not installed",
       "section": "2.2 Configure Client Services",
-      "description": "The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for NIS/YP.",
-      "impact": "If the system will not need to act as an LDAP client, it is recommended that the software be removed to reduce the potential attack surface.",
-      "remediation": "Uninstall ldap-utils: apt purge ldap-utils",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "ldap-utils",
-      "should_be_installed": false
+      "should_be_installed": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "2.2.5",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "2.2.6",
       "title": "Ensure ftp client is not installed",
       "section": "2.2 Configure Client Services",
-      "description": "The ftp package provides the ftp client utility.",
-      "impact": "FTP does not protect the confidentiality of data or authentication credentials. It is recommended sftp be used if file transfer is required.",
-      "remediation": "Uninstall ftp: apt purge ftp",
       "profile": "Level1",
       "automated": true,
       "type": "Package",
       "package_name": "ftp",
-      "should_be_installed": false
+      "should_be_installed": false,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "2.2.6",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

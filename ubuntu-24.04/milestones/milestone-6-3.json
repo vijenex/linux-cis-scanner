@@ -8,49 +8,52 @@
       "id": "6.3.1",
       "title": "Ensure AIDE is installed",
       "section": "6.3 Configure Integrity Checking",
-      "description": "AIDE takes a snapshot of filesystem state including modification times, permissions, and file hashes which can then be used to compare against the current state of the filesystem to detect modifications to the system.",
-      "impact": "By monitoring the filesystem state compromised files can be detected to prevent or limit the exposure of accidental or malicious misconfigurations or modified binaries.",
-      "remediation": "Install AIDE: apt install aide aide-common",
       "profile": "Level1",
       "automated": true,
       "type": "MultiPackage",
-      "package_names": ["aide", "aide-common"],
-      "should_be_installed": true
+      "package_names": [
+        "aide",
+        "aide-common"
+      ],
+      "should_be_installed": true,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.3.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.3.2",
       "title": "Ensure filesystem integrity is regularly checked",
       "section": "6.3 Configure Integrity Checking",
-      "description": "Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.",
-      "impact": "Periodic file checking allows the system administrator to determine on a regular basis if critical files have been changed in an unauthorized fashion.",
-      "remediation": "Run the following command: crontab -u root -e. Add the following line to the crontab: 0 5 * * * /usr/bin/aide.wrapper --config /etc/aide/aide.conf --check",
       "profile": "Level1",
       "automated": true,
       "type": "CronJob",
       "cron_user": "root",
       "expected_job": "/usr/bin/aide",
-      "job_description": "AIDE filesystem integrity check"
+      "job_description": "AIDE filesystem integrity check",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.3.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     },
     {
       "id": "6.3.3",
       "title": "Ensure cryptographic mechanisms are used to protect the integrity of audit tools",
       "section": "6.3 Configure Integrity Checking",
-      "description": "Protecting the integrity of the tools used for auditing purposes is a critical step toward ensuring the integrity of audit information.",
-      "impact": "Protecting the integrity of audit tools with file integrity monitoring ensures that audit tools have not been replaced or modified.",
-      "remediation": "Add audit tools to AIDE configuration for monitoring: /sbin/auditctl, /sbin/auditd, /sbin/ausearch, /sbin/aureport, /sbin/autrace, /sbin/audispd, /sbin/augenrules",
       "profile": "Level1",
       "automated": true,
       "type": "AIDEConfig",
       "config_file": "/etc/aide/aide.conf",
       "monitored_tools": [
         "/sbin/auditctl",
-        "/sbin/auditd", 
+        "/sbin/auditd",
         "/sbin/ausearch",
         "/sbin/aureport",
         "/sbin/autrace",
         "/sbin/audispd",
         "/sbin/augenrules"
-      ]
+      ],
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "6.3.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
     }
   ]
 }

@@ -7,126 +7,116 @@
       "id": "7.2.1",
       "title": "Ensure accounts in /etc/passwd use shadowed passwords",
       "section": "System Maintenance",
-      "description": "Local accounts can use either shadowed or non-shadowed passwords. With shadowed passwords, The passwords are saved in shadow file which is not readable by users. With non-shadowed passwords, the passwords are stored in the world readable /etc/passwd file.",
-      "rationale": "The /etc/passwd file also contains information like user ID's and group ID's that are used by many system programs. Therefore, the /etc/passwd file must remain world readable. In spite of encoding the password with a randomly-generated one-way hash function, an attacker could still break the system by using widely available password cracking programs to guess the passwords. One way to mitigate this risk is to use shadowed passwords to move the passwords in the /etc/passwd file to /etc/shadow. The /etc/shadow file is readable only by root and thus the passwords are no longer accessible by other users.",
-      "impact": "All accounts must use shadowed passwords.",
-      "remediation": "If any accounts in the /etc/passwd file do not have a single x character for the passwd field, run the following command to set these accounts to use shadowed passwords: sed -e 's/^\\([a-zA-Z0-9_]*\\):[^:]*:/\\1:x:/' -i /etc/passwd",
       "profile": "Level1",
       "type": "ShadowedPasswords",
-      "passwd_file": "/etc/passwd"
+      "passwd_file": "/etc/passwd",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.1",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.2",
       "title": "Ensure /etc/shadow password fields are not empty",
       "section": "System Maintenance",
-      "description": "An account with an empty password field means that anybody may log in as that user without providing a password.",
-      "rationale": "All accounts must have passwords or be locked to prevent the account from being used by an unauthorized user.",
-      "impact": "None.",
-      "remediation": "If any accounts in the /etc/shadow file do not have a password, run the following command to lock the account until it can be determined why it does not have a password: passwd -l <username>",
       "profile": "Level1",
       "type": "EmptyPasswords",
-      "shadow_file": "/etc/shadow"
+      "shadow_file": "/etc/shadow",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.2",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.3",
       "title": "Ensure all groups in /etc/passwd exist in /etc/group",
       "section": "System Maintenance",
-      "description": "Over time, system administration errors and changes can lead to groups being defined in /etc/passwd but not in /etc/group.",
-      "rationale": "Groups defined in the /etc/passwd file but not in the /etc/group file pose a threat to system security since group permissions are not properly managed.",
-      "impact": "None.",
-      "remediation": "Analyze the output of the Audit step above and perform the appropriate action to correct any discrepancies found.",
       "profile": "Level1",
       "type": "GroupConsistency",
       "passwd_file": "/etc/passwd",
-      "group_file": "/etc/group"
+      "group_file": "/etc/group",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.3",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.4",
       "title": "Ensure shadow group is empty",
       "section": "System Maintenance",
-      "description": "The shadow group allows system programs which require access the ability to read the /etc/shadow file. No users should be assigned to the shadow group.",
-      "rationale": "Any users assigned to the shadow group would be granted read access to the /etc/shadow file. If attackers can gain read access to the /etc/shadow file, they can easily run a password cracking program against the hashed passwords to break them. Other security information that is stored in the /etc/shadow file (such as expiration) could also be useful to subvert additional user accounts.",
-      "impact": "None.",
-      "remediation": "Remove any users from the shadow group.",
       "profile": "Level1",
       "type": "EmptyGroup",
       "group_name": "shadow",
-      "group_file": "/etc/group"
+      "group_file": "/etc/group",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.4",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.5",
       "title": "Ensure no duplicate UIDs exist",
       "section": "System Maintenance",
-      "description": "Although the useradd program will not let you create a duplicate User ID (UID), it is possible for an administrator to manually edit the /etc/passwd file and change the UID field.",
-      "rationale": "Users must be assigned unique UIDs for accountability and to ensure appropriate access protections.",
-      "impact": "None.",
-      "remediation": "Based on the results of the audit script, establish unique UIDs and review all files owned by the shared UIDs to determine which UID they are supposed to belong to.",
       "profile": "Level1",
       "type": "DuplicateUIDs",
-      "passwd_file": "/etc/passwd"
+      "passwd_file": "/etc/passwd",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.5",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.6",
       "title": "Ensure no duplicate GIDs exist",
       "section": "System Maintenance",
-      "description": "Although the groupadd program will not let you create a duplicate Group ID (GID), it is possible for an administrator to manually edit the /etc/group file and change the GID field.",
-      "rationale": "User groups must be assigned unique GIDs for accountability and to ensure appropriate access protections.",
-      "impact": "None.",
-      "remediation": "Based on the results of the audit script, establish unique GIDs and review all files owned by the shared GID to determine which group they are supposed to belong to.",
       "profile": "Level1",
       "type": "DuplicateGIDs",
-      "group_file": "/etc/group"
+      "group_file": "/etc/group",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.6",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.7",
       "title": "Ensure no duplicate user names exist",
       "section": "System Maintenance",
-      "description": "Although the useradd program will not let you create a duplicate user name, it is possible for an administrator to manually edit the /etc/passwd file and change the user name.",
-      "rationale": "If a user is assigned a duplicate user name, it will create and have access to files with the first UID for that username in /etc/passwd. For example, if \"test4\" has a UID of 1000 and a subsequent \"test4\" entry has a UID of 2000, logging in as \"test4\" will use UID 1000. Effectively, the UID is shared, which is a security problem.",
-      "impact": "None.",
-      "remediation": "Based on the results of the audit script, establish unique user names for the users. File ownerships will automatically reflect the change as long as the users have unique UIDs.",
       "profile": "Level1",
       "type": "DuplicateUsernames",
-      "passwd_file": "/etc/passwd"
+      "passwd_file": "/etc/passwd",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.7",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.8",
       "title": "Ensure no duplicate group names exist",
       "section": "System Maintenance",
-      "description": "Although the groupadd program will not let you create a duplicate group name, it is possible for an administrator to manually edit the /etc/group file and change the group name.",
-      "rationale": "If a group is assigned a duplicate group name, it will create and have access to files with the first GID for that group in /etc/group. Effectively, the GID is shared, which is a security problem.",
-      "impact": "None.",
-      "remediation": "Based on the results of the audit script, establish unique names for the users. File group ownerships will automatically reflect the change as long as the groups have unique GIDs.",
       "profile": "Level1",
       "type": "DuplicateGroupnames",
-      "group_file": "/etc/group"
+      "group_file": "/etc/group",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.8",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.9",
       "title": "Ensure local interactive user home directories are configured",
       "section": "System Maintenance",
-      "description": "Local interactive users on the system must be assigned a home directory in the /etc/passwd file.",
-      "rationale": "If local interactive users are not assigned a valid home directory, there is no place for the storage and control of files they should own.",
-      "impact": "None.",
-      "remediation": "Change the assigned home directory of any users identified as not having an assigned home directory to a directory that the user has read, write and execute permissions to.",
       "profile": "Level1",
       "type": "UserHomeDirs",
       "passwd_file": "/etc/passwd",
-      "min_uid": 1000
+      "min_uid": 1000,
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.9",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     },
     {
       "id": "7.2.10",
       "title": "Ensure local interactive user dot files access is configured",
       "section": "System Maintenance",
-      "description": "Local interactive user dot files are used to set user preferences and control the behavior of interactive programs. If these files can be modified by other users, the user's account may be compromised.",
-      "rationale": "If a local interactive user's files can be modified by other users, the user's account may be compromised and the user may not be able to access their account or may have their account taken over by an attacker.",
-      "impact": "None.",
-      "remediation": "Making global modifications to user home directories without alerting the user community can result in unexpected outages and unhappy users. Therefore, it is recommended that a monitoring policy be established to report user dot file permissions and determine the action to be taken in accordance with site policy.",
       "profile": "Level1",
       "type": "UserDotFiles",
       "passwd_file": "/etc/passwd",
       "min_uid": 1000,
-      "max_permissions": "go-w"
+      "max_permissions": "go-w",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "7.2.10",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     }
   ]
 }

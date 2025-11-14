@@ -7,13 +7,12 @@
       "id": "X.X.X",
       "title": "Control Title",
       "section": "Section Name",
-      "description": "Detailed description of the control",
-      "rationale": "Why this control is important",
-      "impact": "Impact of implementing this control",
-      "remediation": "Steps to remediate if control fails",
       "profile": "Level1",
       "type": "ControlType",
-      "parameter_name": "parameter_value"
+      "parameter_name": "parameter_value",
+      "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
+      "cis_control_id": "X.X.X",
+      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
     }
   ]
 }

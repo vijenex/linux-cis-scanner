@@ -2547,9 +2547,9 @@ class LinuxCISScanner:
             "id": control_id,
             "title": control.get('title', ''),
             "section": control.get('section', ''),
-            "description": control.get('description', ''),
-            "impact": control.get('impact', ''),
-            "remediation": control.get('remediation', ''),
+            "cis_reference": control.get('cis_reference', ''),
+            "cis_control_id": control.get('cis_control_id', ''),
+            "reference_note": control.get('reference_note', ''),
             "profile": control.get('profile', 'Level1'),
             "status": "MANUAL",
             "current": "",
@@ -2968,9 +2968,8 @@ class LinuxCISScanner:
             <th>Control</th>
             <th>Section</th>
             <th>Status</th>
-            <th>Description</th>
-            <th>Impact</th>
-            <th>Remediation</th>
+            <th>CIS Reference</th>
+            <th>Details</th>
         </tr>
 """
         
@@ -2978,15 +2977,17 @@ class LinuxCISScanner:
             status_class = f"status-{result['status'].lower()}"
             status_symbol = "✓" if result["status"] == "PASS" else "✗" if result["status"] == "FAIL" else "?"
             
+            cis_link = f"<a href='{result.get('cis_reference', '#')}' target='_blank'>CIS Benchmark</a>" if result.get('cis_reference') else 'N/A'
+            reference_note = result.get('reference_note', 'Refer to official CIS benchmark documentation')
+            
             html_content += f"""
         <tr>
             <td>{result['id']}</td>
             <td>{result['title']}</td>
             <td>{result['section']}</td>
             <td class="{status_class}">{status_symbol} {result['status']}</td>
-            <td>{result['description']}</td>
-            <td>{result['impact']}</td>
-            <td>{result['remediation']}</td>
+            <td>{cis_link}</td>
+            <td>{reference_note}</td>
         </tr>"""
         
         html_content += """
@@ -3007,7 +3008,7 @@ class LinuxCISScanner:
         report_path = self.output_dir / "vijenex-cis-results.csv"
         
         with open(report_path, 'w', newline='') as csvfile:
-            fieldnames = ['ID', 'Control', 'Section', 'Status', 'Description', 'Impact', 'Remediation']
+            fieldnames = ['ID', 'Control', 'Section', 'Status', 'CIS_Reference', 'Reference_Note']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
             writer.writeheader()
@@ -3017,9 +3018,8 @@ class LinuxCISScanner:
                     'Control': result['title'],
                     'Section': result['section'],
                     'Status': result['status'],
-                    'Description': result['description'],
-                    'Impact': result['impact'],
-                    'Remediation': result['remediation']
+                    'CIS_Reference': result.get('cis_reference', ''),
+                    'Reference_Note': result.get('reference_note', 'Refer to official CIS benchmark documentation')
                 })
         
         return str(report_path)
