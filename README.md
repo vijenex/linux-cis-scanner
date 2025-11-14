@@ -30,8 +30,8 @@ This platform provides automated security compliance auditing for Linux systems 
 - **🚫 Audit-Only**: No system modifications - safe to run in production
 - **⚡ Automated**: Minimal user interaction required
 - **🐍 Python-Based**: Cross-platform compatibility and easy maintenance
-- **🎨 Colorful Interface**: Professional CLI with color-coded results
-- **📊 Real-time Progress**: Live scan progress with status indicators
+- **🎨 Professional CLI**: Clean interface with color-coded results
+- **📊 Progress Tracking**: Live scan progress with detailed status
 
 ### 🎯 Supported Check Types
 
@@ -167,13 +167,13 @@ sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-5-
 
 The tool generates comprehensive reports with detailed system information:
 
-🎨 Colorful CLI Output
-🔵 Beautiful ASCII Banner: Professional Vijenex branding
-🟢 Green ✓: PASSED controls
-🔴 Red ✗: FAILED controls
-🟡 Yellow ⚠: MANUAL verification required
-🔵 Cyan ?: SKIPPED controls
-📊 Real-time Progress: Live scan status with emojis
+### 🎨 Professional CLI Output
+- **Vijenex ASCII Banner**: Clean professional branding
+- **Green ✓**: PASSED controls
+- **Red ✗**: FAILED controls
+- **Yellow ⚠**: MANUAL verification required
+- **Cyan ?**: SKIPPED controls
+- **Progress Indicators**: Real-time scan status updates
 
 ### 📄 HTML Report (`vijenex-cis-report.html`)
 - **System Information**: Distribution, kernel, IP address, scan date
@@ -344,7 +344,7 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 ### Current Stable Release
 - **v1.0.1** - Ubuntu 22.04 LTS CIS Scanner
   - Complete CIS benchmark implementation (290+ controls)
-  - Professional CLI with colorful output
+  - Professional CLI with clean color-coded output
   - System-wide installation with man pages
   - HTML and CSV reporting with proper Vijenex branding
   - Automatic reports folder creation
