@@ -148,6 +148,9 @@ sudo vijenex-cis --format both    # Both formats (default)
 # Scan specific milestone sections
 sudo vijenex-cis --milestones milestone-1.json milestone-2.json
 
+# Clean up scanner files after scan (keeps reports only)
+sudo vijenex-cis --cleanup
+
 # Get help and view all options
 vijenex-cis --help
 
@@ -181,6 +184,7 @@ sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-5-
 | `--profile` | CIS profile level | `Level1` | `--profile Level2` |
 | `--format` | Report format | `both` | `--format html` or `--format csv` |
 | `--milestones` | Specific milestone files | All files | `--milestones milestone-1-1.json milestone-5-1.json` |
+| `--cleanup` | Delete scanner files after scan | `false` | `--cleanup` (keeps reports only) |
 
 ## 📊 Report Output
 

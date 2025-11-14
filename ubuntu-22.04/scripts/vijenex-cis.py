@@ -3047,6 +3047,7 @@ def main():
     parser.add_argument('--profile', choices=['Level1', 'Level2'], default='Level1', help='CIS profile level')
     parser.add_argument('--milestones', nargs='+', help='Specific milestone files to scan')
     parser.add_argument('--format', choices=['html', 'csv', 'both'], default='both', help='Report format')
+    parser.add_argument('--cleanup', action='store_true', help='Delete scanner files after scan (keeps reports only)')
     
     args = parser.parse_args()
     
@@ -3076,6 +3077,57 @@ def main():
         print(f"{GREEN}📊 CSV report:{RESET} {csv_report}")
     
     print(f"\n{BOLD}{GREEN}🎉 Vijenex CIS scan completed successfully!{RESET}")
+    
+    # Optional cleanup
+    if args.cleanup and not os.path.exists('/usr/share/vijenex-cis'):
+        cleanup_scanner_files(scanner.output_dir)
+
+def cleanup_scanner_files(reports_dir: Path) -> None:
+    """Clean up scanner files while preserving reports"""
+    try:
+        import shutil
+        
+        # Get the main scanner directory (3 levels up from reports)
+        scanner_root = reports_dir.parent.parent
+        
+        # Safety checks
+        if not str(scanner_root).endswith(('linux-cis-scanner', 'linux-cis-scanner-1.0.1')):
+            print(f"⚠️  Cleanup skipped: Not in scanner directory ({scanner_root})")
+            return
+            
+        if not (scanner_root / 'ubuntu-22.04').exists():
+            print(f"⚠️  Cleanup skipped: Ubuntu directories not found")
+            return
+        
+        print(f"\n🧹 Cleaning up scanner files (keeping reports)...")
+        
+        # Preserve all reports directories
+        reports_to_preserve = []
+        for ubuntu_dir in scanner_root.glob('ubuntu-*'):
+            reports_path = ubuntu_dir / 'reports'
+            if reports_path.exists():
+                # Move reports to temp location
+                temp_reports = scanner_root / f'temp_reports_{ubuntu_dir.name}'
+                shutil.move(str(reports_path), str(temp_reports))
+                reports_to_preserve.append((temp_reports, ubuntu_dir.name))
+        
+        # Remove scanner directories
+        for item in scanner_root.iterdir():
+            if item.is_dir() and item.name.startswith(('ubuntu-', 'rhel-', 'centos-', 'debian-')):
+                shutil.rmtree(item)
+            elif item.is_file() and item.name in ['install.sh', 'setup.sh', 'requirements.txt']:
+                item.unlink()
+        
+        # Restore reports in clean structure
+        for temp_reports, ubuntu_version in reports_to_preserve:
+            final_reports = scanner_root / f'{ubuntu_version}-reports'
+            shutil.move(str(temp_reports), str(final_reports))
+            print(f"📊 Preserved: {final_reports}")
+        
+        print(f"✅ Cleanup completed. Reports preserved in {scanner_root}")
+        
+    except Exception as e:
+        print(f"❌ Cleanup failed: {e}")
 
 if __name__ == "__main__":
     main()
