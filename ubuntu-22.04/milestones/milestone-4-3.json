@@ -1,0 +1,113 @@
+{
+  "milestone": "4.3",
+  "title": "Configure nftables",
+  "description": "Configure nftables for host-based firewall protection",
+  "controls": [
+    {
+      "id": "4.3.1",
+      "title": "Ensure nftables is installed",
+      "description": "nftables provides a new in-kernel packet classification framework that is based on a network-specific Virtual Machine (VM) and a new nft userspace command line tool.",
+      "rationale": "nftables is a replacement for iptables, ip6tables, ebtables and arptables.",
+      "impact": "None.",
+      "profile": "Level1",
+      "type": "Package",
+      "package": "nftables",
+      "expected_state": "installed"
+    },
+    {
+      "id": "4.3.2",
+      "title": "Ensure ufw is uninstalled or disabled with nftables",
+      "description": "ufw is a program for managing a netfilter firewall and should not be used with nftables.",
+      "rationale": "Running both ufw and nftables may lead to conflict, therefore this recommendation is to stop and mask the ufw daemon when using nftables.",
+      "impact": "Manual review required.",
+      "profile": "Level1",
+      "type": "Manual",
+      "description": "Ensure ufw is not conflicting with nftables"
+    },
+    {
+      "id": "4.3.3",
+      "title": "Ensure iptables are flushed with nftables",
+      "description": "nftables is a replacement for iptables, ip6tables, ebtables and arptables.",
+      "rationale": "It is possible to mix iptables and nftables. However, this increases complexity and also the chance to introduce loopholes in the firewall ruleset.",
+      "impact": "Manual review required.",
+      "profile": "Level1",
+      "type": "Manual",
+      "description": "Ensure iptables rules are flushed when using nftables"
+    },
+    {
+      "id": "4.3.4",
+      "title": "Ensure a nftables table exists",
+      "description": "Tables hold chains. Each table only has one address family and only applies to packets of this family.",
+      "rationale": "nftables doesn't have any default tables. Without a table being build, nftables will not filter network traffic.",
+      "impact": "None.",
+      "profile": "Level1",
+      "type": "ConfigFile",
+      "file": "/etc/nftables.conf",
+      "pattern": "table",
+      "expected": "present"
+    },
+    {
+      "id": "4.3.5",
+      "title": "Ensure nftables base chains exist",
+      "description": "Chains are containers for rules. They exist in two kinds, base chains and regular chains.",
+      "rationale": "If a base chain doesn't exist with a hook for input, forward, and delete, packets that would flow through those chains will not be touched by nftables.",
+      "impact": "None.",
+      "profile": "Level1",
+      "type": "ConfigFile",
+      "file": "/etc/nftables.conf",
+      "pattern": "chain.*hook",
+      "expected": "present"
+    },
+    {
+      "id": "4.3.6",
+      "title": "Ensure nftables loopback traffic is configured",
+      "description": "Configure the loopback interface to accept traffic.",
+      "rationale": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system.",
+      "impact": "Manual review required.",
+      "profile": "Level1",
+      "type": "Manual",
+      "description": "Review nftables loopback configuration"
+    },
+    {
+      "id": "4.3.7",
+      "title": "Ensure nftables outbound and established connections are configured",
+      "description": "Configure the outbound and established rules.",
+      "rationale": "If rules are not in place for new outbound, and established connections all packets will be dropped by the default policy preventing network usage.",
+      "impact": "Manual review required.",
+      "profile": "Level1",
+      "type": "Manual",
+      "description": "Review nftables outbound connection rules"
+    },
+    {
+      "id": "4.3.8",
+      "title": "Ensure nftables default deny firewall policy",
+      "description": "Base chain policy is the default verdict that will be applied to packets reaching the end of the chain.",
+      "rationale": "There are two policies: accept (default) and drop. If the policy is set to accept, nftables will accept any packet that is not configured to be denied and the packet will continue transversing the network stack.",
+      "impact": "Manual review required.",
+      "profile": "Level1",
+      "type": "Manual",
+      "description": "Review nftables default policy configuration"
+    },
+    {
+      "id": "4.3.9",
+      "title": "Ensure nftables service is enabled",
+      "description": "The nftables service allows for the loading of nftables rulesets during boot, or starting of the nftables service.",
+      "rationale": "The nftables service restores the nftables rules from the rules files referenced in the /etc/nftables.conf file. This ensures that nftables rules are persistent across reboots.",
+      "impact": "None.",
+      "profile": "Level1",
+      "type": "Service",
+      "service": "nftables",
+      "expected_state": "enabled"
+    },
+    {
+      "id": "4.3.10",
+      "title": "Ensure nftables rules are permanent",
+      "description": "nftables is a subsystem of the Linux kernel providing filtering and classification of network packets/datagrams/frames.",
+      "rationale": "Changes made to nftables rules only affect the live system, you will also need to configure the nftables rules to apply on boot.",
+      "impact": "Manual review required.",
+      "profile": "Level1",
+      "type": "Manual",
+      "description": "Review nftables rule persistence configuration"
+    }
+  ]
+}

@@ -2690,13 +2690,21 @@ class LinuxCISScanner:
                     control.get('min_uid', 1000),
                     control.get('max_permissions', 'go-w')
                 )
-            else:
+            elif control_type == "Manual":
                 # Manual check
                 check_result = {
                     "status": "MANUAL",
                     "current": "Manual verification required",
-                    "expected": control.get('expected', 'See CIS documentation'),
+                    "expected": control.get('description', 'See CIS documentation'),
                     "evidence": "This control requires manual verification"
+                }
+            else:
+                # Unknown control type - treat as manual
+                check_result = {
+                    "status": "MANUAL",
+                    "current": f"Unknown control type: {control_type}",
+                    "expected": control.get('expected', 'See CIS documentation'),
+                    "evidence": f"Control type '{control_type}' not implemented - manual verification required"
                 }
             
             result.update(check_result)

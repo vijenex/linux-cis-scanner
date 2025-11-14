@@ -1,0 +1,62 @@
+{
+  "milestone": "1.5",
+  "title": "Additional Process Hardening",
+  "description": "Configure additional process hardening controls",
+  "controls": [
+    {
+      "id": "1.5.1",
+      "title": "Ensure address space layout randomization is enabled",
+      "description": "Address space layout randomization (ASLR) is an exploit mitigation technique which randomly arranges the address space of key data areas of a process.",
+      "rationale": "Randomly placing virtual memory regions will make it difficult to write memory page exploits as the memory placement will be consistently shifting.",
+      "impact": "Some applications may not work with ASLR enabled. Check before enabling.",
+      "profile": "Level1",
+      "type": "KernelParameter",
+      "parameter": "kernel.randomize_va_space",
+      "expected_value": "2"
+    },
+    {
+      "id": "1.5.2",
+      "title": "Ensure ptrace_scope is restricted",
+      "description": "The ptrace() system call allows a parent process to observe and control the execution of another process.",
+      "rationale": "Restricting the use of ptrace to only child processes will help mitigate potential privilege escalation attacks.",
+      "impact": "Some debugging tools may not work properly with this setting.",
+      "profile": "Level1",
+      "type": "KernelParameter",
+      "parameter": "kernel.yama.ptrace_scope",
+      "expected_value": "1"
+    },
+    {
+      "id": "1.5.3",
+      "title": "Ensure core dumps are restricted",
+      "description": "A core dump is the recorded state of the working memory of a computer program at a specific time.",
+      "rationale": "Core dumps may contain sensitive information and should be restricted.",
+      "impact": "Debugging may be more difficult without core dumps.",
+      "profile": "Level1",
+      "type": "KernelParameter",
+      "parameter": "fs.suid_dumpable",
+      "expected_value": "0"
+    },
+    {
+      "id": "1.5.4",
+      "title": "Ensure prelink is not installed",
+      "description": "prelink is a program that modifies ELF shared libraries and ELF dynamically linked binaries in such a way that the time needed for the dynamic linker to perform relocations at startup significantly decreases.",
+      "rationale": "The prelinking feature can interfere with the operation of AIDE, because it changes binaries.",
+      "impact": "None.",
+      "profile": "Level1",
+      "type": "Package",
+      "package": "prelink",
+      "expected_state": "not_installed"
+    },
+    {
+      "id": "1.5.5",
+      "title": "Ensure Automatic Error Reporting is not enabled",
+      "description": "apport collects potentially sensitive data, such as core dumps, stack traces, and log files.",
+      "rationale": "This information could be used by an attacker to learn about the system and gain more knowledge on potential attack vectors.",
+      "impact": "Automatic error reporting will be disabled.",
+      "profile": "Level1",
+      "type": "Service",
+      "service": "apport",
+      "expected_state": "disabled"
+    }
+  ]
+}
