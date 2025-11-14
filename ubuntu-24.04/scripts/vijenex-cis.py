@@ -31,22 +31,35 @@ class LinuxCISScanner:
     """Main Linux CIS compliance scanner engine"""
     
     def __init__(self, output_dir: str = None, profile: str = "Level1"):
-        # Default to reports directory - use /usr/share/vijenex-cis/reports if installed, otherwise local
+        # Default to reports directory - detect correct Ubuntu version directory
         if output_dir is None:
             if os.path.exists('/usr/share/vijenex-cis'):
                 output_dir = '/usr/share/vijenex-cis/reports'
             else:
-                output_dir = str(Path(__file__).parent.parent / "reports")
+                # Detect Ubuntu version and use appropriate directory
+                ubuntu_version = self._detect_ubuntu_version()
+                base_dir = Path(__file__).parent.parent.parent  # Go up to main directory
+                version_dir = base_dir / f"ubuntu-{ubuntu_version}"
+                if version_dir.exists():
+                    output_dir = str(version_dir / "reports")
+                else:
+                    output_dir = str(Path(__file__).parent.parent / "reports")
         self.output_dir = Path(output_dir)
         self.profile = profile
         self.results = []
         self.system_info = self._get_system_info()
         
-        # Set milestones directory - use /usr/share/vijenex-cis/milestones if installed, otherwise local
+        # Set milestones directory - use correct Ubuntu version
         if os.path.exists('/usr/share/vijenex-cis/milestones'):
             self.milestones_dir = Path('/usr/share/vijenex-cis/milestones')
         else:
-            self.milestones_dir = Path(__file__).parent.parent / "milestones"
+            ubuntu_version = self._detect_ubuntu_version()
+            base_dir = Path(__file__).parent.parent.parent
+            version_dir = base_dir / f"ubuntu-{ubuntu_version}"
+            if version_dir.exists():
+                self.milestones_dir = version_dir / "milestones"
+            else:
+                self.milestones_dir = Path(__file__).parent.parent / "milestones"
         
         # Ensure output directory exists
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -81,6 +94,18 @@ class LinuxCISScanner:
         except:
             pass
         return "Unknown Linux Distribution"
+    
+    def _detect_ubuntu_version(self) -> str:
+        """Detect Ubuntu version for directory selection"""
+        try:
+            with open('/etc/os-release', 'r') as f:
+                for line in f:
+                    if line.startswith('VERSION_ID='):
+                        version = line.split('=')[1].strip().strip('"')
+                        return version
+        except (IOError, OSError, ValueError):
+            pass
+        return "24.04"  # Default fallback
     
     def _validate_path(self, file_path: str) -> bool:
         """Validate file path to prevent path traversal"""
