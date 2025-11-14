@@ -98,9 +98,9 @@ cd /tmp && vijenex-cis
 **Latest Release (Stable):**
 ```bash
 # Download latest release
-wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.2.tar.gz
-tar -xzf v1.0.2.tar.gz
-cd linux-cis-scanner-1.0.2
+wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.3.tar.gz
+tar -xzf v1.0.3.tar.gz
+cd linux-cis-scanner-1.0.3
 
 # Install globally with OS-specific report directories
 chmod +x install.sh
@@ -124,7 +124,7 @@ sudo ./install.sh
 **Specific Version:**
 ```bash
 # Install specific version (replace v1.0.2 with desired version)
-git clone --branch v1.0.2 https://github.com/vijenex/linux-cis-scanner.git
+git clone --branch v1.0.3 https://github.com/vijenex/linux-cis-scanner.git
 cd linux-cis-scanner
 chmod +x install.sh
 sudo ./install.sh
@@ -375,7 +375,7 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 ## 🏷️ Releases
 
 ### Current Stable Release
-- **v1.0.2** - Ubuntu 22.04 LTS CIS Scanner with Auto OS Detection
+- **v1.0.3** - Ubuntu 22.04 LTS CIS Scanner with Fixed OS-Specific Directory Structure
   - Complete CIS benchmark implementation (290+ controls)
   - Auto OS detection from /etc/os-release
   - Smart directory management for Ubuntu versions
@@ -390,14 +390,14 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 ### Download Options
 ```bash
 # Latest stable release
-wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.2.tar.gz
+wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.3.tar.gz
 
 # All releases
 # Visit: https://github.com/vijenex/linux-cis-scanner/releases
 ```
 
 ### Version Information
-- **Current Version**: v1.0.2
+- **Current Version**: v1.0.3
 - **Supported Distributions**: Ubuntu 22.04 LTS
 - **CIS Compliance**: Based on official CIS benchmark documentation
 - **Release Date**: November 2024
