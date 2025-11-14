@@ -31,36 +31,9 @@ class LinuxCISScanner:
     """Main Linux CIS compliance scanner engine"""
     
     def __init__(self, output_dir: str = None, profile: str = "Level1"):
-        # Use explicit output_dir if provided, otherwise auto-detect
+        # Use explicit output_dir if provided, otherwise use default
         if output_dir is None:
-            # Detect Ubuntu version and use appropriate directory
-            ubuntu_version = self._detect_ubuntu_version()
-            
-            # Check if running from global installation
-            if str(Path(__file__).parent).startswith('/usr/share/vijenex-cis'):
-                # Global installation - create reports in /var/log/vijenex-cis with OS-specific subdirectory
-                output_dir = f"/var/log/vijenex-cis/ubuntu-{ubuntu_version}-reports"
-            else:
-                # Local installation - try to find the main scanner directory
-                current_path = Path(__file__).parent
-                scanner_root = None
-                
-                # Search up the directory tree for the main scanner directory
-                for parent in [current_path.parent, current_path.parent.parent, current_path.parent.parent.parent]:
-                    if any((parent / f"ubuntu-{v}").exists() for v in ["20.04", "22.04", "24.04"]):
-                        scanner_root = parent
-                        break
-                
-                if scanner_root:
-                    version_dir = scanner_root / f"ubuntu-{ubuntu_version}"
-                    if version_dir.exists():
-                        output_dir = str(version_dir / "reports")
-                    else:
-                        # Create OS-specific reports directory in scanner root
-                        output_dir = str(scanner_root / f"ubuntu-{ubuntu_version}-reports")
-                else:
-                    # Fallback: create reports in current working directory with OS-specific name
-                    output_dir = f"./ubuntu-{ubuntu_version}-reports"
+            output_dir = "./reports"
         
         self.output_dir = Path(output_dir)
         self.profile = profile
