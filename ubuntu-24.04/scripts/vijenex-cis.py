@@ -48,7 +48,7 @@ class LinuxCISScanner:
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-        except:
+        except (socket.error, OSError) as e:
             hostname = "Unknown"
             ip_address = "Unknown"
             
@@ -2342,6 +2342,15 @@ class LinuxCISScanner:
     def check_user_home_dirs(self, passwd_file: str, min_uid: int) -> Dict[str, Any]:
         """Check user home directory configuration"""
         try:
+            # Validate path to prevent traversal attacks
+            if not self._validate_path(passwd_file):
+                return {
+                    "status": "FAIL",
+                    "current": "Invalid file path",
+                    "expected": "All interactive users have valid home directories",
+                    "evidence": f"File path {passwd_file} is not allowed"
+                }
+            
             if not os.path.exists(passwd_file):
                 return {
                     "status": "FAIL",

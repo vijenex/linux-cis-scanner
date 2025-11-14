@@ -2046,12 +2046,19 @@ class LinuxCISScanner:
                 "evidence": f"Checked {passwd_file}, Non-shadowed: {len(non_shadowed)}"
             }
             
+        except (OSError, IOError, PermissionError) as e:
+            return {
+                "status": "ERROR",
+                "current": "Error checking shadowed passwords",
+                "expected": "All accounts use shadowed passwords",
+                "evidence": f"File access error: {str(e)}"
+            }
         except Exception as e:
             return {
                 "status": "ERROR",
                 "current": "Error checking shadowed passwords",
                 "expected": "All accounts use shadowed passwords",
-                "evidence": str(e)
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_empty_passwords(self, shadow_file: str) -> Dict[str, Any]:
@@ -2409,6 +2416,8 @@ class LinuxCISScanner:
                                 checked_users += 1
                                 if not home_dir or home_dir == '/':
                                     issues.append(f"{username}: no home directory assigned")
+                                elif not self._validate_path(home_dir):
+                                    issues.append(f"{username}: invalid home directory path {home_dir}")
                                 elif not os.path.exists(home_dir):
                                     issues.append(f"{username}: home directory {home_dir} does not exist")
             

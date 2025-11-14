@@ -33,7 +33,10 @@ class LinuxCISScanner:
         # Default to reports directory in parent folder
         if output_dir is None:
             output_dir = str(Path(__file__).parent.parent / "reports")
-        self.output_dir = Path(output_dir)
+        # Validate and normalize output directory path
+        if not self._validate_output_path(output_dir):
+            raise ValueError(f"Invalid output directory path: {output_dir}")
+        self.output_dir = Path(output_dir).resolve()
         self.profile = profile
         self.results = []
         self.system_info = self._get_system_info()
@@ -47,7 +50,7 @@ class LinuxCISScanner:
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-        except:
+        except (socket.error, OSError) as e:
             hostname = "Unknown"
             ip_address = "Unknown"
             
@@ -69,15 +72,47 @@ class LinuxCISScanner:
                 for line in f:
                     if line.startswith('PRETTY_NAME='):
                         return line.split('=')[1].strip().strip('"')
-        except:
+        except (IOError, OSError, ValueError) as e:
             pass
         return "Unknown Linux Distribution"
+    
+    def _validate_output_path(self, output_path: str) -> bool:
+        """Validate output directory path to prevent path traversal"""
+        try:
+            # Normalize and resolve the path
+            normalized_path = os.path.normpath(output_path)
+            resolved_path = os.path.realpath(normalized_path)
+            
+            # Check for path traversal attempts
+            if '..' in normalized_path or normalized_path.startswith('/'):
+                # Only allow relative paths within current working directory
+                if normalized_path.startswith('/'):
+                    return False
+            
+            # Ensure path doesn't contain null bytes or other dangerous characters
+            if '\x00' in output_path or any(c in output_path for c in ['<', '>', '|', '*', '?']):
+                return False
+                
+            return True
+        except (OSError, ValueError):
+            return False
     
     def _validate_path(self, file_path: str) -> bool:
         """Validate file path to prevent path traversal"""
         try:
-            # Resolve path and check if it's within allowed directories
-            resolved_path = os.path.realpath(file_path)
+            # Normalize and resolve the path
+            normalized_path = os.path.normpath(file_path)
+            resolved_path = os.path.realpath(normalized_path)
+            
+            # Check for path traversal attempts
+            if '..' in normalized_path:
+                return False
+            
+            # Ensure path doesn't contain null bytes
+            if '\x00' in file_path:
+                return False
+            
+            # Check if path is within allowed system directories
             allowed_prefixes = ['/etc/', '/var/', '/usr/', '/bin/', '/sbin/', '/lib/', '/opt/', '/home/', '/root/', '/proc/', '/sys/']
             return any(resolved_path.startswith(prefix) for prefix in allowed_prefixes)
         except (OSError, ValueError):
@@ -298,7 +333,22 @@ class LinuxCISScanner:
     
     def load_milestone(self, milestone_file: str) -> List[Dict[str, Any]]:
         """Load CIS controls from milestone file"""
+        # Validate milestone filename to prevent path traversal
+        if not milestone_file or '..' in milestone_file or '/' in milestone_file or '\\' in milestone_file:
+            print(f"Warning: Invalid milestone filename {milestone_file}")
+            return []
+        
         milestone_path = self.milestones_dir / milestone_file
+        
+        # Ensure the resolved path is within milestones directory
+        try:
+            resolved_path = milestone_path.resolve()
+            if not str(resolved_path).startswith(str(self.milestones_dir.resolve())):
+                print(f"Warning: Milestone file path outside allowed directory")
+                return []
+        except (OSError, ValueError):
+            print(f"Warning: Invalid milestone file path {milestone_file}")
+            return []
         
         if not milestone_path.exists():
             print(f"Warning: Milestone file {milestone_file} not found")

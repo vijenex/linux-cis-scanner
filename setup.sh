@@ -11,7 +11,20 @@
            Powered by Vijenex Security Platform
 """
 
+# Error handling function
+error_exit() {
+    echo "Error: $1" >&2
+    exit 1
+}
+
+# Exit on any error, undefined variables, or pipe failures
 set -euo pipefail
+
+# Error handling function
+error_exit() {
+    echo "Error: $1" >&2
+    exit 1
+}
 
 echo "Setting up Linux CIS Audit Platform..."
 echo "======================================"
@@ -19,12 +32,12 @@ echo "======================================"
 # Detect distribution
 if [ -f /etc/os-release ]; then
     # shellcheck source=/etc/os-release
-    . /etc/os-release
+    . /etc/os-release || error_exit "Failed to source /etc/os-release"
     DISTRO="${ID:-unknown}"
     VERSION="${VERSION_ID:-unknown}"
+    [ "$DISTRO" = "unknown" ] && error_exit "Could not determine distribution ID"
 else
-    echo "Cannot detect Linux distribution"
-    exit 1
+    error_exit "Cannot detect Linux distribution - /etc/os-release not found"
 fi
 
 echo "Detected: $PRETTY_NAME"
@@ -44,7 +57,7 @@ if ! command -v python3 >/dev/null 2>&1; then
             echo "  Install Python 3 using your package manager"
             ;;
     esac
-    exit 1
+    error_exit "Python 3 installation required"
 fi
 
 echo "Python 3 found: $(python3 --version)"
@@ -75,7 +88,7 @@ case "$DISTRO" in
             SCANNER_DIR="rhel-9"
         else
             echo "RHEL version $VERSION not yet supported"
-            exit 1
+            error_exit "Unsupported RHEL version: $VERSION"
         fi
         ;;
     centos)

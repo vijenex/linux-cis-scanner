@@ -39,13 +39,13 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com" || { echo "Failed to set git email"; exit 1; }
+          git config --local user.name "GitHub Action" || { echo "Failed to set git name"; exit 1; }
           
           if git diff --quiet README.md; then
             echo "No changes to commit"
           else
-            git add README.md
-            git commit -m "Auto-update README version to ${{ steps.version.outputs.version }}"
-            git push origin HEAD:main
+            git add README.md || { echo "Failed to add README.md"; exit 1; }
+            git commit -m "Auto-update README version to ${{ steps.version.outputs.version }}" || { echo "Failed to commit changes"; exit 1; }
+            git push origin HEAD:main || { echo "Failed to push changes"; exit 1; }
           fi

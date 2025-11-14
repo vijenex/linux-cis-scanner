@@ -16,8 +16,29 @@ import os
 sys.path.append(os.path.dirname(__file__))
 
 # Import the scanner class from the main module
-# Import directly from the file
-exec(open('linux-cis-scanner.py').read())
+try:
+    from linux_cis_scanner import LinuxCISScanner
+except ImportError:
+    # Fallback: try importing from current directory
+    import importlib.util
+    import os
+    
+    # Validate path to prevent injection attacks
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    scanner_filename = 'linux-cis-scanner.py'
+    scanner_path = os.path.join(base_dir, scanner_filename)
+    
+    # Ensure the path is within the expected directory
+    if not scanner_path.startswith(base_dir) or '..' in scanner_filename:
+        raise ImportError("Invalid scanner path detected")
+    
+    if os.path.exists(scanner_path):
+        spec = importlib.util.spec_from_file_location("linux_cis_scanner", scanner_path)
+        linux_cis_scanner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(linux_cis_scanner)
+        LinuxCISScanner = linux_cis_scanner.LinuxCISScanner
+    else:
+        raise ImportError("Could not find linux-cis-scanner.py module")
 
 def test_vijenex_scanner():
     """Test basic Vijenex CIS scanner functionality"""

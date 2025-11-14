@@ -146,7 +146,13 @@ EOF
 
 # Update man database
 if command -v mandb >/dev/null 2>&1; then
-    mandb -q 2>/dev/null || true
+    if ! mandb -q 2>/dev/null; then
+        echo -e "${YELLOW}⚠ Warning: Failed to update man database${RESET}" >&2
+    else
+        echo -e "${GREEN}✓ Man database updated${RESET}"
+    fi
+else
+    echo -e "${YELLOW}⚠ Warning: mandb command not found, skipping man database update${RESET}" >&2
 fi
 
 echo -e "${CYAN}═══════════════════════════════════════════════════════════${RESET}"
