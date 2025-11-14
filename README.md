@@ -34,6 +34,23 @@ This platform provides automated security compliance auditing for Linux systems 
 - **🐍 Python-Based**: Cross-platform compatibility and easy maintenance
 - **🎨 Clean CLI Interface**: Color-coded results and clear output
 - **📊 Progress Tracking**: Live scan progress with detailed status
+- **🔍 Auto OS Detection**: Automatically detects Ubuntu version and stores reports in dedicated OS folders
+- **📁 Smart Directory Management**: Uses correct milestone files and report directories based on detected OS version
+
+### 🔍 OS Detection Examples
+```bash
+# Running on Ubuntu 22.04 - automatically uses ubuntu-22.04/reports/
+sudo vijenex-cis
+# Reports stored in: ubuntu-22.04/reports/vijenex-cis-report.html
+
+# Running on Ubuntu 20.04 - automatically uses ubuntu-20.04/reports/  
+sudo vijenex-cis
+# Reports stored in: ubuntu-20.04/reports/vijenex-cis-report.html
+
+# System-wide installation - uses shared location
+sudo ./install.sh && vijenex-cis
+# Reports stored in: /usr/share/vijenex-cis/reports/vijenex-cis-report.html
+```
 
 ### 🎯 Supported Check Types
 
@@ -167,7 +184,14 @@ sudo python3 scripts/vijenex-cis.py --milestones milestone-1-1.json milestone-5-
 
 ## 📊 Report Output
 
-The tool generates comprehensive reports with detailed system information:
+The tool generates comprehensive reports with detailed system information and **automatically stores them in the correct OS-specific directory**:
+
+### 🔍 Automatic OS Detection & Directory Management
+- **Smart OS Detection**: Automatically reads `/etc/os-release` to detect Ubuntu version (20.04, 22.04, 24.04)
+- **Dedicated OS Folders**: Stores reports in `ubuntu-{version}/reports/` based on detected OS
+- **Correct Milestone Loading**: Uses appropriate `ubuntu-{version}/milestones/` for CIS controls
+- **System-wide Installation**: When installed via `install.sh`, uses `/usr/share/vijenex-cis/reports/`
+- **Local Development**: When running locally, automatically detects and uses correct `ubuntu-{version}/` directory
 
 ### 🎨 CLI Output
 - **Vijenex ASCII Banner**: Clean branding display
