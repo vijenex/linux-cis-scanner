@@ -3,7 +3,7 @@
 # Vijenex CIS Scanner Installation Script
 # Enterprise-grade installation like OpenSCAP
 
-set -e
+set -euo pipefail
 
 # Colors
 RED='\033[0;31m'
@@ -38,9 +38,10 @@ fi
 
 # Detect distribution
 if [ -f /etc/os-release ]; then
+    # shellcheck source=/etc/os-release
     . /etc/os-release
-    DISTRO=$ID
-    VERSION=$VERSION_ID
+    DISTRO="${ID:-unknown}"
+    VERSION="${VERSION_ID:-unknown}"
 else
     echo -e "${RED}❌ Cannot detect Linux distribution${RESET}"
     exit 1
@@ -49,7 +50,7 @@ fi
 echo -e "${BLUE}🐧 Detected: $PRETTY_NAME${RESET}"
 
 # Check Python 3
-if ! command -v python3 &> /dev/null; then
+if ! command -v python3 >/dev/null 2>&1; then
     echo -e "${RED}❌ Python 3 is required but not installed${RESET}"
     echo -e "${YELLOW}💡 Install with: apt install python3 (Ubuntu/Debian) or yum install python3 (RHEL/CentOS)${RESET}"
     exit 1
@@ -69,19 +70,31 @@ mkdir -p /usr/share/vijenex-cis
 
 # Detect Ubuntu version and copy appropriate files
 echo -e "${YELLOW}📋 Installing scanner components...${RESET}"
-if [[ "$VERSION_ID" == "24.04" ]]; then
+if [[ "${VERSION_ID:-}" == "24.04" ]] && [ -d "ubuntu-24.04" ]; then
     cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
     echo -e "${GREEN}✓ Ubuntu 24.04 LTS scanner installed${RESET}"
-elif [[ "$VERSION_ID" == "22.04" ]]; then
+elif [[ "${VERSION_ID:-}" == "22.04" ]] && [ -d "ubuntu-22.04" ]; then
     cp -r ubuntu-22.04/* /usr/share/vijenex-cis/
     echo -e "${GREEN}✓ Ubuntu 22.04 LTS scanner installed${RESET}"
 else
-    echo -e "${YELLOW}⚠ Unsupported Ubuntu version: $VERSION_ID${RESET}"
-    echo -e "${YELLOW}📋 Installing Ubuntu 24.04 scanner as fallback${RESET}"
-    cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
+    echo -e "${YELLOW}⚠ Unsupported Ubuntu version: ${VERSION_ID:-unknown}${RESET}"
+    if [ -d "ubuntu-24.04" ]; then
+        echo -e "${YELLOW}📋 Installing Ubuntu 24.04 scanner as fallback${RESET}"
+        cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
+    elif [ -d "ubuntu-22.04" ]; then
+        echo -e "${YELLOW}📋 Installing Ubuntu 22.04 scanner as fallback${RESET}"
+        cp -r ubuntu-22.04/* /usr/share/vijenex-cis/
+    else
+        echo -e "${RED}❌ No compatible scanner found${RESET}"
+        exit 1
+    fi
 fi
-cp LICENSE /usr/share/vijenex-cis/
-cp README.md /usr/share/vijenex-cis/
+if [ -f "LICENSE" ]; then
+    cp LICENSE /usr/share/vijenex-cis/
+fi
+if [ -f "README.md" ]; then
+    cp README.md /usr/share/vijenex-cis/
+fi
 
 # Create wrapper script
 cat > /usr/local/bin/vijenex-cis << 'EOF'
@@ -132,7 +145,7 @@ OpenSCAP, CIS Benchmarks
 EOF
 
 # Update man database
-if command -v mandb &> /dev/null; then
+if command -v mandb >/dev/null 2>&1; then
     mandb -q 2>/dev/null || true
 fi
 

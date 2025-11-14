@@ -74,6 +74,14 @@ class LinuxCISScanner:
     def _run_command(self, command: str, shell: bool = True) -> Tuple[str, str, int]:
         """Execute system command and return output"""
         try:
+            # Sanitize command for security
+            if shell and isinstance(command, str):
+                # Basic command validation - only allow known safe commands
+                safe_commands = ['systemctl', 'sysctl', 'dpkg', 'rpm', 'lsmod', 'modinfo', 'aa-status', 'ufw', 'nft', 'ss', 'crontab', 'find', 'iwconfig', 'nmcli', 'rfkill']
+                cmd_parts = command.split()
+                if not cmd_parts or not any(safe_cmd in cmd_parts[0] for safe_cmd in safe_commands):
+                    return "", "Command not allowed", 1
+            
             result = subprocess.run(
                 command,
                 shell=shell,
@@ -84,12 +92,33 @@ class LinuxCISScanner:
             return result.stdout, result.stderr, result.returncode
         except subprocess.TimeoutExpired:
             return "", "Command timeout", 1
+        except (OSError, ValueError) as e:
+            return "", f"Command error: {str(e)}", 1
         except Exception as e:
-            return "", str(e), 1
+            return "", f"Unexpected error: {str(e)}", 1
+    
+    def _validate_path(self, file_path: str) -> bool:
+        """Validate file path to prevent path traversal"""
+        try:
+            # Resolve path and check if it's within allowed directories
+            resolved_path = os.path.realpath(file_path)
+            allowed_prefixes = ['/etc/', '/var/', '/usr/', '/bin/', '/sbin/', '/lib/', '/opt/', '/home/', '/root/', '/proc/', '/sys/']
+            return any(resolved_path.startswith(prefix) for prefix in allowed_prefixes)
+        except (OSError, ValueError):
+            return False
     
     def check_file_permissions(self, file_path: str, expected_mode: str, expected_owner: str = None, expected_group: str = None) -> Dict[str, Any]:
         """Check file permissions and ownership"""
         try:
+            # Validate path to prevent traversal attacks
+            if not self._validate_path(file_path):
+                return {
+                    "status": "FAIL",
+                    "current": "Invalid file path",
+                    "expected": f"Mode: {expected_mode}, Owner: {expected_owner}, Group: {expected_group}",
+                    "evidence": f"File path {file_path} is not allowed"
+                }
+            
             if not os.path.exists(file_path):
                 return {
                     "status": "FAIL",
@@ -120,12 +149,19 @@ class LinuxCISScanner:
                 "evidence": "; ".join(issues) if issues else "Permissions correct"
             }
             
-        except Exception as e:
+        except (OSError, KeyError, ValueError) as e:
             return {
                 "status": "FAIL",
                 "current": "Error checking file",
                 "expected": f"Mode: {expected_mode}, Owner: {expected_owner}, Group: {expected_group}",
-                "evidence": str(e)
+                "evidence": f"File access error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "current": "Unexpected error",
+                "expected": f"Mode: {expected_mode}, Owner: {expected_owner}, Group: {expected_group}",
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_service_status(self, service_name: str, expected_status: str) -> Dict[str, Any]:
@@ -205,6 +241,15 @@ class LinuxCISScanner:
     def check_config_file(self, file_path: str, pattern: str, expected_match: bool = True) -> Dict[str, Any]:
         """Check configuration file for specific pattern"""
         try:
+            # Validate path
+            if not self._validate_path(file_path):
+                return {
+                    "status": "FAIL",
+                    "current": "Invalid file path",
+                    "expected": f"Pattern '{pattern}' {'found' if expected_match else 'not found'}",
+                    "evidence": f"File path {file_path} is not allowed"
+                }
+            
             if not os.path.exists(file_path):
                 return {
                     "status": "FAIL",
@@ -213,7 +258,7 @@ class LinuxCISScanner:
                     "evidence": f"Configuration file {file_path} does not exist"
                 }
             
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
             
             match_found = re.search(pattern, content, re.MULTILINE)
@@ -234,12 +279,19 @@ class LinuxCISScanner:
                 "evidence": f"In {file_path}: {current}"
             }
             
-        except Exception as e:
+        except (OSError, IOError, UnicodeDecodeError) as e:
             return {
                 "status": "FAIL",
                 "current": "Error reading file",
                 "expected": f"Pattern '{pattern}' {'found' if expected_match else 'not found'}",
-                "evidence": str(e)
+                "evidence": f"File read error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "current": "Unexpected error",
+                "expected": f"Pattern '{pattern}' {'found' if expected_match else 'not found'}",
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_kernel_module(self, module_name: str, expected_status: str) -> Dict[str, Any]:
@@ -251,17 +303,21 @@ class LinuxCISScanner:
             
             for modprobe_dir in modprobe_dirs:
                 if os.path.exists(modprobe_dir):
-                    for conf_file in os.listdir(modprobe_dir):
-                        if conf_file.endswith('.conf'):
-                            conf_path = os.path.join(modprobe_dir, conf_file)
-                            try:
-                                with open(conf_path, 'r') as f:
-                                    content = f.read()
-                                    if re.search(f'install\\s+{module_name}\\s+/bin/(true|false)', content):
-                                        blacklist_found = True
-                                        break
-                            except:
-                                continue
+                    try:
+                        for conf_file in os.listdir(modprobe_dir):
+                            if conf_file.endswith('.conf'):
+                                conf_path = os.path.join(modprobe_dir, conf_file)
+                                if self._validate_path(conf_path):
+                                    try:
+                                        with open(conf_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                            content = f.read()
+                                            if re.search(f'install\\s+{re.escape(module_name)}\\s+/bin/(true|false)', content):
+                                                blacklist_found = True
+                                                break
+                                    except (OSError, IOError):
+                                        continue
+                    except (OSError, PermissionError):
+                        continue
                 if blacklist_found:
                     break
             
@@ -312,7 +368,15 @@ class LinuxCISScanner:
             current_options = []
             mount_found = False
             
-            with open('/proc/mounts', 'r') as f:
+            if not self._validate_path('/proc/mounts'):
+                return {
+                    "status": "ERROR",
+                    "current": "Cannot access mount information",
+                    "expected": f"Option '{required_option}' present",
+                    "evidence": "Access to /proc/mounts denied"
+                }
+            
+            with open('/proc/mounts', 'r', encoding='utf-8', errors='ignore') as f:
                 for line in f:
                     parts = line.strip().split()
                     if len(parts) >= 4 and parts[1] == mount_point:
@@ -338,12 +402,19 @@ class LinuxCISScanner:
                 "evidence": f"Mount {mount_point}: {required_option} {'found' if option_present else 'missing'}"
             }
             
-        except Exception as e:
+        except (OSError, IOError) as e:
             return {
                 "status": "ERROR",
                 "current": "Error checking mount options",
                 "expected": f"Option '{required_option}' present",
-                "evidence": str(e)
+                "evidence": f"Mount check error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "current": "Unexpected error",
+                "expected": f"Option '{required_option}' present",
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_mount_point(self, mount_point: str, expected_status: str) -> Dict[str, Any]:
@@ -353,7 +424,15 @@ class LinuxCISScanner:
             mount_found = False
             device_info = ""
             
-            with open('/proc/mounts', 'r') as f:
+            if not self._validate_path('/proc/mounts'):
+                return {
+                    "status": "ERROR",
+                    "current": "Cannot access mount information",
+                    "expected": f"Mount point {expected_status}",
+                    "evidence": "Access to /proc/mounts denied"
+                }
+            
+            with open('/proc/mounts', 'r', encoding='utf-8', errors='ignore') as f:
                 for line in f:
                     parts = line.strip().split()
                     if len(parts) >= 2 and parts[1] == mount_point:
@@ -393,6 +472,14 @@ class LinuxCISScanner:
     def check_boot_parameters(self, parameters: List[str], config_file: str) -> Dict[str, Any]:
         """Check boot parameters in GRUB configuration"""
         try:
+            if not self._validate_path(config_file):
+                return {
+                    "status": "FAIL",
+                    "current": "Invalid config file path",
+                    "expected": f"Parameters {parameters} in {config_file}",
+                    "evidence": f"Config file path {config_file} is not allowed"
+                }
+            
             if not os.path.exists(config_file):
                 return {
                     "status": "FAIL",
@@ -401,7 +488,7 @@ class LinuxCISScanner:
                     "evidence": f"Boot config file {config_file} does not exist"
                 }
             
-            with open(config_file, 'r') as f:
+            with open(config_file, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
             
             missing_params = []
@@ -427,12 +514,19 @@ class LinuxCISScanner:
                 "evidence": f"In {config_file}: {current}"
             }
             
-        except Exception as e:
+        except (OSError, IOError) as e:
             return {
                 "status": "ERROR",
                 "current": "Error checking boot parameters",
                 "expected": f"Parameters: {', '.join(parameters)}",
-                "evidence": str(e)
+                "evidence": f"Boot config error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "current": "Unexpected error",
+                "expected": f"Parameters: {', '.join(parameters)}",
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_apparmor_profiles(self, expected_modes: List[str], check_unconfined: bool) -> Dict[str, Any]:
