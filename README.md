@@ -106,8 +106,7 @@ cd linux-cis-scanner-1.0.3
 chmod +x install.sh
 sudo ./install.sh
 
-# Now run from anywhere - reports automatically stored in OS-specific directories
-vijenex-cis  # Reports go to /var/log/vijenex-cis/ubuntu-{detected-version}-reports/
+vijenex-cis
 ```
 
 **Development Version:**
