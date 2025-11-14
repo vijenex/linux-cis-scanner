@@ -80,9 +80,9 @@ This platform provides automated security compliance auditing for Linux systems 
 **Latest Release (Stable):**
 ```bash
 # Download latest release
-wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.0.tar.gz
-tar -xzf v1.0.0.tar.gz
-cd linux-cis-scanner-1.0.0
+wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.1.tar.gz
+tar -xzf v1.0.1.tar.gz
+cd linux-cis-scanner-1.0.1
 
 # Install
 chmod +x install.sh
@@ -102,8 +102,8 @@ sudo ./install.sh
 
 **Specific Version:**
 ```bash
-# Install specific version (replace v1.0.0 with desired version)
-git clone --branch v1.0.0 https://github.com/vijenex/linux-cis-scanner.git
+# Install specific version (replace v1.0.1 with desired version)
+git clone --branch v1.0.1 https://github.com/vijenex/linux-cis-scanner.git
 cd linux-cis-scanner
 chmod +x install.sh
 sudo ./install.sh
@@ -176,14 +176,14 @@ The tool generates comprehensive reports with detailed system information:
 - **🔵 Cyan ?**: SKIPPED controls
 - **📊 Real-time Progress**: Live scan status with emojis
 
-### 📄 HTML Report (`linux-cis-report.html`)
+### 📄 HTML Report (`vijenex-cis-report.html`)
 - **System Information**: Distribution, kernel, IP address, scan date
 - **Visual dashboard** with pass/fail summary
 - **Detailed findings** with descriptions and impact
 - **Remediation guidance** for each control
 - **Color-coded results** for easy identification
 
-### 📈 CSV Report (`linux-cis-results.csv`)
+### 📈 CSV Report (`vijenex-cis-results.csv`)
 - **Structured data** for analysis and tracking
 - **Import-friendly** format for spreadsheet applications
 - **Compliance tracking** over time
@@ -343,25 +343,26 @@ This tool implements controls from CIS (Center for Internet Security) benchmarks
 ## 🏷️ Releases
 
 ### Current Stable Release
-- **v1.0.0** - Ubuntu 22.04 LTS CIS Scanner
+- **v1.0.1** - Ubuntu 22.04 LTS CIS Scanner
   - Complete CIS benchmark implementation (290+ controls)
   - Professional CLI with colorful output
   - Enterprise installation with man pages
-  - HTML and CSV reporting
+  - HTML and CSV reporting with proper Vijenex branding
+  - Automatic reports folder creation
   - Zero false positive design
   - 19 milestone files covering 7 major CIS sections
 
 ### Download Options
 ```bash
 # Latest stable release
-wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.0.tar.gz
+wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.1.tar.gz
 
 # All releases
 # Visit: https://github.com/vijenex/linux-cis-scanner/releases
 ```
 
 ### Version Information
-- **Current Version**: v1.0.0
+- **Current Version**: v1.0.1
 - **Supported Distributions**: Ubuntu 22.04 LTS
 - **CIS Compliance**: Based on official CIS benchmark documentation
 - **Release Date**: November 2024
