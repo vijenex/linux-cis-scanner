@@ -105,6 +105,9 @@ if [ -f "README.md" ]; then
     cp README.md /usr/share/vijenex-cis/
 fi
 
+# Clean any existing reports directories first
+find . -name "reports" -type d -exec rm -rf {} + 2>/dev/null || true
+
 # Create wrapper script with OS detection
 cat > /usr/local/bin/vijenex-cis << EOF
 #!/bin/bash
@@ -130,7 +133,10 @@ else
     exit 1
 fi
 
-# Create OS-specific reports directory
+# Clean any existing reports directories
+find /usr/share/vijenex-cis -name "reports" -type d -exec rm -rf {} + 2>/dev/null || true
+
+# Create single OS-specific reports directory
 mkdir -p "/var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports"
 
 # Run scanner with OS-specific output directory
