@@ -21,6 +21,8 @@ This repository contains open source software under MIT License. **CONTRIBUTIONS
 
 This platform provides automated security compliance auditing for Linux systems against official CIS (Center for Internet Security) benchmarks. It performs comprehensive security assessments without making any system changes - **audit-only mode**.
 
+![Vijenex Security Platform](docs/images/Gemini_Generated_Image_xcoiigxcoiigxcoi.png)
+
 ### ✨ Key Features
 
 - **🐧 Multi-Distribution Support**: Dedicated modules for Ubuntu, RHEL, CentOS, Debian
