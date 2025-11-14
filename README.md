@@ -39,17 +39,17 @@ This platform provides automated security compliance auditing for Linux systems 
 
 ### 🔍 OS Detection Examples
 ```bash
-# Running on Ubuntu 22.04 - automatically uses ubuntu-22.04/reports/
-sudo vijenex-cis
+# Local development - automatically detects OS and uses correct directory
+sudo python3 ubuntu-22.04/scripts/vijenex-cis.py
 # Reports stored in: ubuntu-22.04/reports/vijenex-cis-report.html
 
-# Running on Ubuntu 20.04 - automatically uses ubuntu-20.04/reports/  
-sudo vijenex-cis
-# Reports stored in: ubuntu-20.04/reports/vijenex-cis-report.html
-
-# System-wide installation - uses shared location
+# Global installation - detects OS and creates OS-specific reports
 sudo ./install.sh && vijenex-cis
-# Reports stored in: /usr/share/vijenex-cis/reports/vijenex-cis-report.html
+# Reports stored in: /var/log/vijenex-cis/ubuntu-22.04-reports/vijenex-cis-report.html
+
+# Works from any directory after installation
+cd /tmp && vijenex-cis
+# Still stores in: /var/log/vijenex-cis/ubuntu-{detected-version}-reports/
 ```
 
 ### 🎯 Supported Check Types
@@ -102,9 +102,12 @@ wget https://github.com/vijenex/linux-cis-scanner/archive/refs/tags/v1.0.2.tar.g
 tar -xzf v1.0.2.tar.gz
 cd linux-cis-scanner-1.0.2
 
-# Install
+# Install globally with OS-specific report directories
 chmod +x install.sh
 sudo ./install.sh
+
+# Now run from anywhere - reports automatically stored in OS-specific directories
+vijenex-cis  # Reports go to /var/log/vijenex-cis/ubuntu-{detected-version}-reports/
 ```
 
 **Development Version:**
@@ -192,10 +195,10 @@ The tool generates comprehensive reports with detailed system information and **
 
 ### 🔍 Automatic OS Detection & Directory Management
 - **Smart OS Detection**: Automatically reads `/etc/os-release` to detect Ubuntu version (20.04, 22.04, 24.04)
-- **Dedicated OS Folders**: Stores reports in `ubuntu-{version}/reports/` based on detected OS
+- **Global Installation**: After `sudo ./install.sh`, reports stored in `/var/log/vijenex-cis/ubuntu-{version}-reports/`
+- **Local Development**: When running locally, stores reports in `ubuntu-{version}/reports/` based on detected OS
 - **Correct Milestone Loading**: Uses appropriate `ubuntu-{version}/milestones/` for CIS controls
-- **System-wide Installation**: When installed via `install.sh`, uses `/usr/share/vijenex-cis/reports/`
-- **Local Development**: When running locally, automatically detects and uses correct `ubuntu-{version}/` directory
+- **Global Command**: Run `vijenex-cis` from anywhere after installation - reports always go to correct OS-specific directory
 
 ### 🎨 CLI Output
 - **Vijenex ASCII Banner**: Clean branding display
