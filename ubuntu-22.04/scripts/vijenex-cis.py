@@ -37,10 +37,20 @@ class LinuxCISScanner:
             ubuntu_version = self._detect_ubuntu_version()
             base_dir = Path(__file__).parent.parent.parent  # Go up to main directory
             version_dir = base_dir / f"ubuntu-{ubuntu_version}"
+            
+            # Debug output
+            print(f"Debug: Detected Ubuntu version: {ubuntu_version}")
+            print(f"Debug: Base directory: {base_dir}")
+            print(f"Debug: Version directory: {version_dir}")
+            print(f"Debug: Version directory exists: {version_dir.exists()}")
+            
             if version_dir.exists():
                 output_dir = str(version_dir / "reports")
             else:
                 output_dir = str(Path(__file__).parent.parent / "reports")
+            
+            print(f"Debug: Final output directory: {output_dir}")
+            
         self.output_dir = Path(output_dir)
         self.profile = profile
         self.results = []
