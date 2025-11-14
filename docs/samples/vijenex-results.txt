@@ -1,0 +1,55 @@
+Vijenex CIS Scanner Ubuntu 22.04 Results
+
+TOTAL CONTROLS: 322 (across all milestones)
+
+MILESTONE BREAKDOWN:
+- milestone-1-1.json: 22 controls (Kernel modules, partitions)
+- milestone-1-2.json: 26 controls (Partition configurations)  
+- milestone-1-3.json: 9 controls (Package management, AppArmor, bootloader)
+- milestone-1-4.json: 23 controls (Boot parameters, core dumps)
+- milestone-1-5.json: 5 controls (Address space randomization)
+- milestone-1-6.json: 6 controls (Mandatory access controls)
+- milestone-1-7.json: 11 controls (Command line warnings)
+- milestone-2-1.json: 22 controls (Server services)
+- milestone-2-2.json: 6 controls (Client services)
+- milestone-2-3.json: 16 controls (Time synchronization, job schedulers)
+- milestone-3-1.json: 7 controls (Network parameters)
+- milestone-3-2.json: 26 controls (Network parameters continued)
+- milestone-3-3.json: 11 controls (IPv6 and uncommon protocols)
+- milestone-4-1.json: 7 controls (Host-based firewall)
+- milestone-4-2.json: 7 controls (Configure nftables)
+- milestone-4-3.json: 10 controls (Configure iptables)
+- milestone-5-1.json: 22 controls (SSH server configuration)
+- milestone-5-2.json: 7 controls (Privilege escalation)
+- milestone-5-3.json: 13 controls (PAM and password policies)
+- milestone-5-4.json: 9 controls (User accounts and environment)
+- milestone-6-1.json: 21 controls (System logging)
+- milestone-6-2.json: 11 controls (System auditing)
+- milestone-6-3.json: 3 controls (System file integrity)
+- milestone-7-1.json: 12 controls (File and directory permissions)
+- milestone-7-2.json: 10 controls (User and group settings)
+
+COVERAGE COMPARISON WITH AWS INSPECTOR:
+- AWS Inspector: 208 controls
+- Vijenex Scanner: 322 controls
+- Vijenex has 55% MORE coverage than AWS Inspector
+
+SAMPLE CONTROLS (from test run):
+✓ PASS: 1.1.1.1 - Ensure cramfs kernel module is not available
+✓ PASS: 1.1.1.2 - Ensure freevxfs kernel module is not available  
+✓ PASS: 1.1.1.3 - Ensure hfs kernel module is not available
+✓ PASS: 1.1.1.4 - Ensure hfsplus kernel module is not available
+✓ PASS: 1.1.1.5 - Ensure jffs2 kernel module is not available
+? SKIPPED: 1.1.1.6 - Ensure overlay kernel module is not available
+? SKIPPED: 1.1.1.7 - Ensure squashfs kernel module is not available
+✓ PASS: 1.1.1.8 - Ensure udf kernel module is not available
+✓ PASS: 1.1.1.9 - Ensure usb-storage kernel module is not available
+⚠ MANUAL: 1.1.1.10 - Ensure unused filesystems kernel modules are not available
+
+VIJENEX ADVANTAGES:
+1. More comprehensive coverage (322 vs 208 controls)
+2. Detailed milestone organization by CIS sections
+3. Multiple check types (FilePermission, Service, KernelParameter, etc.)
+4. Proper handling of manual verification requirements
+5. Profile-based scanning (Level1/Level2)
+6. Rich reporting with HTML and CSV formats

@@ -1,0 +1,233 @@
+AWS Inspector Ubuntu 22.04 Results
+
+PASSED (119 controls):
+- Ensure accounts in /etc/passwd use shadowed passwords
+- Ensure network file system services are not in use
+- Ensure message of the day is configured properly
+- Ensure samba file server services are not in use
+- Ensure prelink is not installed
+- Ensure nosuid option set on /var partition
+- Ensure ufw is uninstalled or disabled with iptables
+- Ensure password quality checking is enforced
+- Ensure permissions on SSH private host key files are configured
+- Ensure strong password hashing algorithm is configured
+- Ensure ldap client is not installed
+- Ensure root is the only UID 0 account
+- Ensure /etc/shadow password fields are not empty
+- Ensure permissions on /etc/shadow are configured
+- Ensure rsync services are not in use
+- Ensure a single time synchronization daemon is in use
+- Ensure wireless interfaces are disabled
+- Ensure nodev option set on /var partition
+- Ensure root is the only GID 0 account
+- Ensure permissions on /etc/group- are configured
+- Ensure pam_unix does not include remember
+- Ensure permissions on /etc/passwd- are configured
+- Ensure tftp server services are not in use
+- Ensure bluetooth services are not in use
+- Ensure nodev option set on /var/tmp partition
+- Ensure access to /etc/motd is configured
+- Ensure web proxy server services are not in use
+- Ensure talk client is not installed
+- Ensure sshd PermitEmptyPasswords is disabled
+- Ensure ftp server services are not in use
+- Ensure permissions on /etc/group are configured
+- Ensure permissions on /etc/passwd are configured
+- Ensure message access server services are not in use
+- Ensure snmp services are not in use
+- Ensure password dictionary check is enabled
+- Ensure ldap server services are not in use
+- Ensure GDM login banner is configured
+- Ensure no files or directories without an owner and a group exist
+- Ensure nodev option set on /home partition
+- Ensure GDM disable-user-list option is enabled
+- Ensure dns server services are not in use
+- Ensure root path integrity
+- Ensure no duplicate GIDs exist
+- Ensure access to /etc/issue.net is configured
+- Ensure xinetd services are not in use
+- Ensure sshd MaxSessions is configured
+- Ensure permissions on /etc/shells are configured
+- Ensure hfsplus kernel module is not available
+- Ensure NIS Client is not installed
+- Ensure world writable files and directories are secured
+- Ensure root user umask is configured
+- Ensure dnsmasq services are not in use
+- Ensure permissions on /etc/gshadow- are configured
+- Ensure access to /etc/issue is configured
+- Ensure web server services are not in use
+- Ensure jffs2 kernel module is not available
+- Ensure rsh client is not installed
+- Ensure no duplicate UIDs exist
+- Ensure all users last password change date is in the past
+- Ensure permissions on /etc/gshadow are configured
+- Ensure GDM screen locks cannot be overridden
+- Ensure group root is the only GID 0 group
+- Ensure avahi daemon services are not in use
+- Ensure shadow group is empty
+- Ensure pam_unix includes a strong password hashing algorithm
+- Ensure nosuid option set on /home partition
+- Ensure GDM screen locks when the user is idle
+- Ensure all groups in /etc/passwd exist in /etc/group
+- Ensure dhcp server services are not in use
+- Ensure permissions on /etc/shadow- are configured
+- Ensure XDCMP is not enabled
+- Ensure iptables-persistent is not installed with ufw
+- Ensure bogus icmp responses are ignored
+- Ensure noexec option set on /tmp partition
+- Ensure /dev/shm is a separate partition
+- Ensure nodev option set on /var/log/audit partition
+- Ensure GDM disabling automatic mounting of removable media is not overridden
+- Ensure at is restricted to authorized users
+- Ensure all AppArmor Profiles are in enforce or complain mode
+- Ensure broadcast icmp requests are ignored
+- Ensure pam_unix module is enabled
+- Ensure nosuid option set on /tmp partition
+- Ensure noexec option set on /var/log partition
+- Ensure cramfs kernel module is not available
+- Ensure local interactive user home directories are configured
+- Ensure GDM automatic mounting of removable media is disabled
+- Ensure sshd LogLevel is configured
+- Ensure autofs services are not in use
+- Ensure sudo authentication timeout is configured correctly
+- Ensure permissions on /etc/security/opasswd are configured
+- Ensure nosuid option set on /dev/shm partition
+- Ensure sshd IgnoreRhosts is enabled
+- Ensure chrony is enabled and running
+- Ensure system accounts do not have a valid login shell
+- Ensure noexec option set on /var/log/audit partition
+- Ensure no duplicate group names exist
+- Ensure GDM autorun-never is not overridden
+- Ensure freevxfs kernel module is not available
+- Ensure re-authentication for privilege escalation is not disabled globally
+- Ensure ufw is installed
+- Ensure journald service is enabled and active
+- Ensure nodev option set on /dev/shm partition
+- Ensure accounts without a valid login shell are locked
+- Ensure nosuid option set on /var/log/audit partition
+- Ensure chrony is running as user _chrony
+- Ensure no duplicate user names exist
+- Ensure GDM autorun-never is enabled
+- Ensure sshd KexAlgorithms is configured
+- Ensure hfs kernel module is not available
+- Ensure nis server services are not in use
+- Ensure sshd PermitUserEnvironment is disabled
+- Ensure noexec option set on /var/tmp partition
+- Ensure mail transfer agent is configured for local-only mode
+- Ensure sshd Ciphers are configured
+- Ensure sshd HostbasedAuthentication is disabled
+- Ensure sshd UsePAM is enabled
+- Ensure nosuid option set on /var/tmp partition
+- Ensure sudo commands use pty
+- Ensure systemd-journal-remote service is not in use
+- Ensure rpcbind services are not in use
+- Ensure ptrace_scope is restricted
+- Ensure nftables is installed
+- Ensure systemd-timesyncd configured with authorized timeserver
+- Ensure journald ForwardToSyslog is disabled
+- Ensure nodev option set on /tmp partition
+- Ensure latest version of pam is installed
+- Ensure nosuid option set on /var/log partition
+- Ensure local interactive user dot files access is configured
+- Ensure sudo is installed
+- Ensure print server services are not in use
+- Ensure ufw is uninstalled or disabled with nftables
+- Ensure nodev option set on /var/log partition
+- Ensure libpam-modules is installed
+- Ensure permissions on SSH public host key files are configured
+- Ensure cron daemon is enabled and active
+
+FAILED (89 controls):
+- Ensure nftables default deny firewall policy
+- Ensure Automatic Error Reporting is not enabled
+- Ensure pam_unix does not include nullok
+- Ensure core dumps are restricted
+- Ensure nftables is not installed with iptables
+- Ensure inactive password lock is configured
+- Ensure ftp client is not installed
+- Ensure password quality is enforced for the root user
+- Ensure permissions on /etc/ssh/sshd_config are configured
+- Ensure nftables service is enabled
+- Ensure remote login warning banner is configured properly
+- Ensure iptables loopback traffic is configured
+- Ensure nftables loopback traffic is configured
+- Ensure password history is enforced for the root user
+- Ensure password maximum sequential characters is configured
+- Ensure local login warning banner is configured properly
+- Ensure iptables default deny firewall policy
+- Ensure telnet client is not installed
+- Ensure password expiration warning days is configured
+- Ensure pam_pwhistory includes use_authtok
+- Ensure permissions on /etc/cron.d are configured
+- Ensure source routed packets are not accepted
+- Ensure pam_pwhistory module is enabled
+- Ensure default user shell timeout is configured
+- Ensure crontab is restricted to authorized users
+- Ensure noexec option set on /dev/shm partition
+- Ensure suspicious packets are logged
+- Ensure sshd MaxStartups is configured
+- Ensure default user umask is configured
+- Ensure tcp syn cookies is enabled
+- Ensure iptables packages are installed
+- Ensure sshd MACs are configured
+- Ensure usb-storage kernel module is not available
+- Ensure AppArmor is installed
+- Ensure root password is set
+- Ensure pam_unix includes use_authtok
+- Ensure sshd MaxAuthTries is configured
+- Ensure permissions on /etc/cron.hourly are configured
+- Ensure AppArmor is enabled in the bootloader configuration
+- Ensure password unlock time is configured
+- Ensure libpam-pwquality is installed
+- Ensure sshd LoginGraceTime is configured
+- Ensure permissions on /etc/cron.daily are configured
+- Ensure ipv6 router advertisements are not accepted
+- Ensure ufw service is enabled
+- Ensure access to the su command is restricted
+- Ensure filesystem integrity is regularly checked
+- Ensure icmp redirects are not accepted
+- Ensure ip6tables firewall rules exist for all open ports
+- Ensure permissions on /etc/cron.weekly are configured
+- Ensure bootloader password is set
+- Ensure access to all logfiles has been configured
+- Ensure pam_faillock module is enabled
+- Ensure secure icmp redirects are not accepted
+- Ensure permissions on /etc/cron.monthly are configured
+- Ensure password failed attempts lockout is configured
+- Ensure reverse path filtering is enabled
+- Ensure pam_pwquality module is enabled
+- Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured
+- Ensure systemd-journal-upload is enabled and active
+- Ensure iptables firewall rules exist for all open ports
+- Ensure ip6tables default deny firewall policy
+- Ensure sudo log file exists
+- Ensure ufw default deny firewall policy
+- Ensure journald Compress is configured
+- Ensure a nftables table exists
+- Ensure access to bootloader config is configured
+- Ensure nftables rules are permanent
+- Ensure nftables base chains exist
+- Ensure password history remember is configured
+- Ensure password expiration is configured
+- Ensure password same consecutive characters is configured
+- Ensure ufw loopback traffic is configured
+- Ensure sshd Banner is configured
+- Ensure ip forwarding is disabled
+- Ensure /tmp is a separate partition
+- Ensure AIDE is installed
+- Ensure systemd-journal-remote is installed
+- Ensure password number of changed characters is configured
+- Ensure sshd access is configured
+- Ensure permissions on /etc/crontab are configured
+- Ensure address space layout randomization is enabled
+- Ensure packet redirect sending is disabled
+- Ensure sshd PermitRootLogin is disabled
+- Ensure ip6tables loopback traffic is configured
+- Ensure ufw firewall rules exist for all open ports
+- Ensure minimum password length is configured
+- Ensure journald Storage is configured
+
+Summary:
+Total: 208 controls
+Passed: 119 (57.2%)
+Failed: 89 (42.8%)
