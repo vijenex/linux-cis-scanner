@@ -72,8 +72,9 @@ mkdir -p /usr/share/vijenex-cis
 echo -e "${YELLOW}📋 Installing scanner components...${RESET}"
 for ubuntu_dir in ubuntu-*/; do
     if [ -d "$ubuntu_dir" ]; then
-        cp -r "$ubuntu_dir" /usr/share/vijenex-cis/
-        echo -e "${GREEN}✓ $(basename "$ubuntu_dir") scanner installed${RESET}"
+        ubuntu_name=$(basename "$ubuntu_dir")
+        cp -r "$ubuntu_dir" "/usr/share/vijenex-cis/$ubuntu_name"
+        echo -e "${GREEN}✓ $ubuntu_name scanner installed${RESET}"
     fi
 done
 
