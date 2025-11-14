@@ -1,0 +1,98 @@
+{
+  "milestone": "4.1 Configure Uncomplicated Firewall",
+  "version": "1.0.0",
+  "description": "Ubuntu 22.04 LTS CIS Benchmark - Section 4.1 Configure Uncomplicated Firewall",
+  "controls": [
+    {
+      "id": "4.1.1",
+      "title": "Ensure ufw is installed",
+      "section": "Host Based Firewall",
+      "description": "The Uncomplicated Firewall (ufw) is a frontend for iptables and is particularly well-suited for host-based firewalls.",
+      "rationale": "A firewall utility is required to configure the Linux kernel's netfilter framework via the iptables or nftables back-end. The Linux kernel's netfilter framework host-based firewall can protect against threats originating from within a corporate network to include malicious mobile code and poorly configured software on a host.",
+      "impact": "UFW must be available before it can be configured.",
+      "remediation": "Run the following command to install ufw: apt install ufw",
+      "profile": "Level1",
+      "type": "Package",
+      "package_name": "ufw",
+      "should_be_installed": true
+    },
+    {
+      "id": "4.1.2",
+      "title": "Ensure ufw service is configured",
+      "section": "Host Based Firewall",
+      "description": "UnComplicated Firewall (ufw) is a program for managing a netfilter firewall. It provides a command line interface and aims to be uncomplicated for the user.",
+      "rationale": "The ufw service must be enabled and running in order for ufw to protect the system.",
+      "impact": "When running ufw --force enable or starting ufw, ufw will flush its chains. This is required so ufw can maintain a consistent state, but may drop existing connections (e.g. ssh). ufw does support adding rules before enabling the firewall.",
+      "remediation": "Run the following command to enable ufw: ufw --force enable",
+      "profile": "Level1",
+      "type": "UFWStatus",
+      "expected_status": "active"
+    },
+    {
+      "id": "4.1.3",
+      "title": "Ensure ufw incoming default is configured",
+      "section": "Host Based Firewall",
+      "description": "A default deny policy on connections ensures that any unconfigured network usage will be rejected.",
+      "rationale": "With a default accept policy the firewall will accept any packet that is not configured to be denied. It is easier to white list acceptable usage than to black list unacceptable usage.",
+      "impact": "Changing firewall settings while connected over network can result in being locked out of the system.",
+      "remediation": "Run the following command to set the default policy for incoming connections: ufw default deny incoming",
+      "profile": "Level1",
+      "type": "UFWDefaultPolicy",
+      "expected_policies": {
+        "incoming": "deny"
+      }
+    },
+    {
+      "id": "4.1.4",
+      "title": "Ensure ufw outgoing default is configured",
+      "section": "Host Based Firewall",
+      "description": "A default allow policy on connections ensures that any unconfigured network usage will be allowed.",
+      "rationale": "With a default allow policy the firewall will allow any packet that is not configured to be denied. It is easier to white list acceptable usage than to black list unacceptable usage.",
+      "impact": "Changing firewall settings while connected over network can result in being locked out of the system.",
+      "remediation": "Run the following command to set the default policy for outgoing connections: ufw default allow outgoing",
+      "profile": "Level1",
+      "type": "UFWDefaultPolicy",
+      "expected_policies": {
+        "outgoing": "allow"
+      }
+    },
+    {
+      "id": "4.1.5",
+      "title": "Ensure ufw routed default is configured",
+      "section": "Host Based Firewall",
+      "description": "A default deny policy on routed connections ensures that any unconfigured network usage will be rejected.",
+      "rationale": "With a default deny policy the firewall will deny any packet that is not configured to be allowed. It is easier to white list acceptable usage than to black list unacceptable usage.",
+      "impact": "Changing firewall settings while connected over network can result in being locked out of the system.",
+      "remediation": "Run the following command to set the default policy for routed connections: ufw default deny routed",
+      "profile": "Level1",
+      "type": "UFWDefaultPolicy",
+      "expected_policies": {
+        "routed": "deny"
+      }
+    },
+    {
+      "id": "4.1.6",
+      "title": "Ensure ufw loopback traffic is configured",
+      "section": "Host Based Firewall",
+      "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network (127.0.0.0/8).",
+      "rationale": "Loopback traffic is generated between processes on machine and is typically critical to operation of the system. The loopback interface is the only place that loopback network (127.0.0.0/8) traffic should be seen, all other interfaces should ignore traffic on this network as an anti-spoofing measure.",
+      "impact": "Improperly configuring the loopback interface may cause the system to be unusable.",
+      "remediation": "Run the following commands to implement the loopback rules: ufw allow in on lo, ufw allow out on lo, ufw deny in from 127.0.0.0/8, ufw deny in from ::1",
+      "profile": "Level1",
+      "type": "UFWLoopback",
+      "expected_rules": ["allow in on lo", "allow out on lo", "deny in from 127.0.0.0/8", "deny in from ::1"]
+    },
+    {
+      "id": "4.1.7",
+      "title": "Ensure ufw firewall rules exist for all open ports",
+      "section": "Host Based Firewall",
+      "description": "Any ports that have been opened on non-loopback addresses need firewall rules to govern traffic.",
+      "rationale": "Without a firewall rule configured for open ports default firewall policy will drop all packets to these ports.",
+      "impact": "If firewall rules are not in place for open ports, all packets will be dropped by the default policy.",
+      "remediation": "For each port identified in the audit which does not have a firewall rule establish a proper rule for accepting inbound connections: ufw allow in <port>/<tcp or udp protocol>",
+      "profile": "Level1",
+      "type": "UFWOpenPorts",
+      "check_open_ports": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "milestone": "Template for Ubuntu 22.04 CIS Controls",
+  "version": "1.0.0",
+  "description": "Template milestone file for Ubuntu 22.04 LTS CIS benchmark controls",
+  "controls": [
+    {
+      "id": "X.X.X",
+      "title": "Control Title",
+      "section": "Section Name",
+      "description": "Detailed description of the control",
+      "rationale": "Why this control is important",
+      "impact": "Impact of implementing this control",
+      "remediation": "Steps to remediate if control fails",
+      "profile": "Level1",
+      "type": "ControlType",
+      "parameter_name": "parameter_value"
+    }
+  ]
+}

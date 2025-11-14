@@ -1,0 +1,47 @@
+{
+  "milestone": "6.3 Configure Filesystem Integrity Checking",
+  "version": "1.0.0",
+  "description": "Ubuntu 22.04 LTS CIS Benchmark - Section 6.3 Configure Filesystem Integrity Checking",
+  "controls": [
+    {
+      "id": "6.3.1",
+      "title": "Ensure AIDE is installed",
+      "section": "System Auditing",
+      "description": "AIDE takes a snapshot of filesystem state including modification times, permissions, and file hashes which can then be used to compare against the current state of the filesystem to detect modifications to the system.",
+      "rationale": "By monitoring the filesystem state compromised files can be detected to prevent or limit the exposure of accidental or malicious misconfigurations or modified binaries.",
+      "impact": "None.",
+      "remediation": "Install AIDE using the appropriate package manager or compile from source: apt install aide aide-common",
+      "profile": "Level1",
+      "type": "MultiPackage",
+      "package_names": ["aide", "aide-common"],
+      "should_be_installed": true
+    },
+    {
+      "id": "6.3.2",
+      "title": "Ensure filesystem integrity is regularly checked",
+      "section": "System Auditing",
+      "description": "Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.",
+      "rationale": "Periodic file checking allows the system administrator to determine on a regular basis if critical files have been changed in an unauthorized fashion.",
+      "impact": "None.",
+      "remediation": "If AIDE is installed, setup a cron job to run the AIDE check. Example: 0 5 * * * /usr/bin/aide.wrapper --config /etc/aide/aide.conf --check",
+      "profile": "Level1",
+      "type": "CronJob",
+      "cron_user": "root",
+      "expected_job": "aide",
+      "job_description": "AIDE filesystem integrity check"
+    },
+    {
+      "id": "6.3.3",
+      "title": "Ensure cryptographic mechanisms are used to protect the integrity of audit tools",
+      "section": "System Auditing",
+      "description": "Protecting the integrity of the tools used for auditing purposes is a critical step toward ensuring the integrity of audit information.",
+      "rationale": "Protecting audit information also includes identifying and protecting the tools used to view and manipulate log data. Therefore, protecting audit tools is necessary to prevent unauthorized operation on audit information.",
+      "impact": "None.",
+      "remediation": "Add audit tools to AIDE configuration for integrity monitoring: /sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512, /sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512, /sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512, /sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512, /sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512, /sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512",
+      "profile": "Level1",
+      "type": "AIDEConfig",
+      "config_file": "/etc/aide/aide.conf",
+      "monitored_tools": ["/sbin/auditctl", "/sbin/auditd", "/sbin/ausearch", "/sbin/aureport", "/sbin/autrace", "/sbin/augenrules"]
+    }
+  ]
+}

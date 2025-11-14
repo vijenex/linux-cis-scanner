@@ -1,0 +1,103 @@
+{
+  "milestone": "5.2 Configure Privilege Escalation",
+  "version": "1.0.0",
+  "description": "Ubuntu 22.04 LTS CIS Benchmark - Section 5.2 Configure Privilege Escalation",
+  "controls": [
+    {
+      "id": "5.2.1",
+      "title": "Ensure sudo is installed",
+      "section": "Access Control",
+      "description": "sudo allows a permitted user to execute a command as the superuser or another user, as specified by the security policy.",
+      "rationale": "sudo supports a plugin architecture for security policies and input/output logging. Third parties can develop and distribute their own policy and I/O logging plugins to work seamlessly with the sudo front end. The default security policy is sudoers, which is configured via the file /etc/sudoers and any files in the /etc/sudoers.d directory.",
+      "impact": "None.",
+      "remediation": "Run the following command to install sudo: apt install sudo",
+      "profile": "Level1",
+      "type": "Package",
+      "package_name": "sudo",
+      "should_be_installed": true
+    },
+    {
+      "id": "5.2.2",
+      "title": "Ensure sudo commands use pty",
+      "section": "Access Control",
+      "description": "sudo can be configured to run only from a pseudo-pty.",
+      "rationale": "Attackers can run a malicious program using sudo, which would fork a background process that remains even when the main program has finished executing. This can be mitigated by configuring sudo to run other commands only from a pseudo-pty, whether or not I/O logging is turned on.",
+      "impact": "None.",
+      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line: Defaults use_pty",
+      "profile": "Level1",
+      "type": "SudoConfig",
+      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
+      "required_setting": "Defaults use_pty",
+      "prohibited_setting": ""
+    },
+    {
+      "id": "5.2.3",
+      "title": "Ensure sudo log file exists",
+      "section": "Access Control",
+      "description": "sudo can use a custom log file.",
+      "rationale": "A sudo log file simplifies auditing of sudo commands.",
+      "impact": "None.",
+      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line: Defaults logfile=\"/var/log/sudo.log\"",
+      "profile": "Level1",
+      "type": "SudoConfig",
+      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
+      "required_setting": "Defaults logfile=",
+      "prohibited_setting": ""
+    },
+    {
+      "id": "5.2.4",
+      "title": "Ensure users must provide password for escalation",
+      "section": "Access Control",
+      "description": "The sudo NOPASSWD tag, when specified, allows a user to execute commands using sudo without having to authenticate.",
+      "rationale": "Without re-authenticating, users may accidentally execute commands as root.",
+      "impact": "Users will be required to enter their password when using sudo.",
+      "remediation": "Edit the file /etc/sudoers and /etc/sudoers.d/* files with visudo and remove any occurrences of NOPASSWD tags in the file(s).",
+      "profile": "Level1",
+      "type": "SudoConfig",
+      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
+      "required_setting": "",
+      "prohibited_setting": "NOPASSWD"
+    },
+    {
+      "id": "5.2.5",
+      "title": "Ensure re-authentication for privilege escalation is not disabled globally",
+      "section": "Access Control",
+      "description": "The sudo !authenticate tag, when specified, allows a user to execute commands using sudo without having to authenticate.",
+      "rationale": "Without re-authenticating, users may accidentally execute commands as root.",
+      "impact": "Users will be required to authenticate when using sudo.",
+      "remediation": "Edit the file /etc/sudoers and /etc/sudoers.d/* files with visudo and remove any occurrences of !authenticate tags in the file(s).",
+      "profile": "Level1",
+      "type": "SudoConfig",
+      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
+      "required_setting": "",
+      "prohibited_setting": "!authenticate"
+    },
+    {
+      "id": "5.2.6",
+      "title": "Ensure sudo timestamp_timeout is configured",
+      "section": "Access Control",
+      "description": "The sudo timestamp_timeout tag sets the amount of time sudo password prompt waits.",
+      "rationale": "Setting a timeout value reduces the window of opportunity for unauthorized privileged access to another user (i.e. walk away from the terminal while sudo has authenticated a user).",
+      "impact": "Users will need to re-authenticate more frequently.",
+      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line: Defaults timestamp_timeout=15",
+      "profile": "Level1",
+      "type": "SudoConfig",
+      "config_files": ["/etc/sudoers", "/etc/sudoers.d/*"],
+      "required_setting": "Defaults timestamp_timeout=",
+      "prohibited_setting": ""
+    },
+    {
+      "id": "5.2.7",
+      "title": "Ensure access to the su command is restricted",
+      "section": "Access Control",
+      "description": "The su command allows a user to run a command or shell as another user. The program has been superseded by sudo, which allows for more granular control over privileged access. Normally, the su command can be executed by any user. By uncommenting the pam_wheel.so statement in /etc/pam.d/su, the su command will only allow users in a specific group to execute su.",
+      "rationale": "Restricting the use of su, and using sudo in its place, provides system administrators better control of the escalation of user privileges to execute privileged commands. The sudo utility also provides a better logging and audit mechanism, as it can log each command executed via sudo, whereas su can only record that a user executed the su program.",
+      "impact": "Only users in the specified group will be able to use the su command.",
+      "remediation": "Create a comma separated list of users in the wheel group in /etc/group: wheel:x:10:root,<user list>. Edit the /etc/pam.d/su file and uncomment the following line: auth required pam_wheel.so use_uid",
+      "profile": "Level1",
+      "type": "PAMConfig",
+      "config_file": "/etc/pam.d/su",
+      "required_setting": "auth required pam_wheel.so use_uid"
+    }
+  ]
+}

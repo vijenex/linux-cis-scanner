@@ -67,9 +67,19 @@ mkdir -p /etc/vijenex-cis
 mkdir -p /var/log/vijenex-cis
 mkdir -p /usr/share/vijenex-cis
 
-# Copy files
+# Detect Ubuntu version and copy appropriate files
 echo -e "${YELLOW}📋 Installing scanner components...${RESET}"
-cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
+if [[ "$VERSION_ID" == "24.04" ]]; then
+    cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
+    echo -e "${GREEN}✓ Ubuntu 24.04 LTS scanner installed${RESET}"
+elif [[ "$VERSION_ID" == "22.04" ]]; then
+    cp -r ubuntu-22.04/* /usr/share/vijenex-cis/
+    echo -e "${GREEN}✓ Ubuntu 22.04 LTS scanner installed${RESET}"
+else
+    echo -e "${YELLOW}⚠ Unsupported Ubuntu version: $VERSION_ID${RESET}"
+    echo -e "${YELLOW}📋 Installing Ubuntu 24.04 scanner as fallback${RESET}"
+    cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
+fi
 cp LICENSE /usr/share/vijenex-cis/
 cp README.md /usr/share/vijenex-cis/
 
