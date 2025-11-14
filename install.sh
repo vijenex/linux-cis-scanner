@@ -68,22 +68,30 @@ mkdir -p /etc/vijenex-cis
 mkdir -p /var/log/vijenex-cis
 mkdir -p /usr/share/vijenex-cis
 
-# Detect Ubuntu version and copy appropriate files
+# Copy all Ubuntu versions to preserve OS-specific structure
 echo -e "${YELLOW}📋 Installing scanner components...${RESET}"
-if [[ "${VERSION_ID:-}" == "24.04" ]] && [ -d "ubuntu-24.04" ]; then
-    cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
-    echo -e "${GREEN}✓ Ubuntu 24.04 LTS scanner installed${RESET}"
-elif [[ "${VERSION_ID:-}" == "22.04" ]] && [ -d "ubuntu-22.04" ]; then
-    cp -r ubuntu-22.04/* /usr/share/vijenex-cis/
-    echo -e "${GREEN}✓ Ubuntu 22.04 LTS scanner installed${RESET}"
+for ubuntu_dir in ubuntu-*/; do
+    if [ -d "$ubuntu_dir" ]; then
+        cp -r "$ubuntu_dir" /usr/share/vijenex-cis/
+        echo -e "${GREEN}✓ $(basename "$ubuntu_dir") scanner installed${RESET}"
+    fi
+done
+
+# Detect current Ubuntu version for wrapper script
+if [[ "${VERSION_ID:-}" == "24.04" ]] && [ -d "/usr/share/vijenex-cis/ubuntu-24.04" ]; then
+    SCANNER_VERSION="ubuntu-24.04"
+elif [[ "${VERSION_ID:-}" == "22.04" ]] && [ -d "/usr/share/vijenex-cis/ubuntu-22.04" ]; then
+    SCANNER_VERSION="ubuntu-22.04"
+elif [[ "${VERSION_ID:-}" == "20.04" ]] && [ -d "/usr/share/vijenex-cis/ubuntu-20.04" ]; then
+    SCANNER_VERSION="ubuntu-20.04"
 else
     echo -e "${YELLOW}⚠ Unsupported Ubuntu version: ${VERSION_ID:-unknown}${RESET}"
-    if [ -d "ubuntu-24.04" ]; then
-        echo -e "${YELLOW}📋 Installing Ubuntu 24.04 scanner as fallback${RESET}"
-        cp -r ubuntu-24.04/* /usr/share/vijenex-cis/
-    elif [ -d "ubuntu-22.04" ]; then
-        echo -e "${YELLOW}📋 Installing Ubuntu 22.04 scanner as fallback${RESET}"
-        cp -r ubuntu-22.04/* /usr/share/vijenex-cis/
+    if [ -d "/usr/share/vijenex-cis/ubuntu-24.04" ]; then
+        SCANNER_VERSION="ubuntu-24.04"
+        echo -e "${YELLOW}📋 Using Ubuntu 24.04 scanner as fallback${RESET}"
+    elif [ -d "/usr/share/vijenex-cis/ubuntu-22.04" ]; then
+        SCANNER_VERSION="ubuntu-22.04"
+        echo -e "${YELLOW}📋 Using Ubuntu 22.04 scanner as fallback${RESET}"
     else
         echo -e "${RED}❌ No compatible scanner found${RESET}"
         exit 1
@@ -96,17 +104,42 @@ if [ -f "README.md" ]; then
     cp README.md /usr/share/vijenex-cis/
 fi
 
-# Create wrapper script
-cat > /usr/local/bin/vijenex-cis << 'EOF'
+# Create wrapper script with OS detection
+cat > /usr/local/bin/vijenex-cis << EOF
 #!/bin/bash
-# Vijenex CIS Scanner Wrapper
-cd /usr/share/vijenex-cis
-exec python3 scripts/vijenex-cis.py "$@"
+# Vijenex CIS Scanner Wrapper with OS Detection
+
+# Detect Ubuntu version
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    UBUNTU_VERSION="\${VERSION_ID:-unknown}"
+else
+    UBUNTU_VERSION="unknown"
+fi
+
+# Determine scanner directory
+if [ -d "/usr/share/vijenex-cis/ubuntu-\${UBUNTU_VERSION}" ]; then
+    SCANNER_DIR="/usr/share/vijenex-cis/ubuntu-\${UBUNTU_VERSION}"
+elif [ -d "/usr/share/vijenex-cis/ubuntu-24.04" ]; then
+    SCANNER_DIR="/usr/share/vijenex-cis/ubuntu-24.04"
+elif [ -d "/usr/share/vijenex-cis/ubuntu-22.04" ]; then
+    SCANNER_DIR="/usr/share/vijenex-cis/ubuntu-22.04"
+else
+    echo "Error: No compatible scanner found"
+    exit 1
+fi
+
+# Create OS-specific reports directory
+mkdir -p "/var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports"
+
+# Run scanner with OS-specific output directory
+cd "\${SCANNER_DIR}"
+exec python3 scripts/vijenex-cis.py --output-dir "/var/log/vijenex-cis/ubuntu-\${UBUNTU_VERSION}-reports" "\$@"
 EOF
 
 # Make executable
 chmod +x /usr/local/bin/vijenex-cis
-chmod +x /usr/share/vijenex-cis/scripts/vijenex-cis.py
+chmod +x /usr/share/vijenex-cis/*/scripts/*.py
 
 # Create man page
 cat > /usr/share/man/man1/vijenex-cis.1 << 'EOF'
@@ -159,7 +192,7 @@ echo -e "${CYAN}═════════════════════�
 echo -e "${GREEN}${BOLD}✅ Vijenex CIS Scanner installed successfully!${RESET}"
 echo -e "${GREEN}✓ Command available: ${BOLD}vijenex-cis${RESET}"
 echo -e "${GREEN}✓ Man page: ${BOLD}man vijenex-cis${RESET}"
-echo -e "${GREEN}✓ Log directory: ${BOLD}/var/log/vijenex-cis${RESET}"
+echo -e "${GREEN}✓ OS-specific reports: ${BOLD}/var/log/vijenex-cis/ubuntu-${VERSION_ID:-unknown}-reports/${RESET}"
 echo -e "${CYAN}═══════════════════════════════════════════════════════════${RESET}"
 echo -e "${YELLOW}💡 Usage Examples:${RESET}"
 echo -e "   ${BOLD}sudo vijenex-cis${RESET}                    # Complete scan"
