@@ -90,7 +90,7 @@ tar -xzf v1.0.8.tar.gz
 cd linux-cis-scanner-1.0.8
 
 # Run locally (reports stored in ./reports/)
-sudo ./run-local.sh
+sudo ./vijenex-cis
 ```
 
 #### Option 2: System-wide Installation
@@ -130,20 +130,20 @@ sudo ./install.sh
 #### Local Execution (from downloaded release)
 ```bash
 # Complete compliance scan (reports in ./reports/)
-sudo ./run-local.sh
+sudo ./vijenex-cis
 
 # Level 2 profile scan
-sudo ./run-local.sh --profile Level2
+sudo ./vijenex-cis --profile Level2
 
 # Custom output directory
-sudo ./run-local.sh --output-dir /tmp/my-reports
+sudo ./vijenex-cis --output-dir /tmp/my-reports
 
 # Specific report formats
-sudo ./run-local.sh --format html
-sudo ./run-local.sh --format csv
+sudo ./vijenex-cis --format html
+sudo ./vijenex-cis --format csv
 
 # Get help
-./run-local.sh --help
+./vijenex-cis --help
 ```
 
 #### System-wide Installation Commands
