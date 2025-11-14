@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linux CIS Compliance Report - Vijenex Security Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background: #2c3e50; color: white; padding: 20px; text-align: center; }
+        .summary { display: flex; justify-content: space-around; margin: 20px 0; }
+        .metric { text-align: center; padding: 20px; border-radius: 5px; }
+        .pass { background: #d4edda; color: #155724; }
+        .fail { background: #f8d7da; color: #721c24; }
+        .manual { background: #fff3cd; color: #856404; }
+        .system-info { background: #f8f9fa; padding: 15px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f2f2f2; }
+        .status-pass { color: #28a745; font-weight: bold; }
+        .status-fail { color: #dc3545; font-weight: bold; }
+        .status-manual { color: #ffc107; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Linux CIS Compliance Report</h1>
+        <p>Powered by Vijenex Security Platform</p>
+    </div>
+    
+    <div class="system-info">
+        <h3>System Information</h3>
+        <p><strong>Hostname:</strong> Unknown</p>
+        <p><strong>IP Address:</strong> Unknown</p>
+        <p><strong>Distribution:</strong> Unknown Linux Distribution</p>
+        <p><strong>Architecture:</strong> arm64</p>
+        <p><strong>Scan Date:</strong> 2025-11-14 15:17:11</p>
+        <p><strong>Profile:</strong> Level1</p>
+    </div>
+    
+    <div class="summary">
+        <div class="metric pass">
+            <h3>1</h3>
+            <p>Passed</p>
+        </div>
+        <div class="metric fail">
+            <h3>12</h3>
+            <p>Failed</p>
+        </div>
+        <div class="metric manual">
+            <h3>6</h3>
+            <p>Manual</p>
+        </div>
+    </div>
+    
+    <h3>Detailed Results</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Control</th>
+            <th>Section</th>
+            <th>Status</th>
+            <th>Description</th>
+            <th>Impact</th>
+            <th>Remediation</th>
+        </tr>
+
+        <tr>
+            <td>1.1.1.1</td>
+            <td>Ensure mounting of cramfs filesystems is disabled</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The cramfs filesystem type is a compressed read-only Linux filesystem embedded in small footprint systems. A cramfs image can be used without having to first decompress the image.</td>
+            <td>Removing support for unneeded filesystem types reduces the local attack surface of the system.</td>
+            <td>Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add the following line: install cramfs /bin/true</td>
+        </tr>
+        <tr>
+            <td>1.1.1.2</td>
+            <td>Ensure mounting of freevxfs filesystems is disabled</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The freevxfs filesystem type is a free version of the Veritas type filesystem. This is the primary filesystem type for HP-UX operating systems.</td>
+            <td>Removing support for unneeded filesystem types reduces the local attack surface of the system.</td>
+            <td>Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add the following line: install freevxfs /bin/true</td>
+        </tr>
+        <tr>
+            <td>1.1.1.3</td>
+            <td>Ensure mounting of jffs2 filesystems is disabled</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The jffs2 (journaling flash filesystem 2) filesystem type is a log-structured filesystem used in flash memory devices.</td>
+            <td>Removing support for unneeded filesystem types reduces the local attack surface of the system.</td>
+            <td>Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add the following line: install jffs2 /bin/true</td>
+        </tr>
+        <tr>
+            <td>1.1.1.4</td>
+            <td>Ensure mounting of hfs filesystems is disabled</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The hfs filesystem type is a hierarchical filesystem that allows you to mount Mac OS filesystems.</td>
+            <td>Removing support for unneeded filesystem types reduces the local attack surface of the system.</td>
+            <td>Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add the following line: install hfs /bin/true</td>
+        </tr>
+        <tr>
+            <td>1.1.1.5</td>
+            <td>Ensure mounting of hfsplus filesystems is disabled</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The hfsplus filesystem type is a hierarchical filesystem designed to replace hfs that allows you to mount Mac OS filesystems.</td>
+            <td>Removing support for unneeded filesystem types reduces the local attack surface of the system.</td>
+            <td>Edit or create a file in the /etc/modprobe.d/ directory ending in .conf and add the following line: install hfsplus /bin/true</td>
+        </tr>
+        <tr>
+            <td>1.1.2</td>
+            <td>Ensure /tmp is configured</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-skipped">? SKIPPED</td>
+            <td>The /tmp directory is a world-writable directory used for temporary storage by all users and some applications.</td>
+            <td>Making /tmp its own file system allows an administrator to set the noexec option on the mount, making /tmp useless for an attacker to install executable code.</td>
+            <td>Configure /tmp as a separate partition or logical volume. Edit /etc/fstab and add or edit the /tmp entry.</td>
+        </tr>
+        <tr>
+            <td>1.1.3</td>
+            <td>Ensure nodev option set on /tmp partition</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The nodev mount option specifies that the filesystem cannot contain special devices.</td>
+            <td>Since the /tmp filesystem is not intended to support devices, set this option to ensure that users cannot attempt to create block or character special devices in /tmp.</td>
+            <td>Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /tmp partition.</td>
+        </tr>
+        <tr>
+            <td>1.1.4</td>
+            <td>Ensure nosuid option set on /tmp partition</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The nosuid mount option specifies that the filesystem cannot contain setuid files.</td>
+            <td>Since the /tmp filesystem is only intended for temporary file storage, set this option to ensure that users cannot create setuid files in /tmp.</td>
+            <td>Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /tmp partition.</td>
+        </tr>
+        <tr>
+            <td>1.1.5</td>
+            <td>Ensure noexec option set on /tmp partition</td>
+            <td>1.1 Filesystem Configuration</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The noexec mount option specifies that the filesystem cannot contain executable binaries.</td>
+            <td>Since the /tmp filesystem is only intended for temporary file storage, set this option to ensure that users cannot run executable binaries from /tmp.</td>
+            <td>Edit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /tmp partition.</td>
+        </tr>
+        <tr>
+            <td>1.2.1</td>
+            <td>Ensure package manager repositories are configured</td>
+            <td>1.2 Software Updates</td>
+            <td class="status-manual">? MANUAL</td>
+            <td>Systems need to have package manager repositories configured to ensure they receive the latest patches and updates.</td>
+            <td>If a system's package repositories are misconfigured important patches may not be identified or a rogue repository could introduce compromised software.</td>
+            <td>Configure your package manager repositories according to site policy.</td>
+        </tr>
+        <tr>
+            <td>1.2.2</td>
+            <td>Ensure GPG keys are configured</td>
+            <td>1.2 Software Updates</td>
+            <td class="status-manual">? MANUAL</td>
+            <td>Most packages managers implement GPG key signing to verify package integrity during installation.</td>
+            <td>It is important to ensure that updates are obtained from a valid source to protect against spoofing that could lead to the inadvertent installation of malware on the system.</td>
+            <td>Update your package manager GPG keys in accordance with site policy.</td>
+        </tr>
+        <tr>
+            <td>1.3.1</td>
+            <td>Ensure AIDE is installed</td>
+            <td>1.3 Filesystem Integrity Checking</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>AIDE takes a snapshot of filesystem state including modification times, permissions, and file hashes which can then be used to compare against the current state of the filesystem to detect modifications to the system.</td>
+            <td>By monitoring the filesystem state compromised files can be detected to prevent or limit the exposure of accidental or malicious misconfigurations or modified binaries.</td>
+            <td>Install AIDE using the appropriate package manager or compile from source.</td>
+        </tr>
+        <tr>
+            <td>1.3.2</td>
+            <td>Ensure filesystem integrity is regularly checked</td>
+            <td>1.3 Filesystem Integrity Checking</td>
+            <td class="status-manual">? MANUAL</td>
+            <td>Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.</td>
+            <td>Periodic file checking allows the system administrator to determine on a regular basis if critical files have been changed in an unauthorized fashion.</td>
+            <td>Run the following command: crontab -u root -e. Add the following line to the crontab: 0 5 * * * /usr/bin/aide.wrapper --config /etc/aide/aide.conf --check</td>
+        </tr>
+        <tr>
+            <td>1.4.1</td>
+            <td>Ensure permissions on bootloader config are configured</td>
+            <td>1.4 Secure Boot Settings</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>The grub configuration file contains information on boot settings and passwords for unlocking boot options.</td>
+            <td>Setting the permissions to read and write for root only prevents non-root users from seeing the boot parameters or changing them.</td>
+            <td>Run the following commands to set permissions on your grub configuration files.</td>
+        </tr>
+        <tr>
+            <td>1.4.2</td>
+            <td>Ensure bootloader password is set</td>
+            <td>1.4 Secure Boot Settings</td>
+            <td class="status-manual">? MANUAL</td>
+            <td>Setting the boot loader password will require that anyone rebooting with modified boot parameters will require the boot loader password to do so.</td>
+            <td>Requiring a boot password upon execution of the boot loader will prevent an unauthorized user from entering user single mode or changing the boot parameters during the boot process.</td>
+            <td>Create an encrypted password with grub-mkpasswd-pbkdf2 and configure GRUB to use it.</td>
+        </tr>
+        <tr>
+            <td>1.4.3</td>
+            <td>Ensure authentication required for single user mode</td>
+            <td>1.4 Secure Boot Settings</td>
+            <td class="status-manual">? MANUAL</td>
+            <td>Single user mode is used for recovery when the system detects an issue during boot or by manual selection from the bootloader.</td>
+            <td>Requiring authentication in single user mode prevents an unauthorized user from rebooting the system into single user to gain root privileges without credentials.</td>
+            <td>Run the following command and follow the prompts to set a password for the root user: passwd root</td>
+        </tr>
+        <tr>
+            <td>1.5.1</td>
+            <td>Ensure core dumps are restricted</td>
+            <td>1.5 Additional Process Hardening</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>A core dump is the memory of an executable program. It is generally used to determine why a program aborted.</td>
+            <td>Setting a hard limit of 0 prevents users from overriding the soft variable. If core dumps are required, consider setting limits for user groups (see limits.conf(5)).</td>
+            <td>Add the following line to /etc/security/limits.conf or a /etc/security/limits.d/* file: * hard core 0</td>
+        </tr>
+        <tr>
+            <td>1.5.2</td>
+            <td>Ensure XD/NX support is enabled</td>
+            <td>1.5 Additional Process Hardening</td>
+            <td class="status-manual">? MANUAL</td>
+            <td>Recent processors in the x86 family support the ability to prevent code execution on a per memory page basis.</td>
+            <td>Enabling any feature that can protect against buffer overflow attacks enhances the security of the system.</td>
+            <td>On 32 bit systems install a kernel with PAE support, no installation is required on 64 bit systems.</td>
+        </tr>
+        <tr>
+            <td>1.5.3</td>
+            <td>Ensure address space layout randomization (ASLR) is enabled</td>
+            <td>1.5 Additional Process Hardening</td>
+            <td class="status-fail">✗ FAIL</td>
+            <td>Address space layout randomization (ASLR) is an exploit mitigation technique which randomly arranges the address space of key data areas of a process.</td>
+            <td>Randomly placing virtual memory regions will make it difficult to write memory page exploits as the memory placement will be consistently shifting.</td>
+            <td>Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: kernel.randomize_va_space = 2</td>
+        </tr>
+        <tr>
+            <td>1.5.4</td>
+            <td>Ensure prelink is disabled</td>
+            <td>1.5 Additional Process Hardening</td>
+            <td class="status-pass">✓ PASS</td>
+            <td>prelink is a program that modifies ELF shared libraries and ELF dynamically linked binaries in such a way that the time needed for the dynamic linker to perform relocations at startup significantly decreases.</td>
+            <td>The prelinking feature can interfere with the operation of AIDE, because it changes binaries. Prelinking can also increase the vulnerability of the system if a malicious user is able to compromise a common library such as libc.</td>
+            <td>Run the following commands to restore binaries to normal and uninstall prelink: prelink -ua && apt purge prelink</td>
+        </tr>
+    </table>
+</body>
+</html>

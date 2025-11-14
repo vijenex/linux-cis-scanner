@@ -29,7 +29,10 @@ from typing import Dict, List, Any, Optional, Tuple
 class LinuxCISScanner:
     """Main Linux CIS compliance scanner engine"""
     
-    def __init__(self, output_dir: str = "./reports", profile: str = "Level1"):
+    def __init__(self, output_dir: str = None, profile: str = "Level1"):
+        # Default to reports directory in parent folder
+        if output_dir is None:
+            output_dir = str(Path(__file__).parent.parent / "reports")
         self.output_dir = Path(output_dir)
         self.profile = profile
         self.results = []
@@ -497,7 +500,7 @@ class LinuxCISScanner:
 </body>
 </html>"""
         
-        report_path = self.output_dir / "linux-cis-report.html"
+        report_path = self.output_dir / "vijenex-cis-report.html"
         with open(report_path, 'w') as f:
             f.write(html_content)
         
@@ -507,7 +510,7 @@ class LinuxCISScanner:
         """Generate CSV compliance report"""
         import csv
         
-        report_path = self.output_dir / "linux-cis-results.csv"
+        report_path = self.output_dir / "vijenex-cis-results.csv"
         
         with open(report_path, 'w', newline='') as csvfile:
             fieldnames = ['ID', 'Control', 'Section', 'Status', 'Description', 'Impact', 'Remediation']
@@ -529,7 +532,7 @@ class LinuxCISScanner:
 
 def main():
     parser = argparse.ArgumentParser(description='Linux CIS Compliance Scanner - Vijenex Security Platform')
-    parser.add_argument('--output-dir', default='./reports', help='Output directory for reports')
+    parser.add_argument('--output-dir', help='Output directory for reports (default: ../reports)')
     parser.add_argument('--profile', choices=['Level1', 'Level2'], default='Level1', help='CIS profile level')
     parser.add_argument('--milestones', nargs='+', help='Specific milestone files to scan')
     parser.add_argument('--format', choices=['html', 'csv', 'both'], default='both', help='Report format')
@@ -545,17 +548,31 @@ def main():
     scanner = LinuxCISScanner(args.output_dir, args.profile)
     scanner.scan_milestones(args.milestones)
     
-    print("\nGenerating reports...")
+    # Print summary
+    pass_count = sum(1 for r in scanner.results if r["status"] == "PASS")
+    fail_count = sum(1 for r in scanner.results if r["status"] == "FAIL")
+    manual_count = sum(1 for r in scanner.results if r["status"] == "MANUAL")
+    unknown_count = len(scanner.results) - pass_count - fail_count - manual_count
+    
+    print("\n🎯 Scan Completed Successfully!")
+    print(f"✓ Passed: {pass_count}")
+    print(f"✗ Failed: {fail_count}")
+    print(f"⚠ Manual: {manual_count}")
+    if unknown_count > 0:
+        print(f"❓ Unknown: {unknown_count}")
+    print(f"📊 Total Controls: {len(scanner.results)}")
+    
+    print("\n📊 Generating reports...")
     
     if args.format in ['html', 'both']:
         html_report = scanner.generate_html_report()
-        print(f"HTML report: {html_report}")
+        print(f"📄 HTML report: {html_report}")
     
     if args.format in ['csv', 'both']:
         csv_report = scanner.generate_csv_report()
-        print(f"CSV report: {csv_report}")
+        print(f"📊 CSV report: {csv_report}")
     
-    print("\nScan completed successfully!")
+    print("\n🎉 Vijenex CIS scan completed successfully!")
 
 if __name__ == "__main__":
     main()
