@@ -62,12 +62,15 @@ else
     echo -e "${YELLOW}   Tried: python3, python, python3.6, python3.8, python3.9, python3.11${NC}"
 fi
 
-# Check for Go binary (multiple locations)
+# Check for Go binary (skip wrapper scripts, use actual binaries)
 GO_BINARY=""
-for binary in ./vijenex-cis ./vijenex-cis-amd64 ./vijenex-cis-arm64 ./go-scanner/bin/vijenex-cis ./bin/vijenex-cis-scanner; do
+for binary in ./vijenex-cis-amd64 ./vijenex-cis-arm64 ./go-scanner/bin/vijenex-cis ./vijenex-cis-binary ./bin/vijenex-cis-scanner; do
     if [ -f "$binary" ] && [ -x "$binary" ]; then
-        GO_BINARY="$binary"
-        break
+        # Skip if it's a bash script
+        if ! head -n1 "$binary" 2>/dev/null | grep -q "#!/bin/bash"; then
+            GO_BINARY="$binary"
+            break
+        fi
     fi
 done
 
