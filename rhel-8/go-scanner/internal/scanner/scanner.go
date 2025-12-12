@@ -48,8 +48,8 @@ func (s *Scanner) LoadMilestones(milestoneFiles []string) error {
 		return fmt.Errorf("failed to create output directory: %w", err)
 	}
 
-	// Get milestone directory
-	milestonesDir := filepath.Join("milestones")
+	// Get milestone directory - use parent milestones with 234 automated controls
+	milestonesDir := filepath.Join("..", "milestones")
 
 	// If no specific milestones provided, load all
 	if len(milestoneFiles) == 0 {
