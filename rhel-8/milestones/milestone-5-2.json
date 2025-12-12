@@ -1,0 +1,79 @@
+{
+  "milestone": "5-2",
+  "section": "5.2 Configure privilege escalation",
+  "description": "Configure sudo and su access",
+  "controls": [
+    {
+      "id": "5.2.1",
+      "title": "Ensure sudo is installed",
+      "section": "5.2 Privilege Escalation",
+      "type": "PackageInstalled",
+      "profile": "Level1",
+      "package_name": "sudo",
+      "expected_status": "installed",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.1",
+      "description": "sudo allows a permitted user to execute a command as the superuser or another user",
+      "remediation": "Run: dnf install sudo"
+    },
+    {
+      "id": "5.2.2",
+      "title": "Ensure sudo commands use pty",
+      "section": "5.2 Privilege Escalation",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.2",
+      "description": "Attackers can run a malicious program using sudo which would fork a background process",
+      "remediation": "Add 'Defaults use_pty' to /etc/sudoers"
+    },
+    {
+      "id": "5.2.3",
+      "title": "Ensure sudo log file exists",
+      "section": "5.2 Privilege Escalation",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.3",
+      "description": "sudo can log all commands run and the location of the log file can be configured",
+      "remediation": "Add 'Defaults logfile=\"/var/log/sudo.log\"' to /etc/sudoers"
+    },
+    {
+      "id": "5.2.4",
+      "title": "Ensure users must provide password for privilege escalation",
+      "section": "5.2 Privilege Escalation",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.4",
+      "description": "Ensure that users must provide a password for privilege escalation",
+      "remediation": "Remove NOPASSWD tags from /etc/sudoers"
+    },
+    {
+      "id": "5.2.5",
+      "title": "Ensure re-authentication for privilege escalation is not disabled globally",
+      "section": "5.2 Privilege Escalation",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.5",
+      "description": "Ensure that users must re-authenticate for privilege escalation",
+      "remediation": "Remove !authenticate tags from /etc/sudoers"
+    },
+    {
+      "id": "5.2.6",
+      "title": "Ensure sudo authentication timeout is configured correctly",
+      "section": "5.2 Privilege Escalation",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.6",
+      "description": "The default sudo authentication timeout is 5 minutes",
+      "remediation": "Set 'Defaults timestamp_timeout=15' in /etc/sudoers"
+    },
+    {
+      "id": "5.2.7",
+      "title": "Ensure access to the su command is restricted",
+      "section": "5.2 Privilege Escalation",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.7",
+      "description": "The su command allows a user to run a command or shell as another user",
+      "remediation": "Add 'auth required pam_wheel.so use_uid' to /etc/pam.d/su"
+    }
+  ]
+}

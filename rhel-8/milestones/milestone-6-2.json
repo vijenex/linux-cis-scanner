@@ -1,0 +1,107 @@
+{
+  "milestone": "6-2",
+  "section": "6.2 User and Group Settings",
+  "description": "Ensure user and group configurations are secure",
+  "controls": [
+    {
+      "id": "6.2.1",
+      "title": "Ensure accounts in /etc/passwd use shadowed passwords",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1",
+      "description": "Passwords should be stored in /etc/shadow, not /etc/passwd",
+      "remediation": "Run: pwconv to move passwords to shadow file"
+    },
+    {
+      "id": "6.2.2",
+      "title": "Ensure /etc/shadow password fields are not empty",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2",
+      "description": "All accounts must have passwords or be locked",
+      "remediation": "Lock accounts with empty passwords: passwd -l <username>"
+    },
+    {
+      "id": "6.2.3",
+      "title": "Ensure all groups in /etc/passwd exist in /etc/group",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.3",
+      "description": "Groups referenced in /etc/passwd must exist in /etc/group",
+      "remediation": "Add missing groups to /etc/group or fix user GIDs"
+    },
+    {
+      "id": "6.2.4",
+      "title": "Ensure no duplicate UIDs exist",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.4",
+      "description": "Duplicate UIDs can cause security issues",
+      "remediation": "Change duplicate UIDs to unique values"
+    },
+    {
+      "id": "6.2.5",
+      "title": "Ensure no duplicate GIDs exist",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.5",
+      "description": "Duplicate GIDs can cause security issues",
+      "remediation": "Change duplicate GIDs to unique values"
+    },
+    {
+      "id": "6.2.6",
+      "title": "Ensure no duplicate user names exist",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.6",
+      "description": "Duplicate usernames can cause confusion",
+      "remediation": "Remove or rename duplicate usernames"
+    },
+    {
+      "id": "6.2.7",
+      "title": "Ensure no duplicate group names exist",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.7",
+      "description": "Duplicate group names can cause confusion",
+      "remediation": "Remove or rename duplicate group names"
+    },
+    {
+      "id": "6.2.8",
+      "title": "Ensure root PATH Integrity",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.8",
+      "description": "The root user PATH should not include current directory or writable directories",
+      "remediation": "Remove . and writable directories from root PATH"
+    },
+    {
+      "id": "6.2.9",
+      "title": "Ensure all users' home directories exist",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.9",
+      "description": "Users should have valid home directories",
+      "remediation": "Create missing home directories or update /etc/passwd"
+    },
+    {
+      "id": "6.2.10",
+      "title": "Ensure users own their home directories",
+      "section": "6.2 User and Group Settings",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.10",
+      "description": "Users should own their home directories",
+      "remediation": "Run: chown <user>:<group> /home/<user>"
+    }
+  ]
+}
