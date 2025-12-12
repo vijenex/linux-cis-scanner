@@ -28,30 +28,38 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Check for Python 3
-if command -v python3 &> /dev/null; then
-    PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
-    PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d. -f1)
-    PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d. -f2)
-    
-    if [ "$PYTHON_MAJOR" -ge 3 ] && [ "$PYTHON_MINOR" -ge 6 ]; then
-        echo -e "${GREEN}✓ Python $PYTHON_VERSION detected${NC}"
-        echo -e "${BLUE}🚀 Running Python scanner...${NC}"
-        echo ""
+# Check for Python 3 (try multiple commands)
+PYTHON_CMD=""
+for cmd in python3 python python3.6 python3.8 python3.9 python3.11; do
+    if command -v $cmd &> /dev/null; then
+        VERSION=$($cmd --version 2>&1 | grep -oP 'Python \K[0-9.]+')
+        MAJOR=$(echo $VERSION | cut -d. -f1)
+        MINOR=$(echo $VERSION | cut -d. -f2)
         
-        python3 scripts/vijenex-cis.py --profile Level1 "$@"
-        
-        echo ""
-        echo -e "${GREEN}✅ Scan completed!${NC}"
-        echo -e "${YELLOW}📄 Reports generated in: ./reports/${NC}"
-        echo -e "${YELLOW}   - HTML: reports/vijenex-cis-report.html${NC}"
-        echo -e "${YELLOW}   - CSV:  reports/vijenex-cis-results.csv${NC}"
-        exit 0
-    else
-        echo -e "${YELLOW}⚠ Python $PYTHON_VERSION found (need 3.6+)${NC}"
+        if [ "$MAJOR" -eq 3 ] && [ "$MINOR" -ge 6 ]; then
+            PYTHON_CMD=$cmd
+            PYTHON_VERSION=$VERSION
+            break
+        fi
     fi
+done
+
+if [ -n "$PYTHON_CMD" ]; then
+    echo -e "${GREEN}✓ Python $PYTHON_VERSION detected ($PYTHON_CMD)${NC}"
+    echo -e "${BLUE}🚀 Running Python scanner...${NC}"
+    echo ""
+    
+    $PYTHON_CMD scripts/vijenex-cis.py --profile Level1 "$@"
+    
+    echo ""
+    echo -e "${GREEN}✅ Scan completed!${NC}"
+    echo -e "${YELLOW}📄 Reports generated in: ./reports/${NC}"
+    echo -e "${YELLOW}   - HTML: reports/vijenex-cis-report.html${NC}"
+    echo -e "${YELLOW}   - CSV:  reports/vijenex-cis-results.csv${NC}"
+    exit 0
 else
-    echo -e "${YELLOW}⚠ Python 3 not found${NC}"
+    echo -e "${YELLOW}⚠ Python 3.6+ not found${NC}"
+    echo -e "${YELLOW}   Tried: python3, python, python3.6, python3.8, python3.9, python3.11${NC}"
 fi
 
 # Check for Go binary
