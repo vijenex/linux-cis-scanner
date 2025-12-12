@@ -3,18 +3,18 @@
 ## 🚀 Run Scanner (5 seconds)
 
 ```bash
-cd Linux-CIS-Audit-code/rhel-8/scripts
-sudo python3 vijenex-cis.py --profile Level1
+cd Linux-CIS-Audit-code/rhel-8
+sudo ./scan.sh
 ```
 
 ## 📊 View Report
 
 ```bash
 # HTML (recommended)
-open reports/vijenex-cis-report.html
-
-# Or on server
 firefox reports/vijenex-cis-report.html
+
+# Or copy to local machine
+scp user@server:~/Linux-CIS-Audit-code/rhel-8/reports/vijenex-cis-report.html .
 ```
 
 ## 🔍 Compare with OpenSCAP

@@ -22,24 +22,26 @@ cd Linux-CIS-Audit-code/rhel-8/scripts
 ### Run Scanner
 
 ```bash
-# Full scan (requires root)
-sudo python3 vijenex-cis.py --profile Level1
+# Simple - auto-detects Python or Go
+cd rhel-8
+sudo ./scan.sh
 
 # Level 2 scan
-sudo python3 vijenex-cis.py --profile Level2
+sudo ./scan.sh --profile Level2
 
-# Specific sections only
-sudo python3 vijenex-cis.py --milestones milestone-1-1.json milestone-1-2.json
-
-# Generate HTML report only
-sudo python3 vijenex-cis.py --format html
+# Or run Python directly
+cd rhel-8/scripts
+sudo python3 vijenex-cis.py --profile Level1
 ```
 
 ### View Reports
 
 ```bash
+# Reports are in rhel-8/reports/
+cd rhel-8
+
 # HTML report (recommended)
-open reports/vijenex-cis-report.html
+firefox reports/vijenex-cis-report.html
 
 # CSV report
 cat reports/vijenex-cis-results.csv
