@@ -187,6 +187,13 @@ func (s *Scanner) executeControl(ctrl controls.Control) Result {
 		result.EvidenceCommand = checkResult.EvidenceCommand
 		result.Description = checkResult.Description
 
+	case "FileContent":
+		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
+		result.Status = checkResult.Status
+		result.ActualValue = checkResult.ActualValue
+		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.Description = checkResult.Description
+
 	default:
 		result.Status = "MANUAL"
 		result.ActualValue = "Manual verification required"

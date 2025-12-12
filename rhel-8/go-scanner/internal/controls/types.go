@@ -23,6 +23,8 @@ type Control struct {
 	ExpectedPermissions string `json:"expected_permissions,omitempty"`
 	ExpectedOwner      string `json:"expected_owner,omitempty"`
 	ExpectedGroup      string `json:"expected_group,omitempty"`
+	Pattern            string `json:"pattern,omitempty"`
+	ExpectedResult     string `json:"expected_result,omitempty"`
 }
 
 type CheckResult struct {
