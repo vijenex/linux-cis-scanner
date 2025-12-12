@@ -117,10 +117,11 @@ fi
 # If only one available, auto-select
 if [ $AVAILABLE_COUNT -eq 1 ]; then
     echo -e "${YELLOW}Auto-selecting the only available scanner...${RESET}"
+    echo
     CHOICE=$AUTO_CHOICE
 else
     # Ask user to choose
-    echo -e "${BOLD}Select scanner [1-3]:${RESET} "
+    echo -n -e "${BOLD}Select scanner [1-3]: ${RESET}"
     read -r CHOICE
 fi
 
