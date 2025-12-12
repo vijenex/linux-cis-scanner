@@ -16,11 +16,21 @@
 ```
 /Users/satish.korra/Desktop/Linux-CIS-Audit-code/
 ├── rhel-8/
+│   ├── scan.sh                      # ⭐ WRAPPER SCRIPT - Use this to run scanner!
 │   ├── scripts/
-│   │   └── vijenex-cis.py          # Main scanner script
-│   └── milestones/
-│       └── milestone-1-1.json      # Control definitions (currently 22 controls)
-└── INSTRUCTIONS.md                  # This file
+│   │   ├── vijenex-cis.py          # Main scanner script (Python)
+│   │   ├── auto-add-controls.py    # Automated control extractor
+│   │   └── reorganize-milestones.py # Milestone organizer
+│   ├── milestones/
+│   │   ├── milestone-1-1.json      # Section 1.1 controls
+│   │   ├── milestone-1-2.json      # Section 1.2 controls
+│   │   └── ... (48 milestone files)
+│   ├── reports/                     # Generated reports (HTML, CSV)
+│   └── bin/                         # Go binary (if available)
+├── README.md                        # Project overview
+├── INSTRUCTIONS.md                  # This file - Full documentation
+├── QUICK_START.md                   # Quick testing guide
+└── CHANGELOG.md                     # Version history
 ```
 
 ## REFERENCE FILES
@@ -240,15 +250,46 @@ python3 auto-add-controls.py --start 2.1.1 --count 20
 python3 auto-add-controls.py --start 3.1.1 --count 15
 ```
 
-### Run Scanner
+### Run Scanner (IMPORTANT - USE WRAPPER SCRIPT)
 ```bash
+# CORRECT WAY - Use scan.sh wrapper (auto-detects Python/Go)
+cd /Users/satish.korra/Desktop/Linux-CIS-Audit-code/rhel-8
+sudo ./scan.sh
+
+# Level 2 scan
+sudo ./scan.sh --profile Level2
+
+# Or run Python directly (if needed)
 cd /Users/satish.korra/Desktop/Linux-CIS-Audit-code/rhel-8/scripts
-sudo python3 vijenex-cis.py
+sudo python3 vijenex-cis.py --profile Level1
+```
+
+### CRITICAL: scan.sh Wrapper Script
+**Location**: `/rhel-8/scan.sh`
+
+**What it does:**
+1. Checks if running as root
+2. Auto-detects Python 3.6+ (preferred)
+3. Falls back to Go binary if Python not found
+4. Runs the scanner with proper arguments
+5. Shows colored output and report location
+
+**Usage on RHEL 8 machine:**
+```bash
+cd linux-cis-scanner/rhel-8
+sudo ./scan.sh
 ```
 
 ### View Report
 ```bash
-open /tmp/cis_report_*.html
+# Reports are in rhel-8/reports/ directory
+cd /Users/satish.korra/Desktop/Linux-CIS-Audit-code/rhel-8
+
+# HTML report (recommended)
+firefox reports/vijenex-cis-report.html
+
+# CSV report
+cat reports/vijenex-cis-results.csv
 ```
 
 ### Check Control Count (Single Milestone)
