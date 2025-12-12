@@ -72,16 +72,12 @@ for binary in ./vijenex-cis ./vijenex-cis-amd64 ./vijenex-cis-arm64 ./go-scanner
 done
 
 if [ -n "$GO_BINARY" ]; then
-    echo -e "${GREEN}✓ Go binary detected: $GO_BINARY${NC}"
+    echo -e "${GREEN}✓ Go binary detected${NC}"
     echo -e "${BLUE}🚀 Running Go scanner...${NC}"
     echo ""
     
-    $GO_BINARY "$@"
-    
-    echo ""
-    echo -e "${GREEN}✅ Scan completed!${NC}"
-    echo -e "${YELLOW}📄 Reports generated in: ./reports/${NC}"
-    exit 0
+    # Run Go binary directly
+    exec $GO_BINARY "$@"
 fi
 
 # Neither found
