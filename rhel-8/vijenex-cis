@@ -1,0 +1,181 @@
+#!/bin/bash
+# Vijenex CIS Scanner - Smart Launcher
+# Automatically detects available scanners and lets user choose
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+# Banner
+echo -e "${CYAN}${BOLD}"
+echo "██████╗ ██╗  ██╗███████╗██╗          █████╗ "
+echo "██╔══██╗██║  ██║██╔════╝██║         ██╔══██╗"
+echo "██████╔╝███████║█████╗  ██║         ╚█████╔╝"
+echo "██╔══██╗██╔══██║██╔══╝  ██║          ╚═══██╗"
+echo "██║  ██║██║  ██║███████╗███████╗    █████╔╝ "
+echo "╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚════╝  "
+echo -e "${RESET}"
+echo -e "${BOLD}${BLUE}    Vijenex CIS Scanner - RHEL 8${RESET}"
+echo -e "${YELLOW}    Security Compliance Automation${RESET}"
+echo -e "${CYAN}=============================================================${RESET}"
+echo
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Detect available scanners
+PYTHON_AVAILABLE=false
+GO_AVAILABLE=false
+SHELL_AVAILABLE=false
+
+# Check Python
+if command -v python3 &> /dev/null; then
+    PYTHON_VERSION=$(python3 --version 2>&1 | cut -d' ' -f2)
+    if [ -f "$SCRIPT_DIR/scripts/vijenex-cis.py" ]; then
+        PYTHON_AVAILABLE=true
+    fi
+fi
+
+# Check Go binary
+if [ -f "$SCRIPT_DIR/go-scanner/bin/vijenex-cis" ]; then
+    GO_AVAILABLE=true
+elif [ -f "$SCRIPT_DIR/vijenex-cis-binary" ]; then
+    GO_AVAILABLE=true
+fi
+
+# Check Shell script
+if [ -f "$SCRIPT_DIR/shell-scanner/vijenex-cis.sh" ]; then
+    SHELL_AVAILABLE=true
+fi
+
+# Display available scanners
+echo -e "${BOLD}Available Scanners:${RESET}"
+echo
+
+if [ "$PYTHON_AVAILABLE" = true ]; then
+    echo -e "${GREEN}✓ [1] Python Scanner${RESET} (Python $PYTHON_VERSION)"
+    echo "      Fast, feature-rich, requires Python 3.6+"
+else
+    echo -e "${RED}✗ [1] Python Scanner${RESET} (Python not installed)"
+fi
+
+if [ "$GO_AVAILABLE" = true ]; then
+    echo -e "${GREEN}✓ [2] Go Binary${RESET} (Standalone, no dependencies)"
+    echo "      Fastest, single binary, works anywhere"
+else
+    echo -e "${YELLOW}⚠ [2] Go Binary${RESET} (Not built yet)"
+    echo "      Run: cd go-scanner && ./build.sh"
+fi
+
+if [ "$SHELL_AVAILABLE" = true ]; then
+    echo -e "${GREEN}✓ [3] Shell Script${RESET} (Pure Bash, universal)"
+    echo "      Slower, works on any Linux"
+else
+    echo -e "${YELLOW}⚠ [3] Shell Script${RESET} (Not implemented yet)"
+fi
+
+echo
+echo -e "${CYAN}=============================================================${RESET}"
+
+# Auto-select if only one available
+AVAILABLE_COUNT=0
+AUTO_CHOICE=""
+
+if [ "$PYTHON_AVAILABLE" = true ]; then
+    ((AVAILABLE_COUNT++))
+    AUTO_CHOICE="1"
+fi
+
+if [ "$GO_AVAILABLE" = true ]; then
+    ((AVAILABLE_COUNT++))
+    AUTO_CHOICE="2"
+fi
+
+if [ "$SHELL_AVAILABLE" = true ]; then
+    ((AVAILABLE_COUNT++))
+    AUTO_CHOICE="3"
+fi
+
+# If no scanner available
+if [ $AVAILABLE_COUNT -eq 0 ]; then
+    echo -e "${RED}${BOLD}❌ No scanner available!${RESET}"
+    echo
+    echo "Options:"
+    echo "  1. Install Python: sudo yum install python3"
+    echo "  2. Build Go binary: cd go-scanner && ./build.sh"
+    echo "  3. Wait for shell script implementation"
+    exit 1
+fi
+
+# If only one available, auto-select
+if [ $AVAILABLE_COUNT -eq 1 ]; then
+    echo -e "${YELLOW}Auto-selecting the only available scanner...${RESET}"
+    CHOICE=$AUTO_CHOICE
+else
+    # Ask user to choose
+    echo -e "${BOLD}Select scanner [1-3]:${RESET} "
+    read -r CHOICE
+fi
+
+echo
+echo -e "${CYAN}=============================================================${RESET}"
+
+# Execute selected scanner
+case $CHOICE in
+    1)
+        if [ "$PYTHON_AVAILABLE" = false ]; then
+            echo -e "${RED}❌ Python scanner not available${RESET}"
+            echo "Install Python: sudo yum install python3"
+            exit 1
+        fi
+        
+        echo -e "${GREEN}🚀 Starting Python Scanner...${RESET}"
+        echo
+        cd "$SCRIPT_DIR"
+        exec python3 scripts/vijenex-cis.py "$@"
+        ;;
+    
+    2)
+        if [ "$GO_AVAILABLE" = false ]; then
+            echo -e "${RED}❌ Go binary not available${RESET}"
+            echo "Build it: cd go-scanner && ./build.sh"
+            exit 1
+        fi
+        
+        echo -e "${GREEN}🚀 Starting Go Binary...${RESET}"
+        echo
+        
+        if [ -f "$SCRIPT_DIR/go-scanner/bin/vijenex-cis" ]; then
+            cd "$SCRIPT_DIR/go-scanner"
+            exec ./bin/vijenex-cis "$@"
+        else
+            exec "$SCRIPT_DIR/vijenex-cis-binary" "$@"
+        fi
+        ;;
+    
+    3)
+        if [ "$SHELL_AVAILABLE" = false ]; then
+            echo -e "${RED}❌ Shell script not available yet${RESET}"
+            echo "Use Python or Go scanner instead"
+            exit 1
+        fi
+        
+        echo -e "${GREEN}🚀 Starting Shell Script Scanner...${RESET}"
+        echo
+        cd "$SCRIPT_DIR"
+        exec bash shell-scanner/vijenex-cis.sh "$@"
+        ;;
+    
+    *)
+        echo -e "${RED}❌ Invalid choice: $CHOICE${RESET}"
+        echo "Please select 1, 2, or 3"
+        exit 1
+        ;;
+esac
