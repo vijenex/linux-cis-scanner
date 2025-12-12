@@ -1,0 +1,51 @@
+{
+  "milestone": "4-1",
+  "section": "4.1 Configure System Accounting (auditd)",
+  "description": "Configure auditd service and logging",
+  "controls": [
+    {
+      "id": "4.1.1.1",
+      "title": "Ensure auditd is installed",
+      "section": "4.1 System Accounting",
+      "type": "PackageInstalled",
+      "profile": "Level1",
+      "package_name": "audit",
+      "expected_status": "installed",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1.1",
+      "description": "auditd is the userspace component to the Linux Auditing System",
+      "remediation": "Run: dnf install audit audit-libs"
+    },
+    {
+      "id": "4.1.1.2",
+      "title": "Ensure auditd service is enabled and active",
+      "section": "4.1 System Accounting",
+      "type": "ServiceStatus",
+      "profile": "Level1",
+      "service_name": "auditd",
+      "expected_status": "enabled",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1.2",
+      "description": "Turn on the auditd daemon to record system events",
+      "remediation": "Run: systemctl --now enable auditd"
+    },
+    {
+      "id": "4.1.1.3",
+      "title": "Ensure auditing for processes that start prior to auditd is enabled",
+      "section": "4.1 System Accounting",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1.3",
+      "description": "Configure grub to audit processes that start before auditd",
+      "remediation": "Edit /etc/default/grub and add audit=1 to GRUB_CMDLINE_LINUX"
+    },
+    {
+      "id": "4.1.1.4",
+      "title": "Ensure audit_backlog_limit is sufficient",
+      "section": "4.1 System Accounting",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1.4",
+      "description": "The backlog limit determines how many audit records can be queued",
+      "remediation": "Edit /etc/default/grub and add audit_backlog_limit=8192 to GRUB_CMDLINE_LINUX"
+    }
+  ]
+}

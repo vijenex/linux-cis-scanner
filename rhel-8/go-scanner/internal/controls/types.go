@@ -17,8 +17,12 @@ type Control struct {
 	ServiceName    string `json:"service_name,omitempty"`
 	PackageName    string `json:"package_name,omitempty"`
 	ExpectedStatus string `json:"expected_status,omitempty"`
-	ParameterName  string `json:"parameter_name,omitempty"`
-	ExpectedValue  string `json:"expected_value,omitempty"`
+	ParameterName      string `json:"parameter_name,omitempty"`
+	ExpectedValue      string `json:"expected_value,omitempty"`
+	FilePath           string `json:"file_path,omitempty"`
+	ExpectedPermissions string `json:"expected_permissions,omitempty"`
+	ExpectedOwner      string `json:"expected_owner,omitempty"`
+	ExpectedGroup      string `json:"expected_group,omitempty"`
 }
 
 type CheckResult struct {

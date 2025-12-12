@@ -1,0 +1,111 @@
+{
+  "milestone": "5-1",
+  "section": "5.1 Configure SSH Server",
+  "description": "Secure SSH daemon configuration",
+  "controls": [
+    {
+      "id": "5.1.1",
+      "title": "Ensure permissions on /etc/ssh/sshd_config are configured",
+      "section": "5.1 SSH Server",
+      "type": "FilePermissions",
+      "profile": "Level1",
+      "file_path": "/etc/ssh/sshd_config",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.1",
+      "description": "The sshd_config file contains configuration specifications for sshd",
+      "remediation": "Run: chown root:root /etc/ssh/sshd_config && chmod 0600 /etc/ssh/sshd_config"
+    },
+    {
+      "id": "5.1.2",
+      "title": "Ensure permissions on SSH private host key files are configured",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.2",
+      "description": "SSH private keys should be protected from unauthorized access",
+      "remediation": "Run: find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod u-x,go-rwx {} \\;"
+    },
+    {
+      "id": "5.1.3",
+      "title": "Ensure permissions on SSH public host key files are configured",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.3",
+      "description": "SSH public keys should be world-readable",
+      "remediation": "Run: find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod u-x,go-wx {} \\;"
+    },
+    {
+      "id": "5.1.4",
+      "title": "Ensure sshd access is configured",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.4",
+      "description": "Configure AllowUsers, AllowGroups, DenyUsers, DenyGroups in sshd_config",
+      "remediation": "Edit /etc/ssh/sshd_config and configure access restrictions"
+    },
+    {
+      "id": "5.1.5",
+      "title": "Ensure sshd Banner is configured",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.5",
+      "description": "Banners are used to warn connecting users of the particular site's policy",
+      "remediation": "Edit /etc/ssh/sshd_config and set Banner /etc/issue.net"
+    },
+    {
+      "id": "5.1.6",
+      "title": "Ensure sshd Ciphers are configured",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.6",
+      "description": "Weak ciphers should not be used",
+      "remediation": "Edit /etc/ssh/sshd_config and configure strong ciphers"
+    },
+    {
+      "id": "5.1.7",
+      "title": "Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.7",
+      "description": "Idle SSH sessions should timeout after a period of inactivity",
+      "remediation": "Edit /etc/ssh/sshd_config: ClientAliveInterval 300, ClientAliveCountMax 0"
+    },
+    {
+      "id": "5.1.8",
+      "title": "Ensure sshd DisableForwarding is enabled",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level2",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.8",
+      "description": "SSH port forwarding should be disabled unless required",
+      "remediation": "Edit /etc/ssh/sshd_config and set DisableForwarding yes"
+    },
+    {
+      "id": "5.1.9",
+      "title": "Ensure sshd HostbasedAuthentication is disabled",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.9",
+      "description": "Host-based authentication should be disabled",
+      "remediation": "Edit /etc/ssh/sshd_config and set HostbasedAuthentication no"
+    },
+    {
+      "id": "5.1.10",
+      "title": "Ensure sshd IgnoreRhosts is enabled",
+      "section": "5.1 SSH Server",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.10",
+      "description": "SSH should ignore .rhosts files",
+      "remediation": "Edit /etc/ssh/sshd_config and set IgnoreRhosts yes"
+    }
+  ]
+}
