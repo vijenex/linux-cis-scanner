@@ -3,6 +3,25 @@
   "title": "SSH Server Configuration - Part 2",
   "controls": [
     {
+      "id": "5.2.2",
+      "title": "Ensure sudo commands use pty",
+      "automated": true,
+      "profile": "Level1",
+      "section": "5.2",
+      "description": "\\\n\n\\f0\\b0 \\cf4 sudo\n\\f2 \\cf2  can be configured to run only from a pseudo terminal (\n\\f0 \\cf4 pseudo-pty\n\\f2 \\cf2 ).\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 Attackers can run a malicious program using \n\\f0 \\cf4 sudo\n\\f2 \\cf2  which would fork a background\\\nprocess that remains even when the main program has finished executing.\\\n\n\\f1\\b",
+      "impact": "\\\nWARNING:\n\\f2\\b0  Editing the \n\\f0 \\cf4 sudo\n\\f2 \\cf2  configuration incorrectly can cause \n\\f0 \\cf4 sudo\n\\f2 \\cf2  to stop\\\nfunctioning. Always use \n\\f0 \\cf4 visudo\n\\f2 \\cf2  to modify \n\\f0 \\cf4 sudo\n\\f2 \\cf2  configuration files.\\\n\n\\f1\\b",
+      "audit_command": "\\\n\n\\f2\\b0 Verify that \n\\f0 \\cf4 sudo\n\\f2 \\cf2  can only run other commands from a pseudo terminal.\\\nRun the following command to verify \n\\f0 \\cf4 Defaults use_pty\n\\f2 \\cf2  is set:\\\n\n\\f4\\fs20\\fsmilli10080 # grep -rPi --\\\n'^\\\\h*Defaults\\\\h+([^#\\\\n\\\\r]+,\\\\h*)?use_pty\\\\b' /etc/sudoers*\\\n\n\\f2\\fs24 Verify the output matches:\\\n\n\\f4\\fs20\\fsmilli10080 /etc/sudoers:Defaults use_pty\\\n\n\\f2\\fs24 Run the follow command to to verify \n\\f0 \\cf4 Defaults !use_pty\n\\f2 \\cf2  is not set:\\\n\n\\f4\\fs20\\fsmilli10080 # g",
+      "remediation": "\\\n\n\\f2\\b0 Edit the file \n\\f0 \\cf4 /etc/sudoers\n\\f2 \\cf2  with \n\\f0 \\cf4 visudo\n\\f2 \\cf2  or a file in \n\\f0 \\cf4 /etc/sudoers.d/\n\\f2 \\cf2  with \n\\f0 \\cf4 visudo -f\\\n<PATH TO FILE>\n\\f2 \\cf2  and add the following line:\\\n\n\\f4\\fs20\\fsmilli10080",
+      "references": "\\\n\n\\f2\\b0 1. SUDO(8)\\\n2. VISUDO(8)\\\n3. sudoers(5)\\\n4. NIST SP 800-53 Rev. 5: AC-6\\\n\n\\f1\\b",
+      "type": "FileContent",
+      "file_path": "/etc/sudoers*\\",
+      "pattern": "",
+      "expected_result": "found",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.2 | Level1"
+    },
+    {
       "control_id": "5.2.9",
       "title": "Ensure SSH HostbasedAuthentication is disabled",
       "level": 1,

@@ -103,6 +103,25 @@
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 8.4 Configure Anti-Malware Scanning of Removable Devices",
       "check_type": "Manual",
       "check_value": ""
+    },
+    {
+      "id": "1.8.7",
+      "title": "Ensure Xwayland is configured",
+      "automated": true,
+      "profile": "Level2",
+      "section": "1.8",
+      "description": "\\\n\n\\f2\\b0 Xwayland is a compatibility layer that allows legacy X11 applications to run within a\\\nWayland environment. It's effectively an X server that runs as a Wayland client,\\\nenabling existing X11 software to be displayed on a Wayland compositor.\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 Wayland's security benefits from not relying on X11's network listener. Without X11,\\\nthere's no network listener, making it harder for malicious actors to exploit vulnerabilities\\\nin X11. However, enabling Xwayland (running X11 applications on Wayland) introduces\\\nX11's security concerns.\\\nAll X vulnerabilities apply to Xwayland, including keylogging, but they only affect X\\\nwindows and interactions with them.\\\nMalware can potentially exploit Xwayland vulnerabilities to keylog or inte",
+      "impact": "\\\n\n\\f2\\b0 Many applications haven't been ported to Wayland yet, and Xwayland makes it possible\\\nto run these applications without requiring a full switch back to X11. Disabling Xwayland\\\nfunctionality may cause these applications to fail.\\\n\n\\f1\\b",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following command to verify Xwayland is not enabled:\\\n\n\\f4\\fs20\\fsmilli10080 # sed -n '/\\\\[daemon\\\\]/,/\\\\[/p' /etc/gdm/custom.conf | grep -Psi\\\n'^\\\\h*waylandenable\\\\b'\\\n\n\\f2\\fs24 Verify output includes:\\\n\n\\f4\\fs20\\fsmilli10080 WaylandEnable=false\n\\f2 Page 285\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "remediation": "\\\n\n\\f2\\b0 Edit the file \n\\f0 \\cf4 /etc/gdm/custom.conf\n\\f2 \\cf2  and uncomment or add the following line in the\\\n\n\\f0 \\cf4 [daemon]\n\\f2 \\cf2  block:\\\n\n\\f4\\fs20\\fsmilli10080 WaylandEnable=false\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # GDM configuration storage\\\n[daemon]\\\nWaylandEnable=false\\\n[security]\\\n[xdmcp]\\\n[chooser]\\\n[debug]\\\n# Uncomment the line below to turn on debugging\\\n#Enable=true\\\n\n\\f1\\b\\fs24",
+      "references": "",
+      "type": "FileContent",
+      "file_path": "/etc/gdm/custom.conf",
+      "pattern": "",
+      "expected_result": "found",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.8.7 | Level2"
     }
   ]
 }

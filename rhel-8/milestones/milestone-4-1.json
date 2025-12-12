@@ -46,6 +46,38 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1.4",
       "description": "The backlog limit determines how many audit records can be queued",
       "remediation": "Edit /etc/default/grub and add audit_backlog_limit=8192 to GRUB_CMDLINE_LINUX"
+    },
+    {
+      "id": "4.1.5",
+      "title": "Ensure firewalld loopback traffic is configured",
+      "automated": false,
+      "profile": "Level1",
+      "section": "4.1",
+      "description": "\\\n\n\\f2\\b0 Every device with networking capabilities has a loopback interface.\\\nLoopback traffic refers to network communication where a device sends data to itself,\\\nessentially routing the traffic back to its own network interface.\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 Loopback traffic is generated between processes on machine and is typically critical to\\\noperation of the system. The loopback interface is the only place that loopback network\\\ntraffic should be seen, all other interfaces should ignore traffic on this network as an\\\nanti-spoofing measure.\\\n\n\\f1\\b",
+      "impact": "None",
+      "audit_command": "\\\n\n\\f2\\b0 Verify the loopback interface accepts all incoming traffic.\\\n1. Run the following command to verify the currently configured zone for the\\\nloopback interface:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --get-zone-of-interface=lo\\\n\n\\f3\\i\\fs24 Example output:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 trusted\\\n\n\\f2\\fs24 Verify the output is not \n\\f0 \\cf4 no zone\n\\f2 \\cf2 . If the output is \n\\f0 \\cf4 no zone\n\\f2 \\cf2  the second audit is also\\\nautomatically considered to be failed.\\\n2. Run the following comm",
+      "remediation": "\\\n\n\\f2\\b0 1. Run one of the following commands to add the \n\\f0 \\cf4 lo\n\\f2 \\cf2  interface to the trusted zone.\\\nIf the \n\\f0 \\cf4 lo\n\\f2 \\cf2  interface is not currently assigned to a zone:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --permanent --zone=trusted --add-interface=lo\\\n\n\\f1\\b\\fs24 - OR -\n\\f2\\b0  if the \n\\f0 \\cf4 lo\n\\f2 \\cf2  interface is currently assigned to a zone:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --zone=public --change-interface=lo\\\n\n\\f2\\fs24 2. Run the following command to reload firewalld:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --reload\\\n\n\\f1\\b\\fs24 CIS Controls:\\\nControls\\\nVersion Control IG 1 IG 2 IG 3\\\n\n\\f2\\b0 v8\\\n4.4 Implement and Manage a Firewall on Servers\\\n\n\\fs16\\fsmilli8400 Implement and manage a firewall on servers, where supported. Example\\\nimplementations inclu",
+      "references": "",
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.5 | Level1"
+    },
+    {
+      "id": "4.1.7",
+      "title": "Ensure firewalld services and ports are configured",
+      "automated": false,
+      "profile": "Level1",
+      "section": "4.1",
+      "description": "\\\n\n\\f2\\b0 Services and ports can be accepted, explicitly rejected, or dropped by a zone.\\\nFor every zone, you can set a default behavior that handles incoming traffic that is not\\\nfurther specified. Such behavior is defined by setting the target of the zone. There are\\\nthree options - \n\\f0 \\cf4 ACCEPT\n\\f2 \\cf2 , \n\\f0 \\cf4 REJECT\n\\f2 \\cf2 , and \n\\f0 \\cf4 DROP\n\\f2 \\cf2 .\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\f0\\fs24 \\cf4 ACCEPT\n\\f2 \\cf2  - you accept all incoming packets except those disabled by a s",
+      "rationale": "\\\n\n\\f2\\b0 To reduce the attack surface of a system, all services and ports should be blocked\\\nunless required\\\n\n\\f1\\b",
+      "impact": "None",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following command and review output to ensure that listed services and ports\\\nfollow site policy:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --list-all --zone=\"$(firewall-cmd --list-all | awk\\\n'/\\\\(active\\\\)/ \\{ print $1 \\}')\" | grep -P --\\\n'^\\\\h*(services:|ports:)'\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  The command \n\\f0 \\cf4 firewall-cmd --get-services | tr ' ' '\\\\n' | column\n\\f2 \\cf2  can\\\nbe used to produce a list of services firewalld can be configured to address as services.\n\\fs20\\fsmilli",
+      "remediation": "\\\n\n\\f2\\b0 Run the following command to remove an unnecessary service:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --remove-service=<service>\\\n\n\\f3\\i\\fs24 Example\n\\f2\\i0 :\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --remove-service=cockpit\\\n\n\\f2\\fs24 Run the following command to remove an unnecessary port:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --remove-port=<port-number>/<port-type>\\\n\n\\f3\\i\\fs24 Example\n\\f2\\i0 :\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --remove-port=25/tcp\\\n\n\\f2\\fs24 Run the following command to make new settings persistent:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --runtime-to-permanent\\\n\n\\f1\\b\\fs24",
+      "references": "\\\n\n\\f2\\b0 1. \\cf7 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-\\\nsingle/configuring_firewalls_and_packet_filters/index\\\n\n\\f1\\b \\cf2",
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.7 | Level1"
     }
   ]
 }

@@ -3,6 +3,25 @@
   "title": "Configure Data Retention",
   "controls": [
     {
+      "id": "4.1.2",
+      "title": "Ensure firewalld backend is configured",
+      "automated": true,
+      "profile": "Level1",
+      "section": "4.1",
+      "description": "\\\n\n\\f2\\b0 The \n\\f0 \\cf4 FirewallBackend\n\\f2 \\cf2  option selects the firewall backend implementation.\\\nChoices are:\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 nftables (default)\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 iptables (iptables, ip6tables, ebtables and ipset)\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 IPTables are deprecated.\\\n\n\\f1\\b",
+      "impact": "\\\n\n\\f2\\b0 Verifying the proper backend configuration insures the critical functionality of the\\\nfirewall.\\\n\n\\f1\\b",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following command to verify \n\\f0 \\cf4 NFTables\n\\f2 \\cf2  is set as the backend for \n\\f0 \\cf4 firewalld\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # grep -Psi -- 'FirewallBackend\\\\h*=\\\\h*nftables\\\\b'\\\n/etc/firewalld/firewalld.conf\\\nFirewallBackend=nftables\\\n\n\\f1\\b\\fs24",
+      "remediation": "\\\n\n\\f2\\b0 Edit the file \n\\f0 \\cf4 /etc/firewalld/firewalld.conf\n\\f2 \\cf2  and add or modify the following line:\\\n\n\\f4\\fs20\\fsmilli10080 FirewallBackend=nftables\\\n\n\\f1\\b\\fs24",
+      "references": "\\\n\n\\f2\\b0 1. GRID #\\\n2. NIST SP 800-53 Rev. 5: CA-9\n\\fs20\\fsmilli10080 Page 576\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "type": "FileContent",
+      "file_path": "/etc/firewalld/firewalld.conf\\",
+      "pattern": "",
+      "expected_result": "found",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.2 | Level1"
+    },
+    {
       "control_id": "4.1.2.1",
       "title": "Ensure audit log storage size is configured",
       "level": 2,

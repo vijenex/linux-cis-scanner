@@ -3,6 +3,22 @@
   "title": "Configure System Accounting (auditd)",
   "controls": [
     {
+      "id": "4.1.1",
+      "title": "Ensure firewalld is installed",
+      "automated": true,
+      "profile": "Level1",
+      "section": "4.1",
+      "description": "\\\n\n\\f0\\b0 \\cf4 firewalld\n\\f2 \\cf2  is a high-level firewall rules management frontend utility. It does not directly\\\nhandle packet filtering itself but relies on the \n\\f0 \\cf4 nftables\n\\f2 \\cf2  subsystem within the Linux\\\nkernel.\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f0\\b0 \\cf4 firewalld\n\\f2 \\cf2  is a dynamic, user friendly, firewall manager that can protect against threats\\\noriginating from within a corporate network to include malicious mobile code and poorly\\\nconfigured software on a host.\\\n\n\\f1\\b",
+      "impact": "\\\n\n\\f2\\b0 Changing firewall settings while connected over the network can result in being locked\\\nout of the system.\\\n\n\\f1\\b",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following command to verify that \n\\f0 \\cf4 firewalld\n\\f2 \\cf2  is installed:\\\n\n\\f4\\fs20\\fsmilli10080 # rpm -q firewalld\\\nfirewalld-<version>\\\n\n\\f1\\b\\fs24",
+      "remediation": "\\\n\n\\f2\\b0 Run the following command to install \n\\f0 \\cf4 firewalld\\\n\n\\f4\\fs20\\fsmilli10080 \\cf2 # dnf install firewalld\\\n\n\\f1\\b\\fs24",
+      "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CA-9\n\\fs20\\fsmilli10080 Page 574\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1 | Level1"
+    },
+    {
       "control_id": "4.1.1.1",
       "title": "Ensure auditd is installed",
       "level": 2,

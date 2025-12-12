@@ -83,7 +83,7 @@ class RHEL8CISScanner:
     def _run_command(self, command: str, shell: bool = True) -> Tuple[str, str, int]:
         """Execute system command"""
         try:
-            safe_commands = ['systemctl', 'sysctl', 'rpm', 'lsmod', 'modinfo', 'modprobe', 'findmnt', 'grep', 'getenforce', 'sestatus', 'firewall-cmd', 'ss', 'crontab', 'find', 'auditctl', 'grubby']
+            safe_commands = ['systemctl', 'sysctl', 'rpm', 'lsmod', 'modinfo', 'modprobe', 'findmnt', 'grep', 'getenforce', 'sestatus', 'firewall-cmd', 'ss', 'crontab', 'find', 'auditctl', 'grubby', 'dnf', 'yum', 'cat']
             cmd_parts = command.split()
             if not cmd_parts or not any(safe_cmd in cmd_parts[0] for safe_cmd in safe_commands):
                 return "", "Command not allowed", 1
@@ -339,6 +339,144 @@ class RHEL8CISScanner:
                 "description": str(e)
             }
     
+    def check_sysctl_parameter(self, parameter: str, expected_value: str) -> Dict[str, Any]:
+        """Check sysctl kernel parameter"""
+        try:
+            stdout, stderr, returncode = self._run_command(f"sysctl {parameter}")
+            
+            if returncode == 0:
+                actual_value = stdout.strip().split('=')[-1].strip()
+                
+                if actual_value == expected_value:
+                    status = "PASS"
+                    result_msg = f"{parameter} = {actual_value}"
+                else:
+                    status = "FAIL"
+                    result_msg = f"{parameter} = {actual_value} (expected: {expected_value})"
+            else:
+                status = "FAIL"
+                result_msg = f"Parameter {parameter} not found"
+            
+            return {
+                "status": status,
+                "actual_value": result_msg,
+                "evidence_command": f"sysctl {parameter}",
+                "description": f"Kernel parameter {parameter} check"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "actual_value": "Error checking sysctl",
+                "evidence_command": f"sysctl {parameter}",
+                "description": str(e)
+            }
+    
+    def check_file_permissions(self, file_path: str, expected_mode: str = None, expected_owner: str = None, expected_group: str = None) -> Dict[str, Any]:
+        """Check file permissions, owner, and group"""
+        try:
+            if not self._validate_path(file_path):
+                return {
+                    "status": "ERROR",
+                    "actual_value": "Invalid file path",
+                    "evidence_command": f"stat {file_path}",
+                    "description": "File path validation failed"
+                }
+            
+            if not os.path.exists(file_path):
+                return {
+                    "status": "FAIL",
+                    "actual_value": "File does not exist",
+                    "evidence_command": f"stat {file_path}",
+                    "description": f"File {file_path} not found"
+                }
+            
+            stat_info = os.stat(file_path)
+            actual_mode = oct(stat_info.st_mode)[-4:]
+            actual_owner = pwd.getpwuid(stat_info.st_uid).pw_name
+            actual_group = grp.getgrgid(stat_info.st_gid).gr_name
+            
+            issues = []
+            if expected_mode and actual_mode != expected_mode:
+                issues.append(f"mode={actual_mode} (expected {expected_mode})")
+            if expected_owner and actual_owner != expected_owner:
+                issues.append(f"owner={actual_owner} (expected {expected_owner})")
+            if expected_group and actual_group != expected_group:
+                issues.append(f"group={actual_group} (expected {expected_group})")
+            
+            if issues:
+                status = "FAIL"
+                result_msg = f"{file_path}: " + ", ".join(issues)
+            else:
+                status = "PASS"
+                result_msg = f"{file_path}: {actual_mode} {actual_owner}:{actual_group}"
+            
+            return {
+                "status": status,
+                "actual_value": result_msg,
+                "evidence_command": f"stat -c '%a %U:%G' {file_path}",
+                "description": f"File permissions check for {file_path}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "actual_value": "Error checking file permissions",
+                "evidence_command": f"stat {file_path}",
+                "description": str(e)
+            }
+    
+    def check_file_content(self, file_path: str, pattern: str, expected_result: str) -> Dict[str, Any]:
+        """Check file content using grep pattern"""
+        try:
+            if not file_path:
+                return {
+                    "status": "ERROR",
+                    "actual_value": "No file path specified",
+                    "evidence_command": "N/A",
+                    "description": "File path is required"
+                }
+            
+            if not self._validate_path(file_path):
+                return {
+                    "status": "ERROR",
+                    "actual_value": "Invalid file path",
+                    "evidence_command": f"cat {file_path}",
+                    "description": "File path validation failed"
+                }
+            
+            stdout, stderr, returncode = self._run_command(f"grep -Pi -- '{pattern}' {file_path}")
+            
+            if expected_result == "found":
+                if returncode == 0 and stdout.strip():
+                    status = "PASS"
+                    actual_value = f"Pattern found: {stdout.strip()[:100]}"
+                else:
+                    status = "FAIL"
+                    actual_value = "Pattern not found"
+            elif expected_result == "not_found":
+                if returncode != 0 or not stdout.strip():
+                    status = "PASS"
+                    actual_value = "Pattern not found (as expected)"
+                else:
+                    status = "FAIL"
+                    actual_value = f"Pattern found: {stdout.strip()[:100]}"
+            else:
+                status = "FAIL"
+                actual_value = f"Unknown expected_result: {expected_result}"
+            
+            return {
+                "status": status,
+                "actual_value": actual_value,
+                "evidence_command": f"grep -Pi -- '{pattern}' {file_path}",
+                "description": f"File content check: {file_path}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "actual_value": "Error checking file content",
+                "evidence_command": f"grep -Pi -- '{pattern}' {file_path}",
+                "description": str(e)
+            }
+    
     def load_milestone(self, milestone_file: str) -> List[Dict[str, Any]]:
         """Load controls from milestone file"""
         milestone_path = self.milestones_dir / milestone_file
@@ -403,6 +541,24 @@ class RHEL8CISScanner:
                 check_result = self.check_package_installed(
                     control.get('package_name', ''),
                     control.get('expected_status', '')
+                )
+            elif control_type == "FileContent":
+                check_result = self.check_file_content(
+                    control.get('file_path', ''),
+                    control.get('pattern', ''),
+                    control.get('expected_result', '')
+                )
+            elif control_type == "SysctlParameter":
+                check_result = self.check_sysctl_parameter(
+                    control.get('parameter', ''),
+                    control.get('expected_value', '')
+                )
+            elif control_type == "FilePermissions":
+                check_result = self.check_file_permissions(
+                    control.get('file_path', ''),
+                    control.get('expected_mode', None),
+                    control.get('expected_owner', None),
+                    control.get('expected_group', None)
                 )
             elif control_type == "Manual" or control_type == "ServiceConfig" or control_type == "ServiceUser":
                 check_result = {
@@ -523,57 +679,231 @@ class RHEL8CISScanner:
         pass_count = sum(1 for r in self.results if r["status"] == "PASS")
         fail_count = sum(1 for r in self.results if r["status"] == "FAIL")
         manual_count = sum(1 for r in self.results if r["status"] == "MANUAL")
+        skipped_count = sum(1 for r in self.results if r["status"] == "SKIPPED")
+        
+        # Calculate severity breakdown for failures
+        severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0, "unknown": 0}
+        for r in self.results:
+            if r["status"] == "FAIL":
+                sev = r.get("severity", "unknown").lower()
+                if sev in severity_counts:
+                    severity_counts[sev] += 1
+                else:
+                    severity_counts["unknown"] += 1
+        
+        compliance_score = round((pass_count / len(self.results)) * 100, 2) if self.results else 0
         
         html_content = f"""<!DOCTYPE html>
 <html>
 <head>
     <title>RHEL 8 CIS Compliance Report - Vijenex</title>
+    <meta charset="UTF-8">
     <style>
-        body {{ font-family: Arial, sans-serif; margin: 20px; }}
-        .header {{ background: #c00; color: white; padding: 20px; text-align: center; }}
-        .summary {{ display: flex; justify-content: space-around; margin: 20px 0; }}
-        .metric {{ text-align: center; padding: 20px; border-radius: 5px; }}
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }}
+        .container {{ max-width: 1400px; margin: 0 auto; background: white; }}
+        .header {{ background: linear-gradient(135deg, #c00 0%, #8b0000 100%); color: white; padding: 30px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }}
+        .header h1 {{ font-size: 32px; margin-bottom: 10px; }}
+        .header p {{ font-size: 14px; opacity: 0.9; }}
+        .info-section {{ padding: 20px 30px; background: #f8f9fa; border-bottom: 1px solid #dee2e6; }}
+        .info-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }}
+        .info-item {{ background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #c00; }}
+        .info-label {{ font-size: 11px; color: #6c757d; text-transform: uppercase; font-weight: 600; }}
+        .info-value {{ font-size: 14px; color: #212529; margin-top: 4px; }}
+        .summary {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; padding: 30px; }}
+        .metric {{ text-align: center; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s; }}
+        .metric:hover {{ transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }}
+        .metric h3 {{ font-size: 36px; margin-bottom: 8px; }}
+        .metric p {{ font-size: 14px; text-transform: uppercase; font-weight: 600; }}
         .pass {{ background: #d4edda; color: #155724; }}
         .fail {{ background: #f8d7da; color: #721c24; }}
         .manual {{ background: #fff3cd; color: #856404; }}
-        table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
-        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
-        th {{ background: #f2f2f2; }}
-        .status-pass {{ color: #28a745; font-weight: bold; }}
-        .status-fail {{ color: #dc3545; font-weight: bold; }}
-        .status-manual {{ color: #ffc107; font-weight: bold; }}
+        .skipped {{ background: #e2e3e5; color: #383d41; }}
+        .score {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }}
+        .severity-section {{ padding: 20px 30px; background: #fff; border-bottom: 1px solid #dee2e6; }}
+        .severity-title {{ font-size: 18px; margin-bottom: 15px; color: #212529; }}
+        .severity-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }}
+        .severity-item {{ padding: 12px; border-radius: 4px; text-align: center; }}
+        .sev-critical {{ background: #721c24; color: white; }}
+        .sev-high {{ background: #dc3545; color: white; }}
+        .sev-medium {{ background: #ffc107; color: #212529; }}
+        .sev-low {{ background: #17a2b8; color: white; }}
+        .sev-unknown {{ background: #6c757d; color: white; }}
+        .controls-section {{ padding: 30px; }}
+        .control-card {{ background: white; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 15px; overflow: hidden; transition: box-shadow 0.2s; }}
+        .control-card:hover {{ box-shadow: 0 4px 12px rgba(0,0,0,0.1); }}
+        .control-header {{ padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }}
+        .control-id {{ font-weight: 700; color: #c00; font-size: 14px; }}
+        .control-title {{ flex: 1; margin: 0 15px; font-size: 14px; color: #212529; }}
+        .status-badge {{ padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; }}
+        .status-pass {{ background: #28a745; color: white; }}
+        .status-fail {{ background: #dc3545; color: white; }}
+        .status-manual {{ background: #ffc107; color: #212529; }}
+        .status-skipped {{ background: #6c757d; color: white; }}
+        .control-body {{ padding: 20px; display: none; }}
+        .control-body.active {{ display: block; }}
+        .detail-section {{ margin-bottom: 15px; }}
+        .detail-label {{ font-size: 12px; font-weight: 600; color: #6c757d; text-transform: uppercase; margin-bottom: 5px; }}
+        .detail-content {{ font-size: 14px; color: #212529; line-height: 1.6; }}
+        .remediation-box {{ background: #f8f9fa; padding: 15px; border-left: 4px solid #c00; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; }}
+        .impact-warning {{ background: #fff3cd; padding: 12px; border-left: 4px solid #ffc107; border-radius: 4px; margin-top: 10px; }}
+        .footer {{ padding: 20px; text-align: center; background: #f8f9fa; color: #6c757d; font-size: 12px; border-top: 1px solid #dee2e6; }}
+        @media print {{ .control-body {{ display: block !important; }} }}
     </style>
+    <script>
+        function toggleControl(id) {{
+            const body = document.getElementById('control-' + id);
+            body.classList.toggle('active');
+        }}
+    </script>
 </head>
 <body>
-    <div class="header">
-        <h1>RHEL 8 CIS Compliance Report</h1>
-        <p>Powered by Vijenex Security Platform</p>
-    </div>
-    
-    <div class="summary">
-        <div class="metric pass"><h3>{pass_count}</h3><p>Passed</p></div>
-        <div class="metric fail"><h3>{fail_count}</h3><p>Failed</p></div>
-        <div class="metric manual"><h3>{manual_count}</h3><p>Manual</p></div>
-    </div>
-    
-    <h3>Detailed Results</h3>
-    <table>
-        <tr><th>ID</th><th>Control</th><th>Section</th><th>Status</th><th>Details</th></tr>
+    <div class="container">
+        <div class="header">
+            <h1>RHEL 8 CIS Compliance Report</h1>
+            <p>Powered by Vijenex Security Platform | https://vijenex.com</p>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Hostname</div>
+                    <div class="info-value">{self.system_info['hostname']}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">IP Address</div>
+                    <div class="info-value">{self.system_info['ip_address']}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Distribution</div>
+                    <div class="info-value">{self.system_info['distribution']}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Scan Date</div>
+                    <div class="info-value">{self.system_info['scan_date']}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Profile</div>
+                    <div class="info-value">CIS {self.profile}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Scanner Version</div>
+                    <div class="info-value">{self.system_info['scanner_version']}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <div class="metric score">
+                <h3>{compliance_score}%</h3>
+                <p>Compliance Score</p>
+            </div>
+            <div class="metric pass">
+                <h3>{pass_count}</h3>
+                <p>Passed</p>
+            </div>
+            <div class="metric fail">
+                <h3>{fail_count}</h3>
+                <p>Failed</p>
+            </div>
+            <div class="metric manual">
+                <h3>{manual_count}</h3>
+                <p>Manual Review</p>
+            </div>
+            <div class="metric skipped">
+                <h3>{skipped_count}</h3>
+                <p>Skipped</p>
+            </div>
+        </div>
+        
+        <div class="severity-section">
+            <div class="severity-title">Severity of Failed Rules</div>
+            <div class="severity-grid">
+                <div class="severity-item sev-critical">
+                    <div style="font-size: 24px; font-weight: bold;">{severity_counts['critical']}</div>
+                    <div style="font-size: 11px; margin-top: 4px;">CRITICAL</div>
+                </div>
+                <div class="severity-item sev-high">
+                    <div style="font-size: 24px; font-weight: bold;">{severity_counts['high']}</div>
+                    <div style="font-size: 11px; margin-top: 4px;">HIGH</div>
+                </div>
+                <div class="severity-item sev-medium">
+                    <div style="font-size: 24px; font-weight: bold;">{severity_counts['medium']}</div>
+                    <div style="font-size: 11px; margin-top: 4px;">MEDIUM</div>
+                </div>
+                <div class="severity-item sev-low">
+                    <div style="font-size: 24px; font-weight: bold;">{severity_counts['low']}</div>
+                    <div style="font-size: 11px; margin-top: 4px;">LOW</div>
+                </div>
+                <div class="severity-item sev-unknown">
+                    <div style="font-size: 24px; font-weight: bold;">{severity_counts['unknown']}</div>
+                    <div style="font-size: 11px; margin-top: 4px;">UNKNOWN</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls-section">
+            <h2 style="margin-bottom: 20px; color: #212529;">Detailed Control Results</h2>
 """
         
-        for result in self.results:
+        for idx, result in enumerate(self.results):
             status_class = f"status-{result['status'].lower()}"
+            impact = result.get('impact', '')
+            has_warning = '⚠️' in impact or 'WARNING' in impact.upper()
+            
             html_content += f"""
-        <tr>
-            <td>{result['id']}</td>
-            <td>{result['title']}</td>
-            <td>{result['section']}</td>
-            <td class="{status_class}">{result['status']}</td>
-            <td>{result.get('description', 'N/A')}</td>
-        </tr>"""
+            <div class="control-card">
+                <div class="control-header" onclick="toggleControl('{idx}')">
+                    <span class="control-id">{result['id']}</span>
+                    <span class="control-title">{result['title']}</span>
+                    <span class="status-badge {status_class}">{result['status']}</span>
+                </div>
+                <div id="control-{idx}" class="control-body">
+                    <div class="detail-section">
+                        <div class="detail-label">Section</div>
+                        <div class="detail-content">{result.get('section', 'N/A')}</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">CIS Reference</div>
+                        <div class="detail-content">{result.get('cis_reference', 'N/A')}</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">Description</div>
+                        <div class="detail-content">{result.get('description', 'N/A')}</div>
+                    </div>"""
+            
+            if result['status'] == 'FAIL':
+                html_content += f"""
+                    <div class="detail-section">
+                        <div class="detail-label">Current Value</div>
+                        <div class="detail-content">{result.get('actual_value', 'N/A')}</div>
+                    </div>
+                    <div class="detail-section">
+                        <div class="detail-label">Remediation</div>
+                        <div class="remediation-box">{result.get('remediation', 'Refer to CIS Benchmark documentation')}</div>
+                    </div>"""
+            
+            if has_warning:
+                html_content += f"""
+                    <div class="impact-warning">
+                        <strong>⚠️ Impact Warning:</strong><br>
+                        {impact}
+                    </div>"""
+            
+            html_content += """
+                </div>
+            </div>
+"""
         
-        html_content += """
-    </table>
+        html_content += f"""
+        </div>
+        
+        <div class="footer">
+            <p>Generated by Vijenex CIS Scanner v{self.system_info['scanner_version']} | Scan Date: {self.system_info['scan_date']}</p>
+            <p>This report is based on CIS Red Hat Enterprise Linux 8 Benchmark v4.0.0</p>
+            <p style="margin-top: 10px;">⚠️ Do not attempt to implement any settings without first testing in a non-operational environment.</p>
+        </div>
+    </div>
 </body>
 </html>"""
         

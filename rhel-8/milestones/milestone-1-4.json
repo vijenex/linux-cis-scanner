@@ -1,77 +1,43 @@
 {
   "milestone": "1.4",
-  "section": "1.4-1.5 Secure Boot & Additional Process Hardening",
-  "title": "Configure Secure Boot Settings and Additional Process Hardening",
+  "version": "1.0.0",
+  "description": "RHEL 8 CIS Benchmark v4.0.0 - Section 1.4",
   "controls": [
     {
       "id": "1.4.1",
       "title": "Ensure bootloader password is set",
-      "section": "1.4 Secure Boot Settings",
+      "automated": true,
       "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.1",
-      "remediation": "Run: grub2-setpassword",
-      "description": "Verify GRUB2 bootloader password is configured"
+      "section": "1.4",
+      "description": "\\\n\n\\f2\\b0 Setting the boot loader password will require that anyone rebooting the system must\\\nenter a password before being able to set command line boot parameters.\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 Requiring a boot password upon execution of the boot loader will prevent an\\\nunauthorized user from entering boot parameters or changing the boot partition. This\\\nprevents users from weakening security (e.g. turning off SELinux at boot time).\\\n\n\\f1\\b",
+      "impact": "\\\n\n\\f2\\b0 If password protection is enabled, only the designated superuser can edit a GRUB 2\\\nmenu item by pressing \n\\f0 \\cf4 e\n\\f2 \\cf2  or access the GRUB 2 command line by pressing \n\\f0 \\cf4 c\\\n\n\\f2 \\cf2 If GRUB 2 is set up to boot automatically to a password-protected menu entry the user\\\nhas no",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following script to verify the bootloader password has been set:\\\n\n\\f4\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\nl_grub_password_file=\"$(find /boot -type f -name 'user.cfg' ! -empty)\"\\\nif [ -f \"$l_grub_password_file\" ]; then\\\nawk -F. '/^\\\\s*GRUB2_PASSWORD=\\\\S+/ \\{print $1\".\"$2\".\"$3\\}'\\\n\"$l_grub_password_file\"\\\nfi\\\n\\}\\\n\n\\f2\\fs24 Output should be similar to:\\\n\n\\f4\\fs20\\fsmilli10080 GRUB2_PASSWORD=grub.pbkdf2.sha512\n\\f2 Page 167\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "remediation": "\\\n\n\\f2\\b0 Create an encrypted password with \n\\f0 \\cf4 grub2-setpassword\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # grub2-setpassword\\\nEnter password: <password>\\\nConfirm password: <password>\\\n\n\\f1\\b\\fs24",
+      "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3\\\n2. NIST SP 800-53A :: AC-3.1\\\n3. STIG ID: RHEL-08-010140 | RULE ID: SV-230234r1017053 | CAT I\\\n4. STIG ID: RHEL-08-010150 | RULE ID: SV-230235r1017054 | CAT I\\\n5. STIG ID: RHEL-09-212010 | RULE ID: SV-257787r1044836 | CAT II\\\n\n\\f1\\b",
+      "type": "FileContent",
+      "pattern": "",
+      "expected_result": "found",
+      "severity": "high",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.1 | Level1"
     },
     {
       "id": "1.4.2",
-      "title": "Ensure access to bootloader config is configured",
-      "section": "1.4 Secure Boot Settings",
+      "title": "Ensure access to bootloader config is configured\\",
+      "automated": true,
       "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.2",
-      "remediation": "Run: chown root:root /boot/grub2/grub.cfg && chmod og-rwx /boot/grub2/grub.cfg && chown root:root /boot/grub2/grubenv && chmod og-rwx /boot/grub2/grubenv",
-      "description": "Verify bootloader config files have proper permissions (0600 root:root)"
-    },
-    {
-      "id": "1.5.1",
-      "title": "Ensure address space layout randomization (ASLR) is enabled",
-      "section": "1.5 Additional Process Hardening",
-      "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.1",
-      "remediation": "Set kernel.randomize_va_space = 2 in /etc/sysctl.conf or /etc/sysctl.d/",
-      "description": "Verify ASLR is enabled (kernel.randomize_va_space = 2)"
-    },
-    {
-      "id": "1.5.2",
-      "title": "Ensure ptrace_scope is restricted",
-      "section": "1.5 Additional Process Hardening",
-      "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.2",
-      "remediation": "Set kernel.yama.ptrace_scope = 1 in /etc/sysctl.conf or /etc/sysctl.d/",
-      "description": "Verify ptrace is restricted (kernel.yama.ptrace_scope = 1)"
-    },
-    {
-      "id": "1.5.3",
-      "title": "Ensure core dumps are restricted",
-      "section": "1.5 Additional Process Hardening",
-      "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.3",
-      "remediation": "Add '* hard core 0' to /etc/security/limits.conf and set fs.suid_dumpable = 0",
-      "description": "Verify core dumps are restricted via limits.conf and sysctl"
-    },
-    {
-      "id": "1.5.4",
-      "title": "Ensure prelink is not installed",
-      "section": "1.5 Additional Process Hardening",
-      "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.4",
-      "remediation": "Run: dnf remove prelink",
-      "description": "Verify prelink package is not installed"
-    },
-    {
-      "id": "1.5.5",
-      "title": "Ensure Automatic Error Reporting is not enabled",
-      "section": "1.5 Additional Process Hardening",
-      "profile": "Level1",
-      "type": "Manual",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.5",
-      "remediation": "Run: systemctl disable --now abrtd && dnf remove abrt",
-      "description": "Verify ABRT (Automatic Bug Reporting Tool) is disabled"
+      "section": "1.4",
+      "description": "\\\n\n\\f2\\b0 The grub files contain information on boot settings and passwords for unlocking boot\\\noptions.\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 Setting the permissions to read and write for root only prevents non-root users from\\\nseeing the boot parameters or changing them. Non-root users who read the boot\\\nparameters may be able to identify weaknesses in security upon boot and be able to\\\nexploit them.\\\n\n\\f1\\b",
+      "impact": "None",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following script to verify grub configuration files:\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 For Files located in \n\\f0 \\cf4 /boot/efi/EFI/*\n\\f2 \\cf2 : \n\\f1\\b Note:\n\\f2\\b0  This is a vFat filesystem\\\n\n\\f4\\fs20\\fsmilli10080 o\n\\f2  \n\\fs24 Mode is \n\\f0 \\cf4 0700\n\\f2 \\cf2  or more restrictive\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 For Files located in \n\\f0 \\cf4 /boot/grub2/*\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 o\n\\f2  \n\\fs24 Mode is \n\\f0 \\cf4 0600\n\\f2 \\cf2  or more restrictive\\\n\n\\f",
+      "remediation": "\\\n\n\\f2\\b0 Run the following to update the mode, ownership, and group ownership of the grub\\\nconfiguration files:\\\n\n\\f1\\b - IF -\n\\f2\\b0  Files are located in \n\\f0 \\cf4 /boot/efi/EFI/*\n\\f2 \\cf2  \n\\f1\\b Note:\n\\f2\\b0  This is a vFat filesystem\\\nEdit \n\\f0 \\cf4 /etc/fstab\n\\f2 \\cf2  and add the \n\\f0 \\cf4 fmask=0077\n\\f2 \\cf2 , \n\\f0 \\cf4 uid=0\n\\f2 \\cf2 , and \n\\f0 \\cf4 gid=0\n\\f2 \\cf2  options:\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 <device> /boot/efi vfat",
+      "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-6 b\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. STIG ID: RHEL-09-212025 | RULE ID: SV-257790r991589 | CAT II\\\n4. STIG ID: RHEL-09-212030 | RULE ID: SV-257791r991589 | CAT II\\\n\n\\f1\\b",
+      "type": "FileContent",
+      "pattern": "",
+      "expected_result": "found",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.2 | Level1"
     }
   ]
 }

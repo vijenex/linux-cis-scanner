@@ -1,39 +1,57 @@
 {
-  "milestone": "3-1",
-  "section": "3.1 Network Configuration",
-  "description": "Configure network parameters and disable unused protocols",
+  "milestone": "3.1",
+  "version": "1.0.0",
+  "description": "RHEL 8 CIS Benchmark v4.0.0 - Section 3.1",
   "controls": [
     {
       "id": "3.1.1",
       "title": "Ensure IPv6 status is identified",
-      "section": "3.1 Network Configuration",
-      "type": "Manual",
+      "automated": false,
       "profile": "Level1",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.1.1",
-      "description": "Determine if IPv6 is required for your environment",
-      "remediation": "Document IPv6 usage requirements for your organization"
+      "section": "3.1",
+      "description": "\\\n\n\\f2\\b0 Internet Protocol Version 6 (IPv6) is the most recent version of Internet Protocol (IP). It's\\\ndesigned to supply IP addressing and additional security to support the predicted\\\ngrowth of connected devices. IPv6 is based on 128-bit addressing and can support 340\\\nundecillion, which is 340,282,366,920,938,463,463,374,607,431,768,211,456 unique\\\naddresses.\\\nFeatures of IPv6\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 Hierarchical addressing and routing infrastructure\\\n\n\\f0\\fs20\\fsmilli10080",
+      "rationale": "\\\n\n\\f2\\b0 IETF RFC 4038 recommends that applications are built with an assumption of dual\\\nstack. It is recommended that IPv6 be enabled and configured in accordance with\\\nBenchmark recommendations.\\\n\n\\f1\\b - IF -\n\\f2\\b0  dual stack and IPv6 are not used in your environment, IPv6 may be disabled to\\\nreduce the attack surface of the system, and recommendations pertaining to IPv6 can\\\nbe skipped.\\\n\n\\f1\\b Note:\n\\f2\\b0  It is recommended that IPv6 be enabled and configured unless this is against\\\nlo",
+      "impact": "\\\n\n\\f2\\b0 IETF RFC 4038 recommends that applications are built with an assumption of dual\\\nstack.\\\nWhen enabled, IPv6 will require additional configuration to reduce risk to the system.\n\\fs20\\fsmilli10080 Page 406\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following script to identify if IPv6 is enabled on the system:\\\n\n\\f4\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\nl_output=\"\"\\\n! grep -Pqs --\\\n'^\\\\h*0\\\\b' /sys/module/ipv6/parameters/disable &&\\\nl_output=\"- IPv6 is not enabled\"\\\nif sysctl net.ipv6.conf.all.disable_ipv6 | grep -Pqs --\\\n\"^\\\\h*net\\\\.ipv6\\\\.conf\\\\.all\\\\.disable_ipv6\\\\h*=\\\\h*1\\\\b\" && \\\\\\\nsysctl net.ipv6.conf.default.disable_ipv6 | grep -Pqs --\\\n\"^\\\\h*net\\\\.ipv6\\\\.conf\\\\.default\\\\.disable_ipv6\\\\h*=\\\\h*1\\\\b\"; then\\\nl_ou",
+      "remediation": "\\\n\n\\f2\\b0 Enable or disable IPv6 in accordance with system requirements and local site policy\\\n\n\\f1\\b",
+      "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\\\n\n\\f1\\b",
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.1.1 | Level1"
     },
     {
       "id": "3.1.2",
-      "title": "Ensure wireless interfaces are disabled",
-      "section": "3.1 Network Configuration",
-      "type": "Manual",
+      "title": "Ensure wireless interfaces are not available",
+      "automated": true,
       "profile": "Level1",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.1.2",
-      "description": "Wireless networking is used when wired networking is unavailable",
-      "remediation": "Run: nmcli radio all off"
+      "section": "3.1",
+      "description": "\\\n\n\\f2\\b0 Wireless networking is used when wired networks are unavailable.\\\n\n\\f1\\b",
+      "rationale": "\\\n- IF -\n\\f2\\b0  wireless is not to be used, wireless devices can be disabled to reduce the potential\\\nattack surface.\\\n\n\\f1\\b",
+      "impact": "\\\n\n\\f2\\b0 Many if not all laptop workstations and some desktop workstations will connect via\\\nwireless requiring these interfaces be enabled.\n\\fs20\\fsmilli10080 Page 409\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following script to verify no wireless interfaces are active on the system:\\\n\n\\f4\\fs19\\fsmilli9600 #!/usr/bin/env bash\\\n\\{\\\nl_output=\"\" l_output2=\"\"\\\nmodule_chk()\\\n\\{\\\n# Check how module will be loaded\\\nl_loadable=\"$(modprobe -n -v \"$l_mname\")\"\\\nif grep -Pq --\\\n'^\\\\h*install \\\\/bin\\\\/(true|false)' <<< \"$l_loadable\"; then\\\nl_output=\"$l_output\\\\n - module: \\\\\"$l_mname\\\\\" is not loadable:\\\n\\\\\"$l_loadable\\\\\"\"\\\nelse\\\nl_output2=\"$l_output2\\\\n - module: \\\\\"$l_mname\\\\\" is loadable:\\\n\\\\",
+      "remediation": "\\\n\n\\f2\\b0 Run the following script to disable any wireless interfaces:\\\n\n\\f4\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\nmodule_fix()\\\n\\{\\\nif ! modprobe -n -v \"$l_mname\" | grep -P --\\\n'^\\\\h*install\\\n\\\\/bin\\\\/(true|false)'; then\\\necho -e \" - setting module: \\\\\"$l_mname\\\\\" to be un-loadable\"\\\necho -e \"install $l_mname /bin/false\" >>\\\n/etc/modprobe.d/\"$l_mname\".conf\\\nfi\\\nif lsmod | grep \"$l_mname\" > /dev/null 2>&1; then\\\necho -e \" - unloading module \\\\\"$l_mname\\\\\"\"\\\nmodprobe -r \"$l_mname\"\\\nfi\\\nif ! grep -Pq --\\\n\"^\\\\h*blacklist\\\\h+$l_mname\\\\b\" /etc/modprobe.d/*; then\\\necho -e \" - deny listing \\\\\"$l_mname\\\\\"\"\\\necho -e \"blacklist $l_mname\" >> /etc/modprobe.d/\"$l_mname\".conf\\\nfi\\\n\\}\\\nif [ -n \"$(find /sys/class/net/*/ -type d -name wireless)\" ]; then\\\nl_dname=$(for driverdir in $(find /sys/class/ne",
+      "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AC-18 (1)\\\n2. NIST SP 800-53 :: AC-18 (1)\\\n3. RHEL 8 STIG Vuln ID: V-230506\\\n4. RHEL 8 STIG Rule ID: SV-230506r627750\n\\fs20\\fsmilli10080 Page 411\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
+      "type": "FileContent",
+      "pattern": "",
+      "expected_result": "found",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.1.2 | Level1"
     },
     {
       "id": "3.1.3",
       "title": "Ensure bluetooth services are not in use",
-      "section": "3.1 Network Configuration",
+      "automated": true,
+      "profile": "Level2",
+      "section": "3.1",
+      "description": "\\\n\n\\f2\\b0 Bluetooth is a short-range wireless technology standard that is used for exchanging\\\ndata between devices over short distances. It employs UHF radio waves in the ISM\\\nbands, from 2.402 GHz to 2.48 GHz. It is mainly used as an alternative to wire\\\nconnections.\\\n\n\\f1\\b",
+      "rationale": "\\\n\n\\f2\\b0 An attacker may be able to find a way to access or corrupt your data. One example of\\\nthis type of activity is \n\\f0 \\cf4 bluesnarfing\n\\f2 \\cf2 , which refers to attackers using a Bluetooth\\\nconnection to steal information off of your Bluetooth device. Also, viruses or other\\\nmalicious code can take advantage of Bluetooth technology to infect other devices. If\\\nyou are infected, your data may be corrupted, compromised, stolen, or lost.\\\n\n\\f1\\b",
+      "impact": "\\\n\n\\f2\\b0 Many personal electronic devices (PEDs) use Bluetooth technology. For example, you\\\nmay be able to operate your computer with a wireless keyboard. Disabling Bluetooth will\\\nprevent these devices from connecting to the system.\\\nThere may be packages that are dependent on the \n\\f0 \\cf4 bluez",
+      "audit_command": "\\\n\n\\f2\\b0 Run the following command to verify the \n\\f0 \\cf4 bluez\n\\f2 \\cf2  package is not installed:\\\n\n\\f4\\fs20\\fsmilli10080 # rpm -q bluez\\\npackage bluez is not installed\\\n\n\\f1\\b\\fs24 - OR -\\\n- IF -\n\\f2\\b0  the \n\\f0 \\cf4 bluez\n\\f2 \\cf2  package is required as a dependency:\\\nRun the following command to verify \n\\f0 \\cf4 bluetooth.service\n\\f2 \\cf2  is not enabled:\\\n\n\\f4\\fs20\\fsmilli10080 # systemctl is-enabled bluetooth.service 2>/dev/null | grep 'enabled'\\\nNothing should be returned\\\n\n\\f2\\fs24 ",
+      "remediation": "\\\n\n\\f2\\b0 Run the following commands to stop \n\\f0 \\cf4 bluetooth.service\n\\f2 \\cf2 , and remove the \n\\f0 \\cf4 bluez\\\n\n\\f2 \\cf2 package:\\\n\n\\f4\\fs20\\fsmilli10080 # systemctl stop bluetooth.service\\\n# dnf remove bluez\\\n\n\\f1\\b\\fs24 - OR -\\\n- IF -\n\\f2\\b0  the \n\\f0 \\cf4 bluez\n\\f2 \\cf2  package is required as a dependency:\\\nRun the following commands to stop and mask \n\\f0 \\cf4 bluetooth.service\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # systemctl stop bluetooth.service\\\n# systemctl mask bluetooth.service\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  A reboot may be required\\\n\n\\f1\\b",
+      "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 414\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
-      "profile": "Level1",
-      "service_name": "bluetooth",
-      "expected_status": "disabled",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.1.3",
-      "description": "Bluetooth is a wireless technology for exchanging data over short distances",
-      "remediation": "Run: systemctl stop bluetooth && systemctl mask bluetooth"
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.1.3 | Level2"
     }
   ]
 }
