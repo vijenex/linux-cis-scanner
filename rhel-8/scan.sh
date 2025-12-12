@@ -10,17 +10,20 @@ if command -v python3 &> /dev/null && [ -f "$SCRIPT_DIR/scripts/vijenex-cis.py" 
     exec python3 scripts/vijenex-cis.py "$@"
 fi
 
-# Check Go binary
-if [ -f "$SCRIPT_DIR/vijenex-cis-binary" ]; then
-    echo "Using Go Binary..."
-    cd "$SCRIPT_DIR"
-    exec ./vijenex-cis-binary "$@"
+# Check Go binary - detect architecture
+ARCH=$(uname -m)
+if [ "$ARCH" = "x86_64" ]; then
+    GO_BINARY="$SCRIPT_DIR/vijenex-cis-amd64"
+elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    GO_BINARY="$SCRIPT_DIR/vijenex-cis-arm64"
+else
+    GO_BINARY="$SCRIPT_DIR/vijenex-cis-binary"
 fi
 
-if [ -f "$SCRIPT_DIR/go-scanner/bin/vijenex-cis" ]; then
-    echo "Using Go Binary..."
-    cd "$SCRIPT_DIR/go-scanner"
-    exec ./bin/vijenex-cis "$@"
+if [ -f "$GO_BINARY" ]; then
+    echo "Using Go Binary ($ARCH)..."
+    cd "$SCRIPT_DIR"
+    exec "$GO_BINARY" "$@"
 fi
 
 echo "ERROR: No scanner available"
