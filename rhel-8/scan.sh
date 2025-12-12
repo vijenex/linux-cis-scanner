@@ -62,13 +62,21 @@ else
     echo -e "${YELLOW}   Tried: python3, python, python3.6, python3.8, python3.9, python3.11${NC}"
 fi
 
-# Check for Go binary
-if [ -f "bin/vijenex-cis-scanner" ]; then
-    echo -e "${GREEN}✓ Go binary detected${NC}"
+# Check for Go binary (multiple locations)
+GO_BINARY=""
+for binary in ./vijenex-cis ./vijenex-cis-amd64 ./vijenex-cis-arm64 ./go-scanner/bin/vijenex-cis ./bin/vijenex-cis-scanner; do
+    if [ -f "$binary" ] && [ -x "$binary" ]; then
+        GO_BINARY="$binary"
+        break
+    fi
+done
+
+if [ -n "$GO_BINARY" ]; then
+    echo -e "${GREEN}✓ Go binary detected: $GO_BINARY${NC}"
     echo -e "${BLUE}🚀 Running Go scanner...${NC}"
     echo ""
     
-    ./bin/vijenex-cis-scanner --profile Level1 "$@"
+    $GO_BINARY "$@"
     
     echo ""
     echo -e "${GREEN}✅ Scan completed!${NC}"
