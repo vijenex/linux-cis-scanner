@@ -8,7 +8,7 @@
   ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
 
                  Vijenex CIS Scanner
-           Enterprise Linux Security Compliance
+           Ubuntu 22.04 LTS Security Compliance
 """
 
 import os
@@ -34,7 +34,7 @@ class LinuxCISScanner:
         # Use explicit output_dir if provided, otherwise use default
         if output_dir is None:
             output_dir = "./reports"
-        
+            
         self.output_dir = Path(output_dir)
         self.profile = profile
         self.results = []
@@ -52,7 +52,7 @@ class LinuxCISScanner:
         try:
             hostname = socket.gethostname()
             ip_address = socket.gethostbyname(hostname)
-        except (socket.error, OSError) as e:
+        except:
             hostname = "Unknown"
             ip_address = "Unknown"
             
@@ -64,7 +64,7 @@ class LinuxCISScanner:
             "distribution": self._get_distribution(),
             "architecture": platform.machine(),
             "scan_date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "scanner_version": "1.0.0"
+            "scanner_version": "1.0.0-ubuntu22.04"
         }
     
     def _get_distribution(self) -> str:
@@ -88,17 +88,7 @@ class LinuxCISScanner:
                         return version
         except (IOError, OSError, ValueError):
             pass
-        return "24.04"  # Default fallback
-    
-    def _validate_path(self, file_path: str) -> bool:
-        """Validate file path to prevent path traversal"""
-        try:
-            # Resolve path and check if it's within allowed directories
-            resolved_path = os.path.realpath(file_path)
-            allowed_prefixes = ['/etc/', '/var/', '/usr/', '/bin/', '/sbin/', '/lib/', '/opt/', '/home/', '/root/', '/proc/', '/sys/']
-            return any(resolved_path.startswith(prefix) for prefix in allowed_prefixes)
-        except (OSError, ValueError):
-            return False
+        return "22.04"  # Default fallback
     
     def _run_command(self, command: str, shell: bool = True) -> Tuple[str, str, int]:
         """Execute system command and return output"""
@@ -125,6 +115,16 @@ class LinuxCISScanner:
             return "", f"Command error: {str(e)}", 1
         except Exception as e:
             return "", f"Unexpected error: {str(e)}", 1
+    
+    def _validate_path(self, file_path: str) -> bool:
+        """Validate file path to prevent path traversal"""
+        try:
+            # Resolve path and check if it's within allowed directories
+            resolved_path = os.path.realpath(file_path)
+            allowed_prefixes = ['/etc/', '/var/', '/usr/', '/bin/', '/sbin/', '/lib/', '/opt/', '/home/', '/root/', '/proc/', '/sys/']
+            return any(resolved_path.startswith(prefix) for prefix in allowed_prefixes)
+        except (OSError, ValueError):
+            return False
     
     def check_file_permissions(self, file_path: str, expected_mode: str, expected_owner: str = None, expected_group: str = None) -> Dict[str, Any]:
         """Check file permissions and ownership"""
@@ -163,9 +163,9 @@ class LinuxCISScanner:
             
             return {
                 "status": status,
-                "current": f"Mode: {current_mode}, Owner: {current_owner}, Group: {current_group}",
-                "expected": f"Mode: {expected_mode}, Owner: {expected_owner}, Group: {expected_group}",
-                "evidence": "; ".join(issues) if issues else "Permissions correct"
+                "actual_value": f"Mode: {current_mode}, Owner: {current_owner}, Group: {current_group}",
+                "evidence_command": f"ls -l {file_path}",
+                "description": "; ".join(issues) if issues else "File permissions verified"
             }
             
         except (OSError, KeyError, ValueError) as e:
@@ -202,9 +202,9 @@ class LinuxCISScanner:
         
         return {
             "status": status,
-            "current": current_status,
-            "expected": expected_status,
-            "evidence": f"Service {service_name}: {current_status}"
+            "actual_value": current_status,
+            "evidence_command": f"systemctl status {service_name}",
+            "description": f"Service {service_name} status verified"
         }
     
     def check_kernel_parameter(self, parameter: str, expected_value: str) -> Dict[str, Any]:
@@ -224,9 +224,9 @@ class LinuxCISScanner:
         
         return {
             "status": status,
-            "current": current_value,
-            "expected": expected_value,
-            "evidence": f"{parameter} = {current_value}"
+            "actual_value": current_value,
+            "evidence_command": f"sysctl {parameter}",
+            "description": f"Kernel parameter {parameter} verified"
         }
     
     def check_package_installed(self, package_name: str, should_be_installed: bool = True) -> Dict[str, Any]:
@@ -252,9 +252,9 @@ class LinuxCISScanner:
         
         return {
             "status": status,
-            "current": current,
-            "expected": expected,
-            "evidence": f"Package {package_name}: {current}"
+            "actual_value": current,
+            "evidence_command": f"dpkg -l {package_name} || rpm -q {package_name}",
+            "description": f"Package {package_name} installation status verified"
         }
     
     def check_config_file(self, file_path: str, pattern: str, expected_match: bool = True) -> Dict[str, Any]:
@@ -322,17 +322,21 @@ class LinuxCISScanner:
             
             for modprobe_dir in modprobe_dirs:
                 if os.path.exists(modprobe_dir):
-                    for conf_file in os.listdir(modprobe_dir):
-                        if conf_file.endswith('.conf'):
-                            conf_path = os.path.join(modprobe_dir, conf_file)
-                            try:
-                                with open(conf_path, 'r') as f:
-                                    content = f.read()
-                                    if re.search(f'install\s+{module_name}\s+/bin/(true|false)', content):
-                                        blacklist_found = True
-                                        break
-                            except:
-                                continue
+                    try:
+                        for conf_file in os.listdir(modprobe_dir):
+                            if conf_file.endswith('.conf'):
+                                conf_path = os.path.join(modprobe_dir, conf_file)
+                                if self._validate_path(conf_path):
+                                    try:
+                                        with open(conf_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                            content = f.read()
+                                            if re.search(f'install\\s+{re.escape(module_name)}\\s+/bin/(true|false)', content):
+                                                blacklist_found = True
+                                                break
+                                    except (OSError, IOError):
+                                        continue
+                    except (OSError, PermissionError):
+                        continue
                 if blacklist_found:
                     break
             
@@ -383,7 +387,15 @@ class LinuxCISScanner:
             current_options = []
             mount_found = False
             
-            with open('/proc/mounts', 'r') as f:
+            if not self._validate_path('/proc/mounts'):
+                return {
+                    "status": "ERROR",
+                    "current": "Cannot access mount information",
+                    "expected": f"Option '{required_option}' present",
+                    "evidence": "Access to /proc/mounts denied"
+                }
+            
+            with open('/proc/mounts', 'r', encoding='utf-8', errors='ignore') as f:
                 for line in f:
                     parts = line.strip().split()
                     if len(parts) >= 4 and parts[1] == mount_point:
@@ -409,12 +421,19 @@ class LinuxCISScanner:
                 "evidence": f"Mount {mount_point}: {required_option} {'found' if option_present else 'missing'}"
             }
             
-        except Exception as e:
+        except (OSError, IOError) as e:
             return {
                 "status": "ERROR",
                 "current": "Error checking mount options",
                 "expected": f"Option '{required_option}' present",
-                "evidence": str(e)
+                "evidence": f"Mount check error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "current": "Unexpected error",
+                "expected": f"Option '{required_option}' present",
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_mount_point(self, mount_point: str, expected_status: str) -> Dict[str, Any]:
@@ -424,7 +443,15 @@ class LinuxCISScanner:
             mount_found = False
             device_info = ""
             
-            with open('/proc/mounts', 'r') as f:
+            if not self._validate_path('/proc/mounts'):
+                return {
+                    "status": "ERROR",
+                    "current": "Cannot access mount information",
+                    "expected": f"Mount point {expected_status}",
+                    "evidence": "Access to /proc/mounts denied"
+                }
+            
+            with open('/proc/mounts', 'r', encoding='utf-8', errors='ignore') as f:
                 for line in f:
                     parts = line.strip().split()
                     if len(parts) >= 2 and parts[1] == mount_point:
@@ -464,6 +491,14 @@ class LinuxCISScanner:
     def check_boot_parameters(self, parameters: List[str], config_file: str) -> Dict[str, Any]:
         """Check boot parameters in GRUB configuration"""
         try:
+            if not self._validate_path(config_file):
+                return {
+                    "status": "FAIL",
+                    "current": "Invalid config file path",
+                    "expected": f"Parameters {parameters} in {config_file}",
+                    "evidence": f"Config file path {config_file} is not allowed"
+                }
+            
             if not os.path.exists(config_file):
                 return {
                     "status": "FAIL",
@@ -472,7 +507,7 @@ class LinuxCISScanner:
                     "evidence": f"Boot config file {config_file} does not exist"
                 }
             
-            with open(config_file, 'r') as f:
+            with open(config_file, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
             
             missing_params = []
@@ -498,12 +533,19 @@ class LinuxCISScanner:
                 "evidence": f"In {config_file}: {current}"
             }
             
-        except Exception as e:
+        except (OSError, IOError) as e:
             return {
                 "status": "ERROR",
                 "current": "Error checking boot parameters",
                 "expected": f"Parameters: {', '.join(parameters)}",
-                "evidence": str(e)
+                "evidence": f"Boot config error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "status": "ERROR",
+                "current": "Unexpected error",
+                "expected": f"Parameters: {', '.join(parameters)}",
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_apparmor_profiles(self, expected_modes: List[str], check_unconfined: bool) -> Dict[str, Any]:
@@ -2020,12 +2062,19 @@ class LinuxCISScanner:
                 "evidence": f"Checked {passwd_file}, Non-shadowed: {len(non_shadowed)}"
             }
             
+        except (OSError, IOError, PermissionError) as e:
+            return {
+                "status": "ERROR",
+                "current": "Error checking shadowed passwords",
+                "expected": "All accounts use shadowed passwords",
+                "evidence": f"File access error: {str(e)}"
+            }
         except Exception as e:
             return {
                 "status": "ERROR",
                 "current": "Error checking shadowed passwords",
                 "expected": "All accounts use shadowed passwords",
-                "evidence": str(e)
+                "evidence": f"Unexpected error: {str(e)}"
             }
     
     def check_empty_passwords(self, shadow_file: str) -> Dict[str, Any]:
@@ -2358,15 +2407,6 @@ class LinuxCISScanner:
     def check_user_home_dirs(self, passwd_file: str, min_uid: int) -> Dict[str, Any]:
         """Check user home directory configuration"""
         try:
-            # Validate path to prevent traversal attacks
-            if not self._validate_path(passwd_file):
-                return {
-                    "status": "FAIL",
-                    "current": "Invalid file path",
-                    "expected": "All interactive users have valid home directories",
-                    "evidence": f"File path {passwd_file} is not allowed"
-                }
-            
             if not os.path.exists(passwd_file):
                 return {
                     "status": "FAIL",
@@ -2392,6 +2432,8 @@ class LinuxCISScanner:
                                 checked_users += 1
                                 if not home_dir or home_dir == '/':
                                     issues.append(f"{username}: no home directory assigned")
+                                elif not self._validate_path(home_dir):
+                                    issues.append(f"{username}: invalid home directory path {home_dir}")
                                 elif not os.path.exists(home_dir):
                                     issues.append(f"{username}: home directory {home_dir} does not exist")
             
@@ -2506,13 +2548,12 @@ class LinuxCISScanner:
             "title": control.get('title', ''),
             "section": control.get('section', ''),
             "cis_reference": control.get('cis_reference', ''),
-            "cis_control_id": control.get('cis_control_id', ''),
-            "reference_note": control.get('reference_note', ''),
+            "remediation": control.get('remediation', 'Refer to CIS Benchmark documentation'),
+            "description": control.get('description', ''),
             "profile": control.get('profile', 'Level1'),
             "status": "MANUAL",
-            "current": "",
-            "expected": "",
-            "evidence": ""
+            "actual_value": "",
+            "evidence_command": ""
         }
         
         # Skip if not in selected profile
@@ -2770,13 +2811,21 @@ class LinuxCISScanner:
                     control.get('min_uid', 1000),
                     control.get('max_permissions', 'go-w')
                 )
-            else:
+            elif control_type == "Manual":
                 # Manual check
                 check_result = {
                     "status": "MANUAL",
                     "current": "Manual verification required",
-                    "expected": control.get('expected', 'See CIS documentation'),
+                    "expected": control.get('description', 'See CIS documentation'),
                     "evidence": "This control requires manual verification"
+                }
+            else:
+                # Unknown control type - treat as manual
+                check_result = {
+                    "status": "MANUAL",
+                    "current": f"Unknown control type: {control_type}",
+                    "expected": control.get('expected', 'See CIS documentation'),
+                    "evidence": f"Control type '{control_type}' not implemented - manual verification required"
                 }
             
             result.update(check_result)
@@ -2802,17 +2851,14 @@ class LinuxCISScanner:
         RESET = '\033[0m'
         
         # Display signature
-        print(f"{CYAN}{BOLD}")
-        print("██╗   ██╗██╗     ██╗███████╗███╗   ██╗███████╗██╗  ██╗")
-        print("██║   ██║██║     ██║██╔════╝████╗  ██║██╔════╝╚██╗██╔╝")
-        print("██║   ██║██║     ██║█████╗  ██╔██╗ ██║█████╗   ╚███╔╝ ")
-        print("╚██╗ ██╔╝██║██   ██║██╔══╝  ██║╚██╗██║██╔══╝   ██╔██╗ ")
-        print(" ╚████╔╝ ██║╚█████╔╝███████╗██║ ╚████║███████╗██╔╝ ██╗")
-        print("  ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝")
-        print(f"{RESET}")
-        print(f"{BOLD}{BLUE}                 Vijenex CIS Scanner{RESET}")
-        print(f"{YELLOW}           Enterprise Linux Security Compliance{RESET}")
-        print(f"{CYAN}═" * 60 + f"{RESET}")
+        print()
+        print(f"{CYAN}============================================================={RESET}")
+        print(f"{CYAN}                        VIJENEX                              {RESET}")
+        print(f"{BOLD}      {self.system_info['distribution']} CIS Scanner           {RESET}")
+        print(f"{YELLOW}           Powered by Vijenex Security Platform             {RESET}")
+        print(f"{CYAN}        https://github.com/vijenex/linux-cis-scanner        {RESET}")
+        print(f"{CYAN}============================================================={RESET}")
+        print()
         
         print(f"{BOLD}🔍 Starting CIS Compliance Scan...{RESET}")
         print(f"{BLUE}📋 Profile:{RESET} {YELLOW}{self.profile}{RESET}")
@@ -2846,11 +2892,19 @@ class LinuxCISScanner:
         fail_count = sum(1 for r in self.results if r["status"] == "FAIL")
         manual_count = sum(1 for r in self.results if r["status"] == "MANUAL")
         
-        print(f"{BOLD}🎯 Scan Completed Successfully!{RESET}")
-        print(f"{GREEN}✓ Passed:{RESET} {GREEN}{pass_count}{RESET}")
-        print(f"{RED}✗ Failed:{RESET} {RED}{fail_count}{RESET}")
-        print(f"{YELLOW}⚠ Manual:{RESET} {YELLOW}{manual_count}{RESET}")
-        print(f"{BOLD}📊 Total Controls:{RESET} {CYAN}{len(self.results)}{RESET}")
+        success_rate = round((pass_count / len(self.results)) * 100, 1) if self.results else 0
+        
+        print()
+        print(f"{CYAN}============================================================={RESET}")
+        print(f"{CYAN}                    SCAN COMPLETED                           {RESET}")
+        print(f"{CYAN}============================================================={RESET}")
+        print(f"Total Checks: {len(self.results)}")
+        print(f"Passed: {GREEN}{pass_count}{RESET}")
+        print(f"Failed: {RED}{fail_count}{RESET}")
+        print(f"Manual: {YELLOW}{manual_count}{RESET}")
+        print(f"Success Rate: {YELLOW}{success_rate}%{RESET}")
+        print(f"{CYAN}============================================================={RESET}")
+        print()
     
     def generate_html_report(self) -> str:
         """Generate HTML compliance report"""
@@ -2958,28 +3012,30 @@ class LinuxCISScanner:
         report_path = self.output_dir / "vijenex-cis-results.csv"
         
         with open(report_path, 'w', newline='') as csvfile:
-            fieldnames = ['ID', 'Control', 'Section', 'Status', 'CIS_Reference', 'Reference_Note']
+            fieldnames = ['Id', 'Title', 'Section', 'Status', 'CISReference', 'Remediation', 'Description']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
             writer.writeheader()
             for result in self.results:
                 writer.writerow({
-                    'ID': result['id'],
-                    'Control': result['title'],
+                    'Id': result['id'],
+                    'Title': result['title'],
                     'Section': result['section'],
                     'Status': result['status'],
-                    'CIS_Reference': result.get('cis_reference', ''),
-                    'Reference_Note': result.get('reference_note', 'Refer to official CIS benchmark documentation')
+                    'CISReference': result.get('cis_reference', 'Refer to CIS Benchmark documentation'),
+                    'Remediation': result.get('remediation', 'Refer to CIS Benchmark documentation'),
+                    'Description': result.get('description', 'Security control verification')
                 })
         
         return str(report_path)
 
 def main():
-    parser = argparse.ArgumentParser(description='Vijenex CIS - Enterprise Linux Security Compliance Scanner')
+    parser = argparse.ArgumentParser(description='Vijenex CIS - Ubuntu 22.04 LTS Security Compliance Scanner')
     parser.add_argument('--output-dir', help='Output directory for reports (default: ../reports)')
     parser.add_argument('--profile', choices=['Level1', 'Level2'], default='Level1', help='CIS profile level')
     parser.add_argument('--milestones', nargs='+', help='Specific milestone files to scan')
     parser.add_argument('--format', choices=['html', 'csv', 'both'], default='both', help='Report format')
+    parser.add_argument('--cleanup', action='store_true', help='Delete scanner files after scan (keeps reports only)')
     
     args = parser.parse_args()
     
@@ -3009,6 +3065,57 @@ def main():
         print(f"{GREEN}📊 CSV report:{RESET} {csv_report}")
     
     print(f"\n{BOLD}{GREEN}🎉 Vijenex CIS scan completed successfully!{RESET}")
+    
+    # Optional cleanup
+    if args.cleanup and not os.path.exists('/usr/share/vijenex-cis'):
+        cleanup_scanner_files(scanner.output_dir)
+
+def cleanup_scanner_files(reports_dir: Path) -> None:
+    """Clean up scanner files while preserving reports"""
+    try:
+        import shutil
+        
+        # Get the main scanner directory (3 levels up from reports)
+        scanner_root = reports_dir.parent.parent
+        
+        # Safety checks
+        if not str(scanner_root).endswith(('linux-cis-scanner', 'linux-cis-scanner-1.0.1')):
+            print(f"⚠️  Cleanup skipped: Not in scanner directory ({scanner_root})")
+            return
+            
+        if not (scanner_root / 'ubuntu-22.04').exists():
+            print(f"⚠️  Cleanup skipped: Ubuntu directories not found")
+            return
+        
+        print(f"\n🧹 Cleaning up scanner files (keeping reports)...")
+        
+        # Preserve all reports directories
+        reports_to_preserve = []
+        for ubuntu_dir in scanner_root.glob('ubuntu-*'):
+            reports_path = ubuntu_dir / 'reports'
+            if reports_path.exists():
+                # Move reports to temp location
+                temp_reports = scanner_root / f'temp_reports_{ubuntu_dir.name}'
+                shutil.move(str(reports_path), str(temp_reports))
+                reports_to_preserve.append((temp_reports, ubuntu_dir.name))
+        
+        # Remove scanner directories
+        for item in scanner_root.iterdir():
+            if item.is_dir() and item.name.startswith(('ubuntu-', 'rhel-', 'centos-', 'debian-')):
+                shutil.rmtree(item)
+            elif item.is_file() and item.name in ['install.sh', 'setup.sh', 'requirements.txt']:
+                item.unlink()
+        
+        # Restore reports in clean structure
+        for temp_reports, ubuntu_version in reports_to_preserve:
+            final_reports = scanner_root / f'{ubuntu_version}-reports'
+            shutil.move(str(temp_reports), str(final_reports))
+            print(f"📊 Preserved: {final_reports}")
+        
+        print(f"✅ Cleanup completed. Reports preserved in {scanner_root}")
+        
+    except Exception as e:
+        print(f"❌ Cleanup failed: {e}")
 
 if __name__ == "__main__":
     main()

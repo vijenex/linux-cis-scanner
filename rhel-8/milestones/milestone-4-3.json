@@ -1,0 +1,40 @@
+{
+  "milestone": "4.3",
+  "title": "Logrotate Configuration",
+  "controls": [
+    {
+      "control_id": "4.3.1",
+      "title": "Ensure logrotate is configured",
+      "level": 1,
+      "scored": false,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "The system includes the capability of rotating log files regularly to avoid filling up the system with logs or making the logs unmanageably large.",
+      "rationale": "By keeping the log files smaller and more manageable, a system administrator can easily archive these files to another system and spend less time looking through inordinately large log files.",
+      "audit": "Review /etc/logrotate.conf and /etc/logrotate.d/* and verify logs are rotated according to site policy.",
+      "remediation": "Edit /etc/logrotate.conf and /etc/logrotate.d/* to ensure logs are rotated according to site policy.",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. See the logrotate(8) man page for more information.",
+      "cis_controls": "v8: 8.3 Ensure Adequate Audit Log Storage\nv7: 6.4 Ensure adequate storage for logs",
+      "check_type": "Manual",
+      "check_value": ""
+    },
+    {
+      "control_id": "4.3.2",
+      "title": "Ensure logrotate assigns appropriate permissions",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "The /etc/logrotate.conf and /etc/logrotate.d/* files control the rotation of log files.",
+      "rationale": "It is important to ensure that log files have the correct permissions to ensure that sensitive data is archived and protected.",
+      "audit": "Run the following command to verify that create mode is set to 0640 or more restrictive:\n# grep -Es '^\\s*create\\s+[0-7][0-7][0-7][0-7]' /etc/logrotate.conf /etc/logrotate.d/*\nVerify that the mode is 0640 or more restrictive",
+      "remediation": "Edit /etc/logrotate.conf and /etc/logrotate.d/* to ensure that create mode is set to 0640 or more restrictive.",
+      "impact": "None",
+      "default_value": "create 0640",
+      "references": "1. See the logrotate(8) man page for more information.",
+      "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
+      "check_type": "Manual",
+      "check_value": ""
+    }
+  ]
+}

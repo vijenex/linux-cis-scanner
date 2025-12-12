@@ -163,9 +163,9 @@ class LinuxCISScanner:
             
             return {
                 "status": status,
-                "current": f"Mode: {current_mode}, Owner: {current_owner}, Group: {current_group}",
-                "expected": f"Mode: {expected_mode}, Owner: {expected_owner}, Group: {expected_group}",
-                "evidence": "; ".join(issues) if issues else "Permissions correct"
+                "actual_value": f"Mode: {current_mode}, Owner: {current_owner}, Group: {current_group}",
+                "evidence_command": f"ls -l {file_path}",
+                "description": "; ".join(issues) if issues else "File permissions verified"
             }
             
         except (OSError, KeyError, ValueError) as e:
@@ -202,9 +202,9 @@ class LinuxCISScanner:
         
         return {
             "status": status,
-            "current": current_status,
-            "expected": expected_status,
-            "evidence": f"Service {service_name}: {current_status}"
+            "actual_value": current_status,
+            "evidence_command": f"systemctl status {service_name}",
+            "description": f"Service {service_name} status verified"
         }
     
     def check_kernel_parameter(self, parameter: str, expected_value: str) -> Dict[str, Any]:
@@ -224,9 +224,9 @@ class LinuxCISScanner:
         
         return {
             "status": status,
-            "current": current_value,
-            "expected": expected_value,
-            "evidence": f"{parameter} = {current_value}"
+            "actual_value": current_value,
+            "evidence_command": f"sysctl {parameter}",
+            "description": f"Kernel parameter {parameter} verified"
         }
     
     def check_package_installed(self, package_name: str, should_be_installed: bool = True) -> Dict[str, Any]:
@@ -252,9 +252,9 @@ class LinuxCISScanner:
         
         return {
             "status": status,
-            "current": current,
-            "expected": expected,
-            "evidence": f"Package {package_name}: {current}"
+            "actual_value": current,
+            "evidence_command": f"dpkg -l {package_name} || rpm -q {package_name}",
+            "description": f"Package {package_name} installation status verified"
         }
     
     def check_config_file(self, file_path: str, pattern: str, expected_match: bool = True) -> Dict[str, Any]:
@@ -2548,13 +2548,12 @@ class LinuxCISScanner:
             "title": control.get('title', ''),
             "section": control.get('section', ''),
             "cis_reference": control.get('cis_reference', ''),
-            "cis_control_id": control.get('cis_control_id', ''),
-            "reference_note": control.get('reference_note', ''),
+            "remediation": control.get('remediation', 'Refer to CIS Benchmark documentation'),
+            "description": control.get('description', ''),
             "profile": control.get('profile', 'Level1'),
             "status": "MANUAL",
-            "current": "",
-            "expected": "",
-            "evidence": ""
+            "actual_value": "",
+            "evidence_command": ""
         }
         
         # Skip if not in selected profile
@@ -2852,17 +2851,14 @@ class LinuxCISScanner:
         RESET = '\033[0m'
         
         # Display signature
-        print(f"{CYAN}{BOLD}")
-        print("██╗   ██╗██╗     ██╗███████╗███╗   ██╗███████╗██╗  ██╗")
-        print("██║   ██║██║     ██║██╔════╝████╗  ██║██╔════╝╚██╗██╔╝")
-        print("██║   ██║██║     ██║█████╗  ██╔██╗ ██║█████╗   ╚███╔╝ ")
-        print("╚██╗ ██╔╝██║██   ██║██╔══╝  ██║╚██╗██║██╔══╝   ██╔██╗ ")
-        print(" ╚████╔╝ ██║╚█████╔╝███████╗██║ ╚████║███████╗██╔╝ ██╗")
-        print("  ╚═══╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝")
-        print(f"{RESET}")
-        print(f"{BOLD}{BLUE}                 Vijenex CIS Scanner{RESET}")
-        print(f"{YELLOW}           Enterprise Linux Security Compliance{RESET}")
-        print(f"{CYAN}═" * 60 + f"{RESET}")
+        print()
+        print(f"{CYAN}============================================================={RESET}")
+        print(f"{CYAN}                        VIJENEX                              {RESET}")
+        print(f"{BOLD}      {self.system_info['distribution']} CIS Scanner           {RESET}")
+        print(f"{YELLOW}           Powered by Vijenex Security Platform             {RESET}")
+        print(f"{CYAN}        https://github.com/vijenex/linux-cis-scanner        {RESET}")
+        print(f"{CYAN}============================================================={RESET}")
+        print()
         
         print(f"{BOLD}🔍 Starting CIS Compliance Scan...{RESET}")
         print(f"{BLUE}📋 Profile:{RESET} {YELLOW}{self.profile}{RESET}")
@@ -2896,11 +2892,19 @@ class LinuxCISScanner:
         fail_count = sum(1 for r in self.results if r["status"] == "FAIL")
         manual_count = sum(1 for r in self.results if r["status"] == "MANUAL")
         
-        print(f"{BOLD}🎯 Scan Completed Successfully!{RESET}")
-        print(f"{GREEN}✓ Passed:{RESET} {GREEN}{pass_count}{RESET}")
-        print(f"{RED}✗ Failed:{RESET} {RED}{fail_count}{RESET}")
-        print(f"{YELLOW}⚠ Manual:{RESET} {YELLOW}{manual_count}{RESET}")
-        print(f"{BOLD}📊 Total Controls:{RESET} {CYAN}{len(self.results)}{RESET}")
+        success_rate = round((pass_count / len(self.results)) * 100, 1) if self.results else 0
+        
+        print()
+        print(f"{CYAN}============================================================={RESET}")
+        print(f"{CYAN}                    SCAN COMPLETED                           {RESET}")
+        print(f"{CYAN}============================================================={RESET}")
+        print(f"Total Checks: {len(self.results)}")
+        print(f"Passed: {GREEN}{pass_count}{RESET}")
+        print(f"Failed: {RED}{fail_count}{RESET}")
+        print(f"Manual: {YELLOW}{manual_count}{RESET}")
+        print(f"Success Rate: {YELLOW}{success_rate}%{RESET}")
+        print(f"{CYAN}============================================================={RESET}")
+        print()
     
     def generate_html_report(self) -> str:
         """Generate HTML compliance report"""
@@ -3008,18 +3012,19 @@ class LinuxCISScanner:
         report_path = self.output_dir / "vijenex-cis-results.csv"
         
         with open(report_path, 'w', newline='') as csvfile:
-            fieldnames = ['ID', 'Control', 'Section', 'Status', 'CIS_Reference', 'Reference_Note']
+            fieldnames = ['Id', 'Title', 'Section', 'Status', 'CISReference', 'Remediation', 'Description']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
             writer.writeheader()
             for result in self.results:
                 writer.writerow({
-                    'ID': result['id'],
-                    'Control': result['title'],
+                    'Id': result['id'],
+                    'Title': result['title'],
                     'Section': result['section'],
                     'Status': result['status'],
-                    'CIS_Reference': result.get('cis_reference', ''),
-                    'Reference_Note': result.get('reference_note', 'Refer to official CIS benchmark documentation')
+                    'CISReference': result.get('cis_reference', 'Refer to CIS Benchmark documentation'),
+                    'Remediation': result.get('remediation', 'Refer to CIS Benchmark documentation'),
+                    'Description': result.get('description', 'Security control verification')
                 })
         
         return str(report_path)

@@ -162,6 +162,13 @@ func (s *Scanner) executeControl(ctrl controls.Control) Result {
 		result.EvidenceCommand = checkResult.EvidenceCommand
 		result.Description = checkResult.Description
 
+	case "PackageNotInstalled":
+		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, "not_installed")
+		result.Status = checkResult.Status
+		result.ActualValue = checkResult.ActualValue
+		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.Description = checkResult.Description
+
 	case "SysctlParameter":
 		checkResult := controls.CheckSysctlParameter(ctrl.ParameterName, ctrl.ExpectedValue)
 		result.Status = checkResult.Status
