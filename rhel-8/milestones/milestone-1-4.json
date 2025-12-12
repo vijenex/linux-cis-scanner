@@ -1,0 +1,77 @@
+{
+  "milestone": "1.4",
+  "section": "1.4-1.5 Secure Boot & Additional Process Hardening",
+  "title": "Configure Secure Boot Settings and Additional Process Hardening",
+  "controls": [
+    {
+      "id": "1.4.1",
+      "title": "Ensure bootloader password is set",
+      "section": "1.4 Secure Boot Settings",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.1",
+      "remediation": "Run: grub2-setpassword",
+      "description": "Verify GRUB2 bootloader password is configured"
+    },
+    {
+      "id": "1.4.2",
+      "title": "Ensure access to bootloader config is configured",
+      "section": "1.4 Secure Boot Settings",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.2",
+      "remediation": "Run: chown root:root /boot/grub2/grub.cfg && chmod og-rwx /boot/grub2/grub.cfg && chown root:root /boot/grub2/grubenv && chmod og-rwx /boot/grub2/grubenv",
+      "description": "Verify bootloader config files have proper permissions (0600 root:root)"
+    },
+    {
+      "id": "1.5.1",
+      "title": "Ensure address space layout randomization (ASLR) is enabled",
+      "section": "1.5 Additional Process Hardening",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.1",
+      "remediation": "Set kernel.randomize_va_space = 2 in /etc/sysctl.conf or /etc/sysctl.d/",
+      "description": "Verify ASLR is enabled (kernel.randomize_va_space = 2)"
+    },
+    {
+      "id": "1.5.2",
+      "title": "Ensure ptrace_scope is restricted",
+      "section": "1.5 Additional Process Hardening",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.2",
+      "remediation": "Set kernel.yama.ptrace_scope = 1 in /etc/sysctl.conf or /etc/sysctl.d/",
+      "description": "Verify ptrace is restricted (kernel.yama.ptrace_scope = 1)"
+    },
+    {
+      "id": "1.5.3",
+      "title": "Ensure core dumps are restricted",
+      "section": "1.5 Additional Process Hardening",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.3",
+      "remediation": "Add '* hard core 0' to /etc/security/limits.conf and set fs.suid_dumpable = 0",
+      "description": "Verify core dumps are restricted via limits.conf and sysctl"
+    },
+    {
+      "id": "1.5.4",
+      "title": "Ensure prelink is not installed",
+      "section": "1.5 Additional Process Hardening",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.4",
+      "remediation": "Run: dnf remove prelink",
+      "description": "Verify prelink package is not installed"
+    },
+    {
+      "id": "1.5.5",
+      "title": "Ensure Automatic Error Reporting is not enabled",
+      "section": "1.5 Additional Process Hardening",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.5.5",
+      "remediation": "Run: systemctl disable --now abrtd && dnf remove abrt",
+      "description": "Verify ABRT (Automatic Bug Reporting Tool) is disabled"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+.TH VIJENEX-CIS 1 "December 2024" "1.0.0" "Vijenex CIS Scanner"
+.SH NAME
+vijenex-cis \- Enterprise Linux Security Compliance Scanner
+.SH SYNOPSIS
+.B vijenex-cis
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+Vijenex CIS Scanner is an enterprise-grade security compliance auditing tool for Linux systems based on CIS (Center for Internet Security) benchmarks. Similar to OpenSCAP, it provides automated security compliance scanning with support for multiple Linux distributions.
+.PP
+The scanner performs automated checks against CIS Benchmarks and generates detailed compliance reports in HTML and CSV formats.
+.SH OPTIONS
+.TP
+\fB\-\-profile\fR LEVEL
+Set CIS profile level (Level1, Level2). Default: Level1
+.RS
+.IP "Level1"
+Basic security requirements with minimal impact on functionality
+.IP "Level2"
+Enhanced security requirements, may impact functionality
+.RE
+.TP
+\fB\-\-output-dir\fR DIR
+Output directory for reports. Default: /var/log/vijenex-cis/
+.TP
+\fB\-\-format\fR FORMAT
+Report format (html, csv, both). Default: both
+.TP
+\fB\-\-milestones\fR FILES
+Specific milestone files to scan (space-separated)
+.TP
+\fB\-\-help\fR
+Show help message and exit
+.SH EXAMPLES
+.TP
+.B sudo vijenex-cis
+Run complete CIS compliance scan with default settings
+.TP
+.B sudo vijenex-cis --profile Level2
+Run Level 2 CIS compliance scan
+.TP
+.B sudo vijenex-cis --output-dir /tmp/security-reports
+Run scan with custom output directory
+.TP
+.B sudo vijenex-cis --format csv --profile Level1
+Generate CSV report only for Level 1 profile
+.TP
+.B sudo vijenex-cis --milestones milestone-1-1.json milestone-1-2.json
+Scan specific milestone files only
+.SH FILES
+.TP
+.I /usr/share/vijenex-cis/
+Scanner installation directory with OS-specific scanners
+.TP
+.I /etc/vijenex-cis/
+Configuration directory
+.TP
+.I /var/log/vijenex-cis/
+Default output directory for scan reports
+.SH SUPPORTED SYSTEMS
+.TP
+.B Red Hat Enterprise Linux
+RHEL 8, RHEL 9
+.TP
+.B CentOS
+CentOS 7
+.TP
+.B Ubuntu
+Ubuntu 20.04 LTS, 22.04 LTS, 24.04 LTS
+.TP
+.B Debian
+Debian 11
+.SH EXIT STATUS
+.TP
+.B 0
+Scan completed successfully
+.TP
+.B 1
+Error occurred during scan
+.SH NOTES
+Root privileges are required for complete system scanning. Some checks may fail without root access.
+.SH AUTHOR
+Vijenex Security Platform
+.br
+https://github.com/vijenex/linux-cis-scanner
+.SH SEE ALSO
+.BR oscap (8),
+.BR openscap (8)
+.PP
+CIS Benchmarks: https://www.cisecurity.org/cis-benchmarks/

@@ -1,0 +1,19 @@
+Package: vijenex-cis-scanner
+Version: 1.0.0
+Section: admin
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.6)
+Maintainer: Vijenex Team <support@vijenex.com>
+Homepage: https://github.com/vijenex/linux-cis-scanner
+Description: Enterprise Linux Security Compliance Scanner
+ Vijenex CIS Scanner is an enterprise-grade security compliance auditing tool
+ for Linux systems based on CIS (Center for Internet Security) benchmarks.
+ Similar to OpenSCAP, it provides automated security compliance scanning.
+ .
+ Features:
+  - Automated CIS Benchmark compliance scanning
+  - Support for Ubuntu 20.04, 22.04, 24.04
+  - HTML and CSV report generation
+  - Level 1 and Level 2 profile support
+  - Command-line interface similar to OpenSCAP

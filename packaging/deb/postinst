@@ -1,0 +1,20 @@
+#!/bin/bash
+# Post-installation script for Debian/Ubuntu
+
+set -e
+
+# Update man database
+if command -v mandb >/dev/null 2>&1; then
+    mandb -q 2>/dev/null || true
+fi
+
+echo "=========================================================="
+echo "  Vijenex CIS Scanner installed successfully!"
+echo "=========================================================="
+echo "Usage:"
+echo "  sudo vijenex-cis                    # Complete scan"
+echo "  sudo vijenex-cis --profile Level2   # Level 2 scan"
+echo "  man vijenex-cis                     # Manual page"
+echo "=========================================================="
+
+exit 0

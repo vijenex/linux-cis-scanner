@@ -1,0 +1,87 @@
+{
+  "milestone": "1.5",
+  "section": "1.3 Mandatory Access Control - SELinux",
+  "title": "Configure SELinux",
+  "controls": [
+    {
+      "id": "1.3.1.1",
+      "title": "Ensure SELinux is installed",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.1",
+      "remediation": "Run: dnf install libselinux",
+      "description": "Verify SELinux package is installed"
+    },
+    {
+      "id": "1.3.1.2",
+      "title": "Ensure SELinux is not disabled in bootloader configuration",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.2",
+      "remediation": "Run: grubby --update-kernel ALL --remove-args 'selinux=0 enforcing=0'",
+      "description": "Verify SELinux is not disabled via boot parameters"
+    },
+    {
+      "id": "1.3.1.3",
+      "title": "Ensure SELinux policy is configured",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.3",
+      "remediation": "Edit /etc/selinux/config and set SELINUXTYPE=targeted",
+      "description": "Verify SELinux policy is set to targeted or mls"
+    },
+    {
+      "id": "1.3.1.4",
+      "title": "Ensure the SELinux mode is not disabled",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.4",
+      "remediation": "Edit /etc/selinux/config and set SELINUX=enforcing or SELINUX=permissive",
+      "description": "Verify SELinux is in enforcing or permissive mode"
+    },
+    {
+      "id": "1.3.1.5",
+      "title": "Ensure the SELinux mode is enforcing",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level2",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.5",
+      "remediation": "Edit /etc/selinux/config and set SELINUX=enforcing",
+      "description": "Verify SELinux is in enforcing mode"
+    },
+    {
+      "id": "1.3.1.6",
+      "title": "Ensure no unconfined services exist",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.6",
+      "remediation": "Investigate unconfined processes and confine them appropriately",
+      "description": "Verify no unconfined services are running"
+    },
+    {
+      "id": "1.3.1.7",
+      "title": "Ensure SETroubleshoot is not installed",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.7",
+      "remediation": "Run: dnf remove setroubleshoot",
+      "description": "Verify setroubleshoot package is not installed"
+    },
+    {
+      "id": "1.3.1.8",
+      "title": "Ensure the MCS Translation Service (mcstrans) is not installed",
+      "section": "1.3 Mandatory Access Control",
+      "profile": "Level1",
+      "type": "Manual",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.8",
+      "remediation": "Run: dnf remove mcstrans",
+      "description": "Verify mcstrans package is not installed"
+    }
+  ]
+}
