@@ -53,6 +53,15 @@ func runScan(cmd *cobra.Command, args []string) {
 	blue := color.New(color.FgBlue)
 	yellow := color.New(color.FgYellow)
 
+	// ASCII Art Logo
+	fmt.Println()
+	cyan.Println("██████╗ ██╗  ██╗███████╗██╗          █████╗ ")
+	cyan.Println("██╔══██╗██║  ██║██╔════╝██║         ██╔══██╗")
+	cyan.Println("██████╔╝███████║█████╗  ██║         ╚█████╔╝")
+	cyan.Println("██╔══██╗██╔══██║██╔══╝  ██║          ╚═══██╗")
+	cyan.Println("██║  ██║██║  ██║███████╗███████╗    █████╔╝ ")
+	cyan.Println("╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚════╝  ")
+	fmt.Println()
 	cyan.Println("=============================================================")
 	cyan.Println("                        VIJENEX                              ")
 	fmt.Println("      Red Hat Enterprise Linux 8 CIS Scanner           ")
