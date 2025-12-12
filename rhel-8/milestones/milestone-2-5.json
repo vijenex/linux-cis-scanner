@@ -1,0 +1,57 @@
+{
+  "milestone": "2.5",
+  "title": "Additional Service Configuration",
+  "controls": [
+    {
+      "control_id": "2.5.1",
+      "title": "Ensure NFS is not installed",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "The Network File System (NFS) is one of the first and most widely distributed file systems in the UNIX environment.",
+      "rationale": "If the system does not export NFS shares, it is recommended that the NFS be disabled to reduce the remote attack surface.",
+      "audit": "Run the following command to verify nfs-utils is not installed:\n# rpm -q nfs-utils\npackage nfs-utils is not installed",
+      "remediation": "Run the following command to remove nfs-utils:\n# dnf remove nfs-utils",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. More information on NFS is available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
+      "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
+      "check_type": "PackageNotInstalled",
+      "check_value": "nfs-utils"
+    },
+    {
+      "control_id": "2.5.2",
+      "title": "Ensure rpcbind is not installed",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "The rpcbind utility maps RPC services to the ports on which they listen.",
+      "rationale": "If the system does not require rpc based services, it is recommended that rpcbind be removed to reduce the remote attack surface.",
+      "audit": "Run the following command to verify rpcbind is not installed:\n# rpm -q rpcbind\npackage rpcbind is not installed",
+      "remediation": "Run the following command to remove rpcbind:\n# dnf remove rpcbind",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. More information on rpcbind is available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
+      "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
+      "check_type": "PackageNotInstalled",
+      "check_value": "rpcbind"
+    },
+    {
+      "control_id": "2.5.3",
+      "title": "Ensure rsync is not installed",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "The rsync service can be used to synchronize files between systems over network links.",
+      "rationale": "The rsync service presents a security risk as it uses unencrypted protocols for communication.",
+      "audit": "Run the following command to verify rsync is not installed:\n# rpm -q rsync\npackage rsync is not installed",
+      "remediation": "Run the following command to remove rsync:\n# dnf remove rsync",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. More information on rsync is available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
+      "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
+      "check_type": "PackageNotInstalled",
+      "check_value": "rsync"
+    }
+  ]
+}

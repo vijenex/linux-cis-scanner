@@ -1,0 +1,23 @@
+{
+  "milestone": "1.11",
+  "title": "Ensure Updates, Patches, and Additional Security Software",
+  "controls": [
+    {
+      "control_id": "1.11.1",
+      "title": "Ensure system-wide crypto policy is not legacy",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "Ensure updates patches and additional security software are installed.",
+      "rationale": "Periodically patches are released for included software either due to security flaws or to include additional functionality.",
+      "audit": "Run the following command to verify there are no updates or patches to install:\n# dnf check-update",
+      "remediation": "Run the following command to update the system:\n# dnf update",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
+      "cis_controls": "v8: 7.1 Establish and Maintain a Vulnerability Management Process\nv7: 3.4 Deploy Automated Operating System Patch Management Tools",
+      "check_type": "Manual",
+      "check_value": ""
+    }
+  ]
+}

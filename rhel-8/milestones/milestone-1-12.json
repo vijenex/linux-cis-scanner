@@ -1,0 +1,40 @@
+{
+  "milestone": "1.12",
+  "title": "AIDE Configuration",
+  "controls": [
+    {
+      "control_id": "1.12.1",
+      "title": "Ensure AIDE is installed",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "AIDE takes a snapshot of filesystem state including modification times, permissions, and file hashes which can then be used to compare against the current state of the filesystem to detect modifications to the system.",
+      "rationale": "By monitoring the filesystem state compromised files can be detected to prevent or limit the exposure of accidental or malicious misconfigurations or modified binaries.",
+      "audit": "Run the following command to verify AIDE is installed:\n# rpm -q aide\naide-<version>",
+      "remediation": "Run the following command to install AIDE:\n# dnf install aide\n# aide --init\n# mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
+      "cis_controls": "v8: 3.14 Log Sensitive Data Access\nv7: 14.9 Enforce Detail Logging for Access or Changes to Sensitive Data",
+      "check_type": "PackageInstalled",
+      "check_value": "aide"
+    },
+    {
+      "control_id": "1.12.2",
+      "title": "Ensure filesystem integrity is regularly checked",
+      "level": 1,
+      "scored": true,
+      "profile_applicability": "Level 1 - Server, Level 1 - Workstation",
+      "description": "Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.",
+      "rationale": "Periodic file checking allows the system administrator to determine on a regular basis if critical files have been changed in an unauthorized fashion.",
+      "audit": "Run the following commands to verify a cron job or systemd timer is scheduled:\n# crontab -u root -l | grep aide\n# grep -r aide /etc/cron.* /etc/crontab\n# systemctl is-enabled aidecheck.timer",
+      "remediation": "Run the following command:\n# crontab -u root -e\nAdd the following line to the crontab:\n0 5 * * * /usr/sbin/aide --check",
+      "impact": "None",
+      "default_value": "N/A",
+      "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
+      "cis_controls": "v8: 3.14 Log Sensitive Data Access\nv7: 14.9 Enforce Detail Logging for Access or Changes to Sensitive Data",
+      "check_type": "Manual",
+      "check_value": ""
+    }
+  ]
+}
