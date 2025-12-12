@@ -1,96 +1,47 @@
 #!/bin/bash
-#
-# Vijenex CIS Scanner - RHEL 8
-# Auto-detects Python or Go and runs the scanner
-#
-
-set -e
+# Vijenex CIS Scanner - Auto-detects Python or Go and runs
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-echo -e "${BLUE}╔══════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║           VIJENEX CIS SCANNER - RHEL 8                       ║${NC}"
-echo -e "${BLUE}╚══════════════════════════════════════════════════════════════╝${NC}"
-echo ""
-
-# Check if running as root
+# Check if root
 if [ "$EUID" -ne 0 ]; then 
-    echo -e "${RED}❌ Error: This script must be run as root${NC}"
-    echo -e "${YELLOW}Please run: sudo ./scan.sh${NC}"
+    echo "ERROR: Must run as root"
+    echo "Usage: sudo ./scan.sh"
     exit 1
 fi
 
-# Check for Python 3 (try multiple commands)
-PYTHON_CMD=""
-for cmd in python3 python python3.6 python3.8 python3.9 python3.11; do
-    if command -v $cmd &> /dev/null; then
-        VERSION=$($cmd --version 2>&1 | grep -oP 'Python \K[0-9.]+')
-        MAJOR=$(echo $VERSION | cut -d. -f1)
-        MINOR=$(echo $VERSION | cut -d. -f2)
-        
-        if [ "$MAJOR" -eq 3 ] && [ "$MINOR" -ge 6 ]; then
-            PYTHON_CMD=$cmd
-            PYTHON_VERSION=$VERSION
-            break
-        fi
-    fi
-done
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "║           VIJENEX CIS SCANNER - RHEL 8                       ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
+echo ""
 
-if [ -n "$PYTHON_CMD" ]; then
-    echo -e "${GREEN}✓ Python $PYTHON_VERSION detected ($PYTHON_CMD)${NC}"
-    echo -e "${BLUE}🚀 Running Python scanner...${NC}"
+# Try Python first
+if command -v python3 &> /dev/null && [ -f "$SCRIPT_DIR/scripts/vijenex-cis.py" ]; then
+    echo "✓ Using Python Scanner"
     echo ""
-    
-    $PYTHON_CMD scripts/vijenex-cis.py --profile Level1 "$@"
-    
-    echo ""
-    echo -e "${GREEN}✅ Scan completed!${NC}"
-    echo -e "${YELLOW}📄 Reports generated in: ./reports/${NC}"
-    echo -e "${YELLOW}   - HTML: reports/vijenex-cis-report.html${NC}"
-    echo -e "${YELLOW}   - CSV:  reports/vijenex-cis-results.csv${NC}"
-    exit 0
+    cd "$SCRIPT_DIR"
+    exec python3 scripts/vijenex-cis.py "$@"
+fi
+
+# Fallback to Go binary - detect architecture
+ARCH=$(uname -m)
+if [ "$ARCH" = "x86_64" ]; then
+    GO_BINARY="$SCRIPT_DIR/go-scanner/bin/vijenex-cis-amd64"
+elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    GO_BINARY="$SCRIPT_DIR/go-scanner/bin/vijenex-cis-arm64"
 else
-    echo -e "${YELLOW}⚠ Python 3.6+ not found${NC}"
-    echo -e "${YELLOW}   Tried: python3, python, python3.6, python3.8, python3.9, python3.11${NC}"
+    GO_BINARY="$SCRIPT_DIR/go-scanner/bin/vijenex-cis"
 fi
 
-# Check for Go binary (skip wrapper scripts, use actual binaries)
-GO_BINARY=""
-for binary in ./vijenex-cis-amd64 ./vijenex-cis-arm64 ./go-scanner/bin/vijenex-cis ./vijenex-cis-binary ./bin/vijenex-cis-scanner; do
-    if [ -f "$binary" ] && [ -x "$binary" ]; then
-        # Skip if it's a bash script
-        if ! head -n1 "$binary" 2>/dev/null | grep -q "#!/bin/bash"; then
-            GO_BINARY="$binary"
-            break
-        fi
-    fi
-done
-
-if [ -n "$GO_BINARY" ]; then
-    echo -e "${GREEN}✓ Go binary detected${NC}"
-    echo -e "${BLUE}🚀 Running Go scanner...${NC}"
+if [ -f "$GO_BINARY" ]; then
+    echo "✓ Using Go Binary ($ARCH)"
     echo ""
-    
-    # Run Go binary directly
-    exec $GO_BINARY "$@"
+    cd "$SCRIPT_DIR"
+    exec "$GO_BINARY" "$@"
 fi
 
-# Neither found
-echo -e "${RED}❌ Error: No scanner found${NC}"
+# No scanner found
+echo "❌ ERROR: No scanner available"
 echo ""
-echo -e "${YELLOW}Requirements:${NC}"
-echo -e "  • Python 3.6+ OR"
-echo -e "  • Go binary in bin/vijenex-cis-scanner"
-echo ""
-echo -e "${YELLOW}To install Python 3:${NC}"
-echo -e "  sudo dnf install python3"
-echo ""
+echo "Install Python: sudo yum install python3"
 exit 1
