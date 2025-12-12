@@ -114,16 +114,21 @@ if [ $AVAILABLE_COUNT -eq 0 ]; then
     exit 1
 fi
 
-# If only one available, auto-select
-if [ $AVAILABLE_COUNT -eq 1 ]; then
-    echo -e "${YELLOW}Auto-selecting the only available scanner...${RESET}"
-    echo
-    CHOICE=$AUTO_CHOICE
+# Auto-select: Python first, then Go, then Shell
+if [ "$PYTHON_AVAILABLE" = true ]; then
+    echo -e "${GREEN}✓ Using Python Scanner${RESET}"
+    CHOICE="1"
+elif [ "$GO_AVAILABLE" = true ]; then
+    echo -e "${GREEN}✓ Using Go Binary${RESET}"
+    CHOICE="2"
+elif [ "$SHELL_AVAILABLE" = true ]; then
+    echo -e "${GREEN}✓ Using Shell Script${RESET}"
+    CHOICE="3"
 else
-    # Ask user to choose
-    echo -n -e "${BOLD}Select scanner [1-3]: ${RESET}"
-    read -r CHOICE
+    echo -e "${RED}❌ No scanner available!${RESET}"
+    exit 1
 fi
+echo
 
 echo
 echo -e "${CYAN}=============================================================${RESET}"
