@@ -1,0 +1,115 @@
+{
+  "milestone": "3-3",
+  "section": "3.3 Network Parameters (Host and Router)",
+  "description": "Configure network parameters for both hosts and routers",
+  "controls": [
+    {
+      "id": "3.3.1",
+      "title": "Ensure source routed packets are not accepted",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.conf.all.accept_source_route",
+      "expected_value": "0",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1",
+      "description": "Source routed packets allow the sender to specify the route",
+      "remediation": "Set net.ipv4.conf.all.accept_source_route = 0 and net.ipv4.conf.default.accept_source_route = 0"
+    },
+    {
+      "id": "3.3.2",
+      "title": "Ensure ICMP redirects are not accepted",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.conf.all.accept_redirects",
+      "expected_value": "0",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2",
+      "description": "ICMP redirects are used by routers to tell the host that a better route is available",
+      "remediation": "Set net.ipv4.conf.all.accept_redirects = 0 and net.ipv4.conf.default.accept_redirects = 0"
+    },
+    {
+      "id": "3.3.3",
+      "title": "Ensure secure ICMP redirects are not accepted",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.conf.all.secure_redirects",
+      "expected_value": "0",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.3",
+      "description": "Secure ICMP redirects are from gateways listed in the default gateway list",
+      "remediation": "Set net.ipv4.conf.all.secure_redirects = 0 and net.ipv4.conf.default.secure_redirects = 0"
+    },
+    {
+      "id": "3.3.4",
+      "title": "Ensure suspicious packets are logged",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.conf.all.log_martians",
+      "expected_value": "1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.4",
+      "description": "Log packets with impossible addresses to kernel log",
+      "remediation": "Set net.ipv4.conf.all.log_martians = 1 and net.ipv4.conf.default.log_martians = 1"
+    },
+    {
+      "id": "3.3.5",
+      "title": "Ensure broadcast ICMP requests are ignored",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.icmp_echo_ignore_broadcasts",
+      "expected_value": "1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.5",
+      "description": "Accepting ICMP echo and timestamp requests with broadcast or multicast destinations can be used for DDoS",
+      "remediation": "Set net.ipv4.icmp_echo_ignore_broadcasts = 1"
+    },
+    {
+      "id": "3.3.6",
+      "title": "Ensure bogus ICMP responses are ignored",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.icmp_ignore_bogus_error_responses",
+      "expected_value": "1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.6",
+      "description": "Some routers violate RFC1122 by sending bogus responses to broadcast frames",
+      "remediation": "Set net.ipv4.icmp_ignore_bogus_error_responses = 1"
+    },
+    {
+      "id": "3.3.7",
+      "title": "Ensure Reverse Path Filtering is enabled",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.conf.all.rp_filter",
+      "expected_value": "1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.7",
+      "description": "Reverse Path Filtering helps prevent IP spoofing",
+      "remediation": "Set net.ipv4.conf.all.rp_filter = 1 and net.ipv4.conf.default.rp_filter = 1"
+    },
+    {
+      "id": "3.3.8",
+      "title": "Ensure TCP SYN Cookies is enabled",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.tcp_syncookies",
+      "expected_value": "1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.8",
+      "description": "TCP SYN cookies provide protection against SYN flood attacks",
+      "remediation": "Set net.ipv4.tcp_syncookies = 1"
+    },
+    {
+      "id": "3.3.9",
+      "title": "Ensure IPv6 router advertisements are not accepted",
+      "section": "3.3 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv6.conf.all.accept_ra",
+      "expected_value": "0",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.9",
+      "description": "Router advertisements can be used to configure IPv6 settings",
+      "remediation": "Set net.ipv6.conf.all.accept_ra = 0 and net.ipv6.conf.default.accept_ra = 0"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "milestone": "5-4",
+  "section": "5.4 User Accounts and Environment",
+  "description": "Configure user account settings",
+  "controls": [
+    {
+      "id": "5.4.1",
+      "title": "Ensure password expiration is 365 days or less",
+      "section": "5.4 User Accounts",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.1",
+      "description": "Passwords should expire to force periodic changes",
+      "remediation": "Set PASS_MAX_DAYS 365 in /etc/login.defs"
+    },
+    {
+      "id": "5.4.2",
+      "title": "Ensure minimum days between password changes is configured",
+      "section": "5.4 User Accounts",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2",
+      "description": "Minimum days between password changes prevents rapid password cycling",
+      "remediation": "Set PASS_MIN_DAYS 1 in /etc/login.defs"
+    },
+    {
+      "id": "5.4.3",
+      "title": "Ensure password expiration warning days is 7 or more",
+      "section": "5.4 User Accounts",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.3",
+      "description": "Users should be warned before password expires",
+      "remediation": "Set PASS_WARN_AGE 7 in /etc/login.defs"
+    },
+    {
+      "id": "5.4.4",
+      "title": "Ensure inactive password lock is 30 days or less",
+      "section": "5.4 User Accounts",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.4",
+      "description": "Inactive accounts should be locked",
+      "remediation": "Run: useradd -D -f 30"
+    },
+    {
+      "id": "5.4.5",
+      "title": "Ensure default user shell timeout is configured",
+      "section": "5.4 User Accounts",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.5",
+      "description": "Shell timeout prevents unattended sessions",
+      "remediation": "Set TMOUT=900 in /etc/bashrc and /etc/profile"
+    },
+    {
+      "id": "5.4.6",
+      "title": "Ensure default user umask is configured",
+      "section": "5.4 User Accounts",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.6",
+      "description": "Default umask should be 027 or more restrictive",
+      "remediation": "Set umask 027 in /etc/bashrc and /etc/profile"
+    }
+  ]
+}

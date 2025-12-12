@@ -1,0 +1,85 @@
+{
+  "milestone": "3-4",
+  "section": "3.4 Firewall Configuration",
+  "description": "Configure firewalld",
+  "controls": [
+    {
+      "id": "3.4.1.1",
+      "title": "Ensure firewalld is installed",
+      "section": "3.4 Firewall Configuration",
+      "type": "PackageInstalled",
+      "profile": "Level1",
+      "package_name": "firewalld",
+      "expected_status": "installed",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.1",
+      "description": "firewalld is a firewall management tool for Linux",
+      "remediation": "Run: dnf install firewalld"
+    },
+    {
+      "id": "3.4.1.2",
+      "title": "Ensure iptables-services package is not installed",
+      "section": "3.4 Firewall Configuration",
+      "type": "PackageInstalled",
+      "profile": "Level1",
+      "package_name": "iptables-services",
+      "expected_status": "not_installed",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.2",
+      "description": "iptables-services conflicts with firewalld",
+      "remediation": "Run: dnf remove iptables-services"
+    },
+    {
+      "id": "3.4.1.3",
+      "title": "Ensure nftables package is not installed",
+      "section": "3.4 Firewall Configuration",
+      "type": "PackageInstalled",
+      "profile": "Level1",
+      "package_name": "nftables",
+      "expected_status": "not_installed",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.3",
+      "description": "nftables conflicts with firewalld",
+      "remediation": "Run: dnf remove nftables"
+    },
+    {
+      "id": "3.4.1.4",
+      "title": "Ensure firewalld service is enabled and active",
+      "section": "3.4 Firewall Configuration",
+      "type": "ServiceStatus",
+      "profile": "Level1",
+      "service_name": "firewalld",
+      "expected_status": "enabled",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.4",
+      "description": "firewalld should be enabled and running",
+      "remediation": "Run: systemctl --now enable firewalld"
+    },
+    {
+      "id": "3.4.1.5",
+      "title": "Ensure firewalld default zone is set",
+      "section": "3.4 Firewall Configuration",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.5",
+      "description": "A default zone should be configured for firewalld",
+      "remediation": "Run: firewall-cmd --set-default-zone=<zone>"
+    },
+    {
+      "id": "3.4.1.6",
+      "title": "Ensure network interfaces are assigned to appropriate zone",
+      "section": "3.4 Firewall Configuration",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.6",
+      "description": "Network interfaces should be assigned to firewalld zones",
+      "remediation": "Run: firewall-cmd --zone=<zone> --change-interface=<interface>"
+    },
+    {
+      "id": "3.4.1.7",
+      "title": "Ensure firewalld drops unnecessary services and ports",
+      "section": "3.4 Firewall Configuration",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.7",
+      "description": "Only necessary services and ports should be allowed",
+      "remediation": "Review firewall rules: firewall-cmd --list-all"
+    }
+  ]
+}

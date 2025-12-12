@@ -1,0 +1,47 @@
+{
+  "milestone": "5-3",
+  "section": "5.3 Configure PAM",
+  "description": "Configure Pluggable Authentication Modules",
+  "controls": [
+    {
+      "id": "5.3.1",
+      "title": "Ensure password creation requirements are configured",
+      "section": "5.3 PAM",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.1",
+      "description": "Password complexity requirements should be enforced",
+      "remediation": "Edit /etc/security/pwquality.conf and set minlen, dcredit, ucredit, ocredit, lcredit"
+    },
+    {
+      "id": "5.3.2",
+      "title": "Ensure lockout for failed password attempts is configured",
+      "section": "5.3 PAM",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.2",
+      "description": "Account lockout after failed login attempts prevents brute force attacks",
+      "remediation": "Configure pam_faillock in /etc/pam.d/system-auth and /etc/pam.d/password-auth"
+    },
+    {
+      "id": "5.3.3",
+      "title": "Ensure password reuse is limited",
+      "section": "5.3 PAM",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3",
+      "description": "Users should not be able to reuse recent passwords",
+      "remediation": "Add remember=5 to pam_pwhistory.so in /etc/pam.d/system-auth"
+    },
+    {
+      "id": "5.3.4",
+      "title": "Ensure password hashing algorithm is SHA-512",
+      "section": "5.3 PAM",
+      "type": "Manual",
+      "profile": "Level1",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.4",
+      "description": "SHA-512 provides strong password hashing",
+      "remediation": "Verify pam_unix.so uses sha512 in /etc/pam.d/password-auth"
+    }
+  ]
+}
