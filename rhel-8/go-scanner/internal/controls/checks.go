@@ -39,17 +39,22 @@ func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
 		}
 	}
 	
-	// Check if module is loaded
+	// Check if module is loaded (handle both hyphen and underscore)
 	loaded := false
+	moduleNameUnderscore := strings.ReplaceAll(moduleName, "-", "_")
 	cmd := exec.Command("lsmod")
 	output, err := cmd.Output()
 	if err == nil {
-		loaded = strings.Contains(string(output), moduleName)
+		loaded = strings.Contains(string(output), moduleName) || strings.Contains(string(output), moduleNameUnderscore)
 	}
 	
-	// Check if module exists
+	// Check if module exists (try both hyphen and underscore)
 	cmd = exec.Command("modinfo", moduleName)
 	moduleExists := cmd.Run() == nil
+	if !moduleExists {
+		cmd = exec.Command("modinfo", moduleNameUnderscore)
+		moduleExists = cmd.Run() == nil
+	}
 	
 	if expectedStatus == "not_available" {
 		if blacklisted && !loaded {
