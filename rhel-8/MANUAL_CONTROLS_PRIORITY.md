@@ -80,68 +80,6 @@
 
 ---
 
-## 📊 Quick Fix Script (Critical + High Priority)
-
-```bash
-#!/bin/bash
-# RHEL 8 CIS Quick Fixes - Critical & High Priority
-# Run as root: sudo bash quick-fix.sh
-
-echo "🔴 Applying CRITICAL fixes..."
-
-# SELinux
-grubby --update-kernel ALL --remove-args 'selinux=0 enforcing=0'
-sed -i 's/^SELINUX=.*/SELINUX=enforcing/' /etc/selinux/config
-
-# SSH Hardening
-cat >> /etc/ssh/sshd_config.d/cis-hardening.conf <<EOF
-PermitRootLogin no
-PermitEmptyPasswords no
-MaxAuthTries 4
-ClientAliveInterval 300
-ClientAliveCountMax 0
-LoginGraceTime 60
-Banner /etc/issue.net
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
-KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
-EOF
-systemctl restart sshd
-
-# Password Policies
-sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS 365/' /etc/login.defs
-sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS 1/' /etc/login.defs
-sed -i 's/^PASS_WARN_AGE.*/PASS_WARN_AGE 7/' /etc/login.defs
-useradd -D -f 30
-
-# PAM Password Complexity
-cat > /etc/security/pwquality.conf <<EOF
-minlen = 14
-dcredit = -1
-ucredit = -1
-ocredit = -1
-lcredit = -1
-EOF
-
-# Bootloader Password
-grub2-setpassword
-
-# AIDE Installation
-dnf install -y aide
-aide --init
-mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
-echo "0 5 * * * /usr/sbin/aide --check" | crontab -
-
-# Audit Boot Parameter
-grubby --update-kernel ALL --args 'audit=1 audit_backlog_limit=8192'
-
-echo "✅ Critical & High priority fixes applied!"
-echo "⚠️  REBOOT REQUIRED for kernel parameters to take effect"
-echo "📋 Review /var/log/cis-fixes.log for details"
-```
-
----
-
 ## 📧 Executive Summary Template
 
 **To:** System Administrators  
@@ -158,7 +96,7 @@ CIS scan identified **191 manual controls** requiring verification. **10 CRITICA
 - Weak SSH encryption (man-in-the-middle attacks)
 
 ### Action Required
-1. **Immediate (1 hour):** Run quick-fix script for critical items
+1. **Immediate (1 hour):** Review and fix critical items manually
 2. **This Week (2 hours):** Configure auditd rules and AIDE
 3. **This Month (2 hours):** Complete medium priority items
 
