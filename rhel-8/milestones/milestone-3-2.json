@@ -1,0 +1,31 @@
+{
+  "milestone": "3-2",
+  "section": "3.2 Network Parameters",
+  "description": "Configure kernel network parameters",
+  "controls": [
+    {
+      "id": "3.2.1",
+      "title": "Ensure IP forwarding is disabled",
+      "section": "3.2 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.ip_forward",
+      "expected_value": "0",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.1",
+      "description": "Setting the flag to 0 ensures that a system with multiple interfaces will not forward packets",
+      "remediation": "Set net.ipv4.ip_forward = 0 in /etc/sysctl.conf"
+    },
+    {
+      "id": "3.2.2",
+      "title": "Ensure packet redirect sending is disabled",
+      "section": "3.2 Network Parameters",
+      "type": "SysctlParameter",
+      "profile": "Level1",
+      "parameter_name": "net.ipv4.conf.all.send_redirects",
+      "expected_value": "0",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.2",
+      "description": "ICMP Redirects are used to send routing information to other hosts",
+      "remediation": "Set net.ipv4.conf.all.send_redirects = 0 and net.ipv4.conf.default.send_redirects = 0"
+    }
+  ]
+}

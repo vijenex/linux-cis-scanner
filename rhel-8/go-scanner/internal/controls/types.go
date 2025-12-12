@@ -17,6 +17,8 @@ type Control struct {
 	ServiceName    string `json:"service_name,omitempty"`
 	PackageName    string `json:"package_name,omitempty"`
 	ExpectedStatus string `json:"expected_status,omitempty"`
+	ParameterName  string `json:"parameter_name,omitempty"`
+	ExpectedValue  string `json:"expected_value,omitempty"`
 }
 
 type CheckResult struct {
