@@ -92,6 +92,20 @@ func (s *Scanner) ExecuteControls() []Result {
 		fmt.Printf("📄 Processing %s...\n", milestone.ID)
 
 		for _, ctrl := range milestone.Controls {
+			// Skip non-automated controls
+			if !ctrl.Automated {
+				results = append(results, Result{
+					ID:          ctrl.ID,
+					Title:       ctrl.Title,
+					Section:     ctrl.Section,
+					Status:      "MANUAL",
+					CISReference: ctrl.CISReference,
+					Remediation: ctrl.Remediation,
+					Description: "Manual verification required per CIS",
+				})
+				continue
+			}
+			
 			// Skip Level 2 controls if running Level 1 profile
 			if s.Profile == "Level1" && ctrl.Profile == "Level2" {
 				results = append(results, Result{
