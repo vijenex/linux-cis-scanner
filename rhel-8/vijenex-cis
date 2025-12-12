@@ -90,17 +90,17 @@ AUTO_CHOICE=""
 
 if [ "$PYTHON_AVAILABLE" = true ]; then
     ((AVAILABLE_COUNT++))
-    AUTO_CHOICE="1"
+    [ -z "$AUTO_CHOICE" ] && AUTO_CHOICE="1"
 fi
 
 if [ "$GO_AVAILABLE" = true ]; then
     ((AVAILABLE_COUNT++))
-    AUTO_CHOICE="2"
+    [ -z "$AUTO_CHOICE" ] && AUTO_CHOICE="2"
 fi
 
 if [ "$SHELL_AVAILABLE" = true ]; then
     ((AVAILABLE_COUNT++))
-    AUTO_CHOICE="3"
+    [ -z "$AUTO_CHOICE" ] && AUTO_CHOICE="3"
 fi
 
 # If no scanner available
