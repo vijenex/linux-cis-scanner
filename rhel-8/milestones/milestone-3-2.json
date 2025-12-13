@@ -18,8 +18,8 @@
       "type": "KernelModule",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.1 | Level1",
-      "module_name": "dccp",
-      "expected_status": "blacklisted"
+      "module_name": "atm",
+      "expected_status": "not_available"
     },
     {
       "id": "3.2.2",
@@ -36,8 +36,8 @@
       "type": "KernelModule",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.2 | Level1",
-      "module_name": "sctp",
-      "expected_status": "blacklisted"
+      "module_name": "can",
+      "expected_status": "not_available"
     },
     {
       "id": "3.2.3",
@@ -54,8 +54,8 @@
       "type": "KernelModule",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.3 | Level1",
-      "module_name": "rds",
-      "expected_status": "blacklisted"
+      "module_name": "dccp",
+      "expected_status": "not_available"
     },
     {
       "id": "3.2.4",
@@ -72,8 +72,8 @@
       "type": "KernelModule",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.4 | Level1",
-      "module_name": "tipc",
-      "expected_status": "blacklisted"
+      "module_name": "rds",
+      "expected_status": "not_available"
     },
     {
       "id": "3.2.5",
@@ -90,8 +90,8 @@
       "type": "KernelModule",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.5 | Level1",
-      "module_name": "bluetooth",
-      "expected_status": "blacklisted"
+      "module_name": "sctp",
+      "expected_status": "not_available"
     },
     {
       "id": "3.2.6",
@@ -108,8 +108,8 @@
       "type": "KernelModule",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.2.6 | Level1",
-      "module_name": "usb-storage",
-      "expected_status": "blacklisted"
+      "module_name": "tipc",
+      "expected_status": "not_available"
     }
   ]
 }
