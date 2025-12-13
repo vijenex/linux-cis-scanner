@@ -13,7 +13,8 @@
       "expected_status": "installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.1",
       "description": "firewalld is a firewall management tool for Linux",
-      "remediation": "Run: dnf install firewalld"
+      "remediation": "Run: dnf install firewalld",
+      "automated": true
     },
     {
       "id": "3.4.1.2",
@@ -25,7 +26,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.2",
       "description": "iptables-services conflicts with firewalld",
-      "remediation": "Run: dnf remove iptables-services"
+      "remediation": "Run: dnf remove iptables-services",
+      "automated": true
     },
     {
       "id": "3.4.1.3",
@@ -37,7 +39,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.3",
       "description": "nftables conflicts with firewalld",
-      "remediation": "Run: dnf remove nftables"
+      "remediation": "Run: dnf remove nftables",
+      "automated": true
     },
     {
       "id": "3.4.1.4",
@@ -49,7 +52,8 @@
       "expected_status": "enabled",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 3.4.1.4",
       "description": "firewalld should be enabled and running",
-      "remediation": "Run: systemctl --now enable firewalld"
+      "remediation": "Run: systemctl --now enable firewalld",
+      "automated": true
     },
     {
       "id": "3.4.1.5",

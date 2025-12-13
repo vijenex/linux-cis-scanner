@@ -13,7 +13,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.1",
       "description": "The X Window System provides a Graphical User Interface (GUI) where users can have multiple windows in which to run programs and various add on. The X Windows system is typically used on workstations where users login, but not on servers where users typically do not login.",
-      "remediation": "Remove X Windows: yum remove xorg-x11-server-common"
+      "remediation": "Remove X Windows: yum remove xorg-x11-server-common",
+      "automated": true
     },
     {
       "id": "2.2.2",
@@ -25,7 +26,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.2",
       "description": "Avahi is a free zeroconf implementation, including a system for multicast DNS/DNS-SD service discovery. Avahi allows programs to publish and discover services and hosts running on a local network with no specific configuration.",
-      "remediation": "Remove Avahi: yum remove avahi"
+      "remediation": "Remove Avahi: yum remove avahi",
+      "automated": true
     },
     {
       "id": "2.2.3",
@@ -37,7 +39,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.3",
       "description": "The Common Unix Print System (CUPS) provides the ability to print to both local and network printers. A system running CUPS can also accept print jobs from remote systems and print them to local printers.",
-      "remediation": "Remove CUPS: yum remove cups"
+      "remediation": "Remove CUPS: yum remove cups",
+      "automated": true
     },
     {
       "id": "2.2.4",
@@ -49,7 +52,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.4",
       "description": "The Dynamic Host Configuration Protocol (DHCP) is a service that allows machines to be dynamically assigned IP addresses.",
-      "remediation": "Remove DHCP Server: yum remove dhcp-server"
+      "remediation": "Remove DHCP Server: yum remove dhcp-server",
+      "automated": true
     },
     {
       "id": "2.2.5",
@@ -61,7 +65,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.5",
       "description": "The Domain Name System (DNS) is a hierarchical naming system that maps names to IP addresses for computers, services and other resources connected to a network.",
-      "remediation": "Remove DNS Server: yum remove bind"
+      "remediation": "Remove DNS Server: yum remove bind",
+      "automated": true
     },
     {
       "id": "2.2.6",
@@ -73,7 +78,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.6",
       "description": "The File Transfer Protocol (FTP) provides networked computers with the ability to transfer files.",
-      "remediation": "Remove FTP Server: yum remove vsftpd"
+      "remediation": "Remove FTP Server: yum remove vsftpd",
+      "automated": true
     },
     {
       "id": "2.2.7",
@@ -85,7 +91,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.7",
       "description": "HTTP or web servers provide the ability to host web site content.",
-      "remediation": "Remove HTTP Server: yum remove httpd"
+      "remediation": "Remove HTTP Server: yum remove httpd",
+      "automated": true
     },
     {
       "id": "2.2.8",
@@ -97,7 +104,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.8",
       "description": "dovecot is an open source IMAP and POP3 server for Linux based systems.",
-      "remediation": "Remove dovecot: yum remove dovecot"
+      "remediation": "Remove dovecot: yum remove dovecot",
+      "automated": true
     },
     {
       "id": "2.2.9",
@@ -109,7 +117,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.9",
       "description": "The Samba daemon allows system administrators to configure their Linux systems to share file systems and directories with Windows desktops.",
-      "remediation": "Remove Samba: yum remove samba"
+      "remediation": "Remove Samba: yum remove samba",
+      "automated": true
     },
     {
       "id": "2.2.10",
@@ -121,7 +130,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.10",
       "description": "Squid is a standard proxy server used in many distributions and environments.",
-      "remediation": "Remove Squid: yum remove squid"
+      "remediation": "Remove Squid: yum remove squid",
+      "automated": true
     },
     {
       "id": "2.2.11",
@@ -133,7 +143,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.11",
       "description": "The Simple Network Management Protocol (SNMP) server is used to listen for SNMP commands from an SNMP management system, execute the commands or collect the information and then send results back to the requesting system.",
-      "remediation": "Remove net-snmp: yum remove net-snmp"
+      "remediation": "Remove net-snmp: yum remove net-snmp",
+      "automated": true
     },
     {
       "id": "2.2.12",
@@ -145,7 +156,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.12",
       "description": "The Network Information Service (NIS) (formerly known as Yellow Pages) is a client-server directory service protocol for distributing system configuration files.",
-      "remediation": "Remove NIS Server: yum remove ypserv"
+      "remediation": "Remove NIS Server: yum remove ypserv",
+      "automated": true
     },
     {
       "id": "2.2.13",
@@ -157,7 +169,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.13",
       "description": "The telnet-server package contains the telnet daemon, which accepts connections from users from other systems via the telnet protocol.",
-      "remediation": "Remove telnet-server: yum remove telnet-server"
+      "remediation": "Remove telnet-server: yum remove telnet-server",
+      "automated": true
     },
     {
       "id": "2.2.14",
@@ -179,7 +192,8 @@
       "expected_status": "not_installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.2.15",
       "description": "The rsync service can be used to synchronize files between systems over network links.",
-      "remediation": "Remove rsync-daemon: yum remove rsync-daemon"
+      "remediation": "Remove rsync-daemon: yum remove rsync-daemon",
+      "automated": true
     }
   ]
 }

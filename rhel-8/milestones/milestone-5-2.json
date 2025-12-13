@@ -13,7 +13,8 @@
       "expected_status": "installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.1",
       "description": "sudo allows a permitted user to execute a command as the superuser or another user",
-      "remediation": "Run: dnf install sudo"
+      "remediation": "Run: dnf install sudo",
+      "automated": true
     },
     {
       "id": "5.2.2",

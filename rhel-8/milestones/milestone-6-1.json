@@ -15,7 +15,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.1",
       "description": "The /etc/passwd file contains user account information",
-      "remediation": "Run: chmod 644 /etc/passwd && chown root:root /etc/passwd"
+      "remediation": "Run: chmod 644 /etc/passwd && chown root:root /etc/passwd",
+      "automated": true
     },
     {
       "id": "6.1.2",
@@ -29,7 +30,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.2",
       "description": "The /etc/passwd- file is a backup of /etc/passwd",
-      "remediation": "Run: chmod 644 /etc/passwd- && chown root:root /etc/passwd-"
+      "remediation": "Run: chmod 644 /etc/passwd- && chown root:root /etc/passwd-",
+      "automated": true
     },
     {
       "id": "6.1.3",
@@ -43,7 +45,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.3",
       "description": "The /etc/group file contains group information",
-      "remediation": "Run: chmod 644 /etc/group && chown root:root /etc/group"
+      "remediation": "Run: chmod 644 /etc/group && chown root:root /etc/group",
+      "automated": true
     },
     {
       "id": "6.1.4",
@@ -57,7 +60,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.4",
       "description": "The /etc/group- file is a backup of /etc/group",
-      "remediation": "Run: chmod 644 /etc/group- && chown root:root /etc/group-"
+      "remediation": "Run: chmod 644 /etc/group- && chown root:root /etc/group-",
+      "automated": true
     },
     {
       "id": "6.1.5",
@@ -71,7 +75,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.5",
       "description": "The /etc/shadow file contains encrypted password information",
-      "remediation": "Run: chmod 0000 /etc/shadow && chown root:root /etc/shadow"
+      "remediation": "Run: chmod 0000 /etc/shadow && chown root:root /etc/shadow",
+      "automated": true
     },
     {
       "id": "6.1.6",
@@ -85,7 +90,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.6",
       "description": "The /etc/shadow- file is a backup of /etc/shadow",
-      "remediation": "Run: chmod 0000 /etc/shadow- && chown root:root /etc/shadow-"
+      "remediation": "Run: chmod 0000 /etc/shadow- && chown root:root /etc/shadow-",
+      "automated": true
     },
     {
       "id": "6.1.7",
@@ -99,7 +105,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.7",
       "description": "The /etc/gshadow file contains encrypted group password information",
-      "remediation": "Run: chmod 0000 /etc/gshadow && chown root:root /etc/gshadow"
+      "remediation": "Run: chmod 0000 /etc/gshadow && chown root:root /etc/gshadow",
+      "automated": true
     },
     {
       "id": "6.1.8",
@@ -113,7 +120,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.1.8",
       "description": "The /etc/gshadow- file is a backup of /etc/gshadow",
-      "remediation": "Run: chmod 0000 /etc/gshadow- && chown root:root /etc/gshadow-"
+      "remediation": "Run: chmod 0000 /etc/gshadow- && chown root:root /etc/gshadow-",
+      "automated": true
     },
     {
       "id": "6.1.9",

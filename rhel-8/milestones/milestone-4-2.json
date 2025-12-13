@@ -13,7 +13,8 @@
       "expected_status": "installed",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 4.2.1.1",
       "description": "rsyslog is the default syslog daemon on RHEL 8",
-      "remediation": "Run: dnf install rsyslog"
+      "remediation": "Run: dnf install rsyslog",
+      "automated": true
     },
     {
       "id": "4.2.1.2",
@@ -25,7 +26,8 @@
       "expected_status": "enabled",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 4.2.1.2",
       "description": "Enable rsyslog service to collect system logs",
-      "remediation": "Run: systemctl --now enable rsyslog"
+      "remediation": "Run: systemctl --now enable rsyslog",
+      "automated": true
     },
     {
       "id": "4.2.1.3",

@@ -15,7 +15,8 @@
       "expected_group": "root",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.1",
       "description": "The sshd_config file contains configuration specifications for sshd",
-      "remediation": "Run: chown root:root /etc/ssh/sshd_config && chmod 0600 /etc/ssh/sshd_config"
+      "remediation": "Run: chown root:root /etc/ssh/sshd_config && chmod 0600 /etc/ssh/sshd_config",
+      "automated": true
     },
     {
       "id": "5.1.2",
