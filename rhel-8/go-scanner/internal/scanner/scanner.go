@@ -150,42 +150,37 @@ func (s *Scanner) executeControl(ctrl controls.Control) Result {
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
+		// Keep original CIS description, don't overwrite
 
 	case "MountPoint":
 		checkResult := controls.CheckMountPoint(ctrl.MountPoint, ctrl.ExpectedStatus)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "MountOption":
 		checkResult := controls.CheckMountOption(ctrl.MountPoint, ctrl.RequiredOption)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "ServiceStatus":
 		checkResult := controls.CheckServiceStatus(ctrl.ServiceName, ctrl.ExpectedStatus)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "PackageInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, ctrl.ExpectedStatus)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "PackageNotInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, "not_installed")
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "SysctlParameter":
 		// Support both parameter_name and parameter fields
@@ -197,21 +192,18 @@ func (s *Scanner) executeControl(ctrl controls.Control) Result {
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "FilePermissions":
 		checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	case "FileContent":
 		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
-		result.Description = checkResult.Description
 
 	default:
 		result.Status = "MANUAL"
