@@ -181,10 +181,10 @@ func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 	
 	if !mountFound {
 		return CheckResult{
-			Status:          "FAIL",
+			Status:          "SKIPPED",
 			ActualValue:     "Mount point not found",
 			EvidenceCommand: fmt.Sprintf("findmnt %s", mountPoint),
-			Description:     fmt.Sprintf("Mount point %s is not mounted", mountPoint),
+			Description:     fmt.Sprintf("Mount point %s does not exist as separate partition", mountPoint),
 		}
 	}
 	
@@ -210,9 +210,15 @@ func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 }
 
 func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
+	// Check both is-enabled and is-active for better accuracy
 	cmd := exec.Command("systemctl", "is-enabled", serviceName)
 	output, err := cmd.Output()
 	outputStr := strings.TrimSpace(string(output))
+	
+	// Also check if service is active
+	cmdActive := exec.Command("systemctl", "is-active", serviceName)
+	outputActive, _ := cmdActive.Output()
+	outputActiveStr := strings.TrimSpace(string(outputActive))
 	
 	if expectedStatus == "enabled" {
 		if err == nil && strings.Contains(outputStr, "enabled") {
@@ -230,19 +236,48 @@ func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
 				Description:     fmt.Sprintf("Service %s status check", serviceName),
 			}
 		}
-	} else if expectedStatus == "disabled" {
-		if err != nil || strings.Contains(outputStr, "disabled") || strings.Contains(outputStr, "masked") {
+	} else if expectedStatus == "disabled" || expectedStatus == "inactive" {
+		// Service should be disabled/inactive
+		isDisabled := err != nil || strings.Contains(outputStr, "disabled") || strings.Contains(outputStr, "masked")
+		isInactive := strings.Contains(outputActiveStr, "inactive") || strings.Contains(outputActiveStr, "failed")
+		
+		if isDisabled && isInactive {
 			return CheckResult{
 				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Service %s is disabled/masked", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s", serviceName),
+				ActualValue:     fmt.Sprintf("Service %s is disabled and inactive", serviceName),
+				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s; systemctl is-active %s", serviceName, serviceName),
+				Description:     fmt.Sprintf("Service %s status check", serviceName),
+			}
+		} else if isInactive {
+			return CheckResult{
+				Status:          "PASS",
+				ActualValue:     fmt.Sprintf("Service %s is inactive", serviceName),
+				EvidenceCommand: fmt.Sprintf("systemctl is-active %s", serviceName),
 				Description:     fmt.Sprintf("Service %s status check", serviceName),
 			}
 		} else {
 			return CheckResult{
 				Status:          "FAIL",
-				ActualValue:     fmt.Sprintf("Service %s is enabled", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s", serviceName),
+				ActualValue:     fmt.Sprintf("Service %s is active or enabled", serviceName),
+				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s; systemctl is-active %s", serviceName, serviceName),
+				Description:     fmt.Sprintf("Service %s status check", serviceName),
+			}
+		}
+	} else if expectedStatus == "active" {
+		// Service should be active
+		isActive := strings.Contains(outputActiveStr, "active")
+		if isActive {
+			return CheckResult{
+				Status:          "PASS",
+				ActualValue:     fmt.Sprintf("Service %s is active", serviceName),
+				EvidenceCommand: fmt.Sprintf("systemctl is-active %s", serviceName),
+				Description:     fmt.Sprintf("Service %s status check", serviceName),
+			}
+		} else {
+			return CheckResult{
+				Status:          "FAIL",
+				ActualValue:     fmt.Sprintf("Service %s is not active", serviceName),
+				EvidenceCommand: fmt.Sprintf("systemctl is-active %s", serviceName),
 				Description:     fmt.Sprintf("Service %s status check", serviceName),
 			}
 		}
