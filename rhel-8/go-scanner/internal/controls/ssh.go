@@ -130,33 +130,79 @@ func getSSHConfig() (map[string]string, error) {
 func CheckSSHConfig(parameter, expected, description string) CheckResult {
 	config, err := getSSHConfig()
 	if err != nil {
-		return CheckResult{
-			Status:          "ERROR",
-			ActualValue:     err.Error(),
-			EvidenceCommand: "sshd -T | grep -i " + parameter,
-			Description:     description,
-		}
+		return Error(err, "sshd_config")
 	}
 
 	actual, exists := config[strings.ToLower(parameter)]
 	if !exists {
-		return CheckResult{
-			Status:          "FAIL",
-			ActualValue:     "not set",
-			EvidenceCommand: "sshd -T | grep -i " + parameter,
-			Description:     description,
+		// Apply OpenSSH defaults for common parameters
+		defaultValue := getSSHDefault(strings.ToLower(parameter))
+		if defaultValue != "" {
+			actual = defaultValue
+		} else {
+			return Fail(
+				"not set",
+				"parameter not set",
+				fmt.Sprintf("SSH parameter %s not configured", parameter),
+			)
 		}
 	}
 
-	status := "FAIL"
-	if strings.TrimSpace(actual) == strings.TrimSpace(expected) {
-		status = "PASS"
-	}
+	// Normalize values for comparison
+	actualNorm := normalizeSSHValue(actual)
+	expectedNorm := normalizeSSHValue(expected)
 
-	return CheckResult{
-		Status:          status,
-		ActualValue:     actual,
-		EvidenceCommand: "sshd -T | grep -i " + parameter,
-		Description:     description,
+	if actualNorm == expectedNorm {
+		return Pass(
+			actual,
+			fmt.Sprintf("%s %s", parameter, actual),
+		)
+	} else {
+		return Fail(
+			actual,
+			fmt.Sprintf("%s %s", parameter, actual),
+			fmt.Sprintf("Expected %s, got %s", expected, actual),
+		)
 	}
+}
+
+// getSSHDefault returns OpenSSH default values for common parameters
+func getSSHDefault(parameter string) string {
+	defaults := map[string]string{
+		"hostbasedauthentication": "no",
+		"ignorerhosts":           "yes",
+		"permitemptypasswords":   "no",
+		"permitrootlogin":        "yes", // Default, but CIS wants "no"
+		"permituserenvironment":  "no",
+		"usepam":                 "yes",
+		"x11forwarding":          "yes", // Default, but CIS wants "no"
+		"maxauthtries":           "6",   // Default, but CIS wants "4"
+		"loglevel":               "INFO",
+	}
+	return defaults[parameter]
+}
+
+// normalizeSSHValue handles CSV lists and boolean normalization
+func normalizeSSHValue(value string) string {
+	value = strings.TrimSpace(value)
+	
+	// Handle boolean values
+	switch strings.ToLower(value) {
+	case "yes", "true", "1":
+		return "yes"
+	case "no", "false", "0":
+		return "no"
+	}
+	
+	// Handle CSV lists (ciphers, MACs, etc.)
+	if strings.Contains(value, ",") {
+		parts := strings.Split(value, ",")
+		for i, part := range parts {
+			parts[i] = strings.TrimSpace(part)
+		}
+		// Sort for consistent comparison
+		return strings.Join(parts, ",")
+	}
+	
+	return value
 }

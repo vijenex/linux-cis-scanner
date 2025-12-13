@@ -335,6 +335,18 @@ func NormalizeStatus(status string) string {
 	}
 }
 
+// Helper functions for consistent status returns
+func NotApplicableIf(condition bool, reason string) CheckResult {
+	if condition {
+		return NotApplicable(reason, "condition not met")
+	}
+	return CheckResult{} // Continue with normal check
+}
+
+func NotApplicableForMissingPath(path string) CheckResult {
+	return NotApplicable(fmt.Sprintf("Path %s does not exist", path), "file not found")
+}
+
 func getStatusSymbol(status string) string {
 	status = NormalizeStatus(status) // Always normalize first
 	switch status {
