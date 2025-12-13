@@ -33,11 +33,11 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to remove the \n\\f0 \\cf4 selinux=0\n\\f2 \\cf2  and \n\\f0 \\cf4 enforcing=0\n\\f2 \\cf2  parameters:\\\n\n\\f4\\fs20\\fsmilli10080 grubby --update-kernel ALL --remove-args \"selinux=0 enforcing=0\"\\\n\n\\f2\\fs24 Run the following command to remove the \n\\f0 \\cf4 selinux=0\n\\f2 \\cf2  and \n\\f0 \\cf4 enforcing=0\n\\f2 \\cf2  parameters if\\\nthey were created by the deprecated \n\\f0 \\cf4 grub2-mkconfig\n\\f2 \\cf2  command:\\\n\n\\f4\\fs20\\fsmilli10080 # grep -Prsq --\\\n'^\\\\h*([^#\\\\n\\\\r]+\\\\h+)?kernelopts=([^#\\\\n\\\\r]+\\\\h+)?(selinux|enforcing)=0\\\\b'\\\n/boot/grub2 /boot/efi && grub2-mkconfig -o \"$(grep -Prl --\\\n'\\\\h*([^#\\\\n\\\\r]+\\\\h+)?kernelopts=([^#\\\\n\\\\r]+\\\\h+)?(selinux|enforcing)=0\\\\b'\\\n/boot/grub2 /boot/efi)\"\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": ".*",
-      "expected_result": "found",
+      "pattern": "selinux=0|enforcing=0",
+      "expected_result": "absent",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.2 | Level1",
-      "file_path": "/etc/cron.d/aide"
+      "file_path": "/etc/default/grub"
     },
     {
       "id": "1.3.1.3",
@@ -52,9 +52,9 @@
       "remediation": "\\\n\n\\f2\\b0 Edit \n\\f0 \\cf4 /etc/selinux/config\n\\f2 \\cf2  and add set the SELINUXTYPE line to \n\\f0 \\cf4 targeted\n\\f2 \\cf2  or \n\\f0 \\cf4 mls\n\\f2 \\cf2 :\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 SELINUXTYPE=targeted\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\\\n\n\\f1\\b",
       "type": "FileContent",
-      "file_path": "/etc/selinux/config\\",
-      "pattern": ".*",
-      "expected_result": "found",
+      "file_path": "/etc/selinux/config",
+      "pattern": "SELINUXTYPE=(targeted|mls)",
+      "expected_result": "present",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.3 | Level1"
     },
@@ -71,9 +71,9 @@
       "remediation": "\\\n\n\\f2\\b0 1. Edit \n\\f0 \\cf4 /etc/selinux/config\n\\f2 \\cf2  and update the SELINUX parameter to either\\\n\n\\f0 \\cf4 SELINUX=enforcing\n\\f2 \\cf2  or \n\\f0 \\cf4 SELINUX=permissive\n\\f2 \\cf2 :\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 SELINUX=enforcing\\\n\n\\f2\\fs24 2. Update the SELinux running state to either \n\\f0 \\cf4 enforcing\n\\f2 \\cf2  or \n\\f0 \\cf4 permissive\n\\f2 \\cf2 :\\\n\n\\f1\\b If SELinux is currently disabled:\\\n\n\\f2\\b0 Run the following command to create \n\\f0 \\cf4 /.autorelabel\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # touch /.autorelabel\\\n\n\\f2\\fs24 Run the following command to reboot the system:\\\n\n\\f4\\fs20\\fsmilli10080 # reboot\\\n\n\\f1\\b\\fs24 WARNING:\n\\f2\\b0  The \n\\f0 \\cf4 autorelabel\n\\f2 \\cf2  may be a long running process and require significant\\\ndowntime. This should be planed for before executing",
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect\\\n-security-enhanced_linux-introduction-selinux_modes\\\n\\cf2 2. NIST SP 800-53 :: SC-3\\\n3. NIST SP 800-53A :: SC-3.1 (ii)\n\\fs20\\fsmilli10080 Page 154\\\n\n\\f0 Inte",
       "type": "FileContent",
-      "file_path": "/etc/selinux/config\\",
-      "pattern": ".*",
-      "expected_result": "found",
+      "file_path": "/etc/selinux/config",
+      "pattern": "SELINUX=(enforcing|permissive)",
+      "expected_result": "present",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.4 | Level1"
     },
@@ -90,9 +90,9 @@
       "remediation": "\\\n\n\\f2\\b0 1. Edit \n\\f0 \\cf4 /etc/selinux/config\n\\f2 \\cf2  and update the SELINUX parameter to\\\n\n\\f0 \\cf4 SELINUX=enforcing\\\n\n\\f3\\i \\cf2 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 SELINUX=enforcing\\\n\n\\f2\\fs24 2. Update the SELinux running state to \n\\f0 \\cf4 enforcing\n\\f2 \\cf2 :\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\f1\\b\\fs24 If SELinux is currently disabled:\\\n\n\\f2\\b0 Run the following command to create \n\\f0 \\cf4 /.autorelabel\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # touch /.autorelabel\\\n\n\\f2\\fs24 Run the following command to reboot the system:\\\n\n\\f4\\fs20\\fsmilli10080 # reboot\\\n\n\\f1\\b\\fs24 WARNING:\n\\f2\\b0  The \n\\f0 \\cf4 autorelabel\n\\f2 \\cf2  may be a long running process and require significant\\\ndowntime. This should be planed for before executing the reboot!\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect\\\n-security-enhanced_linux-introduction-selinux_modes\\\n\\cf2 2. CCI-001084 | CCI-002696\\\n3. NIST SP 800-53 :: SC-3 | NIST SP 800-53 :: SI-6 a\\\n4. NIST SP 800-53",
       "type": "FileContent",
-      "file_path": "/etc/selinux/config\\",
-      "pattern": ".*",
-      "expected_result": "found",
+      "file_path": "/etc/selinux/config",
+      "pattern": "SELINUX=enforcing",
+      "expected_result": "present",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.5 | Level2"
     },
@@ -127,7 +127,8 @@
       "type": "PackageInstalled",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.7 | Level1",
-      "package_name": "grub2-efi-x64"
+      "package_name": "mcstrans",
+      "expected_status": "not_installed"
     },
     {
       "id": "1.3.1.8",
@@ -144,7 +145,8 @@
       "type": "PackageInstalled",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.8 | Level1",
-      "package_name": "shim-x64"
+      "package_name": "setroubleshoot",
+      "expected_status": "not_installed"
     }
   ]
 }

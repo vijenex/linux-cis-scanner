@@ -82,12 +82,15 @@
       "audit_command": "\\\n\n\\f2\\b0 Run the following command and verify \n\\f0 \\cf4 Access\n\\f2 \\cf2  is \n\\f0 \\cf4 644\n\\f2 \\cf2  or more restrictive and \n\\f0 \\cf4 Uid\n\\f2 \\cf2  and\\\n\n\\f0 \\cf4 Gid\n\\f2 \\cf2  are both \n\\f0 \\cf4 0/root\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: \\{ %g/ %G)' /etc/issue\\\nAccess: (0644/-rw-r--r--) Uid: ( 0/ root) Gid: \\{ 0/ root)\\\n\n\\f1\\b\\fs24",
       "remediation": "\\\n\n\\f2\\b0 Run the following commands to set mode, owner, and group on \n\\f0 \\cf4 /etc/issue\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # chown root:root $(readlink -e /etc/issue)\\\n# chmod u-x,go-wx $(readlink -e /etc/issue)\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 254\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
-      "type": "FileContent",
+      "type": "FilePermissions",
       "file_path": "/etc/issue\\",
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.7.5 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.7.5 | Level1",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "1.7.6",
@@ -101,12 +104,15 @@
       "audit_command": "\\\n\n\\f2\\b0 Run the following command and verify \n\\f0 \\cf4 Access\n\\f2 \\cf2  is \n\\f0 \\cf4 644\n\\f2 \\cf2  or more restrictive and \n\\f0 \\cf4 Uid\n\\f2 \\cf2  and\\\n\n\\f0 \\cf4 Gid\n\\f2 \\cf2  are both \n\\f0 \\cf4 0/root\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: \\{ %g/ %G)' /etc/issue.net\\\nAccess: (0644/-rw-r--r--) Uid: ( 0/ root) Gid: ( 0/ root)\\\n\n\\f1\\b\\fs24",
       "remediation": "\\\n\n\\f2\\b0 Run the following commands to set mode, owner, and group on \n\\f0 \\cf4 /etc/issue.net\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # chown root:root $(readlink -e /etc/issue.net)\\\n# chmod u-x,go-wx $(readlink -e /etc/issue.net)\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 256\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
-      "type": "FileContent",
+      "type": "FilePermissions",
       "file_path": "/etc/issue.net\\",
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.7.6 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.7.6 | Level1",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     }
   ]
 }

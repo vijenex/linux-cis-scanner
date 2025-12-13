@@ -40,7 +40,7 @@
       "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.4.1.2 | Level1",
-      "file_path": "/etc/cron.daily",
+      "file_path": "/etc/crontab",
       "expected_permissions": "0700",
       "expected_owner": "root",
       "expected_group": "root"
