@@ -188,7 +188,12 @@ func (s *Scanner) executeControl(ctrl controls.Control) Result {
 		result.Description = checkResult.Description
 
 	case "SysctlParameter":
-		checkResult := controls.CheckSysctlParameter(ctrl.ParameterName, ctrl.ExpectedValue)
+		// Support both parameter_name and parameter fields
+		paramName := ctrl.ParameterName
+		if paramName == "" {
+			paramName = ctrl.Parameter
+		}
+		checkResult := controls.CheckSysctlParameter(paramName, ctrl.ExpectedValue)
 		result.Status = checkResult.Status
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand

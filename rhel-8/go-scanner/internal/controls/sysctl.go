@@ -7,30 +7,42 @@ import (
 )
 
 func CheckSysctlParameter(parameterName, expectedValue string) CheckResult {
+	if parameterName == "" {
+		return CheckResult{
+			Status:          "ERROR",
+			ActualValue:     "No parameter name specified",
+			EvidenceCommand: "N/A",
+			Description:     "Parameter name is required",
+		}
+	}
+	
 	cmd := exec.Command("sysctl", parameterName)
-	output, err := cmd.Output()
+	output, err := cmd.CombinedOutput()
+	outputStr := strings.TrimSpace(string(output))
 	
 	if err != nil {
 		return CheckResult{
-			Status:          "ERROR",
-			ActualValue:     "Parameter not found",
+			Status:          "FAIL",
+			ActualValue:     fmt.Sprintf("Parameter not found or not readable: %s", outputStr),
 			EvidenceCommand: fmt.Sprintf("sysctl %s", parameterName),
 			Description:     fmt.Sprintf("Failed to read %s", parameterName),
 		}
 	}
 	
-	outputStr := strings.TrimSpace(string(output))
-	parts := strings.Split(outputStr, "=")
+	// Parse output: "parameter = value" or "parameter=value"
+	parts := strings.SplitN(outputStr, "=", 2)
 	if len(parts) != 2 {
 		return CheckResult{
 			Status:          "ERROR",
-			ActualValue:     "Invalid output format",
+			ActualValue:     fmt.Sprintf("Invalid output: %s", outputStr),
 			EvidenceCommand: fmt.Sprintf("sysctl %s", parameterName),
 			Description:     "Could not parse sysctl output",
 		}
 	}
 	
 	actualValue := strings.TrimSpace(parts[1])
+	expectedValue = strings.TrimSpace(expectedValue)
+	
 	status := "FAIL"
 	if actualValue == expectedValue {
 		status = "PASS"
