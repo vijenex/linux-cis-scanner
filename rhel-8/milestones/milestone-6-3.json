@@ -32,7 +32,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to install \n\\f0 \\cf4 audit\n\\f2 \\cf2  and \n\\f0 \\cf4 audit-libs\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # dnf install audit audit-libs\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-3, AU-3(1), AU-12, SI-5\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230411\\\n4. RHEL 8 STIG Rule ID: SV-230411r744000\n\\fs20\\fsmilli10080 Page 873\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.1 | Level2"
@@ -51,7 +51,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-12, SI-5\n\\fs20\\fsmilli10080 Page 879\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/default/grub",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.3 | Level2"
@@ -102,7 +102,7 @@
       "remediation": "\\\n\n\\f2\\b0 Set the following parameter in \n\\f0 \\cf4 /etc/audit/auditd.conf\n\\f2 \\cf2  in accordance with site\\\npolicy:\\\n\n\\f4\\fs20\\fsmilli10080 max_log_file = <MB>\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-8\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.1 | Level2"
@@ -120,7 +120,7 @@
       "remediation": "\\\n\n\\f2\\b0 Set the following parameter in \n\\f0 \\cf4 /etc/audit/auditd.conf:\\\n\n\\f4\\fs20\\fsmilli10080 \\cf2 max_log_file_action = keep_logs\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-8\n\\fs20\\fsmilli10080 Page 886\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.2 | Level2"
@@ -138,7 +138,7 @@
       "remediation": "\\\n\n\\f2\\b0 Set one of the following parameters in \n\\f0 \\cf4 /etc/audit/auditd.conf\n\\f2 \\cf2  depending on your\\\nlocal security policies.\\\n\n\\f4\\fs20\\fsmilli10080 disk_full_action = <halt|single>\\\ndisk_error_action = <syslog|single|halt>\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 disk_full_action = halt\\\ndisk_error_action = halt\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. AUDITD.CONF(5)\\\n2. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/8/html/security_hardening/auditing-the-\\\nsystem_security-hardening#configuring-auditd-for-a-secure-\\\nenvironment_auditing-the-system\\\n\\cf2 3. NIST SP 800-53 :: AU-5 b\\\n4. NIST SP 800-53A :: ",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.3 | Level2"
@@ -156,7 +156,7 @@
       "remediation": "\\\n\n\\f2\\b0 Set the \n\\f0 \\cf4 space_left_action\n\\f2 \\cf2  parameter in \n\\f0 \\cf4 /etc/audit/auditd.conf\n\\f2 \\cf2  to \n\\f0 \\cf4 email\n\\f2 \\cf2 , \n\\f0 \\cf4 exec\n\\f2 \\cf2 ,\\\n\n\\f0 \\cf4 single\n\\f2 \\cf2 , or \n\\f0 \\cf4 halt\n\\f2 \\cf2 :\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 space_left_action = email\\\n\n\\f2\\fs24 Set the \n\\f0 \\cf4 admin_space_left_action\n\\f2 \\cf2  parameter in \n\\f0 \\cf4 /etc/audit/auditd.conf\n\\f2 \\cf2  to\\\n\n\\f0 \\cf4 single\n\\f2 \\cf2  or \n\\f0 \\cf4 halt\n\\f2 \\cf2 :\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 admin_space_left_action = single\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  A Mail Transfer Agent (MTA) must be installed and configured properly to set\\\n\n\\f0 \\cf4 space_left_action = email\n\\f2\\fs20\\fsmilli10080 \\cf2 Page 892\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-8, AU-12, SI-5\\\n2. AUDITD.CONF(5)\\\n3. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/8/html/security_hardening/auditing-the-\\\nsystem_security-hardening#configuring-auditd-for-a-secure-\\\nenvironment_auditing-the-system\\\n\n\\f1\\",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.4 | Level2"
@@ -192,7 +192,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 a\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230409\\\n4. RHEL 8 STIG Rule ID: SV-230409r627750_rule\\\n5. RHEL 8 STIG Vul ID: V-230410\\\n6. RHEL 8 STIG Rule ID: SV-230410r627750\n\\fs20\\fsmilli10080 Page 896\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/sudoers",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.1 | Level2"
@@ -210,7 +210,7 @@
       "remediation": "\\\nCreate audit rules\\\n\n\\f2\\b0 Edit or create a file in the \n\\f0 \\cf4 /etc/audit/rules.d/\n\\f2 \\cf2  directory, ending in \n\\f0 \\cf4 .rules\n\\f2 \\cf2  extension,\\\nwith the relevant rules to monitor elevated privileges.\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # printf \"\\\n-a always,exit -F arch=b64 -C euid!=uid -F auid!=unset -S execve -k\\\nuser_emulation\\\n-a always,exit -F arch=b32 -C euid!=uid -F auid!=unset -S execve -k\\\nuser_emulation\\\n\" >> /etc/audit/rules.d/50-user_emulation.rules\\\n\n\\f1\\b\\fs24 Load audit rules\\\n\n\\f2\\b0 Merge and load the rules into active configuration:\\\n\n\\f4\\fs20\\fsmilli10080 # augenrules --load\\\n\n\\f2\\fs24 Check if reboot is required.\\\n\n\\f4\\fs20\\fsmilli10080 # if [[ $(auditctl -s | grep \"enabled\") =~ \"2\" ]]; then printf \"Reboot\\\nrequired to load rules\\\\n\"; fi\\\n\n\\f1\\b\\f",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Revision 5 :: AC-6 (8)\\\n2. RHEL 8 STIG Vul ID: V-230386\\\n3. RHEL 8 STIG Rule ID: SV-230386r854037\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.2 | Level2"
@@ -228,7 +228,7 @@
       "remediation": "\\\nNote:\n\\f2\\b0  This recommendation requires that the sudo logfile is configured. See guidance\\\nprovided in the recommendation \"Ensure sudo log file exists\"\\\nEdit or create a file in the \n\\f0 \\cf4 /etc/audit/rules.d/\n\\f2 \\cf2  directory, ending in \n\\f0 \\cf4 .rules\n\\f2 \\cf2  extension,\\\nwith the relevant rules to monitor events that modify the sudo log file.\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # \\{\\\nSUDO_LOG_FILE=$(grep -r logfile /etc/sudoers* | sed -e 's/.*logfile=//;s/,?\\\n.*//' -e 's/\"//g')\\\n[ -n \"$\\{SUDO_LOG_FILE\\}\" ] && printf \"\\\n-w $\\{SUDO_LOG_FILE\\} -p wa -k sudo_log_file\\\n\" >> /etc/audit/rules.d/50-sudo.rules || printf \"ERROR: Variable\\\n'SUDO_LOG_FILE' is unset.\\\\n\"\\\n\\}\\\n\n\\f2\\fs24 Merge and load the rules into active configuration:\\\n\n\\f4\\fs20\\fsmilli10080 # augenrules --load",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.3 | Level2"
@@ -246,7 +246,7 @@
       "remediation": "section of this recommendation will traverse all mounted\\\nfile systems that is not mounted with either \n\\f0 \\cf4 noexec\n\\f2 \\cf2  or \n\\f0 \\cf4 nosuid\n\\f2 \\cf2  mount options. If there\\\nare large file systems without these mount options, \n\\f1\\b such traversal will be significantly\\\ndetrimental to the performance of the system.\\\n\n\\f2\\b0 Before running either the audit or remediation section, inspect the output of the following\\\ncommand to determine exactly which file systems will be traversed:\\\n\n\\f4\\fs20\\fsmilli10080 # findmnt -n -l -k -it $(awk '/nodev/ \\{ print $2 \\}' /proc/filesystems | paste\\\n-sd,) | grep -Pv \"noexec|nosuid\"\\\n\n\\f2\\fs24 To exclude a particular file system due to adverse performance impacts, update the\\\naudit and remediation sections by adding a sufficiently unique string ",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3, AU-3(1)\n\\fs20\\fsmilli10080 Page 917\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.6 | Level2"
@@ -264,7 +264,7 @@
       "remediation": "\\\nCreate audit rules\\\n\n\\f2\\b0 Edit or create a file in the \n\\f0 \\cf4 /etc/audit/rules.d/\n\\f2 \\cf2  directory, ending in \n\\f0 \\cf4 .rules\n\\f2 \\cf2  extension,\\\nwith the relevant rules to monitor unsuccessful file access attempts.\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # \\{\\\nUID_MIN=$(awk '/^\\\\s*UID_MIN/\\{print $2\\}' /etc/login.defs)\\\n[ -n \"$\\{UID_MIN\\}\" ] && printf \"\\\n-a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-\\\nEACCES -F auid>=$\\{UID_MIN\\} -F auid!=unset -k access\\\n-a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-\\\nEPERM -F auid>=$\\{UID_MIN\\} -F auid!=unset -k access\\\n-a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-\\\nEACCES -F auid>=$\\{UID_MIN\\} -F auid!=unset -k access\\\n-a always,exit -F arch=b32 ",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 a\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230449\\\n4. RHEL 8 STIG Rule ID: SV-230449r810455\n\\fs20\\fsmilli10080 Page 922\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.7 | Level2"
@@ -282,7 +282,7 @@
       "remediation": "\\\nCreate audit rules\\\n\n\\f2\\b0 Edit or create a file in the \n\\f0 \\cf4 /etc/audit/rules.d/\n\\f2 \\cf2  directory, ending in \n\\f0 \\cf4 .rules\n\\f2 \\cf2  extension,\\\nwith the relevant rules to monitor successful file system mounts.\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # \\{\\\nUID_MIN=$(awk '/^\\\\s*UID_MIN/\\{print $2\\}' /etc/login.defs)\\\n[ -n \"$\\{UID_MIN\\}\" ] && printf \"\\\n-a always,exit -F arch=b32 -S mount -F auid>=$UID_MIN -F auid!=unset -k\\\nmounts\\\n-a always,exit -F arch=b64 -S mount -F auid>=$UID_MIN -F auid!=unset -k\\\nmounts\\\n\" >> /etc/audit/rules.d/50-mounts.rules || printf \"ERROR: Variable 'UID_MIN'\\\nis unset.\\\\n\"\\\n\\}\\\n\n\\f1\\b\\fs24 Load audit rules\\\n\n\\f2\\b0 Merge and load the rules into active configuration:\\\n\n\\f4\\fs20\\fsmilli10080 # augenrules --load\\\n\n\\f2\\fs24 Check if reboot is requir",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 a\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG GROUP ID: V-230425\\\n4. RHEL 8 STIG RULE ID: SV-230425r627750\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.10 | Level2"
@@ -300,7 +300,7 @@
       "remediation": "\\\n\n\\f2\\b0 Edit or create a file in the \n\\f0 \\cf4 /etc/audit/rules.d/\n\\f2 \\cf2  directory, ending in \n\\f0 \\cf4 .rules\n\\f2 \\cf2  extension,\\\nwith the relevant rules to monitor session initiation information.\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # printf \"\\\n-w /var/run/utmp -p wa -k session\\\n-w /var/log/wtmp -p wa -k session\\\n-w /var/log/btmp -p wa -k session\\\n\" >> /etc/audit/rules.d/50-session.rules\\\n\n\\f2\\fs24 Merge and load the rules into active configuration:\\\n\n\\f4\\fs20\\fsmilli10080 # augenrules --load\\\n\n\\f2\\fs24 Check if reboot is required.\\\n\n\\f4\\fs20\\fsmilli10080 # if [[ $(auditctl -s | grep \"enabled\") =~ \"2\" ]]; then printf \"Reboot\\\nrequired to load rules\\\\n\"; fi\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3, AU-3\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.11 | Level2"
@@ -319,7 +319,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 a\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230467\\\n4. RHEL 8 STIG Rule ID: SV-230467r627750\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/audit/rules.d/*.rules\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.12 | Level2"
@@ -337,7 +337,7 @@
       "remediation": "\\\nCreate audit rules\\\n\n\\f2\\b0 Edit or create a file in the \n\\f0 \\cf4 /etc/audit/rules.d/\n\\f2 \\cf2  directory, ending in \n\\f0 \\cf4 .rules\n\\f2 \\cf2  extension,\\\nwith the relevant rules to monitor file deletion events by users.\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # \\{\\\nUID_MIN=$(awk '/^\\\\s*UID_MIN/\\{print $2\\}' /etc/login.defs)\\\n[ -n \"$\\{UID_MIN\\}\" ] && printf \"\\\n-a always,exit -F arch=b64 -S rename,unlink,unlinkat,renameat -F\\\nauid>=$\\{UID_MIN\\} -F auid!=unset -F key=delete\\\n-a always,exit -F arch=b32 -S rename,unlink,unlinkat,renameat -F\\\nauid>=$\\{UID_MIN\\} -F auid!=unset -F key=delete\\\n\" >> /etc/audit/rules.d/50-delete.rules || printf \"ERROR: Variable 'UID_MIN'\\\nis unset.\\\\n\"\\\n\\}\\\n\n\\f1\\b\\fs24 Load audit rules\\\n\n\\f2\\b0 Merge and load the rules into active configuration:\\\n\n\\f4\\fs20\\f",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 a\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230439\\\n4. RHEL 8 STIG Rule ID: SV-230439r810465\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.13 | Level2"
@@ -355,7 +355,7 @@
       "remediation": "\\\n\n\\f2\\b0 Edit or create the file \n\\f0 \\cf4 /etc/audit/rules.d/99-finalize.rules\n\\f2 \\cf2  and add the line \n\\f0 \\cf4 -e\\\n2\n\\f2 \\cf2  at the end of the file:\\\n\n\\f3\\i Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # printf '%s\\\\n' \"\" \"-e 2\" >> /etc/audit/rules.d/99-finalize.rules\\\n\n\\f1\\b\\fs24 Load audit rules\\\n\n\\f2\\b0 Merge and load the rules into active configuration:\\\n\n\\f4\\fs20\\fsmilli10080 # augenrules --load\\\n\n\\f2\\fs24 Check if reboot is required.\\\n\n\\f4\\fs20\\fsmilli10080 # if [[ $(auditctl -s | grep \"enabled\") =~ \"2\" ]]; then printf \"Reboot\\\nrequired to load rules\\\\n\"; fi\n\\f2 Page 974\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-9\\\n2. NIST SP 800-53A :: AU-9.1\\\n3. RHEL 8 STIG Vul ID: V-230402\\\n4. RHEL 8 STIG Rule ID: SV-230402r627750\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.21 | Level2"
@@ -406,7 +406,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to configure the audit log directory to have a mode of\\\n\"0750\" or less permissive:\\\n\n\\f4\\fs20\\fsmilli10080 # chmod g-w,o-rwx \"$(dirname \"$(awk -F= '/^\\\\s*log_file\\\\s*/\\{print $2\\}'\\\n/etc/audit/auditd.conf | xargs)\")\"\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3\n\\fs20\\fsmilli10080 Page 980\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.1 | Level2"
@@ -424,7 +424,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to remove more permissive mode than \n\\f0 \\cf4 0640\n\\f2 \\cf2  from audit log\\\nfiles:\\\n\n\\f4\\fs20\\fsmilli10080 # [ -f /etc/audit/auditd.conf ] && find \"$(dirname $(awk -F \"=\"\\\n'/^\\\\s*log_file/ \\{print $2\\}' /etc/audit/auditd.conf | xargs))\" -type f -perm\\\n/0137 -exec chmod u-x,g-wx,o-rwx \\{\\} +\\\n\n\\f1\\b\\fs24 CIS Controls:\\\nControls\\\nVersion Control IG 1 IG 2 IG 3\\\n\n\\f2\\b0 v8\\\n3.3 Configure Data Access Control Lists\\\n\n\\fs16\\fsmilli8400 Configure data access control lists based on a user\\'92s need to know. Apply data\\\naccess control lists, also known as access permissions, to local and remote file\\\nsystems, databases, and applications.\\\n\n\\fs27\\fsmilli13920 \\cf8 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf5 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf6 \\u",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.2 | Level2"
@@ -442,7 +442,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to configure the audit log files to be owned by the \n\\f0 \\cf4 root\\\n\n\\f2 \\cf2 user:\\\n\n\\f4\\fs20\\fsmilli10080 # [ -f /etc/audit/auditd.conf ] && find \"$(dirname $(awk -F \"=\"\\\n'/^\\\\s*log_file/ \\{print $2\\}' /etc/audit/auditd.conf | xargs))\" -type f ! -user\\\nroot -exec chown root \\{\\} +\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-7\\\n2. NIST SP 800-53A :: CM-7.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230397\\\n4. RHEL 8 STIG Rule ID: SV-230397r627750\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.3 | Level2"
@@ -460,7 +460,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to configure the audit log files to be owned by \n\\f0 \\cf4 adm\n\\f2 \\cf2  group:\\\n\n\\f4\\fs20\\fsmilli10080 # find $(dirname $(awk -F\"=\" '/^\\\\s*log_file\\\\s*=\\\\s*/ \\{print $2\\}'\\\n/etc/audit/auditd.conf | xargs)) -type f \\\\( ! -group adm -a ! -group root \\\\)\\\n-exec chgrp adm \\{\\} +\\\n\n\\f2\\fs24 Run the following command to configure the audit log files to be owned by the \n\\f0 \\cf4 adm\\\n\n\\f2 \\cf2 group:\\\n\n\\f4\\fs20\\fsmilli10080 # chgrp adm /var/log/audit/\\\n\n\\f2\\fs24 Run the following command to set the \n\\f0 \\cf4 log_group\n\\f2 \\cf2  parameter in the audit configuration\\\nfile to \n\\f0 \\cf4 log_group = adm\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # sed -ri 's/^\\\\s*#?\\\\s*log_group\\\\s*=\\\\s*\\\\S+(\\\\s*#.*)?.*$/log_group = adm\\\\1/'\\\n/etc/audit/auditd.conf\\\n\n\\f2\\fs24 Run the follow",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.4 | Level2"
@@ -478,7 +478,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to remove more permissive mode than 0640 from the audit\\\nconfiguration files:\\\n\n\\f4\\fs20\\fsmilli10080 # find /etc/audit/ -type f \\\\( -name '*.conf' -o -name '*.rules' \\\\) -exec\\\nchmod u-x,g-wx,o-rwx \\{\\} +\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 b\\\n2. NIST SP 800-53A :: AU-12.1 (iii)\\\n3. RHEL 8 STIG Vul ID: V-230471\\\n4. RHEL 8 STIG Rule ID: SV-230471r627750\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.5 | Level2"
@@ -496,7 +496,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to change ownership to \n\\f0 \\cf4 root\n\\f2 \\cf2  user:\\\n\n\\f4\\fs20\\fsmilli10080 # find /etc/audit/ -type f \\\\( -name '*.conf' -o -name '*.rules' \\\\) ! -user\\\nroot -exec chown root \\{\\} +\n\\f2 Page 992\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24 CIS Controls:\\\nControls\\\nVersion Control IG 1 IG 2 IG 3\\\n\n\\f2\\b0 v8\\\n3.3 Configure Data Access Control Lists\\\n\n\\fs16\\fsmilli8400 Configure data access control lists based on a user\\'92s need to know. Apply data\\\naccess control lists, also known as access permissions, to local and remote file\\\nsystems, databases, and applications.\\\n\n\\fs27\\fsmilli13920 \\cf8 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf5 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf6 \\uc0\\u9679 \\\n\n\\fs24 \\cf2 v7\\\n14.6 Protect Information through Acces",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.6 | Level2"
@@ -514,7 +514,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to change group to \n\\f0 \\cf4 root\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # find /etc/audit/ -type f \\\\( -name '*.conf' -o -name '*.rules' \\\\) ! -group\\\nroot -exec chgrp root \\{\\} +\n\\f2 Page 994\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24 CIS Controls:\\\nControls\\\nVersion Control IG 1 IG 2 IG 3\\\n\n\\f2\\b0 v8\\\n3.3 Configure Data Access Control Lists\\\n\n\\fs16\\fsmilli8400 Configure data access control lists based on a user\\'92s need to know. Apply data\\\naccess control lists, also known as access permissions, to local and remote file\\\nsystems, databases, and applications.\\\n\n\\fs27\\fsmilli13920 \\cf8 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf5 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf6 \\uc0\\u9679 \\\n\n\\fs24 \\cf2 v7\\\n14.6 Protect Information through Access Contro",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.7 | Level2"
@@ -532,7 +532,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to remove more permissive mode from the audit tools:\\\n\n\\f4\\fs20\\fsmilli10080 # chmod go-w /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace\\\n/sbin/auditd /sbin/augenrules\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.8 | Level2"
@@ -550,7 +550,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to change the owner of the audit tools to the \n\\f0 \\cf4 root\n\\f2 \\cf2  user:\\\n\n\\f4\\fs20\\fsmilli10080 # chown root /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace\\\n/sbin/auditd /sbin/augenrules\n\\f2 Page 998\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24 CIS Controls:\\\nControls\\\nVersion Control IG 1 IG 2 IG 3\\\n\n\\f2\\b0 v8\\\n3.3 Configure Data Access Control Lists\\\n\n\\fs16\\fsmilli8400 Configure data access control lists based on a user\\'92s need to know. Apply data\\\naccess control lists, also known as access permissions, to local and remote file\\\nsystems, databases, and applications.\\\n\n\\fs27\\fsmilli13920 \\cf8 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf5 \\uc0\\u9679 \n\\fs24 \\cf2  \n\\fs27\\fsmilli13920 \\cf6 \\uc0\\u9679 \\\n\n\\fs24 \\cf2 v7\\\n14.6 Protect Inform",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.9 | Level2"
@@ -568,7 +568,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to change group ownership to the group \n\\f0 \\cf4 root\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # chgrp root /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace\\\n/sbin/auditd /sbin/augenrules\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3\n\\fs20\\fsmilli10080 Page 1000\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.10 | Level2"

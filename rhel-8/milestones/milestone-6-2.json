@@ -26,7 +26,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following commands to unmask, enable, and start \n\\f0 \\cf4 systemd-\\\njournald.service\\\n\n\\f4\\fs20\\fsmilli10080 \\cf2 # systemctl unmask systemd-journald.service\\\n# systemctl --now enable systemd-journald.service\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. CCI-001665\\\n2. NIST SP 800-53 :: SC-24\\\n3. NIST SP 800-53A :: SC-24.1 (v)\\\n4. STIG ID: RHEL-09-211040 | RULE ID: SV-257783r991562 | CAT II\\\n5. STIG ID: ALMA-09-041490 | RULE ID: SV-269428r1050311 | CAT II\\\n6. STIG ID: OL09-00-002400 | RULE ID: SV-271739r1091929 | CAT II\n\\fs20\\fsmilli100",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.1 | Level1"
@@ -76,7 +76,7 @@
       "remediation": "\\\n- IF -\n\\f2\\b0  \n\\f0 \\cf4 rsyslog\n\\f2 \\cf2  is the preferred method for capturing logs, this section and\\\nRecommendation should be skipped and the \"Configure rsyslog\" section followed.\\\n\n\\f1\\b - IF -\n\\f2\\b0  \n\\f0 \\cf4 journald\n\\f2 \\cf2  is the preferred method for capturing logs:\\\nSet the following parameter in the \n\\f0 \\cf4 [Journal]\n\\f2 \\cf2  section in\\\n\n\\f0 \\cf4 /etc/systemd/journald.conf\n\\f2 \\cf2  or a file in \n\\f0 \\cf4 /etc/systemd/journald.conf.d/\n\\f2 \\cf2  ending\\\nin \n\\f0 \\cf4 .conf\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 ForwardToSyslog=no\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\n[ ! -d /etc/systemd/journald.conf.d/ ] && mkdir\\\n/etc/systemd/journald.conf.d/\\\nif grep -Psq --\\\n'^\\\\h*\\\\[Journal\\\\]' /etc/systemd/journald.conf.d/60-\\\njournald.conf; then\\\npr",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-6, AU-7, AU-12\\\n2. journald.conf(5) - Linux manual page: \\cf7 https://man7.org/linux/man-\\\npages/man5/journald.conf.5.html\n\\fs20\\fsmilli10080 \\cf2 Page 828\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.4 | Level1"
@@ -94,7 +94,7 @@
       "remediation": "\\\n\n\\f2\\b0 Set the following parameter in the \n\\f0 \\cf4 [Journal]\n\\f2 \\cf2  section in\\\n\n\\f0 \\cf4 /etc/systemd/journald.conf\n\\f2 \\cf2  or a file in \n\\f0 \\cf4 /etc/systemd/journald.conf.d/\n\\f2 \\cf2  ending\\\nin \n\\f0 \\cf4 .conf\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 Storage=persistent\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\n[ ! -d /etc/systemd/journald.conf.d/ ] && mkdir\\\n/etc/systemd/journald.conf.d/\\\nif grep -Psq --\\\n'^\\\\h*\\\\[Journal\\\\]' /etc/systemd/journald.conf.d/60-\\\njournald.conf; then\\\nprintf '%s\\\\n' \"Storage=persistent\" >> /etc/systemd/journald.conf.d/60-\\\njournald.conf\\\nelse\\\nprintf '%s\\\\n' \"[Journal]\" \"Storage=persistent\" >>\\\n/etc/systemd/journald.conf.d/60-journald.conf\\\nfi\\\n\\}\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  Drop-in configuration files have higher preceden",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3, AU-12\\\n2. journald.conf(5) - Linux manual page: \\cf7 https://man7.org/linux/man-\\\npages/man5/journald.conf.5.html\n\\fs20\\fsmilli10080 \\cf2 Page 831\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.5 | Level1"
@@ -112,7 +112,7 @@
       "remediation": "\\\n\n\\f2\\b0 Set the following parameter in the \n\\f0 \\cf4 [Journal]\n\\f2 \\cf2  section in\\\n\n\\f0 \\cf4 /etc/systemd/journald.conf\n\\f2 \\cf2  or a file in \n\\f0 \\cf4 /etc/systemd/journald.conf.d/\n\\f2 \\cf2  ending\\\nin \n\\f0 \\cf4 .conf\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 Compress=yes\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\n[ ! -d /etc/systemd/journald.conf.d/ ] && mkdir\\\n/etc/systemd/journald.conf.d/\\\nif grep -Psq --\\\n'^\\\\h*\\\\[Journal\\\\]' /etc/systemd/journald.conf.d/60-\\\njournald.conf; then\\\nprintf '%s\\\\n' \"Compress=yes\" >> /etc/systemd/journald.conf.d/60-\\\njournald.conf\\\nelse\\\nprintf '%s\\\\n' \"[Journal]\" \"Compress=yes\" >>\\\n/etc/systemd/journald.conf.d/60-journald.conf\\\nfi\\\n\\}\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  Drop-in configuration files have higher precedence and override th",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-4\\\n2. journald.conf(5) - Linux manual page: \\cf7 https://man7.org/linux/man-\\\npages/man5/journald.conf.5.html\n\\fs20\\fsmilli10080 \\cf2 Page 834\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.6 | Level1"
@@ -220,7 +220,7 @@
       "remediation": "\\\n- IF -\n\\f2\\b0  \n\\f0 \\cf4 rsyslog\n\\f2 \\cf2  is the preferred method for capturing logs:\\\nSet the following parameter in the \n\\f0 \\cf4 [Journal]\n\\f2 \\cf2  section in\\\n\n\\f0 \\cf4 /etc/systemd/journald.conf\n\\f2 \\cf2  or a file in \n\\f0 \\cf4 /etc/systemd/journald.conf.d/\n\\f2 \\cf2  ending\\\nin \n\\f0 \\cf4 .conf\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 ForwardToSyslog=yes\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 #!/usr/bin/env bash\\\n\\{\\\n[ ! -d /etc/systemd/journald.conf.d/ ] && mkdir\\\n/etc/systemd/journald.conf.d/\\\nif grep -Psq --\\\n'^\\\\h*\\\\[Journal\\\\]' /etc/systemd/journald.conf.d/60-\\\njournald.conf; then\\\nprintf '%s\\\\n' \"ForwardToSyslog=yes\" >> /etc/systemd/journald.conf.d/60-\\\njournald.conf\\\nelse\\\nprintf '%s\\\\n' \"[Journal]\" \"ForwardToSyslog=yes\" >>\\\n/etc/systemd/journald.conf.d/60-journald.conf\\",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, AU-2, AU-4, AU-12, MP-2\\\n2. SYSTEMD-JOURNALD.SERVICE(8)\\\n3. JOURNALD.CONF(5)\n\\fs20\\fsmilli10080 Page 852\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.3 | Level1"
@@ -239,7 +239,7 @@
       "references": "\\\n\n\\f2\\b0 1. RSYSLOG.CONF(5)\\\n2. NIST SP 800-53 Rev. 5: AC-3, AC-6, MP-2\\\n3. \\cf7 https://www.rsyslog.com/doc/\\\n\n\\f1\\b \\cf2",
       "type": "FileContent",
       "file_path": "/etc/rsyslog.conf\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.4 | Level1"
@@ -299,7 +299,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following script to update permissions and ownership on files in \n\\f0 \\cf4 /var/log\n\\f2 \\cf2 .\\\nAlthough the script is not destructive, ensure that the output is captured in the event that\\\nthe remediation causes issues.\n\\fs20\\fsmilli10080 Page 867\\\n\n\\f0 Internal Only - General\\\n\n\\f4\\fs14\\fsmilli7440 #!/usr/bin/env bash\\\n\\{\\\na_output2=()\\\nf_file_test_fix()\\\n\\{\\\na_out2=()\\\nmaxperm=\"$( printf '%o' $(( 0777 & ~$perm_mask)) )\"\\\nif [ $(( $l_mode & $perm_mask )) -gt 0 ]; then\\\na_out2+=(\" o Mode: \\\\\"$l_mode\\\\\" should be \\\\\"$maxperm\\\\\" or more restrictive\" \" x Removing\\\nexcess permissions\")\\\nchmod \"$l_rperms\" \"$l_fname\"\\\nfi\\\nif [[ ! \"$l_user\" =~ $l_auser ]]; then\\\na_out2+=(\" o Owned by: \\\\\"$l_user\\\\\" and should be owned by \\\\\"$\\{l_auser//|/ or \\}\\\\\"\" \" x\\\nChanging ownership to: \\",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.3.1 | Level1"

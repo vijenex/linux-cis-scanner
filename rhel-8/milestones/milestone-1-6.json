@@ -17,7 +17,7 @@
       "references": "\\\n\n\\f2\\b0 1. CRYPTO-POLICIES(7)\\\n2. \\cf7 https://access.redhat.com/articles/3642912#what-polices-are-provided-1\\\n\\cf2 3. fips-mode-setup(8)\\\n4. NIST SP 800-53 Rev. 5: SC-8\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.6.1 | Level1"
@@ -36,7 +36,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://nvd.nist.gov/vuln/detail/CVE-2008-5161\\\n\\cf2 2. crypto-policies(7)\\\n3. update-crypto-policies(8)\\\n4. Red Hat Enterprise 8 security hardening\\\n5. \\cf7 https://www.redhat.com/en/blog/how-customize-crypto-policies-rhel-82\\\n\\cf2 6. \\cf7 https://csrc.nist.gov/glossary/term/messa",
       "type": "FileContent",
       "file_path": "/etc/crypto-\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.6.3 | Level1"
@@ -55,7 +55,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://nvd.nist.gov/vuln/detail/CVE-2008-5161\\\n\\cf2 2. crypto-policies(7)\\\n3. update-crypto-policies(8)\\\n4. Red Hat Enterprise 8 security hardening\\\n5. \\cf7 https://www.redhat.com/en/blog/how-customize-crypto-policies-rhel-82\\\n\\cf2 6. NIST SP 800-53 Rev. 5: SC-8\n\\fs20\\fsmilli10080",
       "type": "FileContent",
       "file_path": "/etc/crypto-\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.6.4 | Level1"

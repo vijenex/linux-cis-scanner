@@ -84,7 +84,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 254\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/issue\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.7.5 | Level1"
@@ -103,7 +103,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 256\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/issue.net\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.7.6 | Level1"

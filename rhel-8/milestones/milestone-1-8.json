@@ -118,7 +118,7 @@
       "references": "",
       "type": "FileContent",
       "file_path": "/etc/gdm/custom.conf",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.8.7 | Level2"

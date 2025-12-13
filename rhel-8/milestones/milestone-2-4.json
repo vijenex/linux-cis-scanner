@@ -16,7 +16,7 @@
       "remediation": "\\\n- IF -\n\\f2\\b0  cron is installed on the system:\\\nRun the following commands to unmask, enable, and start \n\\f0 \\cf4 cron\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # systemctl unmask \"$(systemctl list-unit-files | awk\\\n'$1~/^crond?\\\\.service/\\{print $1\\}')\"\\\n# systemctl --now enable \"$(systemctl list-unit-files | awk\\\n'$1~/^crond?\\\\.service/\\{print $1\\}')\"\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\n\\fs20\\fsmilli10080 Page 380\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.4.1.1 | Level1"
@@ -147,7 +147,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3. MP-2\n\\fs20\\fsmilli10080 Page 398\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/cron.allow",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.4.1.9 | Level1"
@@ -166,7 +166,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3. MP-2\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/at.allow",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.4.2.1 | Level1"

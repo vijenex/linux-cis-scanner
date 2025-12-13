@@ -16,7 +16,7 @@
       "references": "\\\n\n\\f2\\b0 1. SUDO(8)\\\n2. VISUDO(8)\\\n3. sudoers(5)\\\n4. NIST SP 800-53 Rev. 5: AC-6\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/sudoers*\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.2 | Level1"

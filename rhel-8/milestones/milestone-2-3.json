@@ -33,7 +33,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-3, AU-12\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/chrony.conf\")\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.3.2 | Level1"
@@ -52,7 +52,7 @@
       "references": "",
       "type": "FileContent",
       "file_path": "/etc/sysconfig/chronyd\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 2.3.3 | Level1"

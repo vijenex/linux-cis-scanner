@@ -16,7 +16,7 @@
       "references": "\\\n\n\\f2\\b0 1. GRID #\\\n2. NIST SP 800-53 Rev. 5: CA-9\n\\fs20\\fsmilli10080 Page 576\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/firewalld/firewalld.conf\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.2 | Level1"

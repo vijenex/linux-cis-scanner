@@ -122,7 +122,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. SSHD(8)\\\n3. NIST SP 800-53 :: CM-6 b\\\n4. NIST SP 800-53A :: CM-6.1 (iv)\\\n5. RHEL 8 STIG Vul ID: V-244528\\\n6. RHEL 8 STIG Rule ID: SV-244528r952106\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.11 | Level2"
@@ -141,7 +141,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. SSHD(8)\\\n3. NIST SP 800-53 :: CM-6 b\\\n4. NIST SP 800-53A :: CM-6.1 (iv)\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.12 | Level1"
@@ -160,7 +160,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. SSHD(8)\\\n3. NIST SP 800-53 Rev. 5: CM-1,CM-2, CM-6, CM-7, IA-5\n\\fs20\\fsmilli10080 Page 628\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.13 | Level1"
@@ -179,7 +179,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://ubuntu.com/server/docs/openssh-crypto-configuration\\\n\\cf2 2. NIST SP 800-53 Rev. 5: SC-8\\\n3. SSHD(8)\\\n4. SSHD_CONFIG(5)\n\\fs20\\fsmilli10080 Page 632\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.14 | Level1"
@@ -198,7 +198,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Rev. 5: CM-6\\\n3. SSHD(8)\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.15 | Level1"
@@ -217,7 +217,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://www.ssh.com/ssh/sshd_config/\\\n\\cf2 2. NIST SP 800-53 Rev. 5: AU-3, AU-12, SI-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.16 | Level1"
@@ -236,7 +236,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://nvd.nist.gov/vuln/detail/CVE-2023-48795\\\n\\cf2 2. More information on SSH downgrade attacks can be found here:\\\n\\cf7 http://www.mitls.org/pages/attacks/SLOTH\\\n\\cf2 3. SSHD_CONFIG(5)\\\n4. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.17 | Level1"
@@ -255,7 +255,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Rev. 5: AU-3\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.18 | Level1"
@@ -274,7 +274,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.19 | Level1"
@@ -293,7 +293,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.20 | Level1"
@@ -312,7 +312,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Revision 5 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. RHEL 8 STIG Vul ID: V-230380\\\n5. RHEL 8 STIG Rule ID: SV-230380r951612\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.21 | Level1"
@@ -331,7 +331,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Rev. 5:AC-6\\\n3. NIST SP 800-53A :: IA-2 (5).2 (ii)\\\n4. RHEL 8 STIG Vul ID: V-230296\\\n5. RHEL 8 STIG Rule ID: SV-230296r951608\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.22 | Level1"
@@ -350,7 +350,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. SSHD(8)\\\n3. NIST SP 800-53 Rev. 5: CM-1,CM-2, CM-6, CM-7, IA-5\\\n4. NIST SP 800-53A :: CM-6.1 (iv)\\\n5. RHEL 8 STIG Vul ID: V-230330\\\n6. RHEL 8 STIG Rule ID: SV-230330r951610\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.23 | Level1"
@@ -369,7 +369,7 @@
       "references": "\\\n\n\\f2\\b0 1. SSHD_CONFIG(5)\\\n2. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\\\n3. SSHD(8)\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/crypto-policies/back-ends/opensshserver.config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.1.24 | Level1"

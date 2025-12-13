@@ -69,7 +69,7 @@
       "references": "\\\n\n\\f2\\b0 1. authselect(8)\\\n2. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/9/html/configuring_authentication_and_authorization\\\n_in_rhel/configuring-user-authentication-using-authselect_configuring-\\\nauthentication-and-authorization-in-rhel#creating-and-deploying-yo",
       "type": "FileContent",
       "file_path": "/etc/authselect/\"$(head",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.2.1 | Level1"
@@ -88,7 +88,7 @@
       "references": "\\\n\n\\f2\\b0 1. faillock(8) - Linux man page\\\n2. pam_faillock(8) - Linux man page\\\n3. NIST SP 800-53 :: AC-7 a\\\n4. NIST SP 800-53A :: AC-7.1 (ii)\\\n5. RHEL 8 STIG GROUP ID: V-244533\\\n6. RHEL 8 STIG RULE ID: SV-244533r743848\\\n7. RHEL 8 STIG GROUP ID: V-244534\\\n8. RHEL 8 STIG RULE ID: SV-244534r743851\\\n\n\\",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.2.2 | Level1"
@@ -107,7 +107,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-6 b\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. RHEL 8 STIG GROUP ID: V-230356\\\n4. RHEL 8 STIG RULE ID: SV-230356r902728\\\n5. RHEL 8 STIG GROUP ID: V-251713\n\\fs20\\fsmilli10080 Page 692\\\n\n\\f0 Internal Only - General\\\n\n\\f2\\fs24 6. RHEL 8 STIG RULE ID: SV-251713r902740\\\n\n\\f1",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.2.3 | Level1"
@@ -126,7 +126,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5(1)\n\\fs20\\fsmilli10080 Page 695\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.2.4 | Level1"
@@ -145,7 +145,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5(1)\n\\fs20\\fsmilli10080 Page 698\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs27\\fsmilli13920 \\cf3 5.3.3 Configure PAM Arguments\\\n\n\\f2\\b0\\fs24 \\cf2 Pluggable Authentication Modules (PAM) uses arguments to pass information to a\\\npluggable module during authentication",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.2.5 | Level1"
@@ -174,7 +174,7 @@
       "references": "",
       "type": "FileContent",
       "file_path": "/etc/security/faillock.conf\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.1.1 | Level1"
@@ -193,7 +193,7 @@
       "references": "",
       "type": "FileContent",
       "file_path": "/etc/security/faillock.conf\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.1.2 | Level1"
@@ -212,7 +212,7 @@
       "references": "\\\n\n\\f2\\b0 1. pam_pwquality(8)\\\n2. NIST SP 800-53 Rev. 5: IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/security/pwquality.conf",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.2.2 | Level1"
@@ -247,7 +247,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5\n\\fs20\\fsmilli10080 Page 729\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/security/pwquality.conf\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.2.6 | Level1"
@@ -266,7 +266,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/security/pwquality.conf\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.2.7 | Level1"
@@ -285,7 +285,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5(1)\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/security/pwhistory.conf",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.3.1 | Level1"
@@ -304,7 +304,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5\n\\fs20\\fsmilli10080 Page 737\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/security/pwhistory.conf",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.3.2 | Level1"
@@ -323,7 +323,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.3.3 | Level1"
@@ -342,7 +342,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-6 b\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. RHEL 8 STIG GROUP ID: V-244540\\\n4. RHEL 8 STIG RULE ID: SV-244540r743869\\\n5. RHEL 8 STIG GROUP ID: V-244541\\\n6. RHEL 8 STIG RULE ID: SV-244541r743872\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.4.1 | Level1"
@@ -361,7 +361,7 @@
       "references": "",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.4.2 | Level1"
@@ -380,7 +380,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/pam.d/\\{password,system\\}-auth\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.3.4.4 | Level1"

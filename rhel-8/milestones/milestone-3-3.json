@@ -17,7 +17,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: SLES-15-040380 | RULE ID: SV-235024r991589 | CAT II\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.1 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.1 | Level2",
+      "parameter": "net.ipv4.ip_forward",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.2",
@@ -33,7 +35,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040259 | RULE ID: SV-250317r1017358 | CAT II\\\n5. STIG ID: OL08-00-040259 | RULE ID: SV-252662r991589 | CAT II\\\n6. STIG ID: RHEL-09-253075 | RULE ID: SV-257970r1045011 | CAT II\\\n7. STIG ID: AL",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.2 | Level1",
+      "parameter": "net.ipv4.conf.all.forwarding",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.3",
@@ -49,7 +53,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: ALMA-09-019160 | RULE ID: SV-269249r1050131 | CAT II\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.3 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.3 | Level1",
+      "parameter": "net.ipv4.conf.default.forwarding",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.4",
@@ -63,11 +69,11 @@
       "audit_command": "",
       "remediation": "procedure to create a \n\\f0 \\cf4 .conf\n\\f2 \\cf2  file in the \n\\f0 \\cf4 /etc/sysctl.d/\\\n\n\\f2 \\cf2 directory with the correct setting to prevent a potential change due to an\\\nupdate to the system.\\\n\n\\f4\\fs20\\fsmilli10080 o\n\\f2  \n\\fs24 Any files in the \n\\f0 \\cf4 /etc/sysctl.d/\n\\f2 \\cf2  directory that include an incorrect value\\\nshould be modified to comment out or change the incorrect value to\\\nminimize the potential of the incorrect value being used by \n\\f0 \\cf4 systemd\\\nsysctl\n\\f2 \\cf2  due to system configuration changes.\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\f1\\b\\fs24 SYSTEM FILE PRECEDENCE\\\n\n\\f4\\b0\\fs20\\fsmilli10080 o\n\\f2  \n\\fs24 When using the \n\\f0 \\cf4 --system\n\\f2 \\cf2  option, \n\\f0 \\cf4 sysctl\n\\f2 \\cf2  will read files from directories in\\\nthe following list in given order from top to ",
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040220 | RULE ID: SV-230536r1017298 | CAT II\\\n5. STIG ID: OL08-00-040220 | RULE ID: SV-248877r991589 | CAT II\\\n6. STIG ID: RHEL-09-253065 | RULE ID: SV-257968r991589 | CAT II\\\n7. STIG ID: ALM",
-      "type": "FileContent",
-      "pattern": "",
-      "expected_result": "found",
+      "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.4 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.4 | Level1",
+      "parameter": "net.ipv4.conf.all.send_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.5",
@@ -83,7 +89,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040270 | RULE ID: SV-230543r1017305 | CAT II\\\n5. STIG ID: OL08-00-040270 | RULE ID: SV-248886r991589 | CAT II\\\n6. STIG ID: RHEL-09-253070 | RULE ID: SV-257969r991589 | CAT II\\\n7. STIG ID: ALM",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.5 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.5 | Level1",
+      "parameter": "net.ipv4.conf.default.send_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.8",
@@ -99,7 +107,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040279 | RULE ID: SV-244553r1017353 | CAT II\\\n5. STIG ID: OL08-00-040279 | RULE ID: SV-248887r991589 | CAT II\\\n6. STIG ID: RHEL-09-253015 | RULE ID: SV-257958r991589 | CAT II\\\n7. STIG ID: ALM",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.8 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.8 | Level1",
+      "parameter": "net.ipv4.conf.all.accept_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.10",
@@ -115,7 +125,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.10 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.10 | Level1",
+      "parameter": "net.ipv4.conf.all.secure_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.1.12",
@@ -131,7 +143,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040285 | RULE ID: SV-230549r1017311 | CAT II\\\n5. STIG ID: OL08-00-040285 | RULE ID: SV-248893r991589 | CAT II\\\n6. STIG ID: RHEL-09-253035 | RULE ID: SV-257962r991589 | CAT II\\\n7. STIG ID: ALM",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.12 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.12 | Level1",
+      "parameter": "net.ipv4.conf.all.rp_filter",
+      "expected_value": "1"
     },
     {
       "id": "3.3.1.13",
@@ -147,7 +161,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-09-253050 | RULE ID: SV-257965r991589 | CAT II\\\n5. STIG ID: ALMA-09-019820 | RULE ID: SV-269255r1050137 | CAT II\\\n6. STIG ID: OL09-00-006027 | RULE ID: SV-271871r1092325 | CAT II\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.13 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.13 | Level1",
+      "parameter": "net.ipv4.conf.default.rp_filter",
+      "expected_value": "1"
     },
     {
       "id": "3.3.1.16",
@@ -163,7 +179,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-09-253025 | RULE ID: SV-257960r991589 | CAT II\\\n5. STIG ID: ALMA-09-019380 | RULE ID: SV-269251r1050133 | CAT II\\\n6. STIG ID: OL09-00-006022 | RULE ID: SV-271866r1092310 | CAT II\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.16 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.16 | Level1",
+      "parameter": "net.ipv4.conf.all.log_martians",
+      "expected_value": "1"
     },
     {
       "id": "3.3.1.17",
@@ -179,7 +197,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-09-253030 | RULE ID: SV-257961r991589 | CAT II\\\n5. STIG ID: ALMA-09-019380 | RULE ID: SV-269251r1050133 | CAT II\\\n6. STIG ID: OL09-00-006023 | RULE ID: SV-271867r1092313 | CAT II\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.17 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.17 | Level1",
+      "parameter": "net.ipv4.conf.default.log_martians",
+      "expected_value": "1"
     },
     {
       "id": "3.3.1.18",
@@ -195,7 +215,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-001095 | CCI-002385\\\n2. NIST SP 800-53 :: SC-5 (2) | NIST SP 800-53 :: SC-5 a\\\n3. NIST SP 800-53A :: SC-5 (2).1\\\n4. STIG ID: RHEL-09-253010 | RULE ID: SV-257957r1045009 | CAT II\\\n5. STIG ID: ALMA-09-042480 | RULE ID: SV-269435r1050318 | CAT II\\\n6. STIG ID: OL09-00-006050 | RULE ID: ",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.18 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.1.18 | Level1",
+      "parameter": "net.ipv4.tcp_syncookies",
+      "expected_value": "1"
     },
     {
       "id": "3.3.2.1",
@@ -211,7 +233,9 @@
       "references": "\\\n\n\\f2\\b0 1. CI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040260 | RULE ID: SV-230540r1017302 | CAT II\\\n5. STIG ID: OL08-00-040260 | RULE ID: SV-248883r991589 | CAT II\\\n6. STIG ID: RHEL-09-254025 | RULE ID: SV-257974r991589 | CAT II\\\n7. STIG ID: ALMA",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.1 | Level1",
+      "parameter": "net.ipv6.conf.all.forwarding",
+      "expected_value": "0"
     },
     {
       "id": "3.3.2.2",
@@ -227,7 +251,9 @@
       "references": "\\\n\n\\f2\\b0 1. CI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: ALMA-09-019160 | RULE ID: SV-269249r1050131 | CAT II\\\n5. STIG ID: SLES-15-040382 | RULE ID: SV-235026r991589 | CAT II\\\n\n\\f1\\b",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.2 | Level1",
+      "parameter": "net.ipv6.conf.default.forwarding",
+      "expected_value": "0"
     },
     {
       "id": "3.3.2.3",
@@ -243,7 +269,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040280 | RULE ID: SV-230544r1017306 | CAT II\\\n5. STIG ID: OL08-00-040280 | RULE ID: SV-248888r991589 | CAT II\\\n6. STIG ID: RHEL-09-254015 | RULE ID: SV-257972r991589 | CAT II\\\n7. STIG ID: ALM",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.3 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.3 | Level1",
+      "parameter": "net.ipv6.conf.all.accept_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.2.7",
@@ -259,7 +287,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040261 | RULE ID: SV-230541r1017303 | CAT II\\\n5. STIG ID: OL08-00-040261 | RULE ID: SV-248884r991589 | CAT II\\\n6. STIG ID: RHEL-09-254010 | RULE ID: SV-257971r991589 | CAT II\\\n7. STIG ID: ALM",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.7 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.7 | Level1",
+      "parameter": "net.ipv6.conf.all.accept_ra",
+      "expected_value": "0"
     },
     {
       "id": "3.3.2.8",
@@ -275,7 +305,9 @@
       "references": "\\\n\n\\f2\\b0 1. CCI-000366\\\n2. NIST SP 800-53 :: CM-6 b\\\n3. NIST SP 800-53A :: CM-6.1 (iv)\\\n4. STIG ID: RHEL-08-040262 | RULE ID: SV-230542r1017304 | CAT II\\\n5. STIG ID: OL08-00-040262 | RULE ID: SV-248885r991589 | CAT II\\\n6. STIG ID: RHEL-09-254030 | RULE ID: SV-257975r991589 | CAT II\\\n7. STIG ID: ALM",
       "type": "SysctlParameter",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.8 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 3.3.2.8 | Level1",
+      "parameter": "net.ipv6.conf.default.accept_ra",
+      "expected_value": "0"
     }
   ]
 }

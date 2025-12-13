@@ -17,7 +17,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: IA-5\\\n2. PWCONV(8)\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/passwd\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.1 | Level1"
@@ -36,7 +36,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-6 b\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. RHEL 8 STIG Vul ID: V-251706\\\n4. RHEL 8 STIG Rule ID: SV-251706r809342\n\\fs20\\fsmilli10080 Page 1038\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/shadow\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.2 | Level1"
@@ -55,7 +55,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\n\\fs20\\fsmilli10080 Page 1040\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/passwd",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.3 | Level1"
@@ -74,7 +74,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: IA-2\\\n2. NIST SP 800-53A :: IA-2.1\\\n3. RHEL 8 STIG Vul ID: V-230371\\\n4. RHEL 8 STIG Rule ID: SV-230371r627750\n\\fs20\\fsmilli10080 Page 1042\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/passwd",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.4 | Level1"
@@ -93,7 +93,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/group",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.5 | Level1"
@@ -112,7 +112,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\n\\fs20\\fsmilli10080 Page 1046\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/passwd",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.6 | Level1"
@@ -131,7 +131,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-1, CM-2, CM-6, CM-7, IA-5\n\\fs20\\fsmilli10080 Page 1048\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "FileContent",
       "file_path": "/etc/group",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.7 | Level1"
@@ -149,7 +149,7 @@
       "remediation": "\\\n\n\\f2\\b0 Making global modifications to users' files without alerting the user community can result\\\nin unexpected outages and unhappy users. Therefore, it is recommended that a\\\nmonitoring policy be established to report user dot file permissions and determine the\\\naction to be taken in accordance with site policy.\\\nThe following script will:\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 remove excessive permissions on \n\\f0 \\cf4 dot\n\\f2 \\cf2  files within interactive users' home\\\ndirectories\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 change ownership of \n\\f0 \\cf4 dot\n\\f2 \\cf2  files within interactive users' home directories to the\\\nuser\\\n\n\\f0\\fs20\\fsmilli10080 \\'95\n\\f2  \n\\fs24 change group ownership of \n\\f0 \\cf4 dot\n\\f2 \\cf2  files within interactive users' home directories to\\\nthe user's prim",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.9 | Level1"

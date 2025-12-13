@@ -32,7 +32,7 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to remove the \n\\f0 \\cf4 selinux=0\n\\f2 \\cf2  and \n\\f0 \\cf4 enforcing=0\n\\f2 \\cf2  parameters:\\\n\n\\f4\\fs20\\fsmilli10080 grubby --update-kernel ALL --remove-args \"selinux=0 enforcing=0\"\\\n\n\\f2\\fs24 Run the following command to remove the \n\\f0 \\cf4 selinux=0\n\\f2 \\cf2  and \n\\f0 \\cf4 enforcing=0\n\\f2 \\cf2  parameters if\\\nthey were created by the deprecated \n\\f0 \\cf4 grub2-mkconfig\n\\f2 \\cf2  command:\\\n\n\\f4\\fs20\\fsmilli10080 # grep -Prsq --\\\n'^\\\\h*([^#\\\\n\\\\r]+\\\\h+)?kernelopts=([^#\\\\n\\\\r]+\\\\h+)?(selinux|enforcing)=0\\\\b'\\\n/boot/grub2 /boot/efi && grub2-mkconfig -o \"$(grep -Prl --\\\n'\\\\h*([^#\\\\n\\\\r]+\\\\h+)?kernelopts=([^#\\\\n\\\\r]+\\\\h+)?(selinux|enforcing)=0\\\\b'\\\n/boot/grub2 /boot/efi)\"\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.2 | Level1"
@@ -51,7 +51,7 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\\\n\n\\f1\\b",
       "type": "FileContent",
       "file_path": "/etc/selinux/config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.3 | Level1"
@@ -70,7 +70,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect\\\n-security-enhanced_linux-introduction-selinux_modes\\\n\\cf2 2. NIST SP 800-53 :: SC-3\\\n3. NIST SP 800-53A :: SC-3.1 (ii)\n\\fs20\\fsmilli10080 Page 154\\\n\n\\f0 Inte",
       "type": "FileContent",
       "file_path": "/etc/selinux/config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.4 | Level1"
@@ -89,7 +89,7 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 https://access.redhat.com/documentation/en-\\\nus/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect\\\n-security-enhanced_linux-introduction-selinux_modes\\\n\\cf2 2. CCI-001084 | CCI-002696\\\n3. NIST SP 800-53 :: SC-3 | NIST SP 800-53 :: SI-6 a\\\n4. NIST SP 800-53",
       "type": "FileContent",
       "file_path": "/etc/selinux/config\\",
-      "pattern": "",
+      "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
       "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.5 | Level2"
