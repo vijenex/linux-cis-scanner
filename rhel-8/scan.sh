@@ -26,11 +26,11 @@ fi
 # Fallback to Go binary - detect architecture
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
-    GO_BINARY="$SCRIPT_DIR/go-scanner/bin/vijenex-cis-amd64"
+    GO_BINARY="$SCRIPT_DIR/vijenex-cis-amd64"
 elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-    GO_BINARY="$SCRIPT_DIR/go-scanner/bin/vijenex-cis-arm64"
+    GO_BINARY="$SCRIPT_DIR/vijenex-cis-arm64"
 else
-    GO_BINARY="$SCRIPT_DIR/go-scanner/bin/vijenex-cis"
+    GO_BINARY="$SCRIPT_DIR/vijenex-cis"
 fi
 
 if [ -f "$GO_BINARY" ]; then

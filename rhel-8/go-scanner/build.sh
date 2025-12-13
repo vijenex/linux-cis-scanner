@@ -24,25 +24,31 @@ echo "📦 Downloading dependencies..."
 go mod download
 go mod tidy
 
-# Build for Linux AMD64 (RHEL 8)
+# Build for Linux AMD64 (x86_64)
 echo "🔨 Building for Linux AMD64..."
-GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/vijenex-cis ./cmd
+GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/vijenex-cis-amd64 ./cmd
+chmod +x bin/vijenex-cis-amd64
 
-# Make executable
-chmod +x bin/vijenex-cis
+# Build for Linux ARM64 (aarch64)
+echo "🔨 Building for Linux ARM64..."
+GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o bin/vijenex-cis-arm64 ./cmd
+chmod +x bin/vijenex-cis-arm64
 
-# Get binary size
-SIZE=$(du -h bin/vijenex-cis | cut -f1)
+# Get binary sizes
+SIZE_AMD64=$(du -h bin/vijenex-cis-amd64 | cut -f1)
+SIZE_ARM64=$(du -h bin/vijenex-cis-arm64 | cut -f1)
 
 echo "=========================================="
 echo "✅ Build complete!"
 echo "=========================================="
-echo "Binary: bin/vijenex-cis"
-echo "Size: $SIZE"
-echo "Platform: Linux AMD64"
+echo "AMD64 Binary: bin/vijenex-cis-amd64 ($SIZE_AMD64)"
+echo "ARM64 Binary: bin/vijenex-cis-arm64 ($SIZE_ARM64)"
 echo ""
 echo "Copy to RHEL 8 server:"
-echo "  scp bin/vijenex-cis user@server:/usr/local/bin/"
+echo "  # For x86_64:"
+echo "  scp bin/vijenex-cis-amd64 user@server:/usr/local/bin/vijenex-cis"
+echo "  # For aarch64:"
+echo "  scp bin/vijenex-cis-arm64 user@server:/usr/local/bin/vijenex-cis"
 echo ""
 echo "Run on server:"
 echo "  sudo vijenex-cis --output-dir /tmp/scan-results"
