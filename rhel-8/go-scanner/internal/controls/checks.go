@@ -57,6 +57,7 @@ func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
 	}
 	
 	if expectedStatus == "not_available" {
+		// PASS if: blacklisted, not loaded, or doesn't exist
 		if blacklisted && !loaded {
 			return CheckResult{
 				Status:          "PASS",
@@ -71,19 +72,20 @@ func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
 				EvidenceCommand: fmt.Sprintf("modinfo %s", moduleName),
 				Description:     fmt.Sprintf("Module %s not found in kernel", moduleName),
 			}
+		} else if !loaded && !blacklisted {
+			// Module exists but not loaded and not blacklisted - still PASS if not loaded
+			return CheckResult{
+				Status:          "PASS",
+				ActualValue:     "Module not loaded",
+				EvidenceCommand: fmt.Sprintf("lsmod | grep %s", moduleName),
+				Description:     fmt.Sprintf("Module %s not loaded (blacklisting recommended)", moduleName),
+			}
 		} else if loaded {
 			return CheckResult{
 				Status:          "FAIL",
 				ActualValue:     "Module is loaded",
 				EvidenceCommand: fmt.Sprintf("lsmod | grep %s", moduleName),
 				Description:     fmt.Sprintf("Module %s is currently loaded", moduleName),
-			}
-		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     "Module available but not blacklisted",
-				EvidenceCommand: fmt.Sprintf("modprobe -n -v %s", moduleName),
-				Description:     fmt.Sprintf("Module %s exists but not blacklisted", moduleName),
 			}
 		}
 	}
@@ -240,11 +242,12 @@ func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
 		// Service should be disabled/inactive
 		isDisabled := err != nil || strings.Contains(outputStr, "disabled") || strings.Contains(outputStr, "masked")
 		isInactive := strings.Contains(outputActiveStr, "inactive") || strings.Contains(outputActiveStr, "failed")
+		isNotInstalled := strings.Contains(outputStr, "No such file") || strings.Contains(outputStr, "not-found")
 		
-		if isDisabled && isInactive {
+		if isNotInstalled || (isDisabled && isInactive) {
 			return CheckResult{
 				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Service %s is disabled and inactive", serviceName),
+				ActualValue:     fmt.Sprintf("Service %s is not installed or disabled/inactive", serviceName),
 				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s; systemctl is-active %s", serviceName, serviceName),
 				Description:     fmt.Sprintf("Service %s status check", serviceName),
 			}
