@@ -1,0 +1,43 @@
+{
+  "milestone": "sudo-3",
+  "version": "1.0.0",
+  "description": "3 Sudo Controls using SudoConfig type",
+  "controls": [
+    {
+      "id": "5.2.2",
+      "title": "Ensure sudo commands use pty",
+      "type": "SudoConfig",
+      "automated": true,
+      "profile": "Level1",
+      "section": "5.2",
+      "parameter": "use_pty",
+      "expected_value": "enabled",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.2",
+      "description": "Ensure sudo commands use pty"
+    },
+    {
+      "id": "5.2.3",
+      "title": "Ensure sudo log file exists",
+      "type": "SudoConfig",
+      "automated": true,
+      "profile": "Level1",
+      "section": "5.2",
+      "parameter": "logfile",
+      "expected_value": "/var/log/sudo.log",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.3",
+      "description": "Ensure sudo log file exists"
+    },
+    {
+      "id": "5.2.4",
+      "title": "Ensure users must provide password for privilege escalation",
+      "type": "SudoConfig",
+      "automated": true,
+      "profile": "Level1",
+      "section": "5.2",
+      "parameter": "!authenticate",
+      "expected_value": "not_found",
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.2.4",
+      "description": "Ensure users must provide password for privilege escalation"
+    }
+  ]
+}

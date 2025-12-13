@@ -1,342 +1,224 @@
 package controls
 
 import (
-	"bufio"
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"regexp"
 	"strings"
+	"time"
 )
 
 func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
-	// Check if module is blacklisted
-	blacklisted := false
-	modprobeDirs := []string{"/etc/modprobe.d/", "/lib/modprobe.d/", "/usr/lib/modprobe.d/"}
-	
-	for _, dir := range modprobeDirs {
-		files, err := filepath.Glob(filepath.Join(dir, "*.conf"))
-		if err != nil {
-			continue
-		}
-		
-		for _, file := range files {
-			content, err := os.ReadFile(file)
-			if err != nil {
-				continue
-			}
-			
-			pattern := fmt.Sprintf(`install\s+%s\s+/bin/(true|false)`, regexp.QuoteMeta(moduleName))
-			matched, _ := regexp.Match(pattern, content)
-			if matched {
-				blacklisted = true
-				break
-			}
-		}
-		if blacklisted {
-			break
-		}
-	}
-	
-	// Check if module is loaded (handle both hyphen and underscore)
-	loaded := false
-	moduleNameUnderscore := strings.ReplaceAll(moduleName, "-", "_")
-	cmd := exec.Command("lsmod")
-	output, err := cmd.Output()
-	if err == nil {
-		loaded = strings.Contains(string(output), moduleName) || strings.Contains(string(output), moduleNameUnderscore)
-	}
-	
-	// Check if module exists (try both hyphen and underscore)
-	cmd = exec.Command("modinfo", moduleName)
-	moduleExists := cmd.Run() == nil
-	if !moduleExists {
-		cmd = exec.Command("modinfo", moduleNameUnderscore)
-		moduleExists = cmd.Run() == nil
-	}
+	ctx, _ := BuildScanContext()
+	modInfo := ctx.GetModuleInfo(moduleName)
 	
 	if expectedStatus == "not_available" {
-		// PASS if: blacklisted, not loaded, or doesn't exist
-		if blacklisted && !loaded {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     "Module blacklisted and not loaded",
-				EvidenceCommand: fmt.Sprintf("lsmod | grep %s; modprobe -n -v %s", moduleName, moduleName),
-				Description:     fmt.Sprintf("Module %s: blacklisted=%t, loaded=%t", moduleName, blacklisted, loaded),
+		if !modInfo.Loaded && (modInfo.Blacklisted || !modInfo.Exists) {
+			if modInfo.Blacklisted {
+				return Pass(
+					"Module blacklisted and not loaded",
+					fmt.Sprintf("install %s /bin/true", moduleName),
+				)
+			} else {
+				return Pass(
+					"Module not available in kernel",
+					"module not found",
+				)
 			}
-		} else if !moduleExists {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     "Module not available in kernel",
-				EvidenceCommand: fmt.Sprintf("modinfo %s", moduleName),
-				Description:     fmt.Sprintf("Module %s not found in kernel", moduleName),
-			}
-		} else if !loaded && !blacklisted {
-			// Module exists but not loaded and not blacklisted - still PASS if not loaded
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     "Module not loaded",
-				EvidenceCommand: fmt.Sprintf("lsmod | grep %s", moduleName),
-				Description:     fmt.Sprintf("Module %s not loaded (blacklisting recommended)", moduleName),
-			}
-		} else if loaded {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     "Module is loaded",
-				EvidenceCommand: fmt.Sprintf("lsmod | grep %s", moduleName),
-				Description:     fmt.Sprintf("Module %s is currently loaded", moduleName),
-			}
+		} else if modInfo.Loaded {
+			return Fail(
+				"Module is loaded",
+				fmt.Sprintf("%s loaded", moduleName),
+				fmt.Sprintf("Module %s must be disabled", moduleName),
+			)
+		} else if modInfo.Exists && !modInfo.Blacklisted {
+			return Fail(
+				"Module exists but not blacklisted",
+				fmt.Sprintf("%s exists", moduleName),
+				fmt.Sprintf("Module %s should be blacklisted", moduleName),
+			)
 		}
 	}
 	
-	return CheckResult{
-		Status:          "FAIL",
-		ActualValue:     fmt.Sprintf("Unexpected expected_status: %s", expectedStatus),
-		EvidenceCommand: "N/A",
-		Description:     "Invalid expected status",
-	}
+	return Error(fmt.Errorf("unknown expected_status: %s", expectedStatus), "validation")
 }
 
 func CheckMountPoint(mountPoint, expectedStatus string) CheckResult {
-	file, err := os.Open("/proc/mounts")
-	if err != nil {
-		return CheckResult{
-			Status:          "ERROR",
-			ActualValue:     "Cannot access mount information",
-			EvidenceCommand: "findmnt",
-			Description:     "Access to /proc/mounts denied",
-		}
-	}
-	defer file.Close()
-	
-	mountFound := false
-	deviceInfo := ""
-	
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		parts := strings.Fields(scanner.Text())
-		if len(parts) >= 2 && parts[1] == mountPoint {
-			mountFound = true
-			deviceInfo = parts[0]
-			break
-		}
-	}
+	ctx, _ := BuildScanContext()
 	
 	if expectedStatus == "separate_partition" {
-		if mountFound && !strings.HasPrefix(deviceInfo, "/dev/loop") {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Separate partition: %s", deviceInfo),
-				EvidenceCommand: fmt.Sprintf("findmnt %s", mountPoint),
-				Description:     fmt.Sprintf("Mount point %s verification", mountPoint),
-			}
-		} else if mountFound {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Mounted: %s", deviceInfo),
-				EvidenceCommand: fmt.Sprintf("findmnt %s", mountPoint),
-				Description:     fmt.Sprintf("Mount point %s is mounted", mountPoint),
-			}
+		if mountInfo, exists := ctx.Mounts[mountPoint]; exists {
+			return Pass(
+				fmt.Sprintf("Separate partition: %s (%s)", mountInfo.Device, mountInfo.FS),
+				fmt.Sprintf("%s %s", mountInfo.Device, mountPoint),
+			)
 		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     "Not a separate partition",
-				EvidenceCommand: fmt.Sprintf("findmnt %s", mountPoint),
-				Description:     fmt.Sprintf("Mount point %s not found", mountPoint),
-			}
+			return Fail(
+				"Not a separate partition",
+				"mount not found",
+				fmt.Sprintf("Mount point %s not found", mountPoint),
+			)
 		}
 	}
 	
-	return CheckResult{
-		Status:          "FAIL",
-		ActualValue:     fmt.Sprintf("Unexpected expected_status: %s", expectedStatus),
-		EvidenceCommand: "N/A",
-		Description:     "Invalid expected status",
-	}
+	return Error(fmt.Errorf("unknown expected_status: %s", expectedStatus), "validation")
 }
 
 func CheckMountOption(mountPoint, requiredOption string) CheckResult {
-	file, err := os.Open("/proc/mounts")
-	if err != nil {
-		return CheckResult{
-			Status:          "ERROR",
-			ActualValue:     "Cannot access mount information",
-			EvidenceCommand: fmt.Sprintf("findmnt %s", mountPoint),
-			Description:     "Access to /proc/mounts denied",
-		}
-	}
-	defer file.Close()
+	ctx, _ := BuildScanContext()
 	
-	mountFound := false
-	var options []string
-	
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		parts := strings.Fields(scanner.Text())
-		if len(parts) >= 4 && parts[1] == mountPoint {
-			mountFound = true
-			options = strings.Split(parts[3], ",")
-			break
-		}
+	mountInfo, runtimeExists := ctx.Mounts[mountPoint]
+	if !runtimeExists {
+		return Fail(
+			"Mount point not found",
+			"mount not found",
+			fmt.Sprintf("Mount point %s not mounted", mountPoint),
+		)
 	}
 	
-	if !mountFound {
-		return CheckResult{
-			Status:          "SKIPPED",
-			ActualValue:     "Mount point not found",
-			EvidenceCommand: fmt.Sprintf("findmnt %s", mountPoint),
-			Description:     fmt.Sprintf("Mount point %s does not exist as separate partition", mountPoint),
-		}
-	}
+	fstabEntry, fstabExists := ctx.Fstab[mountPoint]
 	
-	optionPresent := false
-	for _, opt := range options {
+	runtimeHasOption := false
+	for opt := range mountInfo.Options {
 		if opt == requiredOption {
-			optionPresent = true
+			runtimeHasOption = true
 			break
 		}
 	}
 	
-	status := "FAIL"
-	if optionPresent {
-		status = "PASS"
+	fstabHasOption := false
+	if fstabExists {
+		for opt := range fstabEntry.Options {
+			if opt == requiredOption {
+				fstabHasOption = true
+				break
+			}
+		}
 	}
 	
-	return CheckResult{
-		Status:          status,
-		ActualValue:     fmt.Sprintf("Options: %s", strings.Join(options, ",")),
-		EvidenceCommand: fmt.Sprintf("findmnt -n %s | grep -v %s", mountPoint, requiredOption),
-		Description:     fmt.Sprintf("Mount %s: %s %s", mountPoint, requiredOption, map[bool]string{true: "found", false: "missing"}[optionPresent]),
+	if runtimeHasOption && fstabHasOption {
+		return Pass(
+			fmt.Sprintf("Option %s present (runtime + fstab)", requiredOption),
+			fmt.Sprintf("%s option found", requiredOption),
+		)
+	} else if runtimeHasOption && !fstabHasOption {
+		return Fail(
+			fmt.Sprintf("Option %s present in runtime but not persistent", requiredOption),
+			fmt.Sprintf("%s in runtime only", requiredOption),
+			fmt.Sprintf("Mount %s missing %s in fstab", mountPoint, requiredOption),
+		)
+	} else {
+		optList := make([]string, 0, len(mountInfo.Options))
+		for opt := range mountInfo.Options {
+			optList = append(optList, opt)
+		}
+		return Fail(
+			fmt.Sprintf("Option %s missing (runtime: %s)", requiredOption, strings.Join(optList, ",")),
+			strings.Join(optList, ","),
+			fmt.Sprintf("Mount %s missing %s option", mountPoint, requiredOption),
+		)
 	}
 }
 
 func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
-	// Check both is-enabled and is-active for better accuracy
-	cmd := exec.Command("systemctl", "is-enabled", serviceName)
-	output, err := cmd.Output()
-	outputStr := strings.TrimSpace(string(output))
+	unitPaths := []string{
+		fmt.Sprintf("/etc/systemd/system/%s.service", serviceName),
+		fmt.Sprintf("/lib/systemd/system/%s.service", serviceName),
+		fmt.Sprintf("/usr/lib/systemd/system/%s.service", serviceName),
+	}
 	
-	// Also check if service is active
-	cmdActive := exec.Command("systemctl", "is-active", serviceName)
-	outputActive, _ := cmdActive.Output()
-	outputActiveStr := strings.TrimSpace(string(outputActive))
+	unitExists := false
+	for _, path := range unitPaths {
+		if info, err := os.Lstat(path); err == nil && info.Mode()&os.ModeSymlink == 0 {
+			unitExists = true
+			break
+		}
+	}
+	
+	enabled := false
+	enabledPaths := []string{
+		fmt.Sprintf("/etc/systemd/system/multi-user.target.wants/%s.service", serviceName),
+		fmt.Sprintf("/etc/systemd/system/default.target.wants/%s.service", serviceName),
+	}
+	
+	for _, path := range enabledPaths {
+		if _, err := os.Lstat(path); err == nil {
+			enabled = true
+			break
+		}
+	}
 	
 	if expectedStatus == "enabled" {
-		if err == nil && strings.Contains(outputStr, "enabled") {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Service %s is enabled", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s", serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
+		if enabled {
+			return Pass(
+				fmt.Sprintf("Service %s is enabled", serviceName),
+				"service enabled",
+			)
 		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     fmt.Sprintf("Service %s is not enabled: %s", serviceName, outputStr),
-				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s", serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
+			return Fail(
+				fmt.Sprintf("Service %s is not enabled", serviceName),
+				"service not enabled",
+				fmt.Sprintf("Service %s not enabled", serviceName),
+			)
 		}
 	} else if expectedStatus == "disabled" || expectedStatus == "inactive" {
-		// Service should be disabled/inactive
-		isDisabled := err != nil || strings.Contains(outputStr, "disabled") || strings.Contains(outputStr, "masked")
-		isInactive := strings.Contains(outputActiveStr, "inactive") || strings.Contains(outputActiveStr, "failed")
-		isNotInstalled := strings.Contains(outputStr, "No such file") || strings.Contains(outputStr, "not-found") || strings.Contains(outputStr, "Failed to get unit file state")
-		
-		if isNotInstalled || (isDisabled && isInactive) {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Service %s is not installed or disabled/inactive", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s; systemctl is-active %s", serviceName, serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
-		} else if isInactive {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Service %s is inactive", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-active %s", serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
+		if !unitExists || !enabled {
+			return Pass(
+				fmt.Sprintf("Service %s is disabled/not installed", serviceName),
+				"service disabled",
+			)
 		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     fmt.Sprintf("Service %s is active or enabled", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-enabled %s; systemctl is-active %s", serviceName, serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
-		}
-	} else if expectedStatus == "active" {
-		// Service should be active
-		isActive := strings.Contains(outputActiveStr, "active")
-		if isActive {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Service %s is active", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-active %s", serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
-		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     fmt.Sprintf("Service %s is not active", serviceName),
-				EvidenceCommand: fmt.Sprintf("systemctl is-active %s", serviceName),
-				Description:     fmt.Sprintf("Service %s status check", serviceName),
-			}
+			return Fail(
+				fmt.Sprintf("Service %s is enabled", serviceName),
+				"service enabled",
+				fmt.Sprintf("Service %s should be disabled", serviceName),
+			)
 		}
 	}
 	
-	return CheckResult{
-		Status:          "FAIL",
-		ActualValue:     fmt.Sprintf("Unknown expected_status: %s", expectedStatus),
-		EvidenceCommand: "N/A",
-		Description:     "Invalid expected status",
-	}
+	return Error(fmt.Errorf("unknown expected_status: %s", expectedStatus), "validation")
 }
 
 func CheckPackageInstalled(packageName, expectedStatus string) CheckResult {
-	cmd := exec.Command("rpm", "-q", packageName)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	
+	cmd := exec.CommandContext(ctx, "rpm", "-q", packageName)
 	output, err := cmd.Output()
 	outputStr := strings.TrimSpace(string(output))
 	
+	if ctx.Err() == context.DeadlineExceeded {
+		return Error(fmt.Errorf("RPM query timeout"), "rpm")
+	}
+	
 	if expectedStatus == "installed" {
 		if err == nil {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Package %s is installed: %s", packageName, outputStr),
-				EvidenceCommand: fmt.Sprintf("rpm -q %s", packageName),
-				Description:     fmt.Sprintf("Package %s installation check", packageName),
-			}
+			return Pass(
+				fmt.Sprintf("Package installed: %s", outputStr),
+				outputStr,
+			)
 		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     fmt.Sprintf("Package %s is not installed", packageName),
-				EvidenceCommand: fmt.Sprintf("rpm -q %s", packageName),
-				Description:     fmt.Sprintf("Package %s installation check", packageName),
-			}
+			return Fail(
+				"Package not installed",
+				"not installed",
+				fmt.Sprintf("Package %s not found", packageName),
+			)
 		}
 	} else if expectedStatus == "not_installed" {
 		if err != nil {
-			return CheckResult{
-				Status:          "PASS",
-				ActualValue:     fmt.Sprintf("Package %s is not installed", packageName),
-				EvidenceCommand: fmt.Sprintf("rpm -q %s", packageName),
-				Description:     fmt.Sprintf("Package %s installation check", packageName),
-			}
+			return Pass(
+				"Package not installed (as expected)",
+				"not installed",
+			)
 		} else {
-			return CheckResult{
-				Status:          "FAIL",
-				ActualValue:     fmt.Sprintf("Package %s is installed: %s", packageName, outputStr),
-				EvidenceCommand: fmt.Sprintf("rpm -q %s", packageName),
-				Description:     fmt.Sprintf("Package %s installation check", packageName),
-			}
+			return Fail(
+				fmt.Sprintf("Package installed: %s", outputStr),
+				outputStr,
+				fmt.Sprintf("Package %s should not be installed", packageName),
+			)
 		}
 	}
 	
-	return CheckResult{
-		Status:          "FAIL",
-		ActualValue:     fmt.Sprintf("Unknown expected_status: %s", expectedStatus),
-		EvidenceCommand: "N/A",
-		Description:     "Invalid expected status",
-	}
+	return Error(fmt.Errorf("unknown expected_status: %s", expectedStatus), "validation")
 }
