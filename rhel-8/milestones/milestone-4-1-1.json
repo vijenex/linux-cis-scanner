@@ -16,7 +16,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CA-9\n\\fs20\\fsmilli10080 Page 574\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.1 | Level1",
+      "package_name": "audit"
     },
     {
       "title": "Ensure auditd is installed",

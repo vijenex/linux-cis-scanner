@@ -35,7 +35,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.1 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.1 | Level2",
+      "file_path": "/etc/passwd",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.1.3",
@@ -70,7 +74,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: AU-12 a\\\n2. NIST SP 800-53A :: AU-12.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-244542\\\n4. RHEL 8 STIG Rule ID: SV-244542r818838\n\\fs20\\fsmilli10080 Page 881\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.4 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.4 | Level2",
+      "service_name": "systemd-coredump",
+      "expected_status": "inactive"
     },
     {
       "title": "Ensure permissions on /etc/group- are configured",
@@ -105,7 +111,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.1 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.1 | Level2",
+      "file_path": "/etc/shadow",
+      "expected_permissions": "0000",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.2.2",
@@ -123,7 +133,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.2 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.2 | Level2",
+      "file_path": "/etc/gshadow",
+      "expected_permissions": "0000",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.2.3",
@@ -141,7 +155,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.3 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.3 | Level2",
+      "file_path": "/etc/group",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.2.4",
@@ -159,7 +177,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.4 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.4 | Level2",
+      "file_path": "/etc/passwd-",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "title": "Ensure permissions on /etc/shadow- are configured",
@@ -213,7 +235,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.2 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.2 | Level2",
+      "file_path": "/etc/motd",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.3",
@@ -231,7 +257,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.3 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.3 | Level2",
+      "file_path": "/etc/issue",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.6",
@@ -249,7 +279,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.6 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.6 | Level2",
+      "file_path": "/etc/issue.net",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.7",
@@ -267,7 +301,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.7 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.7 | Level2",
+      "file_path": "/etc/hosts.allow",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.10",
@@ -285,7 +323,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.10 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.10 | Level2",
+      "file_path": "/etc/hosts.deny",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.11",
@@ -303,7 +345,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.11 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.11 | Level2",
+      "file_path": "/etc/sysctl.conf",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.12",
@@ -340,7 +386,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.13 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.13 | Level2",
+      "file_path": "/etc/sysctl.d",
+      "expected_permissions": "0755",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.21",
@@ -358,7 +408,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.21 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.21 | Level2",
+      "file_path": "/etc/ssh/sshd_config",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.3.22",
@@ -409,7 +463,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.1 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.1 | Level2",
+      "file_path": "/etc/ssh/ssh_host_rsa_key",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.2",
@@ -427,7 +485,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.2 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.2 | Level2",
+      "file_path": "/etc/ssh/ssh_host_ecdsa_key",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.3",
@@ -445,7 +507,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.3 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.3 | Level2",
+      "file_path": "/etc/ssh/ssh_host_ed25519_key",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.4",
@@ -463,7 +529,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.4 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.4 | Level2",
+      "file_path": "/etc/ssh/ssh_host_rsa_key.pub",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.5",
@@ -481,7 +551,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.5 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.5 | Level2",
+      "file_path": "/etc/ssh/ssh_host_ecdsa_key.pub",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.6",
@@ -499,7 +573,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.6 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.6 | Level2",
+      "file_path": "/etc/ssh/ssh_host_ed25519_key.pub",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.7",
@@ -517,7 +595,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.7 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.7 | Level2",
+      "file_path": "/etc/at.allow",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.8",
@@ -535,7 +617,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.8 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.8 | Level2",
+      "file_path": "/etc/at.deny",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.9",
@@ -553,7 +639,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.9 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.9 | Level2",
+      "file_path": "/etc/cron.allow",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "6.3.4.10",
@@ -571,7 +661,11 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.10 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.10 | Level2",
+      "file_path": "/etc/cron.deny",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "title": "Ensure no world writable files exist",

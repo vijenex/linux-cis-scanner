@@ -134,10 +134,11 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following command to update an active zone target and write a permanent\\\nfirewalld rule:\\\n\n\\f4\\fs20\\fsmilli10080 # firewall-cmd --zone=\\{ACTIVE_ZONE\\} --set-target=\\{TARGET\\} --permanent\\\n\n\\f3\\i\\fs24 Example:\\\n\n\\f4\\i0\\fs20\\fsmilli10080 # firewall-cmd --zone=public --set-target=DROP --permanent\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  \n\\f0 \\cf4 --set-target=",
       "references": "",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": "max_log_file_action",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.4 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.4 | Level1",
+      "file_path": "/etc/audit/auditd.conf"
     }
   ]
 }

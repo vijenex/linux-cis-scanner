@@ -27,7 +27,8 @@
       "references": "",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.1.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.1.1 | Level1",
+      "package_name": "pam"
     },
     {
       "id": "5.3.1.2",
@@ -43,7 +44,8 @@
       "references": "",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.1.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.3.1.2 | Level1",
+      "package_name": "authselect"
     },
     {
       "id": "5.3.2",

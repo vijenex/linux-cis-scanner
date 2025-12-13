@@ -102,7 +102,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "high",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.1.5 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.1.5 | Level1",
+      "file_path": "/etc/default/useradd"
     },
     {
       "id": "5.4.1.6",
@@ -206,7 +207,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2.4 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2.4 | Level1",
+      "file_path": "/etc/login.defs"
     },
     {
       "id": "5.4.2.5",
@@ -224,7 +226,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2.5 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2.5 | Level1",
+      "file_path": "/etc/login.defs"
     },
     {
       "id": "5.4.2.6",
@@ -242,7 +245,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2.6 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.2.6 | Level1",
+      "file_path": "/etc/login.defs"
     },
     {
       "id": "5.4.2.7",
@@ -327,7 +331,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.3.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 5.4.3.2 | Level1",
+      "file_path": "/etc/bashrc"
     },
     {
       "id": "5.4.3.3",

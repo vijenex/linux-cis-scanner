@@ -17,7 +17,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: SI-3, MP-7\n\\fs20\\fsmilli10080 Page 290\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.1 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.1 | Level2",
+      "service_name": "autofs",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.2",
@@ -33,7 +35,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: SI-4\n\\fs20\\fsmilli10080 Page 293\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.2 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.2 | Level2",
+      "service_name": "avahi-daemon",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.3",
@@ -49,7 +53,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 296\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.3 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.3 | Level2",
+      "service_name": "cockpit",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.4",
@@ -65,7 +71,9 @@
       "references": "\\\n\n\\f2\\b0 1. dhcpd(8)\\\n2. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 299\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.4 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.4 | Level1",
+      "service_name": "dhcpd",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.5",
@@ -81,7 +89,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 302\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.5 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.5 | Level1",
+      "service_name": "named",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.6",
@@ -97,7 +107,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\\\n\n\\f1\\b",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.6 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.6 | Level1",
+      "service_name": "dnsmasq",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.7",
@@ -113,7 +125,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. RHEL 8 STIG Vul ID: V-230558\\\n4. RHEL 8 STIG Rule ID: SV-230558r627750\n\\fs20\\fsmilli10080 Page 307\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.7 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.7 | Level1",
+      "service_name": "dovecot",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.8",
@@ -129,7 +143,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 310\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.8 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.8 | Level1",
+      "package_name": "ftp"
     },
     {
       "id": "2.1.9",
@@ -145,7 +160,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-6, CM-7\\\n\n\\f1\\b",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.9 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.9 | Level1",
+      "service_name": "httpd",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.10",
@@ -161,7 +178,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 316\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.10 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.10 | Level1",
+      "service_name": "nginx",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.11",
@@ -177,7 +196,9 @@
       "references": "\\\n\n\\f2\\b0 1. \\cf7 http://www.cups.org\\\n\\cf2 2. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 319\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.11 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.11 | Level1",
+      "service_name": "nfs-server",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.12",
@@ -193,7 +214,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-6, CM-7\n\\fs20\\fsmilli10080 Page 322\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.12 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.12 | Level1",
+      "service_name": "rpcbind",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.13",
@@ -209,7 +232,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-6, CM-7\n\\fs20\\fsmilli10080 Page 325\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.13 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.13 | Level1",
+      "service_name": "rsync",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.14",
@@ -225,7 +250,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-6, CM-7\n\\fs20\\fsmilli10080 Page 328\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.14 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.14 | Level1",
+      "service_name": "smb",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.15",
@@ -241,7 +268,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 331\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.15 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.15 | Level1",
+      "service_name": "snmpd",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.16",
@@ -257,7 +286,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7, CM-11\\\n2. NIST SP 800-53A :: CM-7.1 (ii)\\\n3. RHEL 8 STIG Vul ID: V-230487\\\n4. RHEL 8 STIG Rule ID: SV-230487r627750\n\\fs20\\fsmilli10080 Page 334\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.16 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.16 | Level1",
+      "service_name": "squid",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.17",
@@ -273,7 +304,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 337\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.17 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.17 | Level1",
+      "service_name": "tftp",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.18",
@@ -288,10 +321,11 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following commands to stop \n\\f0 \\cf4 squid.service\n\\f2 \\cf2  and remove the \n\\f0 \\cf4 squid\n\\f2 \\cf2  package:\\\n\n\\f4\\fs20\\fsmilli10080 # systemctl stop squid.service\\\n# dnf remove squid\\\n\n\\f1\\b\\fs24 - OR -\n\\f2\\b0  If the \n\\f0 \\cf4 squid\n\\f2 \\cf2  package is required as a dependency:\\\nRun the following commands to stop and mask the \n\\f0 \\cf4 squid.service\n\\f2 \\cf2 :\\\n\n\\f4\\fs20\\fsmilli10080 # systemctl stop squid.service\\\n# systemctl mask squid.service\\\n\n\\f1\\b\\fs24",
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-6, CM-7\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": "xinetd",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.18 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.18 | Level1",
+      "file_path": "/etc/xinetd.conf"
     },
     {
       "id": "2.1.19",
@@ -307,7 +341,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-7\n\\fs20\\fsmilli10080 Page 344\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.19 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.19 | Level1",
+      "package_name": "xorg-x11-server-common"
     },
     {
       "id": "2.1.20",
@@ -323,7 +358,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-7\n\\fs20\\fsmilli10080 Page 347\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.20 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.20 | Level1",
+      "service_name": "ypserv",
+      "expected_status": "inactive"
     },
     {
       "id": "2.1.21",
@@ -338,10 +375,11 @@
       "remediation": "\\\n\n\\f2\\b0 Run the following to remove the \n\\f0 \\cf4 Server with GUI\n\\f2 \\cf2  group:\\\n1. Run the following command to install the \n\\f0 \\cf4 Minimal Install\n\\f2 \\cf2  group:\\\n\n\\f4\\fs20\\fsmilli10080 # dnf groupinstall -y \"Minimal Install\"\\\n\n\\f1\\b\\fs24 Note:\n\\f2\\b0  This is important to update dependencies to allow the removal of the \n\\f0 \\cf4 Server\\\nwith GUI\n\\f2 \\cf2  group with minimal impact to the system functionality.\\\n2. Run the following command to remove the \n\\f0 \\cf4 Server with GUI\n\\f2 \\cf2  group:\\\n\n\\f4\\fs20\\fsmilli10080 # dnf groupremove -y \"Server with GUI\"\\\n\n\\f2\\fs24 3. Run the following command to install the \n\\f0 \\cf4 Server\n\\f2 \\cf2  group:\\\n\n\\f4\\fs20\\fsmilli10080 # dnf groupinstall -y \"Server\"\\\n\n\\f2\\fs24 4. Run the following command to reboot the system:\\\n\n\\f4\\fs20\\fsmilli1",
       "references": "\\\n\n\\f2\\b0 1. removing-gui-rhel-8\\\n\n\\f1\\b",
       "type": "FileContent",
-      "pattern": "",
+      "pattern": "Listen",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.21 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.21 | Level2",
+      "file_path": "/etc/cups/cupsd.conf"
     },
     {
       "id": "2.1.22",
@@ -357,7 +395,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: CM-11\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. RHEL 8 STIG Vul ID: V-230553\\\n4. RHEL 8 STIG Rule ID: SV-230553r809324\\\n\n\\f1\\b",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.22 | Level2"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 2.1.22 | Level2",
+      "package_name": "cups"
     }
   ]
 }

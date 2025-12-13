@@ -152,7 +152,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.9 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 7.2.9 | Level1",
+      "file_path": "/etc/profile"
     }
   ]
 }

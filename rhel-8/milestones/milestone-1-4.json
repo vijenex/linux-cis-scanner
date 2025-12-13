@@ -19,7 +19,11 @@
       "pattern": "",
       "expected_result": "found",
       "severity": "high",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.1 | Level1",
+      "file_path": "/boot/grub2/grub.cfg",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "1.4.2",
@@ -37,7 +41,11 @@
       "pattern": "",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.4.2 | Level1",
+      "file_path": "/boot/grub2/user.cfg",
+      "expected_permissions": "0600",
+      "expected_owner": "root",
+      "expected_group": "root"
     }
   ]
 }

@@ -17,7 +17,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 145\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.1 | Level1",
+      "package_name": "aide"
     },
     {
       "id": "1.3.1.2",
@@ -35,7 +36,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.2 | Level1",
+      "file_path": "/etc/cron.d/aide"
     },
     {
       "id": "1.3.1.3",
@@ -124,7 +126,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 162\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.7 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.7 | Level1",
+      "package_name": "grub2-efi-x64"
     },
     {
       "id": "1.3.1.8",
@@ -140,7 +143,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AC-3, MP-2\n\\fs20\\fsmilli10080 Page 164\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.8 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 1.3.1.8 | Level1",
+      "package_name": "shim-x64"
     }
   ]
 }

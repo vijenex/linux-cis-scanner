@@ -29,7 +29,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.1 | Level1",
+      "file_path": "/etc/ssh/sshd_config"
     },
     {
       "id": "6.2.1.1.2",
@@ -79,7 +80,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.4 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.4 | Level1",
+      "file_path": "/etc/ssh/sshd_config"
     },
     {
       "id": "6.2.1.1.5",
@@ -97,7 +99,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.5 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.5 | Level1",
+      "file_path": "/etc/ssh/sshd_config"
     },
     {
       "id": "6.2.1.1.6",
@@ -115,7 +118,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.6 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.1.6 | Level1",
+      "file_path": "/etc/ssh/sshd_config"
     },
     {
       "id": "6.2.1.2.1",
@@ -131,7 +135,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-7 AU-12\n\\fs20\\fsmilli10080 Page 837\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.2.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.2.1 | Level1",
+      "package_name": "rsyslog"
     },
     {
       "id": "6.2.1.2.3",
@@ -147,7 +152,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-12\n\\fs20\\fsmilli10080 Page 841\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.2.3 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.2.3 | Level1",
+      "service_name": "rsyslog",
+      "expected_status": "active"
     },
     {
       "id": "6.2.1.2.4",
@@ -163,7 +170,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-7 AU-12\\\n\n\\f1\\b",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.2.4 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.1.2.4 | Level1",
+      "service_name": "rsyslog",
+      "expected_status": "enabled"
     },
     {
       "id": "6.2.2",
@@ -189,7 +198,8 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 :: CM-6 b\\\n2. NIST SP 800-53A :: CM-6.1 (iv)\\\n3. RHEL 8 STIG GROUP ID: V-230477\\\n4. RHEL 8 STIG RULE ID: SV-230477r627750\n\\fs20\\fsmilli10080 Page 846\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "PackageInstalled",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.1 | Level1",
+      "package_name": "systemd-journal-remote"
     },
     {
       "id": "6.2.2.2",
@@ -205,7 +215,9 @@
       "references": "\\\n\n\\f2\\b0 1. NIST SP 800-53 Rev. 5: AU-2, AU-3, AU-12\n\\fs20\\fsmilli10080 Page 848\\\n\n\\f0 Internal Only - General\\\n\n\\f1\\b\\fs24",
       "type": "ServiceStatus",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.2 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.2 | Level1",
+      "service_name": "systemd-journal-upload",
+      "expected_status": "active"
     },
     {
       "id": "6.2.2.3",
@@ -223,7 +235,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.3 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.2.3 | Level1",
+      "file_path": "/etc/systemd/journal-upload.conf"
     },
     {
       "id": "6.2.2.4",
@@ -302,7 +315,8 @@
       "pattern": ".*",
       "expected_result": "found",
       "severity": "medium",
-      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.3.1 | Level1"
+      "cis_reference": "CIS RHEL 8 v4.0.0 - 6.2.3.1 | Level1",
+      "file_path": "/etc/systemd/journald.conf"
     },
     {
       "id": "6.2.4",
