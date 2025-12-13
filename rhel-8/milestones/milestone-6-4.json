@@ -3,7 +3,6 @@
   "title": "User and Group Settings",
   "controls": [
     {
-      "control_id": "6.4.1",
       "title": "Ensure password fields are not empty",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the passwd(1) man page for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.1"
     },
     {
-      "control_id": "6.4.2",
       "title": "Ensure all groups in /etc/passwd exist in /etc/group",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the group(5) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 16.1 Maintain an Inventory of Authentication Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.2"
     },
     {
-      "control_id": "6.4.3",
       "title": "Ensure no duplicate UIDs exist",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the useradd(8) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 16.1 Maintain an Inventory of Authentication Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.3"
     },
     {
-      "control_id": "6.4.4",
       "title": "Ensure no duplicate GIDs exist",
       "level": 1,
       "scored": true,
@@ -68,10 +67,10 @@
       "references": "1. See the groupadd(8) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 16.1 Maintain an Inventory of Authentication Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.4"
     },
     {
-      "control_id": "6.4.5",
       "title": "Ensure no duplicate user names exist",
       "level": 1,
       "scored": true,
@@ -85,10 +84,10 @@
       "references": "1. See the useradd(8) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 16.1 Maintain an Inventory of Authentication Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.5"
     },
     {
-      "control_id": "6.4.6",
       "title": "Ensure no duplicate group names exist",
       "level": 1,
       "scored": true,
@@ -102,10 +101,10 @@
       "references": "1. See the groupadd(8) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 16.1 Maintain an Inventory of Authentication Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.6"
     },
     {
-      "control_id": "6.4.7",
       "title": "Ensure root PATH Integrity",
       "level": 1,
       "scored": true,
@@ -119,10 +118,10 @@
       "references": "1. See the bash(1) man page for more information.",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 5.1 Establish Secure Configurations",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.7"
     },
     {
-      "control_id": "6.4.8",
       "title": "Ensure root is the only UID 0 account",
       "level": 1,
       "scored": true,
@@ -136,7 +135,8 @@
       "references": "1. See the passwd(5) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 4.3 Ensure the Use of Dedicated Administrative Accounts",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.4.8"
     }
   ]
 }

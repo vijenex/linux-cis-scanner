@@ -3,7 +3,6 @@
   "title": "Additional Logging Configuration",
   "controls": [
     {
-      "control_id": "4.4.1",
       "title": "Ensure rsyslog is installed",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the rsyslog(8) man page for more information.",
       "cis_controls": "v8: 8.2 Collect Audit Logs\nv7: 6.2 Activate audit logging",
       "check_type": "PackageInstalled",
-      "check_value": "rsyslog"
+      "check_value": "rsyslog",
+      "id": "4.4.1"
     },
     {
-      "control_id": "4.4.2",
       "title": "Ensure journald is configured to send logs to rsyslog",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the journald.conf(5) man page for more information.",
       "cis_controls": "v8: 8.2 Collect Audit Logs\nv7: 6.2 Activate audit logging",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.4.2"
     },
     {
-      "control_id": "4.4.3",
       "title": "Ensure journald is configured to compress large log files",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the journald.conf(5) man page for more information.",
       "cis_controls": "v8: 8.3 Ensure Adequate Audit Log Storage\nv7: 6.4 Ensure adequate storage for logs",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.4.3"
     },
     {
-      "control_id": "4.4.4",
       "title": "Ensure journald is configured to write logfiles to persistent disk",
       "level": 1,
       "scored": true,
@@ -68,7 +67,8 @@
       "references": "1. See the journald.conf(5) man page for more information.",
       "cis_controls": "v8: 8.3 Ensure Adequate Audit Log Storage\nv7: 6.4 Ensure adequate storage for logs",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.4.4"
     }
   ]
 }

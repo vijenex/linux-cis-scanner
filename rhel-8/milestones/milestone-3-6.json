@@ -3,7 +3,6 @@
   "title": "Firewall Configuration - iptables",
   "controls": [
     {
-      "control_id": "3.6.1",
       "title": "Ensure iptables packages are installed",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.4 Implement and Manage a Firewall on Servers\nv7: 9.4 Apply Host-based Firewalls or Port Filtering",
       "check_type": "PackageInstalled",
-      "check_value": "iptables"
+      "check_value": "iptables",
+      "id": "3.6.1"
     },
     {
-      "control_id": "3.6.2",
       "title": "Ensure nftables is not installed with iptables",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.4 Implement and Manage a Firewall on Servers\nv7: 9.4 Apply Host-based Firewalls or Port Filtering",
       "check_type": "PackageNotInstalled",
-      "check_value": "nftables"
+      "check_value": "nftables",
+      "id": "3.6.2"
     },
     {
-      "control_id": "3.6.3",
       "title": "Ensure firewalld is not installed with iptables",
       "level": 1,
       "scored": true,
@@ -51,7 +50,8 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.4 Implement and Manage a Firewall on Servers\nv7: 9.4 Apply Host-based Firewalls or Port Filtering",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "3.6.3"
     }
   ]
 }

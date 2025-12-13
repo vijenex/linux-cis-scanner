@@ -3,7 +3,6 @@
   "title": "Uncommon Network Protocols",
   "controls": [
     {
-      "control_id": "3.5.1",
       "title": "Ensure DCCP is disabled",
       "level": 2,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "KernelModule",
-      "check_value": "dccp"
+      "check_value": "dccp",
+      "id": "3.5.1"
     },
     {
-      "control_id": "3.5.2",
       "title": "Ensure SCTP is disabled",
       "level": 2,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "KernelModule",
-      "check_value": "sctp"
+      "check_value": "sctp",
+      "id": "3.5.2"
     },
     {
-      "control_id": "3.5.3",
       "title": "Ensure RDS is disabled",
       "level": 2,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "KernelModule",
-      "check_value": "rds"
+      "check_value": "rds",
+      "id": "3.5.3"
     },
     {
-      "control_id": "3.5.4",
       "title": "Ensure TIPC is disabled",
       "level": 2,
       "scored": true,
@@ -68,7 +67,8 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "KernelModule",
-      "check_value": "tipc"
+      "check_value": "tipc",
+      "id": "3.5.4"
     }
   ]
 }

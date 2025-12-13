@@ -3,7 +3,6 @@
   "title": "System Accounting",
   "controls": [
     {
-      "control_id": "1.9.1",
       "title": "Ensure system-wide crypto policy is not legacy",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening",
       "cis_controls": "v8: 3.10 Encrypt Sensitive Data in Transit\nv7: 14.4 Encrypt All Sensitive Information in Transit",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.9.1"
     },
     {
-      "control_id": "1.9.2",
       "title": "Ensure system-wide crypto policy is FUTURE or FIPS",
       "level": 2,
       "scored": true,
@@ -34,7 +33,8 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/security_hardening/using-the-system-wide-cryptographic-policies_security-hardening",
       "cis_controls": "v8: 3.10 Encrypt Sensitive Data in Transit\nv7: 14.4 Encrypt All Sensitive Information in Transit",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.9.2"
     }
   ]
 }

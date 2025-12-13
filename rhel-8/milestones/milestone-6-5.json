@@ -3,7 +3,6 @@
   "title": "Additional System File Permissions",
   "controls": [
     {
-      "control_id": "6.5.1",
       "title": "Ensure permissions on /etc/crontab are configured",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the crontab(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/crontab:0600:root:root"
+      "check_value": "/etc/crontab:0600:root:root",
+      "id": "6.5.1"
     },
     {
-      "control_id": "6.5.2",
       "title": "Ensure permissions on /etc/cron.hourly are configured",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the crontab(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/cron.hourly:0700:root:root"
+      "check_value": "/etc/cron.hourly:0700:root:root",
+      "id": "6.5.2"
     },
     {
-      "control_id": "6.5.3",
       "title": "Ensure permissions on /etc/cron.daily are configured",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the crontab(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/cron.daily:0700:root:root"
+      "check_value": "/etc/cron.daily:0700:root:root",
+      "id": "6.5.3"
     },
     {
-      "control_id": "6.5.4",
       "title": "Ensure permissions on /etc/cron.weekly are configured",
       "level": 1,
       "scored": true,
@@ -68,10 +67,10 @@
       "references": "1. See the crontab(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/cron.weekly:0700:root:root"
+      "check_value": "/etc/cron.weekly:0700:root:root",
+      "id": "6.5.4"
     },
     {
-      "control_id": "6.5.5",
       "title": "Ensure permissions on /etc/cron.monthly are configured",
       "level": 1,
       "scored": true,
@@ -85,10 +84,10 @@
       "references": "1. See the crontab(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/cron.monthly:0700:root:root"
+      "check_value": "/etc/cron.monthly:0700:root:root",
+      "id": "6.5.5"
     },
     {
-      "control_id": "6.5.6",
       "title": "Ensure permissions on /etc/cron.d are configured",
       "level": 1,
       "scored": true,
@@ -102,7 +101,8 @@
       "references": "1. See the crontab(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/cron.d:0700:root:root"
+      "check_value": "/etc/cron.d:0700:root:root",
+      "id": "6.5.6"
     }
   ]
 }

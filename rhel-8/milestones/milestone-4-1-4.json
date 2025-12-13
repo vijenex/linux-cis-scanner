@@ -3,7 +3,6 @@
   "title": "Configure auditd File Access",
   "controls": [
     {
-      "control_id": "4.1.3.9",
       "title": "Ensure unsuccessful file access attempts are collected",
       "level": 2,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 14.9 Enforce Detail Logging for Access or Changes to Sensitive Data",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.9"
     },
     {
-      "control_id": "4.1.3.10",
       "title": "Ensure successful file system mounts are collected",
       "level": 2,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 5.5 Implement Automated Configuration Monitoring Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.10"
     },
     {
-      "control_id": "4.1.3.11",
       "title": "Ensure file deletion events by users are collected",
       "level": 2,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 14.9 Enforce Detail Logging for Access or Changes to Sensitive Data",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.11"
     },
     {
-      "control_id": "4.1.3.12",
       "title": "Ensure changes to system administration scope (sudoers) is collected",
       "level": 2,
       "scored": true,
@@ -68,10 +67,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 4.8 Log and Alert on Changes to Administrative Group Membership",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.12"
     },
     {
-      "control_id": "4.1.3.13",
       "title": "Ensure system administrator command executions (sudo) are collected",
       "level": 2,
       "scored": true,
@@ -85,10 +84,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 4.9 Log and Alert on Unsuccessful Administrative Account Login",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.13"
     },
     {
-      "control_id": "4.1.3.14",
       "title": "Ensure kernel module loading and unloading is collected",
       "level": 2,
       "scored": true,
@@ -102,10 +101,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 5.5 Implement Automated Configuration Monitoring Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.14"
     },
     {
-      "control_id": "4.1.3.15",
       "title": "Ensure the audit configuration is immutable",
       "level": 2,
       "scored": true,
@@ -119,7 +118,8 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 6.2 Activate audit logging",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.15"
     },
     {
       "id": "4.1.4",

@@ -3,7 +3,6 @@
   "title": "Additional Service Configuration",
   "controls": [
     {
-      "control_id": "2.5.1",
       "title": "Ensure NFS is not installed",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. More information on NFS is available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "PackageNotInstalled",
-      "check_value": "nfs-utils"
+      "check_value": "nfs-utils",
+      "id": "2.5.1"
     },
     {
-      "control_id": "2.5.2",
       "title": "Ensure rpcbind is not installed",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. More information on rpcbind is available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "PackageNotInstalled",
-      "check_value": "rpcbind"
+      "check_value": "rpcbind",
+      "id": "2.5.2"
     },
     {
-      "control_id": "2.5.3",
       "title": "Ensure rsync is not installed",
       "level": 1,
       "scored": true,
@@ -51,7 +50,8 @@
       "references": "1. More information on rsync is available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "PackageNotInstalled",
-      "check_value": "rsync"
+      "check_value": "rsync",
+      "id": "2.5.3"
     }
   ]
 }

@@ -22,7 +22,6 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.2 | Level1"
     },
     {
-      "control_id": "4.1.2.1",
       "title": "Ensure audit log storage size is configured",
       "level": 2,
       "scored": true,
@@ -36,10 +35,10 @@
       "references": "1. See the auditd.conf(5) man page for more information.",
       "cis_controls": "v8: 8.3 Ensure Adequate Audit Log Storage\nv7: 6.4 Ensure adequate storage for logs",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.2.1"
     },
     {
-      "control_id": "4.1.2.2",
       "title": "Ensure audit logs are not automatically deleted",
       "level": 2,
       "scored": true,
@@ -53,10 +52,10 @@
       "references": "1. See the auditd.conf(5) man page for more information.",
       "cis_controls": "v8: 8.3 Ensure Adequate Audit Log Storage\nv7: 6.4 Ensure adequate storage for logs",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.2.2"
     },
     {
-      "control_id": "4.1.2.3",
       "title": "Ensure system is disabled when audit logs are full",
       "level": 2,
       "scored": true,
@@ -70,7 +69,8 @@
       "references": "1. See the auditd.conf(5) man page for more information.",
       "cis_controls": "v8: 8.3 Ensure Adequate Audit Log Storage\nv7: 6.4 Ensure adequate storage for logs",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.2.3"
     }
   ]
 }

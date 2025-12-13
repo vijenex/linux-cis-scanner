@@ -3,7 +3,6 @@
   "title": "User and Group Settings",
   "controls": [
     {
-      "control_id": "5.7.1",
       "title": "Ensure password expiration is 365 days or less",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the login.defs(5) and chage(1) man pages for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.7.1"
     },
     {
-      "control_id": "5.7.2",
       "title": "Ensure minimum days between password changes is configured",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the login.defs(5) and chage(1) man pages for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.7.2"
     },
     {
-      "control_id": "5.7.3",
       "title": "Ensure password expiration warning days is 7 or more",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the login.defs(5) and chage(1) man pages for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.7.3"
     },
     {
-      "control_id": "5.7.4",
       "title": "Ensure inactive password lock is 30 days or less",
       "level": 1,
       "scored": true,
@@ -68,10 +67,10 @@
       "references": "1. See the useradd(8) and chage(1) man pages for more information.",
       "cis_controls": "v8: 5.3 Disable Dormant Accounts\nv7: 16.9 Disable Dormant Accounts",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.7.4"
     },
     {
-      "control_id": "5.7.5",
       "title": "Ensure all users last password change date is in the past",
       "level": 1,
       "scored": true,
@@ -85,7 +84,8 @@
       "references": "1. See the chage(1) man page for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.7.5"
     }
   ]
 }

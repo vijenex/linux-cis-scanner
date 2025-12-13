@@ -3,7 +3,6 @@
   "title": "User Authentication and Authorization",
   "controls": [
     {
-      "control_id": "5.6.1",
       "title": "Ensure access to the su command is restricted",
       "level": 1,
       "scored": true,
@@ -17,7 +16,8 @@
       "references": "1. See the pam(8) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 4.3 Ensure the Use of Dedicated Administrative Accounts",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.6.1"
     }
   ]
 }

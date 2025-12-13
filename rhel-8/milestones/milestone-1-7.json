@@ -3,7 +3,6 @@
   "title": "Mandatory Access Controls",
   "controls": [
     {
-      "control_id": "1.7.1",
       "title": "Ensure SELinux is installed",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/index",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "PackageInstalled",
-      "check_value": "libselinux"
+      "check_value": "libselinux",
+      "id": "1.7.1"
     },
     {
-      "control_id": "1.7.2",
       "title": "Ensure SELinux is not disabled in bootloader configuration",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.7.2"
     },
     {
-      "control_id": "1.7.3",
       "title": "Ensure SELinux policy is configured",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.7.3"
     },
     {
-      "control_id": "1.7.4",
       "title": "Ensure the SELinux mode is enforcing or permissive",
       "level": 1,
       "scored": true,
@@ -68,7 +67,8 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.7.4"
     },
     {
       "id": "1.7.5",

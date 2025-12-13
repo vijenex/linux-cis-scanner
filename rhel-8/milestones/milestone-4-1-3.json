@@ -19,7 +19,6 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 4.1.3 | Level1"
     },
     {
-      "control_id": "4.1.3.1",
       "title": "Ensure changes to system administration scope (sudoers) is collected",
       "level": 2,
       "scored": true,
@@ -33,10 +32,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 4.9 Log and Alert on Unsuccessful Administrative Account Login",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.1"
     },
     {
-      "control_id": "4.1.3.2",
       "title": "Ensure actions as another user are always logged",
       "level": 2,
       "scored": true,
@@ -50,10 +49,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 4.9 Log and Alert on Unsuccessful Administrative Account Login",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.2"
     },
     {
-      "control_id": "4.1.3.3",
       "title": "Ensure events that modify date and time information are collected",
       "level": 2,
       "scored": true,
@@ -67,10 +66,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 5.5 Implement Automated Configuration Monitoring Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.3"
     },
     {
-      "control_id": "4.1.3.4",
       "title": "Ensure events that modify the system's network environment are collected",
       "level": 2,
       "scored": true,
@@ -84,10 +83,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 5.5 Implement Automated Configuration Monitoring Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.4"
     },
     {
-      "control_id": "4.1.3.5",
       "title": "Ensure events that modify the system's Mandatory Access Controls are collected",
       "level": 2,
       "scored": true,
@@ -101,10 +100,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 5.5 Implement Automated Configuration Monitoring Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.5"
     },
     {
-      "control_id": "4.1.3.6",
       "title": "Ensure login and logout events are collected",
       "level": 2,
       "scored": true,
@@ -118,10 +117,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 4.9 Log and Alert on Unsuccessful Administrative Account Login",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.6"
     },
     {
-      "control_id": "4.1.3.7",
       "title": "Ensure session initiation information is collected",
       "level": 2,
       "scored": true,
@@ -135,10 +134,10 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 4.9 Log and Alert on Unsuccessful Administrative Account Login",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.7"
     },
     {
-      "control_id": "4.1.3.8",
       "title": "Ensure discretionary access control permission modification events are collected",
       "level": 2,
       "scored": true,
@@ -152,7 +151,8 @@
       "references": "1. See the auditctl(8) and auditd(8) man pages for more information.",
       "cis_controls": "v8: 8.5 Collect Detailed Audit Logs\nv7: 5.5 Implement Automated Configuration Monitoring Systems",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "4.1.3.8"
     }
   ]
 }

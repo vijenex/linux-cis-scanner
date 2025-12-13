@@ -3,7 +3,6 @@
   "title": "User Accounts and Environment",
   "controls": [
     {
-      "control_id": "5.5.1",
       "title": "Ensure default user shell timeout is 900 seconds or less",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the bash(1) man page for more information.",
       "cis_controls": "v8: 4.3 Configure Automatic Session Locking on Enterprise Assets\nv7: 16.11 Lock Workstation Sessions After Inactivity",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.5.1"
     },
     {
-      "control_id": "5.5.2",
       "title": "Ensure default user umask is 027 or more restrictive",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the bash(1) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.5.2"
     },
     {
-      "control_id": "5.5.3",
       "title": "Ensure default group for the root account is GID 0",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the usermod(8) man page for more information.",
       "cis_controls": "v8: 5.4 Restrict Administrator Privileges to Dedicated Administrator Accounts\nv7: 4.3 Ensure the Use of Dedicated Administrative Accounts",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.5.3"
     },
     {
-      "control_id": "5.5.4",
       "title": "Ensure default user shell timeout is configured",
       "level": 1,
       "scored": true,
@@ -68,7 +67,8 @@
       "references": "1. See the bash(1) man page for more information.",
       "cis_controls": "v8: 4.3 Configure Automatic Session Locking on Enterprise Assets\nv7: 16.11 Lock Workstation Sessions After Inactivity",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.5.4"
     }
   ]
 }

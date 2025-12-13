@@ -3,7 +3,6 @@
   "title": "System File Permissions",
   "controls": [
     {
-      "control_id": "6.3.1",
       "title": "Ensure permissions on /etc/passwd- are configured",
       "level": 1,
       "scored": true,
@@ -17,7 +16,8 @@
       "references": "1. See the passwd(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/passwd-:0644:root:root"
+      "check_value": "/etc/passwd-:0644:root:root",
+      "id": "6.3.1"
     },
     {
       "id": "6.3.1.1",
@@ -73,7 +73,6 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.1.4 | Level2"
     },
     {
-      "control_id": "6.3.2",
       "title": "Ensure permissions on /etc/group- are configured",
       "level": 1,
       "scored": true,
@@ -87,7 +86,8 @@
       "references": "1. See the group(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/group-:0644:root:root"
+      "check_value": "/etc/group-:0644:root:root",
+      "id": "6.3.2"
     },
     {
       "id": "6.3.2.1",
@@ -162,7 +162,6 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.2.4 | Level2"
     },
     {
-      "control_id": "6.3.3",
       "title": "Ensure permissions on /etc/shadow- are configured",
       "level": 1,
       "scored": true,
@@ -176,7 +175,8 @@
       "references": "1. See the shadow(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/shadow-:0000:root:root"
+      "check_value": "/etc/shadow-:0000:root:root",
+      "id": "6.3.3"
     },
     {
       "id": "6.3.3.1",
@@ -377,7 +377,6 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.3.22 | Level2"
     },
     {
-      "control_id": "6.3.4",
       "title": "Ensure permissions on /etc/gshadow- are configured",
       "level": 1,
       "scored": true,
@@ -391,7 +390,8 @@
       "references": "1. See the gshadow(5) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "FilePermissions",
-      "check_value": "/etc/gshadow-:0000:root:root"
+      "check_value": "/etc/gshadow-:0000:root:root",
+      "id": "6.3.4"
     },
     {
       "id": "6.3.4.1",
@@ -574,7 +574,6 @@
       "cis_reference": "CIS RHEL 8 v4.0.0 - 6.3.4.10 | Level2"
     },
     {
-      "control_id": "6.3.5",
       "title": "Ensure no world writable files exist",
       "level": 1,
       "scored": false,
@@ -588,10 +587,10 @@
       "references": "1. See the chmod(1) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.3.5"
     },
     {
-      "control_id": "6.3.6",
       "title": "Ensure no unowned files or directories exist",
       "level": 1,
       "scored": false,
@@ -605,10 +604,10 @@
       "references": "1. See the find(1) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.3.6"
     },
     {
-      "control_id": "6.3.7",
       "title": "Ensure no ungrouped files or directories exist",
       "level": 1,
       "scored": false,
@@ -622,7 +621,8 @@
       "references": "1. See the find(1) man page for more information.",
       "cis_controls": "v8: 3.3 Configure Data Access Control Lists\nv7: 14.6 Protect Information through Access Control Lists",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "6.3.7"
     }
   ]
 }

@@ -3,7 +3,6 @@
   "title": "Additional PAM Configuration",
   "controls": [
     {
-      "control_id": "5.8.1",
       "title": "Ensure password creation requirements are configured",
       "level": 1,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. See the pam_pwquality(8) man page for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.8.1"
     },
     {
-      "control_id": "5.8.2",
       "title": "Ensure lockout for failed password attempts is configured",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. See the pam_faillock(8) man page for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.8.2"
     },
     {
-      "control_id": "5.8.3",
       "title": "Ensure password reuse is limited",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. See the pam_unix(8) man page for more information.",
       "cis_controls": "v8: 5.2 Use Unique Passwords\nv7: 4.4 Use Unique Passwords",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.8.3"
     },
     {
-      "control_id": "5.8.4",
       "title": "Ensure password hashing algorithm is SHA-512",
       "level": 1,
       "scored": true,
@@ -68,7 +67,8 @@
       "references": "1. See the pam_unix(8) man page for more information.",
       "cis_controls": "v8: 3.11 Encrypt Sensitive Data at Rest\nv7: 14.4 Encrypt All Sensitive Information in Transit",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "5.8.4"
     }
   ]
 }

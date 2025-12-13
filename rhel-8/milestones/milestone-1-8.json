@@ -3,7 +3,6 @@
   "title": "GNOME Display Manager",
   "controls": [
     {
-      "control_id": "1.8.1",
       "title": "Ensure GNOME Display Manager is removed",
       "level": 2,
       "scored": true,
@@ -17,10 +16,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software\nv7: 9.2 Ensure Only Approved Ports, Protocols and Services Are Running",
       "check_type": "PackageNotInstalled",
-      "check_value": "gdm"
+      "check_value": "gdm",
+      "id": "1.8.1"
     },
     {
-      "control_id": "1.8.2",
       "title": "Ensure GDM login banner is configured",
       "level": 1,
       "scored": true,
@@ -34,10 +33,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 5.1 Establish Secure Configurations",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.8.2"
     },
     {
-      "control_id": "1.8.3",
       "title": "Ensure GDM disable-user-list option is enabled",
       "level": 1,
       "scored": true,
@@ -51,10 +50,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 5.1 Establish Secure Configurations",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.8.3"
     },
     {
-      "control_id": "1.8.4",
       "title": "Ensure GDM screen locks when the user is idle",
       "level": 1,
       "scored": true,
@@ -68,10 +67,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.3 Configure Automatic Session Locking on Enterprise Assets\nv7: 16.11 Lock Workstation Sessions After Inactivity",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.8.4"
     },
     {
-      "control_id": "1.8.5",
       "title": "Ensure GDM screen locks cannot be overridden",
       "level": 1,
       "scored": true,
@@ -85,10 +84,10 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.3 Configure Automatic Session Locking on Enterprise Assets\nv7: 16.11 Lock Workstation Sessions After Inactivity",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.8.5"
     },
     {
-      "control_id": "1.8.6",
       "title": "Ensure GDM automatic mounting of removable media is disabled",
       "level": 1,
       "scored": false,
@@ -102,7 +101,8 @@
       "references": "1. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/",
       "cis_controls": "v8: 4.1 Establish and Maintain a Secure Configuration Process\nv7: 8.4 Configure Anti-Malware Scanning of Removable Devices",
       "check_type": "Manual",
-      "check_value": ""
+      "check_value": "",
+      "id": "1.8.6"
     },
     {
       "id": "1.8.7",
