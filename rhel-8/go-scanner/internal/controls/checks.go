@@ -242,7 +242,7 @@ func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
 		// Service should be disabled/inactive
 		isDisabled := err != nil || strings.Contains(outputStr, "disabled") || strings.Contains(outputStr, "masked")
 		isInactive := strings.Contains(outputActiveStr, "inactive") || strings.Contains(outputActiveStr, "failed")
-		isNotInstalled := strings.Contains(outputStr, "No such file") || strings.Contains(outputStr, "not-found")
+		isNotInstalled := strings.Contains(outputStr, "No such file") || strings.Contains(outputStr, "not-found") || strings.Contains(outputStr, "Failed to get unit file state")
 		
 		if isNotInstalled || (isDisabled && isInactive) {
 			return CheckResult{
