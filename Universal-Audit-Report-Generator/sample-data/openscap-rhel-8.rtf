@@ -1,0 +1,595 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 OpenSCAP Evaluation Report\
+Guide to the Secure Configuration of Red Hat Enterprise Linux 8\
+\
+    with profile CIS Red Hat Enterprise Linux 8 Benchmark for Level 1 - Server\
+    This profile defines a baseline that aligns to the "Level 1 - Server"\
+    configuration from the Center for Internet Security\'ae Red Hat Enterprise\
+    Linux 8 Benchmark\'99, v3.0.0, released 2023-10-30.\
+\
+    This profile includes Center for Internet Security\'ae\
+    Red Hat Enterprise Linux 8 CIS Benchmarks\'99 content.\
+\
+The SCAP Security Guide Project\
+https://www.open-scap.org/security-policies/scap-security-guide\
+This guide presents a catalog of security-relevant configuration settings for Red Hat Enterprise Linux 8. It is a rendering of content structured in the eXtensible Configuration Checklist Description Format (XCCDF) in order to support security automation. The SCAP content is is available in the scap-security-guide package which is developed at https://www.open-scap.org/security-policies/scap-security-guide.\
+\
+Providing system administrators with such guidance informs them how to securely configure systems under their control in a variety of network roles. Policy makers and baseline creators can use this catalog of settings, with its associated references to higher-level security control catalogs, in order to assist them in security baseline creation. This guide is a catalog, not a checklist, and satisfaction of every item is not likely to be possible or sensible in many operational scenarios. However, the XCCDF format enables granular selection and adjustment of settings, and their association with OVAL and OCIL content provides an automated checking capability. Transformations of this document, and its associated automated checking content, are capable of providing baselines that meet a diverse set of policy objectives. Some example XCCDF Profiles, which are selections of items that form checklists and can be used as baselines, are available with this guide. They can be processed, in an automated fashion, with tools that support the Security Content Automation Protocol (SCAP). The DISA STIG, which provides required settings for US Department of Defense systems, is one example of a baseline created from this guidance.\
+Do not attempt to implement any of the settings in this guide without first testing them in a non-operational environment. The creators of this guidance assume no responsibility whatsoever for its use by other parties, and makes no guarantees, expressed or implied, about its quality, reliability, or any other characteristic.\
+Evaluation Characteristics\
+Evaluation target	ip-172-24-0-136.ap-southeast-1.compute.internal\
+Benchmark URL	#scap_org.open-scap_comp_ssg-rhel8-xccdf.xml\
+Benchmark ID	xccdf_org.ssgproject.content_benchmark_RHEL-8\
+Benchmark version	0.1.78\
+Profile ID	xccdf_org.ssgproject.content_profile_cis_server_l1\
+Started at	2025-12-12T16:21:17+08:00\
+Finished at	2025-12-12T16:21:40+08:00\
+Performed by	vapt\
+Test system	cpe:/a:redhat:openscap:1.3.12\
+CPE Platforms\
+\
+    cpe:/o:redhat:enterprise_linux:8.5\
+    cpe:/o:redhat:enterprise_linux:8\
+    cpe:/o:redhat:enterprise_linux:8.0\
+    cpe:/o:redhat:enterprise_linux:8.1\
+    cpe:/o:redhat:enterprise_linux:8.10\
+    cpe:/o:redhat:enterprise_linux:8.2\
+    cpe:/o:redhat:enterprise_linux:8.3\
+    cpe:/o:redhat:enterprise_linux:8.4\
+    cpe:/o:redhat:enterprise_linux:8.6\
+    cpe:/o:redhat:enterprise_linux:8.7\
+    cpe:/o:redhat:enterprise_linux:8.8\
+    cpe:/o:redhat:enterprise_linux:8.9\
+\
+Addresses\
+\
+    IPv4  127.0.0.1\
+    IPv4  172.24.0.136\
+    IPv6  0:0:0:0:0:0:0:1\
+    IPv6  fe80:0:0:0:21:dff:fea1:96f4\
+    MAC  00:00:00:00:00:00\
+    MAC  02:21:0D:A1:96:F4\
+\
+Compliance and Scoring\
+The target system did not satisfy the conditions of 104 rules! Please review rule results and consider applying remediation.\
+Rule results\
+152 passed\
+104 failed\
+0 other\
+Severity of failed rules\
+4 other\
+4 low\
+91 medium\
+5 high\
+Score\
+Scoring system	Score	Maximum	Percent\
+urn:xccdf:scoring:default	76.985954	100.000000	\
+76.99%\
+Rule Overview\
+pass\
+fixed\
+informational\
+fail\
+error\
+unknown\
+notchecked\
+notapplicable\
+\
+Group rules by:\
+Title	Severity	Result\
+Guide to the Secure Configuration of Red Hat Enterprise Linux 8 104x fail\
+System Settings 78x fail\
+Installing and Maintaining Software 10x fail\
+System and Software Integrity 5x fail\
+Software Integrity Checking 4x fail\
+Verify Integrity with AIDE 4x fail\
+Install AIDE	medium	\
+fail\
+Build and Test AIDE Database	medium	\
+fail\
+Configure AIDE to Verify the Audit Tools	medium	\
+fail\
+Configure Periodic Execution of AIDE	medium	\
+fail\
+System Cryptographic Policies 1x fail\
+Configure System Cryptography Policy	high	\
+fail\
+Configure SSH to use System Crypto Policy	medium	\
+pass\
+Disk Partitioning 1x fail\
+Ensure /dev/shm is configured	low	\
+pass\
+Ensure /tmp Located On Separate Partition	low	\
+fail\
+GNOME Desktop Environment\
+Sudo 4x fail\
+Install sudo Package	medium	\
+pass\
+Ensure Only Users Logged In To Real tty Can Execute Sudo - sudo use_pty	medium	\
+fail\
+Ensure Sudo Logfile Exists - sudo logfile	low	\
+fail\
+Ensure Users Re-Authenticate for Privilege Escalation - sudo	medium	\
+fail\
+Require Re-Authentication When Using the sudo Command	medium	\
+fail\
+Updating Software\
+Account and Access Control 25x fail\
+Warning Banners for System Accesses 2x fail\
+Implement a GUI Warning Banner\
+Ensure Local Login Warning Banner Is Configured Properly	medium	\
+fail\
+Ensure Remote Login Warning Banner Is Configured Properly	medium	\
+fail\
+Ensure Message Of The Day Is Configured Properly	medium	\
+pass\
+Verify Group Ownership of System Login Banner	medium	\
+pass\
+Verify Group Ownership of System Login Banner for Remote Connections	medium	\
+pass\
+Verify Group Ownership of Message of the Day Banner	medium	\
+pass\
+Verify ownership of System Login Banner	medium	\
+pass\
+Verify ownership of System Login Banner for Remote Connections	medium	\
+pass\
+Verify ownership of Message of the Day Banner	medium	\
+pass\
+Verify permissions on System Login Banner	medium	\
+pass\
+Verify permissions on System Login Banner for Remote Connections	medium	\
+pass\
+Verify permissions on Message of the Day Banner	medium	\
+pass\
+Protect Accounts by Configuring PAM 12x fail\
+Set Lockouts for Failed Password Attempts 6x fail\
+Configure the Use of the pam_faillock.so Module in the /etc/pam.d/password-auth File.	medium	\
+fail\
+Configure the Use of the pam_faillock.so Module in the /etc/pam.d/system-auth File.	medium	\
+fail\
+Limit Password Reuse: password-auth	medium	\
+fail\
+Limit Password Reuse: system-auth	medium	\
+fail\
+Lock Accounts After Failed Password Attempts	medium	\
+fail\
+Set Lockout Time for Failed Password Attempts	medium	\
+fail\
+Set Password Quality Requirements 6x fail\
+Set Password Quality Requirements with pam_pwquality 6x fail\
+Ensure PAM Enforces Password Requirements - Prevent the Use of Dictionary Words	medium	\
+fail\
+Ensure PAM Enforces Password Requirements - Minimum Different Characters	medium	\
+fail\
+Ensure PAM Enforces Password Requirements - Enforce for root User	medium	\
+fail\
+Set Password Maximum Consecutive Repeating Characters	medium	\
+fail\
+Ensure PAM Enforces Password Requirements - Minimum Different Categories	medium	\
+fail\
+Ensure PAM Enforces Password Requirements - Minimum Length	medium	\
+fail\
+Set Password Hashing Algorithm\
+Install pam_pwquality Package	medium	\
+pass\
+Protect Accounts by Restricting Password-Based Login 6x fail\
+Set Account Expiration Parameters 1x fail\
+Set Account Expiration Following Inactivity	medium	\
+fail\
+Ensure All Accounts on the System Have Unique Names	medium	\
+pass\
+Set Password Expiration Parameters 1x fail\
+Set Password Maximum Age	medium	\
+fail\
+Set Existing Passwords Maximum Age	medium	\
+pass\
+Set Existing Passwords Warning Age	medium	\
+pass\
+Set Password Warning Age	medium	\
+pass\
+Set existing passwords a period of inactivity before they been locked	medium	\
+pass\
+Verify Proper Storage and Existence of Password Hashes 1x fail\
+Verify All Account Password Hashes are Shadowed	medium	\
+pass\
+Ensure all users last password change date is in the past	medium	\
+pass\
+All GIDs referenced in /etc/passwd must be defined in /etc/group	low	\
+pass\
+Prevent Login to Accounts With Empty Password	high	\
+fail\
+Ensure There Are No Accounts With Blank or Null Passwords	high	\
+pass\
+Verify No .forward Files Exist	medium	\
+pass\
+Restrict Root Logins 3x fail\
+Verify Only Root Has UID 0	high	\
+pass\
+Verify Root Has A Primary GID 0	high	\
+pass\
+Ensure the Group Used by pam_wheel.so Module Exists on System and is Empty	medium	\
+fail\
+Ensure Authentication Required for Single User Mode	medium	\
+fail\
+Ensure that System Accounts Are Locked	medium	\
+pass\
+Ensure that System Accounts Do Not Run a Shell Upon Login	medium	\
+pass\
+Enforce Usage of pam_wheel with Group Parameter for su Authentication	medium	\
+fail\
+Ensure All Accounts on the System Have Unique User IDs	medium	\
+pass\
+Ensure All Groups on the System Have Unique Group ID	medium	\
+pass\
+Ensure All Groups on the System Have Unique Group Names	medium	\
+pass\
+Secure Session Configuration Files for Login Accounts 5x fail\
+Ensure that No Dangerous Directories Exist in Root's Path\
+Ensure that Users Have Sensible Umask Values 3x fail\
+Ensure the Default Bash Umask is Set Correctly	medium	\
+fail\
+Ensure the Default Umask is Set Correctly in login.defs	medium	\
+fail\
+Ensure the Default Umask is Set Correctly in /etc/profile	medium	\
+fail\
+Set Interactive Session Timeout	medium	\
+fail\
+User Initialization Files Must Be Group-Owned By The Primary Group	medium	\
+pass\
+User Initialization Files Must Be Owned By the Primary User	medium	\
+pass\
+All Interactive Users Home Directories Must Exist	medium	\
+pass\
+Ensure users' .netrc Files are not group or world accessible	medium	\
+pass\
+All Interactive User Home Directories Must Be Owned By The Primary User	medium	\
+pass\
+Ensure All User Initialization Files Have Mode 0740 Or Less Permissive	medium	\
+fail\
+All Interactive User Home Directories Must Have mode 0750 Or Less Permissive	medium	\
+pass\
+Enable authselect	medium	\
+pass\
+GRUB2 bootloader configuration 1x fail\
+Non-UEFI GRUB2 bootloader configuration\
+UEFI GRUB2 bootloader configuration 1x fail\
+Verify the UEFI Boot Loader grub.cfg Group Ownership	medium	\
+pass\
+Verify /boot/efi/EFI/redhat/user.cfg Group Ownership	medium	\
+pass\
+Verify the UEFI Boot Loader grub.cfg User Ownership	medium	\
+pass\
+Verify /boot/efi/EFI/redhat/user.cfg User Ownership	medium	\
+pass\
+Verify the UEFI Boot Loader grub.cfg Permissions	medium	\
+pass\
+Verify /boot/efi/EFI/redhat/user.cfg Permissions	medium	\
+pass\
+Set the UEFI Boot Loader Password	high	\
+fail\
+Configure Syslog 5x fail\
+Ensure Proper Configuration of Log Files 1x fail\
+Ensure Log Files Are Owned By Appropriate Group	medium	\
+pass\
+Ensure Log Files Are Owned By Appropriate User	medium	\
+pass\
+Ensure System Log Files Have Correct Permissions	medium	\
+fail\
+systemd-journald 3x fail\
+Enable systemd-journald Service	medium	\
+pass\
+Ensure journald is configured to compress large log files	medium	\
+fail\
+Ensure journald is configured to send logs to rsyslog	medium	\
+fail\
+Ensure journald is configured to write log files to persistent disk	medium	\
+fail\
+Disable systemd-journal-remote Socket	medium	\
+pass\
+Configure rsyslogd to Accept Remote Messages If Acting as a Log Server\
+Ensure rsyslog is Installed	medium	\
+pass\
+Enable rsyslog Service	medium	\
+pass\
+Ensure rsyslog Default File Permissions Configured	medium	\
+fail\
+Network Configuration and Firewalls 25x fail\
+firewalld 3x fail\
+Inspect and Activate Default firewalld Rules 1x fail\
+Install firewalld Package	medium	\
+fail\
+Verify firewalld Enabled	medium	\
+notapplicable\
+Strengthen the Default Ruleset 2x fail\
+Configure Firewalld to Restrict Loopback Traffic	medium	\
+fail\
+Configure Firewalld to Trust Loopback Traffic	medium	\
+fail\
+IPv6 7x fail\
+Configure IPv6 Settings if Necessary 7x fail\
+Configure Accepting Router Advertisements on All IPv6 Interfaces	medium	\
+fail\
+Disable Accepting ICMP Redirects for All IPv6 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for Accepting Source-Routed Packets on all IPv6 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for IPv6 Forwarding	medium	\
+fail\
+Disable Accepting Router Advertisements on all IPv6 Interfaces by Default	medium	\
+fail\
+Disable Kernel Parameter for Accepting ICMP Redirects by Default on IPv6 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for Accepting Source-Routed Packets on IPv6 Interfaces by Default	medium	\
+fail\
+Kernel Parameters Which Affect Networking 14x fail\
+Network Related Kernel Runtime Parameters for Hosts and Routers 11x fail\
+Disable Accepting ICMP Redirects for All IPv4 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for Accepting Source-Routed Packets on all IPv4 Interfaces	medium	\
+pass\
+Enable Kernel Parameter to Log Martian Packets on all IPv4 Interfaces	unknown	\
+fail\
+Enable Kernel Parameter to Use Reverse Path Filtering on all IPv4 Interfaces	medium	\
+pass\
+Disable Kernel Parameter for Accepting Secure ICMP Redirects on all IPv4 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for Accepting ICMP Redirects by Default on IPv4 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for Accepting Source-Routed Packets on IPv4 Interfaces by Default	medium	\
+fail\
+Enable Kernel Paremeter to Log Martian Packets on all IPv4 Interfaces by Default	unknown	\
+fail\
+Enable Kernel Parameter to Use Reverse Path Filtering on all IPv4 Interfaces by Default	medium	\
+fail\
+Configure Kernel Parameter for Accepting Secure Redirects By Default	medium	\
+fail\
+Enable Kernel Parameter to Ignore ICMP Broadcast Echo Requests on IPv4 Interfaces	medium	\
+fail\
+Enable Kernel Parameter to Ignore Bogus ICMP Error Responses on IPv4 Interfaces	unknown	\
+fail\
+Enable Kernel Parameter to Use TCP Syncookies on Network Interfaces	medium	\
+fail\
+Network Parameters for Hosts Only 3x fail\
+Disable Kernel Parameter for Sending ICMP Redirects on all IPv4 Interfaces	medium	\
+fail\
+Disable Kernel Parameter for Sending ICMP Redirects on all IPv4 Interfaces by Default	medium	\
+fail\
+Disable Kernel Parameter for IP Forwarding on IPv4 Interfaces	medium	\
+fail\
+nftables 1x fail\
+Install nftables Package	medium	\
+fail\
+Verify nftables Service is Disabled	medium	\
+notapplicable\
+Wireless Networking\
+File Permissions and Masks 11x fail\
+Verify Permissions on Important Files and Directories 2x fail\
+Verify Permissions on Files with Local Account Information and Credentials\
+Verify that All World-Writable Directories Have Sticky Bits Set	medium	\
+fail\
+Ensure No World-Writable Files Exist	medium	\
+fail\
+Ensure All Files Are Owned by a Group	medium	\
+pass\
+Ensure All Files Are Owned by a User	medium	\
+pass\
+Restrict Dynamic Mounting and Unmounting of Filesystems 2x fail\
+Disable the Automounter	medium	\
+notapplicable\
+Disable Mounting of cramfs	low	\
+fail\
+Disable Modprobe Loading of USB Storage Driver	medium	\
+fail\
+Restrict Partition Mount Options 3x fail\
+Add nodev Option to /dev/shm	medium	\
+fail\
+Add noexec Option to /dev/shm	medium	\
+fail\
+Add nosuid Option to /dev/shm	medium	\
+fail\
+Add nodev Option to /home	unknown	\
+notapplicable\
+Add nosuid Option to /home	medium	\
+notapplicable\
+Add nodev Option to /tmp	medium	\
+notapplicable\
+Add noexec Option to /tmp	medium	\
+notapplicable\
+Add nosuid Option to /tmp	medium	\
+notapplicable\
+Add nodev Option to /var/log/audit	medium	\
+notapplicable\
+Add noexec Option to /var/log/audit	medium	\
+notapplicable\
+Add nosuid Option to /var/log/audit	medium	\
+notapplicable\
+Add nodev Option to /var/log	medium	\
+notapplicable\
+Add noexec Option to /var/log	medium	\
+notapplicable\
+Add nosuid Option to /var/log	medium	\
+notapplicable\
+Add nodev Option to /var	medium	\
+notapplicable\
+Add nosuid Option to /var	medium	\
+notapplicable\
+Add nodev Option to /var/tmp	medium	\
+notapplicable\
+Add noexec Option to /var/tmp	medium	\
+notapplicable\
+Add nosuid Option to /var/tmp	medium	\
+notapplicable\
+Restrict Programs from Dangerous Execution Patterns 4x fail\
+Disable Core Dumps 2x fail\
+Disable core dump backtraces	medium	\
+fail\
+Disable storing core dump	medium	\
+fail\
+Enable ExecShield 1x fail\
+Enable Randomized Layout of Virtual Address Space	medium	\
+fail\
+Restrict usage of ptrace to descendant processes	medium	\
+fail\
+SELinux 1x fail\
+Install libselinux Package	high	\
+pass\
+Uninstall mcstrans Package	low	\
+pass\
+Uninstall setroubleshoot Package	low	\
+pass\
+Ensure SELinux Not Disabled in /etc/default/grub	medium	\
+pass\
+Ensure No Daemons are Unconfined by SELinux	medium	\
+pass\
+Ensure SELinux is Not Disabled	high	\
+fail\
+Configure SELinux Policy	medium	\
+pass\
+Services 26x fail\
+Avahi Server\
+Cron and At Daemons 8x fail\
+Restrict at and cron to Authorized Users if Necessary 2x fail\
+Ensure that /etc/at.deny does not exist	medium	\
+pass\
+Ensure that /etc/cron.allow exists	medium	\
+fail\
+Ensure that /etc/cron.deny does not exist	medium	\
+fail\
+Verify Group Who Owns /etc/at.allow file	medium	\
+pass\
+Verify Group Who Owns /etc/cron.allow file	medium	\
+pass\
+Verify User Who Owns /etc/cron.allow file	medium	\
+pass\
+Verify Permissions on /etc/at.allow file	medium	\
+pass\
+Verify Permissions on /etc/cron.allow file	medium	\
+pass\
+Enable cron Service	medium	\
+pass\
+Verify Group Who Owns cron.d	medium	\
+pass\
+Verify Group Who Owns cron.daily	medium	\
+pass\
+Verify Group Who Owns cron.hourly	medium	\
+pass\
+Verify Group Who Owns cron.monthly	medium	\
+pass\
+Verify Group Who Owns cron.weekly	medium	\
+pass\
+Verify Group Who Owns Crontab	medium	\
+pass\
+Verify Owner on cron.d	medium	\
+pass\
+Verify Owner on cron.daily	medium	\
+pass\
+Verify Owner on cron.hourly	medium	\
+pass\
+Verify Owner on cron.monthly	medium	\
+pass\
+Verify Owner on cron.weekly	medium	\
+pass\
+Verify Owner on crontab	medium	\
+pass\
+Verify Permissions on cron.d	medium	\
+fail\
+Verify Permissions on cron.daily	medium	\
+fail\
+Verify Permissions on cron.hourly	medium	\
+fail\
+Verify Permissions on cron.monthly	medium	\
+fail\
+Verify Permissions on cron.weekly	medium	\
+fail\
+Verify Permissions on crontab	medium	\
+fail\
+DHCP\
+DNS Server\
+FTP Server\
+Web Server\
+IMAP and POP3 Server\
+Mail Server Software\
+NFS and RPC\
+Network Time Protocol\
+Obsolete Services 1x fail\
+Xinetd\
+NIS\
+Rlogin, Rsh, and Rexec\
+Telnet 1x fail\
+Uninstall telnet-server Package	high	\
+pass\
+Remove telnet Clients	low	\
+fail\
+TFTP Server\
+Uninstall rsync Package	medium	\
+pass\
+Print Support\
+Proxy Server\
+Samba(SMB) Microsoft Windows File Sharing Server\
+SNMP Server\
+SSH Server 17x fail\
+Configure OpenSSH Server if Necessary 17x fail\
+Set SSH Client Alive Count Max	medium	\
+fail\
+Set SSH Client Alive Interval	medium	\
+fail\
+Disable Host-Based Authentication	medium	\
+fail\
+Disable SSH Access via Empty Passwords	high	\
+fail\
+Disable SSH Support for .rhosts Files	medium	\
+fail\
+Disable SSH Root Login	medium	\
+fail\
+Do Not Allow SSH Environment Options	medium	\
+fail\
+Enable PAM	medium	\
+pass\
+Enable SSH Warning Banner	medium	\
+fail\
+Limit Users' SSH Access	unknown	\
+fail\
+Ensure SSH LoginGraceTime is configured	medium	\
+fail\
+Set SSH Daemon LogLevel to VERBOSE	medium	\
+fail\
+Set SSH authentication attempt limit	medium	\
+fail\
+Set SSH MaxSessions limit	medium	\
+fail\
+Ensure SSH MaxStartups is configured	medium	\
+fail\
+Use Only FIPS 140-2 Validated Ciphers	medium	\
+fail\
+Use Only Strong Key Exchange algorithms	medium	\
+fail\
+Use Only Strong MACs	medium	\
+fail\
+Verify Group Who Owns SSH Server config file	medium	\
+pass\
+Verify Group Ownership on SSH Server Private *_key Key Files	medium	\
+pass\
+Verify Group Ownership on SSH Server Public *.pub Key Files	medium	\
+pass\
+Verify Owner on SSH Server config file	medium	\
+pass\
+Verify Ownership on SSH Server Private *_key Key Files	medium	\
+pass\
+Verify Ownership on SSH Server Public *.pub Key Files	medium	\
+pass\
+Verify Permissions on SSH Server config file	medium	\
+pass\
+Verify Permissions on SSH Server Private *_key Key Files	medium	\
+pass\
+Verify Permissions on SSH Server Public *.pub Key Files	medium	\
+pass\
+Red Hat and Red Hat Enterprise Linux are either registered trademarks or trademarks of Red Hat, Inc. in the United States and other countries. All other names are registered trademarks or trademarks of their respective companies.\
+\
+Generated using OpenSCAP 1.3.12\
+}

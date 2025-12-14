@@ -1,0 +1,208 @@
+Title,Severity,Result
+Install AIDE,medium,Fail
+Build and Test AIDE Database,medium,Fail
+Configure AIDE to Verify the Audit Tools,medium,Fail
+Configure Periodic Execution of AIDE,medium,Fail
+Configure System Cryptography Policy,high,Fail
+Configure SSH to use System Crypto Policy,medium,Pass
+Ensure /dev/shm is configured,low,Pass
+Ensure /tmp Located On Separate Partition,low,Fail
+Install sudo Package,medium,Pass
+Ensure Only Users Logged In To Real tty Can Execute Sudo - sudo use_pty,medium,Fail
+Ensure Sudo Logfile Exists - sudo logfile,low,Fail
+Ensure Users Re-Authenticate for Privilege Escalation - sudo,medium,Fail
+Require Re-Authentication When Using the sudo Command,medium,Fail
+Ensure gpgcheck Enabled In Main yum Configuration,high,Pass
+Ensure gpgcheck Enabled for All yum Package Repositories,high,Pass
+Ensure Local Login Warning Banner Is Configured Properly,medium,Fail
+Ensure Remote Login Warning Banner Is Configured Properly,medium,Fail
+Ensure Message Of The Day Is Configured Properly,medium,Pass
+Verify Group Ownership of System Login Banner,medium,Pass
+Verify Group Ownership of System Login Banner for Remote Connections,medium,Pass
+Verify Group Ownership of Message of the Day Banner,medium,Pass
+Verify ownership of System Login Banner,medium,Pass
+Verify ownership of System Login Banner for Remote Connections,medium,Pass
+Verify ownership of Message of the Day Banner,medium,Pass
+Verify permissions on System Login Banner,medium,Pass
+Verify permissions on System Login Banner for Remote Connections,medium,Pass
+Verify permissions on Message of the Day Banner,medium,Pass
+Configure the Use of the pam_faillock.so Module in the /etc/pam.d/password-auth File.,medium,Fail
+Configure the Use of the pam_faillock.so Module in the /etc/pam.d/system-auth File.,medium,Fail
+Limit Password Reuse: password-auth,medium,Fail
+Limit Password Reuse: system-auth,medium,Fail
+Lock Accounts After Failed Password Attempts,medium,Fail
+Set Lockout Time for Failed Password Attempts,medium,Fail
+Ensure PAM Enforces Password Requirements - Prevent the Use of Dictionary Words,medium,Fail
+Ensure PAM Enforces Password Requirements - Minimum Different Characters,medium,Fail
+Ensure PAM Enforces Password Requirements - Enforce for root User,medium,Fail
+Set Password Maximum Consecutive Repeating Characters,medium,Fail
+Ensure PAM Enforces Password Requirements - Minimum Different Categories,medium,Fail
+Ensure PAM Enforces Password Requirements - Minimum Length,medium,Fail
+Install pam_pwquality Package,medium,Pass
+Set Account Expiration Following Inactivity,medium,Fail
+Ensure All Accounts on the System Have Unique Names,medium,Pass
+Set Password Maximum Age,medium,Fail
+Set Existing Passwords Maximum Age,medium,Pass
+Set Existing Passwords Warning Age,medium,Pass
+Set Password Warning Age,medium,Pass
+Set existing passwords a period of inactivity before they been locked,medium,Pass
+Verify All Account Password Hashes are Shadowed,medium,Pass
+Ensure all users last password change date is in the past,medium,Pass
+All GIDs referenced in /etc/passwd must be defined in /etc/group,low,Pass
+Prevent Login to Accounts With Empty Password,high,Fail
+Ensure There Are No Accounts With Blank or Null Passwords,high,Pass
+Verify No .forward Files Exist,medium,Pass
+Verify Only Root Has UID 0,high,Pass
+Verify Root Has A Primary GID 0,high,Pass
+Ensure the Group Used by pam_wheel.so Module Exists on System and is Empty,medium,Fail
+Ensure Authentication Required for Single User Mode,medium,Fail
+Ensure that System Accounts Are Locked,medium,Pass
+Ensure that System Accounts Do Not Run a Shell Upon Login,medium,Pass
+Enforce Usage of pam_wheel with Group Parameter for su Authentication,medium,Fail
+Ensure All Accounts on the System Have Unique User IDs,medium,Pass
+Ensure All Groups on the System Have Unique Group ID,medium,Pass
+Ensure All Groups on the System Have Unique Group Names,medium,Pass
+Ensure that Root's Path Does Not Include World or Group-Writable Directories,medium,Pass
+Ensure the Default Bash Umask is Set Correctly,medium,Fail
+Ensure the Default Umask is Set Correctly in login.defs,medium,Fail
+Ensure the Default Umask is Set Correctly in /etc/profile,medium,Fail
+Set Interactive Session Timeout,medium,Fail
+User Initialization Files Must Be Group-Owned By The Primary Group,medium,Pass
+User Initialization Files Must Be Owned By the Primary User,medium,Pass
+All Interactive Users Home Directories Must Exist,medium,Pass
+Ensure users' .netrc Files are not group or world accessible,medium,Pass
+All Interactive User Home Directories Must Be Owned By The Primary User,medium,Pass
+Ensure All User Initialization Files Have Mode 0740 Or Less Permissive,medium,Fail
+All Interactive User Home Directories Must Have mode 0750 Or Less Permissive,medium,Pass
+Enable authselect,medium,Pass
+Verify the UEFI Boot Loader grub.cfg Group Ownership,medium,Pass
+Verify /boot/efi/EFI/redhat/user.cfg Group Ownership,medium,Pass
+Verify the UEFI Boot Loader grub.cfg User Ownership,medium,Pass
+Verify /boot/efi/EFI/redhat/user.cfg User Ownership,medium,Pass
+Verify the UEFI Boot Loader grub.cfg Permissions,medium,Pass
+Verify /boot/efi/EFI/redhat/user.cfg Permissions,medium,Pass
+Set the UEFI Boot Loader Password,high,Fail
+Ensure Log Files Are Owned By Appropriate Group,medium,Pass
+Ensure Log Files Are Owned By Appropriate User,medium,Pass
+Ensure System Log Files Have Correct Permissions,medium,Fail
+Enable systemd-journald Service,medium,Pass
+Ensure journald is configured to compress large log files,medium,Fail
+Ensure journald is configured to send logs to rsyslog,medium,Fail
+Ensure journald is configured to write log files to persistent disk,medium,Fail
+Disable systemd-journal-remote Socket,medium,Pass
+Ensure rsyslog Does Not Accept Remote Messages Unless Acting As Log Server,medium,Pass
+Ensure rsyslog is Installed,medium,Pass
+Enable rsyslog Service,medium,Pass
+Ensure rsyslog Default File Permissions Configured,medium,Fail
+Install firewalld Package,medium,Fail
+Configure Firewalld to Restrict Loopback Traffic,medium,Fail
+Configure Firewalld to Trust Loopback Traffic,medium,Fail
+Configure Accepting Router Advertisements on All IPv6 Interfaces,medium,Fail
+Disable Accepting ICMP Redirects for All IPv6 Interfaces,medium,Fail
+Disable Kernel Parameter for Accepting Source-Routed Packets on all IPv6 Interfaces,medium,Fail
+Disable Kernel Parameter for IPv6 Forwarding,medium,Fail
+Disable Accepting Router Advertisements on all IPv6 Interfaces by Default,medium,Fail
+Disable Kernel Parameter for Accepting ICMP Redirects by Default on IPv6 Interfaces,medium,Fail
+Disable Kernel Parameter for Accepting Source-Routed Packets on IPv6 Interfaces by Default,medium,Fail
+Disable Accepting ICMP Redirects for All IPv4 Interfaces,medium,Fail
+Disable Kernel Parameter for Accepting Source-Routed Packets on all IPv4 Interfaces,medium,Pass
+Enable Kernel Parameter to Use Reverse Path Filtering on all IPv4 Interfaces,medium,Pass
+Disable Kernel Parameter for Accepting Secure ICMP Redirects on all IPv4 Interfaces,medium,Fail
+Disable Kernel Parameter for Accepting ICMP Redirects by Default on IPv4 Interfaces,medium,Fail
+Disable Kernel Parameter for Accepting Source-Routed Packets on IPv4 Interfaces by Default,medium,Fail
+Enable Kernel Parameter to Use Reverse Path Filtering on all IPv4 Interfaces by Default,medium,Fail
+Configure Kernel Parameter for Accepting Secure Redirects By Default,medium,Fail
+Enable Kernel Parameter to Ignore ICMP Broadcast Echo Requests on IPv4 Interfaces,medium,Fail
+Enable Kernel Parameter to Use TCP Syncookies on Network Interfaces,medium,Fail
+Disable Kernel Parameter for Sending ICMP Redirects on all IPv4 Interfaces,medium,Fail
+Disable Kernel Parameter for Sending ICMP Redirects on all IPv4 Interfaces by Default,medium,Fail
+Disable Kernel Parameter for IP Forwarding on IPv4 Interfaces,medium,Fail
+Install nftables Package,medium,Fail
+Disable Bluetooth Service,medium,Pass
+Verify that All World-Writable Directories Have Sticky Bits Set,medium,Fail
+Ensure No World-Writable Files Exist,medium,Fail
+Ensure All Files Are Owned by a Group,medium,Pass
+Ensure All Files Are Owned by a User,medium,Pass
+Disable Mounting of cramfs,low,Fail
+Disable Modprobe Loading of USB Storage Driver,medium,Fail
+Add nodev Option to /dev/shm,medium,Fail
+Add noexec Option to /dev/shm,medium,Fail
+Add nosuid Option to /dev/shm,medium,Fail
+Disable core dump backtraces,medium,Fail
+Disable storing core dump,medium,Fail
+Enable Randomized Layout of Virtual Address Space,medium,Fail
+Restrict usage of ptrace to descendant processes,medium,Fail
+Install libselinux Package,high,Pass
+Uninstall mcstrans Package,low,Pass
+Uninstall setroubleshoot Package,low,Pass
+Ensure SELinux Not Disabled in /etc/default/grub,medium,Pass
+Ensure No Daemons are Unconfined by SELinux,medium,Pass
+Ensure SELinux is Not Disabled,high,Fail
+Configure SELinux Policy,medium,Pass
+Ensure that /etc/at.deny does not exist,medium,Pass
+Ensure that /etc/cron.allow exists,medium,Fail
+Ensure that /etc/cron.deny does not exist,medium,Fail
+Verify Group Who Owns /etc/at.allow file,medium,Pass
+Verify Group Who Owns /etc/cron.allow file,medium,Pass
+Verify User Who Owns /etc/cron.allow file,medium,Pass
+Verify Permissions on /etc/at.allow file,medium,Pass
+Verify Permissions on /etc/cron.allow file,medium,Pass
+Enable cron Service,medium,Pass
+Verify Group Who Owns cron.d,medium,Pass
+Verify Group Who Owns cron.daily,medium,Pass
+Verify Group Who Owns cron.hourly,medium,Pass
+Verify Group Who Owns cron.monthly,medium,Pass
+Verify Group Who Owns cron.weekly,medium,Pass
+Verify Group Who Owns Crontab,medium,Pass
+Verify Owner on cron.d,medium,Pass
+Verify Owner on cron.daily,medium,Pass
+Verify Owner on cron.hourly,medium,Pass
+Verify Owner on cron.monthly,medium,Pass
+Verify Owner on cron.weekly,medium,Pass
+Verify Owner on crontab,medium,Pass
+Verify Permissions on cron.d,medium,Fail
+Verify Permissions on cron.daily,medium,Fail
+Verify Permissions on cron.hourly,medium,Fail
+Verify Permissions on cron.monthly,medium,Fail
+Verify Permissions on cron.weekly,medium,Fail
+Verify Permissions on crontab,medium,Fail
+Uninstall DHCP Server Package,medium,Pass
+Uninstall bind Package,low,Pass
+Uninstall vsftpd Package,high,Pass
+Remove ftp Package,low,Pass
+Ensure Mail Transfer Agent is not Listening on any non-loopback Address,medium,Pass
+Disable rpcbind Service,low,Pass
+The Chrony package is installed,medium,Pass
+A remote time server for Chrony is configured,medium,Pass
+Ensure that chronyd is running under chrony user account,medium,Pass
+Uninstall xinetd Package,low,Pass
+Uninstall ypserv Package,high,Pass
+Uninstall telnet-server Package,high,Pass
+Remove telnet Clients,low,Fail
+Uninstall rsync Package,medium,Pass
+Set SSH Client Alive Count Max,medium,Fail
+Set SSH Client Alive Interval,medium,Fail
+Disable Host-Based Authentication,medium,Fail
+Disable SSH Access via Empty Passwords,high,Fail
+Disable SSH Support for .rhosts Files,medium,Fail
+Disable SSH Root Login,medium,Fail
+Do Not Allow SSH Environment Options,medium,Fail
+Enable PAM,medium,Pass
+Enable SSH Warning Banner,medium,Fail
+Ensure SSH LoginGraceTime is configured,medium,Fail
+Set SSH Daemon LogLevel to VERBOSE,medium,Fail
+Set SSH authentication attempt limit,medium,Fail
+Set SSH MaxSessions limit,medium,Fail
+Ensure SSH MaxStartups is configured,medium,Fail
+Use Only FIPS 140-2 Validated Ciphers,medium,Fail
+Use Only Strong Key Exchange algorithms,medium,Fail
+Use Only Strong MACs,medium,Fail
+Verify Group Who Owns SSH Server config file,medium,Pass
+Verify Group Ownership on SSH Server Private *_key Key Files,medium,Pass
+Verify Group Ownership on SSH Server Public *.pub Key Files,medium,Pass
+Verify Owner on SSH Server config file,medium,Pass
+Verify Ownership on SSH Server Private *_key Key Files,medium,Pass
+Verify Ownership on SSH Server Public *.pub Key Files,medium,Pass
+Verify Permissions on SSH Server config file,medium,Pass
+Verify Permissions on SSH Server Private *_key Key Files,medium,Pass
+Verify Permissions on SSH Server Public *.pub Key Files,medium,Pass

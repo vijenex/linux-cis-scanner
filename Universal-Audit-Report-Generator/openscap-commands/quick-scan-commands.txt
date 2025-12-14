@@ -1,0 +1,16 @@
+# Quick OpenSCAP Scan Commands - HTML Output
+
+# RHEL 8 - Generate HTML report
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results /tmp/rhel8-results.xml --report /tmp/rhel8-report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+
+# Check if HTML was created
+ls -la /tmp/*.html
+
+# If scan gets killed, try with timeout and smaller profile
+timeout 300 oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis_level1_server --results /tmp/results.xml --report /tmp/report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+
+# Convert existing XML to HTML (if you have XML results)
+oscap xccdf generate report /tmp/rhel8-results.xml > /tmp/rhel8-report.html
+
+# Quick test scan (minimal rules)
+oscap xccdf eval --results /tmp/test-results.xml --report /tmp/test-report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml

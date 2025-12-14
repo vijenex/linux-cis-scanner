@@ -1,0 +1,178 @@
+# OpenSCAP Commands for All Linux Distributions
+# CIS Benchmark Scanning Commands
+
+# ============================================
+# RED HAT ENTERPRISE LINUX (RHEL)
+# ============================================
+
+# RHEL 8
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results rhel8-cis-results.xml --report rhel8-cis-report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+
+# RHEL 9 (save to /home/vapt or /tmp)
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results /home/vapt/rhel9-cis-results.xml --report /home/vapt/rhel9-cis-report.html /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+
+# RHEL 7
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results rhel7-cis-results.xml --report rhel7-cis-report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-ds.xml
+
+# ============================================
+# CENTOS
+# ============================================
+
+# CentOS 8
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results centos8-cis-results.xml --report centos8-cis-report.html /usr/share/xml/scap/ssg/content/ssg-centos8-ds.xml
+
+# CentOS 7
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results centos7-cis-results.xml --report centos7-cis-report.html /usr/share/xml/scap/ssg/content/ssg-centos7-ds.xml
+
+# ============================================
+# UBUNTU
+# ============================================
+
+# Ubuntu 20.04 LTS
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis_level1_server --results ubuntu20-cis-results.xml --report ubuntu20-cis-report.html /usr/share/xml/scap/ssg/content/ssg-ubuntu2004-ds.xml
+
+# Ubuntu 22.04 LTS
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis_level1_server --results ubuntu22-cis-results.xml --report ubuntu22-cis-report.html /usr/share/xml/scap/ssg/content/ssg-ubuntu2204-ds.xml
+
+# Ubuntu 18.04 LTS
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis_level1_server --results ubuntu18-cis-results.xml --report ubuntu18-cis-report.html /usr/share/xml/scap/ssg/content/ssg-ubuntu1804-ds.xml
+
+# ============================================
+# FEDORA
+# ============================================
+
+# Fedora 38
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results fedora38-cis-results.xml --report fedora38-cis-report.html /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
+
+# Fedora 37
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results fedora37-cis-results.xml --report fedora37-cis-report.html /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
+
+# ============================================
+# ORACLE LINUX
+# ============================================
+
+# Oracle Linux 8
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results ol8-cis-results.xml --report ol8-cis-report.html /usr/share/xml/scap/ssg/content/ssg-ol8-ds.xml
+
+# Oracle Linux 9
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results ol9-cis-results.xml --report ol9-cis-report.html /usr/share/xml/scap/ssg/content/ssg-ol9-ds.xml
+
+# ============================================
+# AMAZON LINUX
+# ============================================
+
+# Amazon Linux 2
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results amzn2-cis-results.xml --report amzn2-cis-report.html /usr/share/xml/scap/ssg/content/ssg-amzn2-ds.xml
+
+# ============================================
+# SUSE LINUX ENTERPRISE SERVER (SLES)
+# ============================================
+
+# SLES 15
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results sles15-cis-results.xml --report sles15-cis-report.html /usr/share/xml/scap/ssg/content/ssg-sle15-ds.xml
+
+# SLES 12
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results sles12-cis-results.xml --report sles12-cis-report.html /usr/share/xml/scap/ssg/content/ssg-sle12-ds.xml
+
+# ============================================
+# FIND SCAP CONTENT FILES FIRST
+# ============================================
+
+# Find available SCAP content files
+find /usr -name "*rhel*ds.xml" -o -name "*ssg*xml"
+ls -la /usr/share/xml/scap/ssg/content/
+
+# If no files found, install first:
+dnf install scap-security-guide -y
+
+# ============================================
+# INSTALLATION COMMANDS
+# ============================================
+
+# Install OpenSCAP on RHEL/CentOS/Fedora
+sudo dnf install openscap-scanner scap-security-guide
+# Alternative for older versions:
+sudo yum install openscap-scanner scap-security-guide
+
+# Install OpenSCAP on Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install libopenscap8 ssg-base ssg-debderived ssg-debian ssg-nondebian
+# For Ubuntu 20.04+:
+sudo apt-get install libopenscap8 ssg-applications ssg-base
+
+# Install OpenSCAP on SLES/openSUSE
+sudo zypper install openscap-utils openscap-content scap-security-guide
+
+# Install OpenSCAP on Amazon Linux 2
+sudo yum install openscap-scanner scap-security-guide
+
+# Install OpenSCAP on Oracle Linux
+sudo dnf install openscap-scanner scap-security-guide
+
+# ============================================
+# USEFUL OPTIONS
+# ============================================
+
+# Generate both HTML and XML reports
+--results results.xml --report report.html
+
+# Skip specific rules
+--skip-rule xccdf_org.ssgproject.content_rule_rule_name
+
+# Verbose output
+--verbose
+
+# Custom CPE (Common Platform Enumeration)
+--cpe cpe-dictionary.xml
+
+# ============================================
+# PROFILE OPTIONS
+# ============================================
+
+# CIS Level 1 Server
+--profile xccdf_org.ssgproject.content_profile_cis_level1_server
+
+# CIS Level 2 Server  
+--profile xccdf_org.ssgproject.content_profile_cis_level2_server
+
+# CIS Level 1 Workstation
+--profile xccdf_org.ssgproject.content_profile_cis_level1_workstation
+
+# CIS Level 2 Workstation
+--profile xccdf_org.ssgproject.content_profile_cis_level2_workstation
+
+# Standard CIS Profile
+--profile xccdf_org.ssgproject.content_profile_cis
+
+# ============================================
+# EXAMPLE BATCH SCRIPT
+# ============================================
+
+#!/bin/bash
+# Batch scan script
+HOSTNAME=$(hostname)
+DATE=$(date +%Y%m%d_%H%M%S)
+OUTPUT_DIR="/tmp/scap_results"
+
+mkdir -p $OUTPUT_DIR
+
+oscap xccdf eval \
+  --profile xccdf_org.ssgproject.content_profile_cis \
+  --results $OUTPUT_DIR/${HOSTNAME}_${DATE}_results.xml \
+  --report $OUTPUT_DIR/${HOSTNAME}_${DATE}_report.html \
+  /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+
+echo "Scan completed. Results saved to $OUTPUT_DIR"
+
+# ============================================
+# TROUBLESHOOTING
+# ============================================
+
+# Check if files were created
+ls -la /home/vapt/*results* /home/vapt/*report*
+
+# If scan fails, check available profiles
+oscap info /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+
+# Test with simple scan (no profile)
+oscap xccdf eval --results /home/vapt/test-results.xml --report /home/vapt/test-report.html /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
