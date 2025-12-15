@@ -140,7 +140,10 @@ type HTMLData struct {
 }
 
 func GenerateHTML(outputDir string, results []Result) error {
-	htmlPath := filepath.Join(outputDir, "vijenex-cis-report.html")
+	// Get machine IP
+	ip := getMachineIP()
+	filename := fmt.Sprintf("vijenex-cis-report-%s.html", ip)
+	htmlPath := filepath.Join(outputDir, filename)
 	
 	// Count statuses
 	passCount := 0

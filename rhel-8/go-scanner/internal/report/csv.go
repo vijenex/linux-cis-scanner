@@ -4,7 +4,9 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 type Result struct {
@@ -18,7 +20,10 @@ type Result struct {
 }
 
 func GenerateCSV(outputDir string, results []Result) error {
-	csvPath := filepath.Join(outputDir, "vijenex-cis-results.csv")
+	// Get machine IP
+	ip := getMachineIP()
+	filename := fmt.Sprintf("vijenex-cis-results-%s.csv", ip)
+	csvPath := filepath.Join(outputDir, filename)
 	
 	file, err := os.Create(csvPath)
 	if err != nil {
@@ -52,4 +57,41 @@ func GenerateCSV(outputDir string, results []Result) error {
 	}
 	
 	return nil
+}
+
+func getMachineIP() string {
+	// Try to get primary IP address
+	cmd := exec.Command("hostname", "-I")
+	output, err := cmd.Output()
+	if err == nil {
+		ips := strings.Fields(string(output))
+		if len(ips) > 0 {
+			return ips[0]
+		}
+	}
+	
+	// Fallback: try ip command
+	cmd = exec.Command("ip", "route", "get", "1")
+	output, err = cmd.Output()
+	if err == nil {
+		lines := strings.Split(string(output), "\n")
+		for _, line := range lines {
+			if strings.Contains(line, "src") {
+				fields := strings.Fields(line)
+				for i, field := range fields {
+					if field == "src" && i+1 < len(fields) {
+						return fields[i+1]
+					}
+				}
+			}
+		}
+	}
+	
+	// Final fallback: use hostname
+	hostname, err := os.Hostname()
+	if err == nil {
+		return hostname
+	}
+	
+	return "unknown"
 }

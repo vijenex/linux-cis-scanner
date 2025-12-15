@@ -102,7 +102,7 @@ func runScan(cmd *cobra.Command, args []string) {
 		if err := s.GenerateCSVReport(results); err != nil {
 			color.Red("❌ Error generating CSV: %v", err)
 		} else {
-			green.Printf("📊 CSV report: %s/vijenex-cis-results.csv\n", outputDir)
+			green.Printf("📊 CSV report generated in: %s/\n", outputDir)
 		}
 	}
 
@@ -110,7 +110,7 @@ func runScan(cmd *cobra.Command, args []string) {
 		if err := s.GenerateHTMLReport(results); err != nil {
 			color.Red("❌ Error generating HTML: %v", err)
 		} else {
-			green.Printf("📄 HTML report: %s/vijenex-cis-report.html\n", outputDir)
+			green.Printf("📄 HTML report generated in: %s/\n", outputDir)
 		}
 	}
 
