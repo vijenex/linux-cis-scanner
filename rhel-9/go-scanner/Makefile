@@ -1,22 +1,37 @@
-.PHONY: build clean install
+.PHONY: build build-linux build-all clean install test
 
-BINARY_NAME=vijenex-cis
-BUILD_DIR=bin
-
+# Build for current platform
 build:
-	@echo "Building RHEL 9 CIS Scanner..."
-	go build -o $(BUILD_DIR)/$(BINARY_NAME) cmd/main.go
-	@echo "Build complete: $(BUILD_DIR)/$(BINARY_NAME)"
+	go build -o bin/vijenex-cis ./cmd
 
+# Build for Linux (production)
+build-linux:
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/vijenex-cis-linux-amd64 ./cmd
+
+# Build for all platforms
+build-all:
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/vijenex-cis-linux-amd64 ./cmd
+	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o bin/vijenex-cis-linux-arm64 ./cmd
+
+# Install dependencies
+deps:
+	go mod download
+	go mod tidy
+
+# Clean build artifacts
 clean:
-	@echo "Cleaning..."
-	rm -rf $(BUILD_DIR)
-	rm -rf reports
+	rm -rf bin/
+	rm -rf reports/
 
-install: build
-	@echo "Installing to /usr/local/bin..."
-	sudo cp $(BUILD_DIR)/$(BINARY_NAME) /usr/local/bin/
-	@echo "Installation complete"
+# Install to system (requires root)
+install: build-linux
+	sudo cp bin/vijenex-cis-linux-amd64 /usr/local/bin/vijenex-cis
+	sudo chmod +x /usr/local/bin/vijenex-cis
 
+# Run tests
 test:
-	go test ./...
+	go test -v ./...
+
+# Run locally
+run:
+	go run ./cmd --output-dir ./reports

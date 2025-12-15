@@ -7,7 +7,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/vijenex/linux-cis-scanner/rhel-9/internal/scanner"
+	"github.com/vijenex/linux-cis-scanner/rhel-8/internal/scanner"
 )
 
 var (
@@ -20,7 +20,7 @@ var (
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "vijenex-cis",
-		Short: "Vijenex CIS Scanner for RHEL 9",
+		Short: "Vijenex CIS Scanner for RHEL 8",
 		Long: `
 ██████╗ ██╗  ██╗███████╗██╗          █████╗ 
 ██╔══██╗██║  ██║██╔════╝██║         ██╔══██╗
@@ -30,7 +30,7 @@ func main() {
 ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚════╝  
 
     Vijenex CIS Scanner
-    Red Hat Enterprise Linux 9
+    Red Hat Enterprise Linux 8
     Security Compliance Automation
 `,
 		Run: runScan,
@@ -53,6 +53,7 @@ func runScan(cmd *cobra.Command, args []string) {
 	blue := color.New(color.FgBlue)
 	yellow := color.New(color.FgYellow)
 
+	// ASCII Art Logo
 	fmt.Println()
 	cyan.Println("██████╗ ██╗  ██╗███████╗██╗          █████╗ ")
 	cyan.Println("██╔══██╗██║  ██║██╔════╝██║         ██╔══██╗")
@@ -63,12 +64,13 @@ func runScan(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	cyan.Println("=============================================================")
 	cyan.Println("                        VIJENEX                              ")
-	fmt.Println("      Red Hat Enterprise Linux 9 CIS Scanner           ")
+	fmt.Println("      Red Hat Enterprise Linux 8 CIS Scanner           ")
 	yellow.Println("           Powered by Vijenex Security Platform             ")
 	cyan.Println("        https://github.com/vijenex/linux-cis-scanner        ")
 	cyan.Println("=============================================================")
 	fmt.Println()
 
+	// Check if running as root
 	if os.Geteuid() != 0 {
 		yellow.Println("⚠ Warning: Running without root privileges. Some checks may fail.")
 		yellow.Println("  For complete scanning, run with: sudo vijenex-cis")
@@ -83,8 +85,10 @@ func runScan(cmd *cobra.Command, args []string) {
 
 	startTime := time.Now()
 
+	// Create scanner
 	s := scanner.NewScanner(outputDir, profile)
 
+	// Load and execute controls
 	if err := s.LoadMilestones(milestones); err != nil {
 		color.Red("❌ Error loading milestones: %v", err)
 		os.Exit(1)
@@ -92,6 +96,7 @@ func runScan(cmd *cobra.Command, args []string) {
 
 	results := s.ExecuteControls()
 
+	// Generate reports
 	blue.Println("\n📊 Generating reports...")
 	if format == "csv" || format == "both" {
 		if err := s.GenerateCSVReport(results); err != nil {
@@ -111,6 +116,7 @@ func runScan(cmd *cobra.Command, args []string) {
 
 	duration := time.Since(startTime)
 
+	// Print summary
 	fmt.Println()
 	cyan.Println("=============================================================")
 	cyan.Println("                    SCAN COMPLETED                           ")

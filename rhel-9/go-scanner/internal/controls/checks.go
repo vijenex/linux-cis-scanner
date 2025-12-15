@@ -5,20 +5,12 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"regexp"
 	"strings"
 	"time"
 )
 
-var validNameRegex = regexp.MustCompile(`^[a-zA-Z0-9._/-]+$`)
-
-func isValidName(name string) bool {
-	return validNameRegex.MatchString(name) && len(name) < 256
-}
-
 func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
-	ctx, cancel := BuildScanContext()
-	defer cancel()
+	ctx, _ := BuildScanContext()
 	modInfo := ctx.GetModuleInfo(moduleName)
 	
 	if expectedStatus == "not_available" {
@@ -130,11 +122,6 @@ func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 }
 
 func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
-	// Validate input
-	if !isValidName(serviceName) {
-		return Error(fmt.Errorf("invalid service name: %s", serviceName), "validation")
-	}
-	
 	unitPaths := []string{
 		fmt.Sprintf("/etc/systemd/system/%s.service", serviceName),
 		fmt.Sprintf("/lib/systemd/system/%s.service", serviceName),
@@ -194,11 +181,6 @@ func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
 }
 
 func CheckPackageInstalled(packageName, expectedStatus string) CheckResult {
-	// Validate input
-	if !isValidName(packageName) {
-		return Error(fmt.Errorf("invalid package name: %s", packageName), "validation")
-	}
-	
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	
