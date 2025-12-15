@@ -51,7 +51,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv4.icmp_ignore_bogus_error_responses"
+      "parameter_name": "net.ipv4.icmp_ignore_bogus_error_responses",
+      "expected_value": "1"
     },
     {
       "id": "3.3.4",
@@ -67,7 +68,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv4.icmp_echo_ignore_broadcasts"
+      "parameter_name": "net.ipv4.icmp_echo_ignore_broadcasts",
+      "expected_value": "1"
     },
     {
       "id": "3.3.5",
@@ -83,7 +85,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv4.conf.all.accept_redirects"
+      "parameter_name": "net.ipv4.conf.all.accept_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.6",
@@ -99,7 +102,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv4.conf.all.accept_redirects"
+      "parameter_name": "net.ipv4.conf.all.secure_redirects",
+      "expected_value": "0"
     },
     {
       "id": "3.3.7",
@@ -132,7 +136,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv4.conf.all.accept_source_route"
+      "parameter_name": "net.ipv4.conf.all.accept_source_route",
+      "expected_value": "0"
     },
     {
       "id": "3.3.9",
@@ -148,7 +153,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv4.conf.all.log_martians"
+      "parameter_name": "net.ipv4.conf.all.log_martians",
+      "expected_value": "1"
     },
     {
       "id": "3.3.10",
@@ -181,7 +187,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "net.ipv6.conf.all.accept_ra"
+      "parameter_name": "net.ipv6.conf.all.accept_ra",
+      "expected_value": "0"
     }
   ]
 }

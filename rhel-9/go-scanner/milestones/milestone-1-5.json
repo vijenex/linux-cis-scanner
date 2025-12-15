@@ -34,7 +34,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "kernel.yama.ptrace_scope"
+      "parameter_name": "kernel.yama.ptrace_scope",
+      "expected_value": "1"
     },
     {
       "id": "1.5.3",
