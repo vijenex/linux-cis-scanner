@@ -1,0 +1,82 @@
+{
+  "milestone": "2.2",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 2.2",
+  "controls": [
+    {
+      "id": "2.2.1",
+      "title": "Ensure ftp client is not installed",
+      "section": "Section 2.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.2.1",
+      "description": "Ensure ftp client is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "2.2.2",
+      "title": "Ensure ldap client is not installed",
+      "section": "Section 2.2",
+      "profile": "Level2",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.2.2",
+      "description": "Ensure ldap client is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "2.2.3",
+      "title": "Ensure nis client is not installed",
+      "section": "Section 2.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.2.3",
+      "description": "Ensure nis client is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "2.2.4",
+      "title": "Ensure telnet client is not installed",
+      "section": "Section 2.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.2.4",
+      "description": "Ensure telnet client is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "2.2.5",
+      "title": "Ensure tftp client is not installed",
+      "section": "Section 2.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.2.5",
+      "description": "Ensure tftp client is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

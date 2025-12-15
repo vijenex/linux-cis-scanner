@@ -1,0 +1,67 @@
+{
+  "milestone": "4.3",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 4.3",
+  "controls": [
+    {
+      "id": "4.3.1",
+      "title": "Ensure nftables base chains exist",
+      "section": "Section 4.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.3.1",
+      "description": "Ensure nftables base chains exist",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "4.3.2",
+      "title": "Ensure nftables established connections are configured\\",
+      "section": "Section 4.3",
+      "profile": "Level1",
+      "automated": false,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.3.2",
+      "description": "Ensure nftables established connections are configured\\",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "4.3.3",
+      "title": "Ensure nftables default deny firewall policy",
+      "section": "Section 4.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.3.3",
+      "description": "Ensure nftables default deny firewall policy",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "4.3.4",
+      "title": "Ensure nftables loopback traffic is configured",
+      "section": "Section 4.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.3.4",
+      "description": "Ensure nftables loopback traffic is configured",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

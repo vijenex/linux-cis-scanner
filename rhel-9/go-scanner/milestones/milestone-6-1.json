@@ -1,0 +1,52 @@
+{
+  "milestone": "6.1",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 6.1",
+  "controls": [
+    {
+      "id": "6.1.1",
+      "title": "Ensure AIDE is installed",
+      "section": "Section 6.1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 6.1.1",
+      "description": "Ensure AIDE is installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "6.1.2",
+      "title": "Ensure filesystem integrity is regularly checked",
+      "section": "Section 6.1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 6.1.2",
+      "description": "Ensure filesystem integrity is regularly checked",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "6.1.3",
+      "title": "Ensure cryptographic mechanisms are used to protect the\\ integrity of audit tools",
+      "section": "Section 6.1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FilePermissions",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 6.1.3",
+      "description": "Ensure cryptographic mechanisms are used to protect the\\ integrity of audit tools",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

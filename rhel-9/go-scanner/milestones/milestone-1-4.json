@@ -1,0 +1,37 @@
+{
+  "milestone": "1.4",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 1.4",
+  "controls": [
+    {
+      "id": "1.4.1",
+      "title": "Ensure bootloader password is set",
+      "section": "Section 1.4",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FilePermissions",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 1.4.1",
+      "description": "Ensure bootloader password is set",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "1.4.2",
+      "title": "Ensure access to bootloader config is configured\\",
+      "section": "Section 1.4",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FilePermissions",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 1.4.2",
+      "description": "Ensure access to bootloader config is configured\\",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

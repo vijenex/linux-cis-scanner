@@ -1,0 +1,52 @@
+{
+  "milestone": "2.3",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 2.3",
+  "controls": [
+    {
+      "id": "2.3.1",
+      "title": "Ensure time synchronization is in use",
+      "section": "Section 2.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.3.1",
+      "description": "Ensure time synchronization is in use",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "2.3.2",
+      "title": "Ensure chrony is configured",
+      "section": "Section 2.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.3.2",
+      "description": "Ensure chrony is configured",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "2.3.3",
+      "title": "Ensure chrony is not run as the root user",
+      "section": "Section 2.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 2.3.3",
+      "description": "Ensure chrony is not run as the root user",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

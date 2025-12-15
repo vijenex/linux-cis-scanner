@@ -1,0 +1,67 @@
+{
+  "milestone": "1.5",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 1.5",
+  "controls": [
+    {
+      "id": "1.5.1",
+      "title": "Ensure address space layout randomization is enabled\\",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 1.5.1",
+      "description": "Ensure address space layout randomization is enabled\\",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "1.5.2",
+      "title": "Ensure ptrace_scope is restricted",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 1.5.2",
+      "description": "Ensure ptrace_scope is restricted",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "1.5.3",
+      "title": "Ensure core dump backtraces are disabled",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 1.5.3",
+      "description": "Ensure core dump backtraces are disabled",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "1.5.4",
+      "title": "Ensure core dump storage is disabled",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 1.5.4",
+      "description": "Ensure core dump storage is disabled",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

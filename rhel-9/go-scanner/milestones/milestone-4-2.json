@@ -1,0 +1,37 @@
+{
+  "milestone": "4.2",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 4.2",
+  "controls": [
+    {
+      "id": "4.2.1",
+      "title": "Ensure firewalld drops unnecessary services and ports\\",
+      "section": "Section 4.2",
+      "profile": "Level1",
+      "automated": false,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.2.1",
+      "description": "Ensure firewalld drops unnecessary services and ports\\",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "4.2.2",
+      "title": "Ensure firewalld loopback traffic is configured",
+      "section": "Section 4.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.2.2",
+      "description": "Ensure firewalld loopback traffic is configured",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

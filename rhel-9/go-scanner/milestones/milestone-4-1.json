@@ -1,0 +1,37 @@
+{
+  "milestone": "4.1",
+  "version": "1.0.0",
+  "description": "RHEL 9 CIS Benchmark v2.0.0 - Section 4.1",
+  "controls": [
+    {
+      "id": "4.1.1",
+      "title": "Ensure nftables is installed",
+      "section": "Section 4.1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.1.1",
+      "description": "Ensure nftables is installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "4.1.2",
+      "title": "Ensure a single firewall configuration utility is in use\\",
+      "section": "Section 4.1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "severity": "medium",
+      "cis_reference": "CIS RHEL 9 v2.0.0 - 4.1.2",
+      "description": "Ensure a single firewall configuration utility is in use\\",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}
