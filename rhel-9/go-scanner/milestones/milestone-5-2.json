@@ -16,7 +16,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "sudo",
+      "expected_status": "installed"
     },
     {
       "id": "5.2.2",

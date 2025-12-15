@@ -16,7 +16,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "aide",
+      "expected_status": "installed"
     },
     {
       "id": "6.1.2",
@@ -31,7 +33,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "6.1.3",
@@ -39,14 +42,15 @@
       "section": "Section 6.1",
       "profile": "Level1",
       "automated": true,
-      "type": "FilePermissions",
+      "type": "PackageInstalled",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 6.1.3",
       "description": "Ensure cryptographic mechanisms are used to protect the\\ integrity of audit tools",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
     }
   ]
 }

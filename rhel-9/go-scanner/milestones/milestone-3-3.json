@@ -16,7 +16,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "parameter_name": "forwarding",
+      "expected_value": "0"
     },
     {
       "id": "3.3.2",
@@ -31,7 +33,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "parameter_name": "sending",
+      "expected_value": "0"
     },
     {
       "id": "3.3.3",
@@ -106,7 +110,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "parameter_name": "filtering",
+      "expected_value": "1"
     },
     {
       "id": "3.3.8",
@@ -151,7 +157,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "parameter_name": "cookies",
+      "expected_value": "1"
     },
     {
       "id": "3.3.11",

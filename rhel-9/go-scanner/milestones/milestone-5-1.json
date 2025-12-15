@@ -16,7 +16,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/ssh/sshd_config",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "5.1.2",
@@ -61,7 +65,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "5.1.5",
@@ -76,7 +81,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "5.1.6",
@@ -91,7 +97,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "5.1.7",
@@ -211,7 +218,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "5.1.15",
@@ -256,7 +264,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "5.1.18",
@@ -271,7 +280,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "5.1.19",
@@ -331,7 +341,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     }
   ]
 }

@@ -16,7 +16,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
     },
     {
       "id": "6.3.1.2",
@@ -61,7 +62,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "6.3.2.1",
@@ -241,7 +243,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "6.3.3.9",
@@ -444,14 +447,15 @@
       "section": "Section 6.3",
       "profile": "Level2",
       "automated": true,
-      "type": "FilePermissions",
+      "type": "PackageInstalled",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 6.3.4.1",
       "description": "Ensure the audit log file directory mode is configured\\",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
     },
     {
       "id": "6.3.4.2",
@@ -459,14 +463,15 @@
       "section": "Section 6.3",
       "profile": "Level2",
       "automated": true,
-      "type": "FilePermissions",
+      "type": "PackageInstalled",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 6.3.4.2",
       "description": "Ensure audit log files mode is configured",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
     },
     {
       "id": "6.3.4.3",
@@ -474,14 +479,15 @@
       "section": "Section 6.3",
       "profile": "Level2",
       "automated": true,
-      "type": "FilePermissions",
+      "type": "PackageInstalled",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 6.3.4.3",
       "description": "Ensure audit log files owner is configured",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
     },
     {
       "id": "6.3.4.4",
@@ -496,7 +502,8 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "expected_status": "enabled"
     },
     {
       "id": "6.3.4.5",

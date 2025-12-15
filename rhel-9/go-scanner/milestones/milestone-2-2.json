@@ -16,7 +16,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "ftp",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.2",
@@ -31,7 +33,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "openldap-clients",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.3",
@@ -46,7 +50,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "ypbind",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.4",
@@ -61,7 +67,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "telnet",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.5",
@@ -76,7 +84,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "package_name": "ftp",
+      "expected_status": "not_installed"
     }
   ]
 }

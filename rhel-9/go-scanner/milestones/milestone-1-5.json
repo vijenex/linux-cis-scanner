@@ -16,7 +16,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "parameter_name": "randomization",
+      "expected_value": "1"
     },
     {
       "id": "1.5.2",

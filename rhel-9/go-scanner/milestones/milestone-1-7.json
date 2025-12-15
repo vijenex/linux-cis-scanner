@@ -61,7 +61,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/motd",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "1.7.5",
@@ -76,7 +80,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/issue",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "1.7.6",
@@ -91,7 +99,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/issue.net",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     }
   ]
 }

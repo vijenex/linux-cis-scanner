@@ -16,7 +16,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/passwd",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.2",
@@ -31,7 +35,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/passwd-",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.3",
@@ -46,7 +54,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/group",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.4",
@@ -61,7 +73,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/group-",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.5",
@@ -76,7 +92,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/shadow",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.6",
@@ -91,7 +111,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/shadow-",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.7",
@@ -106,7 +130,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/gshadow",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.8",
@@ -121,7 +149,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/gshadow-",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.9",
@@ -136,7 +168,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/shells",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.10",
@@ -151,7 +187,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/security/opasswd",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.1.11",

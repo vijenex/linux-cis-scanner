@@ -226,7 +226,10 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/shells",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "5.4.3.2",

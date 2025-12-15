@@ -12,11 +12,33 @@ import json
 import os
 import sys
 
+# Service name mapping
+SERVICE_MAP = {
+    "dhcp server": "dhcpd", "dns server": "named", "ftp server": "vsftpd",
+    "web server": "httpd", "mail transfer agent": "postfix", "print server": "cups",
+    "rpcbind": "rpcbind", "rsync": "rsync", "snmp": "snmpd",
+    "telnet server": "telnet.socket", "tftp server": "tftp.socket",
+    "xinetd": "xinetd", "avahi": "avahi-daemon", "samba": "smb",
+    "dnsmasq": "dnsmasq", "nis server": "ypserv", "nfs": "nfs-server",
+    "message access": "dovecot", "web proxy": "squid", "autofs": "autofs",
+    "bluetooth": "bluetooth", "cron": "crond", "chrony": "chronyd",
+}
+
+PACKAGE_MAP = {
+    "x window": "xorg-x11-server-common", "telnet client": "telnet",
+    "ftp client": "ftp", "nis client": "ypbind", "tftp client": "tftp",
+    "ldap client": "openldap-clients", "aide": "aide", "selinux": "libselinux",
+    "setroubleshoot": "setroubleshoot", "gdm": "gdm", "nftables": "nftables",
+    "sudo": "sudo", "pam": "pam", "authselect": "authselect",
+    "libpwquality": "libpwquality", "rsyslog": "rsyslog",
+    "systemd-journal-remote": "systemd-journal-remote", "chrony": "chrony",
+}
+
 def detect_control_type(title, content_window):
     """Detect control type from title and surrounding content"""
     text = f"{title} {content_window}".lower()
     
-    # MountOption - CHECK FIRST (before MountPoint)
+    # MountOption - CHECK FIRST
     if re.search(r'\b(nodev|nosuid|noexec)\b', title.lower()) and 'option' in title.lower():
         return "MountOption"
     
@@ -25,19 +47,19 @@ def detect_control_type(title, content_window):
         return "KernelModule"
     
     # SysctlParameter
-    if re.search(r'\b(sysctl|/proc/sys|kernel\.)', text):
+    if re.search(r'\b(sysctl|/proc/sys|kernel\.|net\.)', text):
         return "SysctlParameter"
     
-    # MountPoint (separate partition)
+    # MountPoint
     if re.search(r'\b(separate partition|partition exists)', text):
         return "MountPoint"
     
     # ServiceStatus
-    if re.search(r'\b(systemctl|service.*enabled|service.*disabled)', text):
+    if re.search(r'\b(systemctl|service.*enabled|service.*disabled|services are not in use)', text):
         return "ServiceStatus"
     
     # PackageInstalled
-    if re.search(r'\b(rpm -q|package.*installed|dnf)', text):
+    if re.search(r'\b(rpm -q|package.*installed|client is not installed|is installed)', text):
         return "PackageInstalled"
     
     # FilePermissions
@@ -49,6 +71,53 @@ def detect_control_type(title, content_window):
         return "FileContent"
     
     return "Manual"
+
+def extract_fields(control_type, title, content_window):
+    """Extract required fields based on control type"""
+    fields = {}
+    title_lower = title.lower()
+    
+    if control_type == "ServiceStatus":
+        # Extract service name
+        for key, service in SERVICE_MAP.items():
+            if key in title_lower:
+                fields["service_name"] = service
+                break
+        fields["expected_status"] = "disabled" if "not in use" in title_lower else "enabled"
+    
+    elif control_type == "PackageInstalled":
+        # Extract package name
+        for key, pkg in PACKAGE_MAP.items():
+            if key in title_lower:
+                fields["package_name"] = pkg
+                break
+        fields["expected_status"] = "not_installed" if "not installed" in title_lower else "installed"
+    
+    elif control_type == "SysctlParameter":
+        # Extract parameter from title or content
+        param_match = re.search(r'([a-z0-9_.]+)\s+is\s+(set|disabled|enabled)', title_lower)
+        if param_match:
+            fields["parameter_name"] = param_match.group(1)
+            fields["expected_value"] = "1" if "enabled" in title_lower else "0"
+    
+    elif control_type == "FilePermissions":
+        # Extract file path
+        path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+)', title)
+        if path_match:
+            fields["file_path"] = path_match.group(1)
+            fields["expected_permissions"] = "0644"
+            fields["expected_owner"] = "root"
+            fields["expected_group"] = "root"
+    
+    elif control_type == "FileContent":
+        # Extract file path
+        path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+)', title)
+        if path_match:
+            fields["file_path"] = path_match.group(1)
+            fields["pattern"] = ".*"
+            fields["expected_result"] = "found"
+    
+    return fields
 
 def parse_rtf(rtf_path, output_dir, os_name, version):
     with open(rtf_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -84,6 +153,9 @@ def parse_rtf(rtf_path, output_dir, os_name, version):
         # Detect control type
         control_type = detect_control_type(title, content_window)
         
+        # Extract required fields
+        extracted_fields = extract_fields(control_type, title, content_window)
+        
         control = {
             "id": control_id,
             "title": f"Ensure {title}",
@@ -99,6 +171,9 @@ def parse_rtf(rtf_path, output_dir, os_name, version):
             "impact": "None",
             "audit_command": "Manual review required"
         }
+        
+        # Add extracted fields
+        control.update(extracted_fields)
         
         # Add type-specific fields
         if control_type == "KernelModule":

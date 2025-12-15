@@ -46,7 +46,11 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/passwd",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "7.2.4",
