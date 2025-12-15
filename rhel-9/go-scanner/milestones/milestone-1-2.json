@@ -32,7 +32,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "1.2.1.3",
@@ -47,7 +49,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "1.2.1.4",

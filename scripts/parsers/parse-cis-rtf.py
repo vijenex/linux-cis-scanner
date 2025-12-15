@@ -22,6 +22,8 @@ SERVICE_MAP = {
     "dnsmasq": "dnsmasq", "nis server": "ypserv", "nfs": "nfs-server",
     "message access": "dovecot", "web proxy": "squid", "autofs": "autofs",
     "bluetooth": "bluetooth", "cron": "crond", "chrony": "chronyd",
+    "setroubleshoot": "setroubleshoot", "auditd": "auditd",
+    "journald": "systemd-journald", "rsyslog": "rsyslog",
 }
 
 PACKAGE_MAP = {
@@ -32,6 +34,34 @@ PACKAGE_MAP = {
     "sudo": "sudo", "pam": "pam", "authselect": "authselect",
     "libpwquality": "libpwquality", "rsyslog": "rsyslog",
     "systemd-journal-remote": "systemd-journal-remote", "chrony": "chrony",
+}
+
+SYSCTL_MAP = {
+    "address space layout randomization": "kernel.randomize_va_space",
+    "ptrace_scope": "kernel.yama.ptrace_scope",
+    "core dump": "kernel.core_pattern",
+    "dmesg": "kernel.dmesg_restrict",
+    "ip forwarding": "net.ipv4.ip_forward",
+    "packet redirect": "net.ipv4.conf.all.send_redirects",
+    "bogus icmp": "net.ipv4.icmp_ignore_bogus_error_responses",
+    "broadcast icmp": "net.ipv4.icmp_echo_ignore_broadcasts",
+    "icmp redirect": "net.ipv4.conf.all.accept_redirects",
+    "secure icmp": "net.ipv4.conf.all.secure_redirects",
+    "reverse path": "net.ipv4.conf.all.rp_filter",
+    "source routed": "net.ipv4.conf.all.accept_source_route",
+    "suspicious packet": "net.ipv4.conf.all.log_martians",
+    "tcp syn cookie": "net.ipv4.tcp_syncookies",
+    "ipv6 router": "net.ipv6.conf.all.accept_ra",
+}
+
+FILE_MAP = {
+    "message of the day": "/etc/motd",
+    "local login banner": "/etc/issue",
+    "remote login banner": "/etc/issue.net",
+    "bootloader password": "/boot/grub2/user.cfg",
+    "bootloader config": "/boot/grub2/grub.cfg",
+    "core dump backtraces": "/etc/systemd/coredump.conf",
+    "core dump storage": "/etc/systemd/coredump.conf",
 }
 
 def detect_control_type(title, content_window):
@@ -78,12 +108,23 @@ def extract_fields(control_type, title, content_window):
     title_lower = title.lower()
     
     if control_type == "ServiceStatus":
-        # Extract service name
+        # Extract service name from map
         for key, service in SERVICE_MAP.items():
             if key in title_lower:
                 fields["service_name"] = service
                 break
-        fields["expected_status"] = "disabled" if "not in use" in title_lower else "enabled"
+        # Fallback: extract from audit
+        if "service_name" not in fields:
+            svc_match = re.search(r'systemctl\s+(?:is-enabled|is-active|status)\s+(\S+)', content_window)
+            if svc_match:
+                fields["service_name"] = svc_match.group(1)
+        # Normalize service name from title
+        if "service_name" not in fields:
+            name_match = re.search(r'Ensure\s+(.+?)\s+(?:service|daemon)', title_lower)
+            if name_match:
+                name = name_match.group(1).replace(' ', '').replace('server', '')
+                fields["service_name"] = name
+        fields["expected_status"] = "disabled" if "not in use" in title_lower or "disabled" in title_lower else "enabled"
     
     elif control_type == "PackageInstalled":
         # Extract package name
@@ -94,15 +135,25 @@ def extract_fields(control_type, title, content_window):
         fields["expected_status"] = "not_installed" if "not installed" in title_lower else "installed"
     
     elif control_type == "SysctlParameter":
-        # Extract parameter from title or content
-        param_match = re.search(r'([a-z0-9_.]+)\s+is\s+(set|disabled|enabled)', title_lower)
-        if param_match:
-            fields["parameter_name"] = param_match.group(1)
-            fields["expected_value"] = "1" if "enabled" in title_lower else "0"
+        # Try semantic map first
+        for key, param in SYSCTL_MAP.items():
+            if key in title_lower:
+                fields["parameter_name"] = param
+                break
+        # Try direct kernel/net parameter
+        if "parameter_name" not in fields:
+            param_match = re.search(r'(kernel\.[a-z0-9_.]+|net\.[a-z0-9_.]+)', title_lower + content_window.lower())
+            if param_match:
+                fields["parameter_name"] = param_match.group(1)
+        # Expected value
+        if "enabled" in title_lower or "set to" in title_lower:
+            fields["expected_value"] = "1"
+        elif "disabled" in title_lower:
+            fields["expected_value"] = "0"
     
     elif control_type == "FilePermissions":
         # Extract file path
-        path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+)', title)
+        path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+|/boot/[a-zA-Z0-9_./-]+)', title)
         if path_match:
             fields["file_path"] = path_match.group(1)
             fields["expected_permissions"] = "0644"
@@ -110,12 +161,18 @@ def extract_fields(control_type, title, content_window):
             fields["expected_group"] = "root"
     
     elif control_type == "FileContent":
-        # Extract file path
-        path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+)', title)
-        if path_match:
-            fields["file_path"] = path_match.group(1)
-            fields["pattern"] = ".*"
-            fields["expected_result"] = "found"
+        # Try semantic map first
+        for key, path in FILE_MAP.items():
+            if key in title_lower:
+                fields["file_path"] = path
+                break
+        # Try direct path extraction
+        if "file_path" not in fields:
+            path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+|/boot/[a-zA-Z0-9_./-]+)', title)
+            if path_match:
+                fields["file_path"] = path_match.group(1)
+        fields["pattern"] = ".*"
+        fields["expected_result"] = "found"
     
     return fields
 

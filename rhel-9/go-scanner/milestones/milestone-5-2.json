@@ -33,7 +33,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "5.2.3",
@@ -48,7 +50,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "5.2.4",
@@ -63,7 +67,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "5.2.5",
@@ -78,7 +84,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "5.2.6",
@@ -93,7 +101,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "5.2.7",

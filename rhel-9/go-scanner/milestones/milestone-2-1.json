@@ -153,6 +153,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "nfs-server.service",
       "expected_status": "disabled"
     },
     {

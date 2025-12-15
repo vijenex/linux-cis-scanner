@@ -17,6 +17,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "firewalld.service",
       "expected_status": "enabled"
     },
     {
@@ -33,6 +34,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "firewalld.service",
       "expected_status": "enabled"
     }
   ]

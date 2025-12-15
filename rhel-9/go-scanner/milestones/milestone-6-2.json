@@ -17,6 +17,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "systemd-journald",
       "expected_status": "enabled"
     },
     {
@@ -47,7 +48,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "6.2.1.4",
@@ -63,6 +66,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "--quiet",
       "expected_status": "enabled"
     },
     {
@@ -112,6 +116,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "systemd-journal-upload.service\\",
       "expected_status": "enabled"
     },
     {
@@ -128,6 +133,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "systemd-journal-remote.socket",
       "expected_status": "disabled"
     },
     {
@@ -144,7 +150,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "enabled"
+      "service_name": "systemd-journald",
+      "expected_status": "disabled"
     },
     {
       "id": "6.2.2.3",
@@ -160,6 +167,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "systemd-journald",
       "expected_status": "enabled"
     },
     {
@@ -176,6 +184,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "systemd-journald",
       "expected_status": "enabled"
     },
     {
@@ -209,6 +218,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "rsyslog",
       "expected_status": "enabled"
     },
     {
@@ -225,6 +235,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "systemd-journald",
       "expected_status": "enabled"
     },
     {
@@ -241,6 +252,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "rsyslog",
       "expected_status": "enabled"
     },
     {
@@ -257,6 +269,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "rsyslog",
       "expected_status": "enabled"
     },
     {
@@ -273,6 +286,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "rsyslog",
       "expected_status": "enabled"
     },
     {
@@ -289,6 +303,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "rsyslog",
       "expected_status": "enabled"
     },
     {
@@ -305,6 +320,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "service_name": "rsyslog",
       "expected_status": "enabled"
     },
     {

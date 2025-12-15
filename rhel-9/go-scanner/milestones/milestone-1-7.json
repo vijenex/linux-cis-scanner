@@ -16,7 +16,10 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/motd",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "1.7.2",
@@ -31,7 +34,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "1.7.3",
@@ -46,7 +51,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "pattern": ".*",
+      "expected_result": "found"
     },
     {
       "id": "1.7.4",
