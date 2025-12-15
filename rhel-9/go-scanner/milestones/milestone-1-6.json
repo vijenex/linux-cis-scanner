@@ -17,6 +17,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/crypto-policies/config",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -25,8 +26,8 @@
       "title": "Ensure system wide crypto policy is not set in sshd\\ configuration",
       "section": "Section 1.6",
       "profile": "Level1",
-      "automated": true,
-      "type": "ServiceStatus",
+      "automated": false,
+      "type": "Manual",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 1.6.2",
       "description": "Ensure system wide crypto policy is not set in sshd\\ configuration",
@@ -50,6 +51,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/crypto-policies/config",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -67,6 +69,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/crypto-policies/config",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -84,6 +87,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/crypto-policies/config",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -101,6 +105,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/crypto-policies/config",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -118,6 +123,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/crypto-policies/config",
       "pattern": ".*",
       "expected_result": "found"
     }

@@ -35,6 +35,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/issue",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -52,6 +53,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/issue.net",
       "pattern": ".*",
       "expected_result": "found"
     },

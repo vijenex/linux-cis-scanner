@@ -42,16 +42,19 @@ SYSCTL_MAP = {
     "core dump": "kernel.core_pattern",
     "dmesg": "kernel.dmesg_restrict",
     "ip forwarding": "net.ipv4.ip_forward",
-    "packet redirect": "net.ipv4.conf.all.send_redirects",
+    "packet redirect sending": "net.ipv4.conf.all.send_redirects",
+    "send redirects": "net.ipv4.conf.all.send_redirects",
     "bogus icmp": "net.ipv4.icmp_ignore_bogus_error_responses",
     "broadcast icmp": "net.ipv4.icmp_echo_ignore_broadcasts",
-    "icmp redirect": "net.ipv4.conf.all.accept_redirects",
-    "secure icmp": "net.ipv4.conf.all.secure_redirects",
-    "reverse path": "net.ipv4.conf.all.rp_filter",
-    "source routed": "net.ipv4.conf.all.accept_source_route",
-    "suspicious packet": "net.ipv4.conf.all.log_martians",
-    "tcp syn cookie": "net.ipv4.tcp_syncookies",
-    "ipv6 router": "net.ipv6.conf.all.accept_ra",
+    "icmp redirects are not accepted": "net.ipv4.conf.all.accept_redirects",
+    "accept redirects": "net.ipv4.conf.all.accept_redirects",
+    "secure icmp redirects": "net.ipv4.conf.all.secure_redirects",
+    "reverse path filtering": "net.ipv4.conf.all.rp_filter",
+    "source routed packets": "net.ipv4.conf.all.accept_source_route",
+    "suspicious packets are logged": "net.ipv4.conf.all.log_martians",
+    "log martians": "net.ipv4.conf.all.log_martians",
+    "tcp syn cookies": "net.ipv4.tcp_syncookies",
+    "ipv6 router advertisements": "net.ipv6.conf.all.accept_ra",
 }
 
 FILE_MAP = {
@@ -62,14 +65,29 @@ FILE_MAP = {
     "bootloader config": "/boot/grub2/grub.cfg",
     "core dump backtraces": "/etc/systemd/coredump.conf",
     "core dump storage": "/etc/systemd/coredump.conf",
+    "crypto policy": "/etc/crypto-policies/config",
+    "selinux config": "/etc/selinux/config",
+    "selinux policy": "/etc/selinux/config",
+    "selinux mode": "/etc/selinux/config",
+    "gpgcheck": "/etc/dnf/dnf.conf",
+    "repo_gpgcheck": "/etc/dnf/dnf.conf",
 }
 
 def detect_control_type(title, content_window):
     """Detect control type from title and surrounding content"""
     text = f"{title} {content_window}".lower()
+    title_lower = title.lower()
     
-    # MountOption - CHECK FIRST
-    if re.search(r'\b(nodev|nosuid|noexec)\b', title.lower()) and 'option' in title.lower():
+    # CRITICAL: Permissions on /etc → FilePermissions
+    if "permissions on /etc" in title_lower or "permissions on /boot" in title_lower:
+        return "FilePermissions"
+    
+    # MountPoint - CHECK BEFORE Sysctl
+    if "separate partition" in title_lower or "partition exists" in title_lower:
+        return "MountPoint"
+    
+    # MountOption
+    if re.search(r'\b(nodev|nosuid|noexec)\b', title_lower) and 'option' in title_lower:
         return "MountOption"
     
     # KernelModule
@@ -80,9 +98,7 @@ def detect_control_type(title, content_window):
     if re.search(r'\b(sysctl|/proc/sys|kernel\.|net\.)', text):
         return "SysctlParameter"
     
-    # MountPoint
-    if re.search(r'\b(separate partition|partition exists)', text):
-        return "MountPoint"
+
     
     # ServiceStatus
     if re.search(r'\b(systemctl|service.*enabled|service.*disabled|services are not in use)', text):
@@ -152,8 +168,8 @@ def extract_fields(control_type, title, content_window):
             fields["expected_value"] = "0"
     
     elif control_type == "FilePermissions":
-        # Extract file path
-        path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+|/boot/[a-zA-Z0-9_./-]+)', title)
+        # Extract file path - including cron files
+        path_match = re.search(r'(/etc/cron[a-z./-]*|/etc/[a-zA-Z0-9_./-]+|/boot/[a-zA-Z0-9_./-]+)', title)
         if path_match:
             fields["file_path"] = path_match.group(1)
             fields["expected_permissions"] = "0644"
@@ -166,9 +182,9 @@ def extract_fields(control_type, title, content_window):
             if key in title_lower:
                 fields["file_path"] = path
                 break
-        # Try direct path extraction
+        # Try direct path extraction - including crypto/selinux
         if "file_path" not in fields:
-            path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+|/boot/[a-zA-Z0-9_./-]+)', title)
+            path_match = re.search(r'(/etc/[a-zA-Z0-9_./-]+|/boot/[a-zA-Z0-9_./-]+|/etc/crypto-policies/[a-zA-Z0-9_./-]+)', title + content_window)
             if path_match:
                 fields["file_path"] = path_match.group(1)
         fields["pattern"] = ".*"
@@ -231,6 +247,19 @@ def parse_rtf(rtf_path, output_dir, os_name, version):
         
         # Add extracted fields
         control.update(extracted_fields)
+        
+        # Safety net: downgrade to Manual if critical fields missing
+        required_fields = {
+            "FilePermissions": "file_path",
+            "FileContent": "file_path",
+            "SysctlParameter": "parameter_name",
+            "ServiceStatus": "service_name",
+            "PackageInstalled": "package_name",
+        }
+        if control_type in required_fields:
+            if required_fields[control_type] not in control:
+                control["type"] = "Manual"
+                control["automated"] = False
         
         # Add type-specific fields
         if control_type == "KernelModule":

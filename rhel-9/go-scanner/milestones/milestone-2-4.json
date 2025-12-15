@@ -26,7 +26,7 @@
       "section": "Section 2.4",
       "profile": "Level1",
       "automated": true,
-      "type": "PackageInstalled",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.2",
       "description": "Ensure permissions on /etc/crontab are configured\\",
@@ -34,7 +34,10 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "file_path": "/etc/crontab",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "2.4.1.3",
@@ -42,7 +45,7 @@
       "section": "Section 2.4",
       "profile": "Level1",
       "automated": true,
-      "type": "PackageInstalled",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.3",
       "description": "Ensure permissions on /etc/cron.hourly are configured\\",
@@ -50,7 +53,10 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "file_path": "/etc/cron.hourly",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "2.4.1.4",
@@ -58,7 +64,7 @@
       "section": "Section 2.4",
       "profile": "Level1",
       "automated": true,
-      "type": "PackageInstalled",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.4",
       "description": "Ensure permissions on /etc/cron.daily are configured\\",
@@ -66,7 +72,10 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "file_path": "/etc/cron.daily",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "2.4.1.5",
@@ -74,7 +83,7 @@
       "section": "Section 2.4",
       "profile": "Level1",
       "automated": true,
-      "type": "PackageInstalled",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.5",
       "description": "Ensure permissions on /etc/cron.weekly are configured\\",
@@ -82,7 +91,10 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "file_path": "/etc/cron.weekly",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "2.4.1.6",
@@ -90,7 +102,7 @@
       "section": "Section 2.4",
       "profile": "Level1",
       "automated": true,
-      "type": "PackageInstalled",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.6",
       "description": "Ensure permissions on /etc/cron.monthly are configured\\",
@@ -98,7 +110,10 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "file_path": "/etc/cron.monthly",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "2.4.1.7",
@@ -106,7 +121,7 @@
       "section": "Section 2.4",
       "profile": "Level1",
       "automated": true,
-      "type": "PackageInstalled",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.7",
       "description": "Ensure permissions on /etc/cron.d are configured\\",
@@ -114,15 +129,18 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "file_path": "/etc/cron.d",
+      "expected_permissions": "0644",
+      "expected_owner": "root",
+      "expected_group": "root"
     },
     {
       "id": "2.4.1.8",
       "title": "Ensure crontab is restricted to authorized users\\",
       "section": "Section 2.4",
       "profile": "Level1",
-      "automated": true,
-      "type": "PackageInstalled",
+      "automated": false,
+      "type": "Manual",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.1.8",
       "description": "Ensure crontab is restricted to authorized users\\",
@@ -137,8 +155,8 @@
       "title": "Ensure at is restricted to authorized users",
       "section": "Section 2.4",
       "profile": "Level1",
-      "automated": true,
-      "type": "PackageInstalled",
+      "automated": false,
+      "type": "Manual",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 2.4.2.1",
       "description": "Ensure at is restricted to authorized users",

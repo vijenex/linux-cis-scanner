@@ -162,7 +162,7 @@
       "section": "Section 1.1",
       "profile": "Level1",
       "automated": true,
-      "type": "SysctlParameter",
+      "type": "MountPoint",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 1.1.2.1.1",
       "description": "Ensure /tmp is a separate partition",
@@ -170,7 +170,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "parameter_name": "kernel.org"
+      "mount_point": "/tmp",
+      "expected_status": "separate_partition"
     },
     {
       "id": "1.1.2.1.2",

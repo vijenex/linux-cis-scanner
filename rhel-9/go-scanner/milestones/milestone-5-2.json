@@ -34,6 +34,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/sudoers",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -51,6 +52,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/sudoers",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -68,6 +70,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/sudoers",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -85,6 +88,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/sudoers",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -102,6 +106,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/sudoers",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -110,8 +115,8 @@
       "title": "Ensure access to the su command is restricted",
       "section": "Section 5.2",
       "profile": "Level1",
-      "automated": true,
-      "type": "FilePermissions",
+      "automated": false,
+      "type": "Manual",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 5.2.7",
       "description": "Ensure access to the su command is restricted",

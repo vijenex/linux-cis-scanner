@@ -9,7 +9,7 @@
       "section": "Section 1.2",
       "profile": "Level1",
       "automated": false,
-      "type": "PackageInstalled",
+      "type": "Manual",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 1.2.1.1",
       "description": "Ensure GPG keys are configured",
@@ -33,6 +33,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/dnf/dnf.conf",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -50,6 +51,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
+      "file_path": "/etc/dnf/dnf.conf",
       "pattern": ".*",
       "expected_result": "found"
     },
@@ -74,7 +76,7 @@
       "section": "Section 1.2",
       "profile": "Level1",
       "automated": false,
-      "type": "ServiceStatus",
+      "type": "Manual",
       "severity": "medium",
       "cis_reference": "CIS RHEL 9 v2.0.0 - 1.2.2.1",
       "description": "Ensure updates, patches, and additional security software\\ are installed",
