@@ -189,7 +189,7 @@ func CheckSudoConfig(parameter, expected, description string) CheckResult {
 	}
 
 	return CheckResult{
-		Status:          status,
+		Status:          Status(status),
 		ActualValue:     actual,
 		EvidenceCommand: "sudo -l -U root",
 		Description:     description,

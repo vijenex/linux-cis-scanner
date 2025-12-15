@@ -189,7 +189,7 @@ func CheckPAMConfig(filePath, module, parameter, expected, description string) C
 	}
 
 	return CheckResult{
-		Status:          status,
+		Status:          Status(status),
 		ActualValue:     actual,
 		EvidenceCommand: fmt.Sprintf("grep %s %s", module, filePath),
 		Description:     description,

@@ -2,7 +2,6 @@ package controls
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -114,6 +113,22 @@ type KernelContext struct {
 	LoadedModules map[string]bool
 	Blacklisted   map[string]bool
 	Available     map[string]bool
+}
+
+// KernelModuleInfo - module status
+type KernelModuleInfo struct {
+	Loaded      bool
+	Blacklisted bool
+	Exists      bool
+}
+
+// GetModuleInfo - query kernel module status
+func (ctx *ScanContext) GetModuleInfo(module string) KernelModuleInfo {
+	return KernelModuleInfo{
+		Loaded:      ctx.Kernel.LoadedModules[module],
+		Blacklisted: ctx.Kernel.Blacklisted[module],
+		Exists:      ctx.Kernel.Available[module],
+	}
 }
 
 // CronContext - cron file permissions

@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"os"
 	"regexp"
-	"strings"
 )
 
 func CheckFileContent(filePath, pattern, expectedResult string) CheckResult {

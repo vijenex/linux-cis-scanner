@@ -132,10 +132,11 @@ type KernelModuleCheckSpec struct {
 
 // CheckResult - strongly typed
 type CheckResult struct {
-	Status      Status
-	ActualValue string
-	Evidence    Evidence
-	Description string
+	Status          Status
+	ActualValue     string
+	EvidenceCommand string   // Backward compatibility for pam.go/sudo.go
+	Evidence        Evidence
+	Description     string
 }
 
 // Normalize legacy controls for backward compatibility

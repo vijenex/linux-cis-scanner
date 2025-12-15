@@ -205,38 +205,38 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 	switch ctrl.Type {
 	case "KernelModule":
 		checkResult := controls.CheckKernelModule(ctrl.ModuleName, ctrl.ExpectedStatus)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 		// Keep original CIS description, don't overwrite
 
 	case "MountPoint":
 		checkResult := controls.CheckMountPoint(ctrl.MountPoint, ctrl.ExpectedStatus)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "MountOption":
 		checkResult := controls.CheckMountOption(ctrl.MountPoint, ctrl.RequiredOption)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "ServiceStatus":
 		checkResult := controls.CheckServiceStatus(ctrl.ServiceName, ctrl.ExpectedStatus)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "PackageInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, ctrl.ExpectedStatus)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "PackageNotInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, "not_installed")
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
@@ -247,37 +247,37 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			paramName = ctrl.Parameter
 		}
 		checkResult := controls.CheckSysctlParameter(paramName, ctrl.ExpectedValue)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "FilePermissions":
 		checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "FileContent":
 		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "SSHConfig":
 		checkResult := controls.CheckSSHConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "PAMConfig":
 		checkResult := controls.CheckPAMConfig(ctrl.FilePath, ctrl.ModuleName, ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "SudoConfig":
 		checkResult := controls.CheckSudoConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
@@ -299,7 +299,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 
 	case "FileExists":
 		checkResult := controls.CheckFileExists(ctrl.FilePath, ctrl.Description)
-		result.Status = checkResult.Status
+		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
@@ -336,15 +336,15 @@ func NormalizeStatus(status string) string {
 }
 
 // Helper functions for consistent status returns
-func NotApplicableIf(condition bool, reason string) CheckResult {
+func NotApplicableIf(condition bool, reason string) controls.CheckResult {
 	if condition {
-		return NotApplicable(reason, "condition not met")
+		return controls.NotApplicable(reason, "condition not met")
 	}
-	return CheckResult{} // Continue with normal check
+	return controls.CheckResult{} // Continue with normal check
 }
 
-func NotApplicableForMissingPath(path string) CheckResult {
-	return NotApplicable(fmt.Sprintf("Path %s does not exist", path), "file not found")
+func NotApplicableForMissingPath(path string) controls.CheckResult {
+	return controls.NotApplicable(fmt.Sprintf("Path %s does not exist", path), "file not found")
 }
 
 func getStatusSymbol(status string) string {

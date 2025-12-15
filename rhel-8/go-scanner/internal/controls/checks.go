@@ -48,7 +48,7 @@ func CheckMountPoint(mountPoint, expectedStatus string) CheckResult {
 	ctx, _ := BuildScanContext()
 	
 	if expectedStatus == "separate_partition" {
-		if mountInfo, exists := ctx.Mounts[mountPoint]; exists {
+		if mountInfo, exists := ctx.Mounts.Runtime[mountPoint]; exists {
 			return Pass(
 				fmt.Sprintf("Separate partition: %s (%s)", mountInfo.Device, mountInfo.FS),
 				fmt.Sprintf("%s %s", mountInfo.Device, mountPoint),
@@ -68,7 +68,7 @@ func CheckMountPoint(mountPoint, expectedStatus string) CheckResult {
 func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 	ctx, _ := BuildScanContext()
 	
-	mountInfo, runtimeExists := ctx.Mounts[mountPoint]
+	mountInfo, runtimeExists := ctx.Mounts.Runtime[mountPoint]
 	if !runtimeExists {
 		// CIS semantics: if partition doesn't exist, it's NOT_APPLICABLE
 		return NotApplicable(
@@ -77,7 +77,7 @@ func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 		)
 	}
 	
-	fstabEntry, fstabExists := ctx.Fstab[mountPoint]
+	fstabEntry, fstabExists := ctx.Mounts.Fstab[mountPoint]
 	
 	runtimeHasOption := false
 	for opt := range mountInfo.Options {
