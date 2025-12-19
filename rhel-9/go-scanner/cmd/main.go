@@ -7,7 +7,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/vijenex/linux-cis-scanner/rhel-8/internal/scanner"
+	"github.com/vijenex/linux-cis-scanner/rhel-9/internal/scanner"
 )
 
 var (
@@ -20,7 +20,7 @@ var (
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "vijenex-cis",
-		Short: "Vijenex CIS Scanner for RHEL 8",
+		Short: "Vijenex CIS Scanner for RHEL 9",
 		Long: `
 ██████╗ ██╗  ██╗███████╗██╗          █████╗ 
 ██╔══██╗██║  ██║██╔════╝██║         ██╔══██╗
@@ -30,7 +30,7 @@ func main() {
 ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚════╝  
 
     Vijenex CIS Scanner
-    Red Hat Enterprise Linux 8
+    Red Hat Enterprise Linux 9
     Security Compliance Automation
 `,
 		Run: runScan,
@@ -64,7 +64,7 @@ func runScan(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	cyan.Println("=============================================================")
 	cyan.Println("                        VIJENEX                              ")
-	fmt.Println("      Red Hat Enterprise Linux 8 CIS Scanner           ")
+	fmt.Println("      Red Hat Enterprise Linux 9 CIS Scanner           ")
 	yellow.Println("           Powered by Vijenex Security Platform             ")
 	cyan.Println("        https://github.com/vijenex/linux-cis-scanner        ")
 	cyan.Println("=============================================================")

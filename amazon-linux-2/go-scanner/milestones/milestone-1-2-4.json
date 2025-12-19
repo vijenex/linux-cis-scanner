@@ -1,0 +1,47 @@
+{
+  "milestone": "1.2.4",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 1.1.2.4 Configure /var",
+  "section": "1 Initial Setup",
+  "controls": [
+    {
+      "id": "1.1.2.4.1",
+      "title": "Ensure separate partition exists for /var",
+      "section": "1.1.2.4 Configure /var",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountPoint",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.4.1 | Level1",
+      "description": "The /var directory is used by daemons and other system services to store frequently changing data. Separating /var from the root filesystem ensures that processes cannot exhaust all available space on the root filesystem.",
+      "remediation": "Create a separate partition for /var and add it to /etc/fstab",
+      "mount_point": "/var",
+      "expected_status": "separate_partition"
+    },
+    {
+      "id": "1.1.2.4.2",
+      "title": "Ensure nodev option set on /var partition",
+      "section": "1.1.2.4 Configure /var",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.4.2 | Level1",
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices. This prevents device files from being created in /var.",
+      "remediation": "Edit /etc/fstab and add nodev to the mount options for /var",
+      "mount_point": "/var",
+      "required_option": "nodev"
+    },
+    {
+      "id": "1.1.2.4.3",
+      "title": "Ensure nosuid option set on /var partition",
+      "section": "1.1.2.4 Configure /var",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.4.3 | Level1",
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files. This prevents setuid files from being executed from /var.",
+      "remediation": "Edit /etc/fstab and add nosuid to the mount options for /var",
+      "mount_point": "/var",
+      "required_option": "nosuid"
+    }
+  ]
+}

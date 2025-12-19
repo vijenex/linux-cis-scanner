@@ -1,0 +1,60 @@
+{
+  "milestone": "3.2",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 3.2 Configure Network Kernel Modules",
+  "section": "3 Network",
+  "controls": [
+    {
+      "id": "3.2.1",
+      "title": "Ensure dccp kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "cis_reference": "CIS Amazon Linux 2 - 3.2.1 | Level1",
+      "description": "The Datagram Congestion Control Protocol (DCCP) is a transport layer protocol that supports streaming media and telephony. Removing support for unneeded protocols reduces the local attack surface of the system.",
+      "remediation": "Run the following commands to unload and disable the dccp kernel module: # modprobe -r dccp && printf 'install dccp /bin/false\\n' >> /etc/modprobe.d/60-dccp.conf && printf 'blacklist dccp\\n' >> /etc/modprobe.d/60-dccp.conf",
+      "module_name": "dccp",
+      "expected_status": "not_available"
+    },
+    {
+      "id": "3.2.2",
+      "title": "Ensure tipc kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "cis_reference": "CIS Amazon Linux 2 - 3.2.2 | Level1",
+      "description": "The Transparent Inter-Process Communication (TIPC) protocol is designed to provide communication between cluster nodes. Removing support for unneeded protocols reduces the local attack surface of the system.",
+      "remediation": "Run the following commands to unload and disable the tipc kernel module: # modprobe -r tipc && printf 'install tipc /bin/false\\n' >> /etc/modprobe.d/60-tipc.conf && printf 'blacklist tipc\\n' >> /etc/modprobe.d/60-tipc.conf",
+      "module_name": "tipc",
+      "expected_status": "not_available"
+    },
+    {
+      "id": "3.2.3",
+      "title": "Ensure rds kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "cis_reference": "CIS Amazon Linux 2 - 3.2.3 | Level1",
+      "description": "The Reliable Datagram Sockets (RDS) protocol is a transport layer protocol designed to provide low-latency, high-bandwidth communications between cluster nodes. Removing support for unneeded protocols reduces the local attack surface of the system.",
+      "remediation": "Run the following commands to unload and disable the rds kernel module: # modprobe -r rds && printf 'install rds /bin/false\\n' >> /etc/modprobe.d/60-rds.conf && printf 'blacklist rds\\n' >> /etc/modprobe.d/60-rds.conf",
+      "module_name": "rds",
+      "expected_status": "not_available"
+    },
+    {
+      "id": "3.2.4",
+      "title": "Ensure sctp kernel module is not available",
+      "section": "3.2 Configure Network Kernel Modules",
+      "profile": "Level1",
+      "automated": true,
+      "type": "KernelModule",
+      "cis_reference": "CIS Amazon Linux 2 - 3.2.4 | Level1",
+      "description": "The Stream Control Transmission Protocol (SCTP) is a transport layer protocol used to support message oriented communication, with several streams of messages in one connection. Removing support for unneeded protocols reduces the local attack surface of the system.",
+      "remediation": "Run the following commands to unload and disable the sctp kernel module: # modprobe -r sctp && printf 'install sctp /bin/false\\n' >> /etc/modprobe.d/60-sctp.conf && printf 'blacklist sctp\\n' >> /etc/modprobe.d/60-sctp.conf",
+      "module_name": "sctp",
+      "expected_status": "not_available"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "milestone": "3.1",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 3.1 Configure Network Devices",
+  "section": "3 Network",
+  "controls": [
+    {
+      "id": "3.1.1",
+      "title": "Ensure IPv6 status is identified",
+      "section": "3.1 Configure Network Devices",
+      "profile": "Level1",
+      "automated": false,
+      "type": "Manual",
+      "cis_reference": "CIS Amazon Linux 2 - 3.1.1 | Level1",
+      "description": "Internet Protocol Version 6 (IPv6) is the most recent version of Internet Protocol (IP). It is recommended that IPv6 be enabled and configured in accordance with Benchmark recommendations.",
+      "remediation": "Enable or disable IPv6 in accordance with system requirements and local site policy"
+    },
+    {
+      "id": "3.1.2",
+      "title": "Ensure wireless interfaces are disabled",
+      "section": "3.1 Configure Network Devices",
+      "profile": "Level1",
+      "automated": true,
+      "type": "CommandOutputEmpty",
+      "cis_reference": "CIS Amazon Linux 2 - 3.1.2 | Level1",
+      "description": "Wireless networking is used when wired networks are unavailable. If wireless is not to be used, wireless devices can be disabled to reduce the potential attack surface.",
+      "remediation": "Run the following script to disable any wireless interfaces: # for driverdir in $(find /sys/class/net/*/ -type d -name wireless); do l_dname=$(basename $(dirname $driverdir)); echo \"install $l_dname /bin/false\" >> /etc/modprobe.d/disable-wireless.conf; done",
+      "audit_command": "find /sys/class/net/*/ -type d -name wireless"
+    },
+    {
+      "id": "3.1.3",
+      "title": "Ensure bluetooth services are not in use",
+      "section": "3.1 Configure Network Devices",
+      "profile": "Level2",
+      "automated": true,
+      "type": "ServiceStatus",
+      "cis_reference": "CIS Amazon Linux 2 - 3.1.3 | Level2",
+      "description": "Bluetooth is a short-range wireless technology standard that is used for exchanging data between devices over short distances. An attacker may be able to find a way to access or corrupt your data.",
+      "remediation": "Run the following commands to stop bluetooth.service, and remove the bluez package: # systemctl stop bluetooth.service && yum remove bluez",
+      "service_name": "bluetooth",
+      "expected_status": "disabled"
+    }
+  ]
+}

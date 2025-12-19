@@ -1,0 +1,34 @@
+{
+  "milestone": "5.3",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 5.3 Configure Integrity Checking",
+  "section": "5 Logging and Auditing",
+  "controls": [
+    {
+      "id": "5.3.1",
+      "title": "Ensure AIDE is installed",
+      "section": "5.3 Configure Integrity Checking",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 5.3.1 | Level1",
+      "description": "AIDE (Advanced Intrusion Detection Environment) is a file and directory integrity checker.",
+      "remediation": "Run the following command to install AIDE: # yum install aide",
+      "package_name": "aide",
+      "expected_status": "installed"
+    },
+    {
+      "id": "5.3.2",
+      "title": "Ensure filesystem integrity is regularly checked",
+      "section": "5.3 Configure Integrity Checking",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "cis_reference": "CIS Amazon Linux 2 - 5.3.2 | Level1",
+      "description": "Regular filesystem integrity checks help detect unauthorized changes.",
+      "remediation": "Initialize AIDE database: # aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz. Create a cron job: 0 5 * * * /usr/sbin/aide --check",
+      "service_name": "aidecheck",
+      "expected_status": "enabled"
+    }
+  ]
+}

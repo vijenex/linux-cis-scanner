@@ -5,37 +5,42 @@ import "fmt"
 // Status normalization - no more string chaos
 func Pass(actual, evidence string) CheckResult {
 	return CheckResult{
-		Status:      StatusPass,
-		ActualValue: actual,
-		Evidence:    Evidence{Method: "parsed", Source: "system", Snippet: evidence},
-		Description: "Control passed",
+		Status:          StatusPass,
+		ActualValue:     actual,
+		Evidence:        Evidence{Method: "parsed", Source: "system", Snippet: evidence},
+		EvidenceCommand: evidence, // Backward compatibility
+		Description:     "Control passed",
 	}
 }
 
 func Fail(actual, evidence, reason string) CheckResult {
 	return CheckResult{
-		Status:      StatusFail,
-		ActualValue: actual,
-		Evidence:    Evidence{Method: "parsed", Source: "system", Snippet: evidence},
-		Description: reason,
+		Status:          StatusFail,
+		ActualValue:     actual,
+		Evidence:        Evidence{Method: "parsed", Source: "system", Snippet: evidence},
+		EvidenceCommand: evidence, // Backward compatibility
+		Description:     reason,
 	}
 }
 
 func NotApplicable(reason, evidence string) CheckResult {
 	return CheckResult{
-		Status:      StatusNotApplicable,
-		ActualValue: reason,
-		Evidence:    Evidence{Method: "system", Source: "config", Snippet: evidence},
-		Description: "Control not applicable: " + reason,
+		Status:          StatusNotApplicable,
+		ActualValue:     reason,
+		Evidence:        Evidence{Method: "system", Source: "config", Snippet: evidence},
+		EvidenceCommand: evidence, // Backward compatibility
+		Description:     "Control not applicable: " + reason,
 	}
 }
 
 func Error(err error, source string) CheckResult {
+	errMsg := err.Error()
 	return CheckResult{
-		Status:      StatusError,
-		ActualValue: err.Error(),
-		Evidence:    Evidence{Method: "error", Source: source, Snippet: err.Error()},
-		Description: "Control execution failed",
+		Status:          StatusError,
+		ActualValue:     errMsg,
+		Evidence:        Evidence{Method: "error", Source: source, Snippet: errMsg},
+		EvidenceCommand: fmt.Sprintf("%s: %s", source, errMsg), // Backward compatibility
+		Description:     "Control execution failed",
 	}
 }
 

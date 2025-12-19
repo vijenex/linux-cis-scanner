@@ -1,4 +1,4 @@
-module github.com/vijenex/linux-cis-scanner/rhel-8
+module github.com/vijenex/linux-cis-scanner/rhel-9
 
 go 1.21
 

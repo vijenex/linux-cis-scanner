@@ -1,0 +1,73 @@
+{
+  "milestone": "2.3",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 2.3 Configure Service Clients",
+  "section": "2 Services",
+  "controls": [
+    {
+      "id": "2.3.1",
+      "title": "Ensure ftp client is not installed",
+      "section": "2.3 Configure Service Clients",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageNotInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 2.3.1 | Level1",
+      "description": "The ftp package provides the client programs for initiating FTP sessions to remote systems. The ftp protocol is insecure and unencrypted.",
+      "remediation": "Run the following command to remove the ftp package: # yum remove ftp",
+      "package_name": "ftp",
+      "expected_status": "not_installed"
+    },
+    {
+      "id": "2.3.2",
+      "title": "Ensure ldap client is not installed",
+      "section": "2.3 Configure Service Clients",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageNotInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 2.3.2 | Level1",
+      "description": "The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for NIS/YP. It is a service that provides a method for looking up information from a central database.",
+      "remediation": "Run the following command to remove the openldap-clients package: # yum remove openldap-clients",
+      "package_name": "openldap-clients",
+      "expected_status": "not_installed"
+    },
+    {
+      "id": "2.3.3",
+      "title": "Ensure nis client is not installed",
+      "section": "2.3 Configure Service Clients",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageNotInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 2.3.3 | Level1",
+      "description": "The Network Information Service (NIS) is a client-server directory service protocol used to distribute system configuration files. The NIS service is inherently an insecure system.",
+      "remediation": "Run the following command to remove the ypbind package: # yum remove ypbind",
+      "package_name": "ypbind",
+      "expected_status": "not_installed"
+    },
+    {
+      "id": "2.3.4",
+      "title": "Ensure telnet client is not installed",
+      "section": "2.3 Configure Service Clients",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageNotInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 2.3.4 | Level1",
+      "description": "The telnet package contains the telnet client, which allows users to start connections to other systems via the telnet protocol. The telnet protocol is insecure and unencrypted.",
+      "remediation": "Run the following command to remove the telnet package: # yum remove telnet",
+      "package_name": "telnet",
+      "expected_status": "not_installed"
+    },
+    {
+      "id": "2.3.5",
+      "title": "Ensure tftp client is not installed",
+      "section": "2.3 Configure Service Clients",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageNotInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 2.3.5 | Level1",
+      "description": "Trivial File Transfer Protocol (TFTP) is a simple protocol for exchanging files between two TCP/IP machines. TFTP does not have built-in encryption, access control or authentication.",
+      "remediation": "Run the following command to remove the tftp package: # yum remove tftp",
+      "package_name": "tftp",
+      "expected_status": "not_installed"
+    }
+  ]
+}

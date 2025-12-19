@@ -1,0 +1,49 @@
+{
+  "milestone": "2.1",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 2.1 Configure Time Synchronization",
+  "section": "2 Services",
+  "controls": [
+    {
+      "id": "2.1.1",
+      "title": "Ensure time synchronization is in use",
+      "section": "2.1 Configure Time Synchronization",
+      "profile": "Level1",
+      "automated": true,
+      "type": "ServiceStatus",
+      "cis_reference": "CIS Amazon Linux 2 - 2.1.1 | Level1",
+      "description": "Time synchronization is important to support accurate time logging. Accurate time logging is important for correlation of events and for supporting forensic investigations.",
+      "remediation": "Run the following command to install chrony: # yum install chrony && systemctl enable chronyd && systemctl start chronyd",
+      "service_name": "chronyd",
+      "expected_status": "enabled"
+    },
+    {
+      "id": "2.1.2",
+      "title": "Ensure chrony is configured",
+      "section": "2.1 Configure Time Synchronization",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "cis_reference": "CIS Amazon Linux 2 - 2.1.2 | Level1",
+      "description": "chrony is a daemon which implements the Network Time Protocol (NTP). It is designed to synchronize system clocks across a variety of systems and use a variety of mechanisms.",
+      "remediation": "Edit /etc/chrony.conf and add one or more time servers: server <remote-server>",
+      "file_path": "/etc/chrony.conf",
+      "pattern": "^(server|pool)",
+      "expected_result": "found"
+    },
+    {
+      "id": "2.1.3",
+      "title": "Ensure chrony is not run as the root user",
+      "section": "2.1 Configure Time Synchronization",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "cis_reference": "CIS Amazon Linux 2 - 2.1.3 | Level1",
+      "description": "Running chrony as a non-privileged user reduces the impact of a potential security vulnerability in the chrony daemon.",
+      "remediation": "Edit /etc/chrony.conf and add: user _chrony",
+      "file_path": "/etc/chrony.conf",
+      "pattern": "^user",
+      "expected_result": "found"
+    }
+  ]
+}

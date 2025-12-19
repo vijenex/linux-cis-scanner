@@ -10,7 +10,7 @@ import (
 const htmlTemplate = `<!DOCTYPE html>
 <html>
 <head>
-    <title>RHEL 8 CIS Compliance Report - Vijenex</title>
+    <title>RHEL 9 CIS Compliance Report - Vijenex</title>
     <meta charset="UTF-8">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }

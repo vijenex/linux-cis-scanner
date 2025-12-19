@@ -1,0 +1,100 @@
+{
+  "milestone": "4.3",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 4.3 Configure privilege escalation",
+  "section": "4 Access, Authentication and Authorization",
+  "controls": [
+    {
+      "id": "4.3.1",
+      "title": "Ensure sudo is installed",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.1 | Level1",
+      "description": "sudo allows a permitted user to execute a command as the superuser or another user, as specified by the security policy.",
+      "remediation": "Run the following command to install sudo: # yum install sudo",
+      "package_name": "sudo",
+      "expected_status": "installed"
+    },
+    {
+      "id": "4.3.2",
+      "title": "Ensure sudo commands use pty",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SudoConfig",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.2 | Level1",
+      "description": "Requiring a pty prevents sudo from being used to execute commands that do not require a terminal.",
+      "remediation": "Edit /etc/sudoers or /etc/sudoers.d/* and add: Defaults use_pty",
+      "parameter": "use_pty",
+      "expected_value": "enabled"
+    },
+    {
+      "id": "4.3.3",
+      "title": "Ensure sudo log file exists",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SudoConfig",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.3 | Level1",
+      "description": "A log file for sudo commands helps in auditing and troubleshooting.",
+      "remediation": "Edit /etc/sudoers or /etc/sudoers.d/* and add: Defaults logfile=/var/log/sudo.log",
+      "parameter": "logfile",
+      "expected_value": "/var/log/sudo.log"
+    },
+    {
+      "id": "4.3.4",
+      "title": "Ensure users must provide password for escalation",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SudoConfig",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.4 | Level1",
+      "description": "Requiring a password for privilege escalation provides an additional layer of security.",
+      "remediation": "Ensure that no user entries in /etc/sudoers or /etc/sudoers.d/* have NOPASSWD set.",
+      "parameter": "!authenticate",
+      "expected_value": "not_found"
+    },
+    {
+      "id": "4.3.5",
+      "title": "Ensure re-authentication for privilege escalation is not disabled globally",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SudoConfig",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.5 | Level1",
+      "description": "Global disabling of re-authentication for privilege escalation reduces security.",
+      "remediation": "Ensure Defaults !authenticate is not set in /etc/sudoers or /etc/sudoers.d/*",
+      "parameter": "!authenticate",
+      "expected_value": "not_found"
+    },
+    {
+      "id": "4.3.6",
+      "title": "Ensure sudo authentication timeout is configured correctly",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SudoConfig",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.6 | Level1",
+      "description": "The timestamp_timeout parameter controls how long a user can use sudo without re-entering their password.",
+      "remediation": "Edit /etc/sudoers or /etc/sudoers.d/* and set: Defaults timestamp_timeout=15",
+      "parameter": "timestamp_timeout",
+      "expected_value": "15"
+    },
+    {
+      "id": "4.3.7",
+      "title": "Ensure access to the su command is restricted",
+      "section": "4.3 Configure privilege escalation",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "cis_reference": "CIS Amazon Linux 2 - 4.3.7 | Level1",
+      "description": "Restricting access to the su command helps prevent unauthorized privilege escalation.",
+      "remediation": "Edit /etc/pam.d/su and add: auth required pam_wheel.so use_uid",
+      "file_path": "/etc/pam.d/su",
+      "pattern": "^auth\\s+required\\s+pam_wheel.so",
+      "expected_result": "found"
+    }
+  ]
+}

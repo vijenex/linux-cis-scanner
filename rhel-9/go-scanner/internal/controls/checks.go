@@ -10,7 +10,10 @@ import (
 )
 
 func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
-	ctx, _ := BuildScanContext()
+	ctx, err := BuildScanContext()
+	if err != nil {
+		return Error(err, "context")
+	}
 	modInfo := ctx.GetModuleInfo(moduleName)
 	
 	if expectedStatus == "not_available" {
@@ -45,7 +48,10 @@ func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
 }
 
 func CheckMountPoint(mountPoint, expectedStatus string) CheckResult {
-	ctx, _ := BuildScanContext()
+	ctx, err := BuildScanContext()
+	if err != nil {
+		return Error(err, "context")
+	}
 	
 	if expectedStatus == "separate_partition" {
 		if mountInfo, exists := ctx.Mounts.Runtime[mountPoint]; exists {
@@ -66,7 +72,10 @@ func CheckMountPoint(mountPoint, expectedStatus string) CheckResult {
 }
 
 func CheckMountOption(mountPoint, requiredOption string) CheckResult {
-	ctx, _ := BuildScanContext()
+	ctx, err := BuildScanContext()
+	if err != nil {
+		return Error(err, "context")
+	}
 	
 	mountInfo, runtimeExists := ctx.Mounts.Runtime[mountPoint]
 	if !runtimeExists {
@@ -122,58 +131,96 @@ func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 }
 
 func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
-	unitPaths := []string{
-		fmt.Sprintf("/etc/systemd/system/%s.service", serviceName),
-		fmt.Sprintf("/lib/systemd/system/%s.service", serviceName),
-		fmt.Sprintf("/usr/lib/systemd/system/%s.service", serviceName),
+	ctx, err := BuildScanContext()
+	if err != nil {
+		return Error(err, "context")
 	}
 	
-	unitExists := false
-	for _, path := range unitPaths {
-		if info, err := os.Lstat(path); err == nil && info.Mode()&os.ModeSymlink == 0 {
-			unitExists = true
-			break
+	// Use context if available
+	serviceState, exists := ctx.Services.Units[serviceName]
+	if exists {
+		if expectedStatus == "enabled" {
+			if serviceState.Enabled && !serviceState.Masked {
+				return Pass(
+					fmt.Sprintf("Service %s is enabled", serviceName),
+					"service enabled",
+				)
+			} else {
+				return Fail(
+					fmt.Sprintf("Service %s is not enabled (enabled: %v, masked: %v)", serviceName, serviceState.Enabled, serviceState.Masked),
+					fmt.Sprintf("enabled: %v, masked: %v", serviceState.Enabled, serviceState.Masked),
+					fmt.Sprintf("Service %s not enabled", serviceName),
+				)
+			}
+		} else if expectedStatus == "disabled" || expectedStatus == "inactive" {
+			if !serviceState.Enabled || serviceState.Masked {
+				return Pass(
+					fmt.Sprintf("Service %s is disabled/not enabled", serviceName),
+					"service disabled",
+				)
+			} else {
+				return Fail(
+					fmt.Sprintf("Service %s is enabled", serviceName),
+					"service enabled",
+					fmt.Sprintf("Service %s should be disabled", serviceName),
+				)
+			}
 		}
-	}
-	
-	enabled := false
-	enabledPaths := []string{
-		fmt.Sprintf("/etc/systemd/system/multi-user.target.wants/%s.service", serviceName),
-		fmt.Sprintf("/etc/systemd/system/default.target.wants/%s.service", serviceName),
-	}
-	
-	for _, path := range enabledPaths {
-		if _, err := os.Lstat(path); err == nil {
-			enabled = true
-			break
+	} else {
+		// Fallback to file-based check if not in context
+		unitPaths := []string{
+			fmt.Sprintf("/etc/systemd/system/%s.service", serviceName),
+			fmt.Sprintf("/lib/systemd/system/%s.service", serviceName),
+			fmt.Sprintf("/usr/lib/systemd/system/%s.service", serviceName),
 		}
-	}
-	
-	if expectedStatus == "enabled" {
-		if enabled {
-			return Pass(
-				fmt.Sprintf("Service %s is enabled", serviceName),
-				"service enabled",
-			)
-		} else {
-			return Fail(
-				fmt.Sprintf("Service %s is not enabled", serviceName),
-				"service not enabled",
-				fmt.Sprintf("Service %s not enabled", serviceName),
-			)
+		
+		unitExists := false
+		for _, path := range unitPaths {
+			if info, err := os.Lstat(path); err == nil && info.Mode()&os.ModeSymlink == 0 {
+				unitExists = true
+				break
+			}
 		}
-	} else if expectedStatus == "disabled" || expectedStatus == "inactive" {
-		if !unitExists || !enabled {
-			return Pass(
-				fmt.Sprintf("Service %s is disabled/not installed", serviceName),
-				"service disabled",
-			)
-		} else {
-			return Fail(
-				fmt.Sprintf("Service %s is enabled", serviceName),
-				"service enabled",
-				fmt.Sprintf("Service %s should be disabled", serviceName),
-			)
+		
+		enabled := false
+		enabledPaths := []string{
+			fmt.Sprintf("/etc/systemd/system/multi-user.target.wants/%s.service", serviceName),
+			fmt.Sprintf("/etc/systemd/system/default.target.wants/%s.service", serviceName),
+		}
+		
+		for _, path := range enabledPaths {
+			if _, err := os.Lstat(path); err == nil {
+				enabled = true
+				break
+			}
+		}
+		
+		if expectedStatus == "enabled" {
+			if enabled {
+				return Pass(
+					fmt.Sprintf("Service %s is enabled", serviceName),
+					"service enabled",
+				)
+			} else {
+				return Fail(
+					fmt.Sprintf("Service %s is not enabled", serviceName),
+					"service not enabled",
+					fmt.Sprintf("Service %s not enabled", serviceName),
+				)
+			}
+		} else if expectedStatus == "disabled" || expectedStatus == "inactive" {
+			if !unitExists || !enabled {
+				return Pass(
+					fmt.Sprintf("Service %s is disabled/not installed", serviceName),
+					"service disabled",
+				)
+			} else {
+				return Fail(
+					fmt.Sprintf("Service %s is enabled", serviceName),
+					"service enabled",
+					fmt.Sprintf("Service %s should be disabled", serviceName),
+				)
+			}
 		}
 	}
 	
@@ -181,19 +228,23 @@ func CheckServiceStatus(serviceName, expectedStatus string) CheckResult {
 }
 
 func CheckPackageInstalled(packageName, expectedStatus string) CheckResult {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	
-	cmd := exec.CommandContext(ctx, "rpm", "-q", packageName)
-	output, err := cmd.Output()
-	outputStr := strings.TrimSpace(string(output))
-	
-	if ctx.Err() == context.DeadlineExceeded {
-		return Error(fmt.Errorf("RPM query timeout"), "rpm")
+	scanCtx, err := BuildScanContext()
+	if err != nil {
+		return Error(err, "context")
 	}
 	
+	// Use context cache if available
+	installed := scanCtx.Packages.Installed[packageName]
+	
 	if expectedStatus == "installed" {
-		if err == nil {
+		if installed {
+			// Get version info for evidence
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			cmd := exec.CommandContext(ctx, "rpm", "-q", packageName)
+			output, _ := cmd.Output()
+			outputStr := strings.TrimSpace(string(output))
+			
 			return Pass(
 				fmt.Sprintf("Package installed: %s", outputStr),
 				outputStr,
@@ -206,12 +257,19 @@ func CheckPackageInstalled(packageName, expectedStatus string) CheckResult {
 			)
 		}
 	} else if expectedStatus == "not_installed" {
-		if err != nil {
+		if !installed {
 			return Pass(
 				"Package not installed (as expected)",
 				"not installed",
 			)
 		} else {
+			// Get version info for evidence
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			cmd := exec.CommandContext(ctx, "rpm", "-q", packageName)
+			output, _ := cmd.Output()
+			outputStr := strings.TrimSpace(string(output))
+			
 			return Fail(
 				fmt.Sprintf("Package installed: %s", outputStr),
 				outputStr,

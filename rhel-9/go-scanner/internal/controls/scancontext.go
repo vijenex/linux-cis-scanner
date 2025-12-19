@@ -3,6 +3,7 @@ package controls
 import (
 	"bufio"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -143,7 +144,14 @@ func BuildScanContext() (*ScanContext, error) {
 	ctx.Meta = buildMeta()
 	ctx.Files = buildFileContext()
 	ctx.Sysctl = buildSysctlContext()
-	// TODO: Add other builders incrementally
+	ctx.Mounts = buildMountContext()
+	ctx.Kernel = buildKernelContext()
+	ctx.Services = buildServiceContext()
+	ctx.Packages = buildPackageContext()
+	ctx.SSH = buildSSHContext()
+	ctx.PAM = buildPAMContext()
+	ctx.Sudo = buildSudoContext()
+	ctx.Cron = buildCronContext()
 	
 	return ctx, nil
 }
@@ -308,4 +316,460 @@ func (s *SysctlContext) IsPersistent(param, expectedValue string) bool {
 
 func (s *SysctlContext) IsIPv6Applicable(param string) bool {
 	return s.IPv6Enabled || !strings.Contains(param, "ipv6")
+}
+
+// buildMountContext - parse runtime mounts and fstab
+func buildMountContext() MountContext {
+	ctx := MountContext{
+		Runtime: make(map[string]MountInfo),
+		Fstab:   make(map[string]MountInfo),
+	}
+	
+	// Parse /proc/mounts for runtime mounts
+	if file, err := os.Open("/proc/mounts"); err == nil {
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			fields := strings.Fields(scanner.Text())
+			if len(fields) >= 4 {
+				device := fields[0]
+				mountPoint := fields[1]
+				fsType := fields[2]
+				options := parseMountOptions(fields[3])
+				
+				ctx.Runtime[mountPoint] = MountInfo{
+					Device:  device,
+					Options: options,
+					FS:      fsType,
+				}
+			}
+		}
+		file.Close()
+	}
+	
+	// Parse /etc/fstab for persistent mounts
+	if info, err := os.Lstat("/etc/fstab"); err == nil && info.Mode()&os.ModeSymlink == 0 {
+		if file, err := os.Open("/etc/fstab"); err == nil {
+			scanner := bufio.NewScanner(file)
+			for scanner.Scan() {
+				line := strings.TrimSpace(scanner.Text())
+				if line == "" || strings.HasPrefix(line, "#") {
+					continue
+				}
+				
+				fields := strings.Fields(line)
+				if len(fields) >= 3 {
+					device := fields[0]
+					mountPoint := fields[1]
+					fsType := fields[2]
+					optionsStr := ""
+					if len(fields) >= 4 {
+						optionsStr = fields[3]
+					}
+					options := parseMountOptions(optionsStr)
+					
+					ctx.Fstab[mountPoint] = MountInfo{
+						Device:  device,
+						Options: options,
+						FS:      fsType,
+					}
+				}
+			}
+			file.Close()
+		}
+	}
+	
+	return ctx
+}
+
+// parseMountOptions - parse mount options string into map
+func parseMountOptions(optionsStr string) map[string]bool {
+	options := make(map[string]bool)
+	if optionsStr == "" {
+		return options
+	}
+	
+	// Split by comma and handle key=value pairs
+	parts := strings.Split(optionsStr, ",")
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		
+		// Handle key=value pairs (store just the key)
+		if idx := strings.Index(part, "="); idx > 0 {
+			key := part[:idx]
+			options[key] = true
+		} else {
+			options[part] = true
+		}
+	}
+	
+	return options
+}
+
+// buildKernelContext - load kernel module information
+func buildKernelContext() KernelContext {
+	ctx := KernelContext{
+		LoadedModules: make(map[string]bool),
+		Blacklisted:   make(map[string]bool),
+		Available:     make(map[string]bool),
+	}
+	
+	// Parse /proc/modules for loaded modules
+	if file, err := os.Open("/proc/modules"); err == nil {
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			fields := strings.Fields(scanner.Text())
+			if len(fields) > 0 {
+				moduleName := fields[0]
+				ctx.LoadedModules[moduleName] = true
+				ctx.Available[moduleName] = true
+			}
+		}
+		file.Close()
+	}
+	
+	// Parse /etc/modprobe.d/*.conf for blacklisted modules
+	modprobeDirs := []string{"/etc/modprobe.d", "/usr/lib/modprobe.d", "/run/modprobe.d"}
+	for _, dir := range modprobeDirs {
+		if entries, err := os.ReadDir(dir); err == nil {
+			for _, entry := range entries {
+				if strings.HasSuffix(entry.Name(), ".conf") {
+					path := filepath.Join(dir, entry.Name())
+					if info, err := os.Lstat(path); err == nil && info.Mode()&os.ModeSymlink == 0 {
+						parseModprobeFile(path, &ctx)
+					}
+				}
+			}
+		}
+	}
+	
+	// Check /proc/modules for available modules (already done above)
+	// Also check /lib/modules for module files
+	if uname, err := exec.Command("uname", "-r").Output(); err == nil {
+		kernelVersion := strings.TrimSpace(string(uname))
+		modulesDir := filepath.Join("/lib/modules", kernelVersion)
+		if entries, err := os.ReadDir(modulesDir); err == nil {
+			for _, entry := range entries {
+				if !entry.IsDir() {
+					// Module file found
+					moduleName := strings.TrimSuffix(entry.Name(), ".ko")
+					moduleName = strings.TrimSuffix(moduleName, ".ko.xz")
+					moduleName = strings.TrimSuffix(moduleName, ".ko.zst")
+					ctx.Available[moduleName] = true
+				}
+			}
+		}
+	}
+	
+	return ctx
+}
+
+// parseModprobeFile - parse modprobe config file for blacklist entries
+func parseModprobeFile(filename string, ctx *KernelContext) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		
+		fields := strings.Fields(line)
+		if len(fields) >= 2 && (fields[0] == "blacklist" || fields[0] == "install") {
+			moduleName := fields[1]
+			ctx.Blacklisted[moduleName] = true
+			
+			// For "install module /bin/true" or "install module /bin/false"
+			if fields[0] == "install" && len(fields) >= 3 {
+				if strings.Contains(fields[2], "/bin/true") || strings.Contains(fields[2], "/bin/false") {
+					ctx.Blacklisted[moduleName] = true
+				}
+			}
+		}
+	}
+}
+
+// buildServiceContext - query systemd for service states
+func buildServiceContext() ServiceContext {
+	ctx := ServiceContext{
+		Units: make(map[string]ServiceState),
+	}
+	
+	// Use systemctl to get all unit files
+	cmd := exec.Command("systemctl", "list-unit-files", "--type=service", "--no-pager", "--no-legend")
+	if output, err := cmd.Output(); err == nil {
+		lines := strings.Split(string(output), "\n")
+		for _, line := range lines {
+			fields := strings.Fields(line)
+			if len(fields) >= 2 {
+				unitName := fields[0]
+				// Remove .service suffix if present
+				unitName = strings.TrimSuffix(unitName, ".service")
+				state := fields[1]
+				
+				stateObj := ServiceState{
+					Installed: true,
+					Enabled:   state == "enabled" || state == "enabled-runtime",
+					Masked:    state == "masked" || state == "masked-runtime",
+				}
+				
+				// Check if service is active
+				activeCmd := exec.Command("systemctl", "is-active", "--quiet", unitName+".service")
+				stateObj.Active = activeCmd.Run() == nil
+				
+				ctx.Units[unitName] = stateObj
+			}
+		}
+	}
+	
+	return ctx
+}
+
+// buildPackageContext - cache installed packages
+func buildPackageContext() PackageContext {
+	ctx := PackageContext{
+		Installed: make(map[string]bool),
+	}
+	
+	// Query all installed packages
+	cmd := exec.Command("rpm", "-qa", "--queryformat", "%{NAME}\n")
+	if output, err := cmd.Output(); err == nil {
+		lines := strings.Split(string(output), "\n")
+		for _, line := range lines {
+			pkgName := strings.TrimSpace(line)
+			if pkgName != "" {
+				ctx.Installed[pkgName] = true
+			}
+		}
+	}
+	
+	return ctx
+}
+
+// buildSSHContext - parse SSH configuration
+func buildSSHContext() SSHContext {
+	ctx := SSHContext{
+		Config:      make(map[string]string),
+		SourceFiles: []string{},
+	}
+	
+	// Use existing SSH parsing logic from ssh.go
+	// For now, we'll parse it here to avoid circular dependencies
+	sshConfigPath := "/etc/ssh/sshd_config"
+	if info, err := os.Lstat(sshConfigPath); err == nil && info.Mode()&os.ModeSymlink == 0 {
+		parseSSHConfigForContext(sshConfigPath, &ctx)
+	}
+	
+	return ctx
+}
+
+// parseSSHConfigForContext - parse SSH config into context (simplified version)
+func parseSSHConfigForContext(path string, ctx *SSHContext) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	
+	ctx.SourceFiles = append(ctx.SourceFiles, path)
+	scanner := bufio.NewScanner(file)
+	
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		
+		// Strip inline comments
+		if idx := strings.Index(line, "#"); idx != -1 {
+			line = strings.TrimSpace(line[:idx])
+		}
+		
+		fields := strings.Fields(line)
+		if len(fields) >= 2 {
+			key := strings.ToLower(fields[0])
+			value := strings.Join(fields[1:], " ")
+			ctx.Config[key] = value
+		}
+	}
+}
+
+// buildPAMContext - parse PAM configuration files
+func buildPAMContext() PAMContext {
+	ctx := PAMContext{
+		Files: make(map[string][]PAMEntry),
+	}
+	
+	// Parse common PAM files
+	pamFiles := []string{
+		"/etc/pam.d/system-auth",
+		"/etc/pam.d/password-auth",
+		"/etc/pam.d/login",
+		"/etc/pam.d/sshd",
+		"/etc/pam.d/sudo",
+	}
+	
+	for _, pamFile := range pamFiles {
+		if entries, err := parsePAMFileForContext(pamFile); err == nil {
+			ctx.Files[pamFile] = entries
+		}
+	}
+	
+	return ctx
+}
+
+// parsePAMFileForContext - parse PAM file (simplified version for context)
+func parsePAMFileForContext(path string) ([]PAMEntry, error) {
+	info, err := os.Lstat(path)
+	if err != nil {
+		return nil, err
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		return nil, nil // Skip symlinks
+	}
+	
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	
+	var entries []PAMEntry
+	scanner := bufio.NewScanner(file)
+	
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		
+		fields := strings.Fields(line)
+		if len(fields) >= 3 {
+			entry := PAMEntry{
+				Type:      fields[0],
+				Control:   fields[1],
+				Module:    filepath.Base(fields[2]),
+				Arguments: make(map[string]string),
+				RawLine:   line,
+			}
+			
+			// Parse arguments
+			for _, arg := range fields[3:] {
+				if strings.Contains(arg, "=") {
+					kv := strings.SplitN(arg, "=", 2)
+					if len(kv) == 2 {
+						entry.Arguments[kv[0]] = strings.Trim(kv[1], `"`)
+					}
+				}
+			}
+			
+			entries = append(entries, entry)
+		}
+	}
+	
+	return entries, nil
+}
+
+// buildSudoContext - parse sudoers configuration
+func buildSudoContext() SudoContext {
+	ctx := SudoContext{
+		Defaults: []SudoDefault{},
+	}
+	
+	sudoersPath := "/etc/sudoers"
+	if info, err := os.Lstat(sudoersPath); err == nil && info.Mode()&os.ModeSymlink == 0 {
+		parseSudoersForContext(sudoersPath, &ctx)
+	}
+	
+	return ctx
+}
+
+// parseSudoersForContext - parse sudoers file for Defaults
+func parseSudoersForContext(path string, ctx *SudoContext) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		
+		// Only process Defaults lines (global only, no colon or @)
+		if !strings.HasPrefix(line, "Defaults") {
+			continue
+		}
+		
+		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			continue
+		}
+		
+		// Skip scoped defaults
+		if strings.Contains(fields[0], ":") || strings.Contains(fields[0], "@") {
+			continue
+		}
+		
+		// Parse each default setting
+		for _, field := range fields[1:] {
+			d := SudoDefault{Source: path}
+			
+			// Handle negation
+			if strings.HasPrefix(field, "!") {
+				d.Negated = true
+				field = strings.TrimPrefix(field, "!")
+			}
+			
+			// Handle key=value pairs
+			if strings.Contains(field, "=") {
+				kv := strings.SplitN(field, "=", 2)
+				if len(kv) == 2 {
+					d.Key = kv[0]
+					d.Value = strings.Trim(kv[1], `"`)
+				}
+			} else {
+				// Handle flags
+				d.Key = field
+				d.Value = "enabled"
+			}
+			
+			ctx.Defaults = append(ctx.Defaults, d)
+		}
+	}
+}
+
+// buildCronContext - check cron file permissions
+func buildCronContext() CronContext {
+	ctx := CronContext{
+		Files: make(map[string]FileStat),
+	}
+	
+	// Check common cron files
+	cronFiles := []string{
+		"/etc/crontab",
+		"/etc/cron.hourly",
+		"/etc/cron.daily",
+		"/etc/cron.weekly",
+		"/etc/cron.monthly",
+		"/etc/cron.d",
+		"/var/spool/cron/root",
+		"/var/spool/cron/crontabs/root",
+	}
+	
+	for _, cronFile := range cronFiles {
+		ctx.Files[cronFile] = getFileStat(cronFile)
+	}
+	
+	return ctx
 }

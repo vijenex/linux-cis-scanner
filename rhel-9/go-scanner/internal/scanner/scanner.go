@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/vijenex/linux-cis-scanner/rhel-8/internal/controls"
-	"github.com/vijenex/linux-cis-scanner/rhel-8/internal/report"
+	"github.com/vijenex/linux-cis-scanner/rhel-9/internal/controls"
+	"github.com/vijenex/linux-cis-scanner/rhel-9/internal/report"
 )
 
 type Scanner struct {
@@ -207,38 +207,38 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		checkResult := controls.CheckKernelModule(ctrl.ModuleName, ctrl.ExpectedStatus)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 		// Keep original CIS description, don't overwrite
 
 	case "MountPoint":
 		checkResult := controls.CheckMountPoint(ctrl.MountPoint, ctrl.ExpectedStatus)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "MountOption":
 		checkResult := controls.CheckMountOption(ctrl.MountPoint, ctrl.RequiredOption)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "ServiceStatus":
 		checkResult := controls.CheckServiceStatus(ctrl.ServiceName, ctrl.ExpectedStatus)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "PackageInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, ctrl.ExpectedStatus)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "PackageNotInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, "not_installed")
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "SysctlParameter":
 		// Support both parameter_name and parameter fields
@@ -249,37 +249,37 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		checkResult := controls.CheckSysctlParameter(paramName, ctrl.ExpectedValue)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "FilePermissions":
 		checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "FileContent":
 		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "SSHConfig":
 		checkResult := controls.CheckSSHConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "PAMConfig":
 		checkResult := controls.CheckPAMConfig(ctrl.FilePath, ctrl.ModuleName, ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "SudoConfig":
 		checkResult := controls.CheckSudoConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	case "CommandOutputEmpty":
 		// Parse command safely - expect "find /path -args"
@@ -294,14 +294,14 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			checkResult := controls.CheckCommandOutputEmpty(cmdName, args, ctrl.Description)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
-			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			result.EvidenceCommand = getEvidenceString(checkResult)
 		}
 
 	case "FileExists":
 		checkResult := controls.CheckFileExists(ctrl.FilePath, ctrl.Description)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		result.EvidenceCommand = getEvidenceString(checkResult)
 
 	default:
 		result.Status = "MANUAL"
@@ -370,6 +370,25 @@ func truncate(s string, maxLen int) string {
 		return s
 	}
 	return s[:maxLen-3] + "..."
+}
+
+// getEvidenceString - standardize evidence extraction from CheckResult
+func getEvidenceString(checkResult controls.CheckResult) string {
+	// Prefer EvidenceCommand for backward compatibility
+	if checkResult.EvidenceCommand != "" {
+		return checkResult.EvidenceCommand
+	}
+	// Fall back to Evidence struct
+	if checkResult.Evidence.Source != "" || checkResult.Evidence.Snippet != "" {
+		if checkResult.Evidence.Source != "" && checkResult.Evidence.Snippet != "" {
+			return checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else if checkResult.Evidence.Source != "" {
+			return checkResult.Evidence.Source
+		} else {
+			return checkResult.Evidence.Snippet
+		}
+	}
+	return "N/A"
 }
 
 func (s *Scanner) GenerateCSVReport(results []Result) error {

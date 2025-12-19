@@ -1,0 +1,47 @@
+{
+  "milestone": "1.2.3",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 1.1.2.3 Configure /home",
+  "section": "1 Initial Setup",
+  "controls": [
+    {
+      "id": "1.1.2.3.1",
+      "title": "Ensure separate partition exists for /home",
+      "section": "1.1.2.3 Configure /home",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountPoint",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.3.1 | Level1",
+      "description": "The /home directory is used to support disk storage needs of local users. Separating /home from the root filesystem ensures that processes cannot exhaust all available space on the root filesystem.",
+      "remediation": "Create a separate partition for /home and add it to /etc/fstab",
+      "mount_point": "/home",
+      "expected_status": "separate_partition"
+    },
+    {
+      "id": "1.1.2.3.2",
+      "title": "Ensure nodev option set on /home partition",
+      "section": "1.1.2.3 Configure /home",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.3.2 | Level1",
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices. This prevents device files from being created in /home.",
+      "remediation": "Edit /etc/fstab and add nodev to the mount options for /home",
+      "mount_point": "/home",
+      "required_option": "nodev"
+    },
+    {
+      "id": "1.1.2.3.3",
+      "title": "Ensure nosuid option set on /home partition",
+      "section": "1.1.2.3 Configure /home",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.3.3 | Level1",
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files. This prevents setuid files from being executed from /home.",
+      "remediation": "Edit /etc/fstab and add nosuid to the mount options for /home",
+      "mount_point": "/home",
+      "required_option": "nosuid"
+    }
+  ]
+}

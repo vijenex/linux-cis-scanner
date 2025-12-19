@@ -1,0 +1,60 @@
+{
+  "milestone": "1.2.2",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 1.1.2.2 Configure /dev/shm",
+  "section": "1 Initial Setup",
+  "controls": [
+    {
+      "id": "1.1.2.2.1",
+      "title": "Ensure /dev/shm is a separate partition",
+      "section": "1.1.2.2 Configure /dev/shm",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountPoint",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.2.1 | Level1",
+      "description": "The /dev/shm filesystem is used for the Shared Memory Segment. Separating /dev/shm from the root filesystem ensures that processes cannot exhaust all available space on the root filesystem.",
+      "remediation": "Create a separate partition for /dev/shm and add it to /etc/fstab",
+      "mount_point": "/dev/shm",
+      "expected_status": "separate_partition"
+    },
+    {
+      "id": "1.1.2.2.2",
+      "title": "Ensure nodev option set on /dev/shm partition",
+      "section": "1.1.2.2 Configure /dev/shm",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.2.2 | Level1",
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices. This prevents device files from being created in /dev/shm.",
+      "remediation": "Edit /etc/fstab and add nodev to the mount options for /dev/shm",
+      "mount_point": "/dev/shm",
+      "required_option": "nodev"
+    },
+    {
+      "id": "1.1.2.2.3",
+      "title": "Ensure nosuid option set on /dev/shm partition",
+      "section": "1.1.2.2 Configure /dev/shm",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.2.3 | Level1",
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files. This prevents setuid files from being executed from /dev/shm.",
+      "remediation": "Edit /etc/fstab and add nosuid to the mount options for /dev/shm",
+      "mount_point": "/dev/shm",
+      "required_option": "nosuid"
+    },
+    {
+      "id": "1.1.2.2.4",
+      "title": "Ensure noexec option set on /dev/shm partition",
+      "section": "1.1.2.2 Configure /dev/shm",
+      "profile": "Level1",
+      "automated": true,
+      "type": "MountOption",
+      "cis_reference": "CIS Amazon Linux 2 - 1.1.2.2.4 | Level1",
+      "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries. This prevents executable files from being executed from /dev/shm.",
+      "remediation": "Edit /etc/fstab and add noexec to the mount options for /dev/shm",
+      "mount_point": "/dev/shm",
+      "required_option": "noexec"
+    }
+  ]
+}

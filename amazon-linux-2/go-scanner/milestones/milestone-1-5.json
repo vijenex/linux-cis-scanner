@@ -1,0 +1,61 @@
+{
+  "milestone": "1.5",
+  "version": "1.0.0",
+  "description": "Amazon Linux 2 CIS Benchmark v3.0.0 - Section 1.4 Configure Additional Process Hardening",
+  "section": "1 Initial Setup",
+  "controls": [
+    {
+      "id": "1.4.1",
+      "title": "Ensure address space layout randomization (ASLR) is enabled",
+      "section": "1.4 Configure Additional Process Hardening",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "cis_reference": "CIS Amazon Linux 2 - 1.4.1 | Level1",
+      "description": "Address space layout randomization (ASLR) is an exploit mitigation technique which randomly arranges the address space of key data areas of a process. Randomly placing virtual memory regions will make it difficult to write memory page exploits as the memory placement will be consistently shifting.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: kernel.randomize_va_space = 2",
+      "parameter_name": "kernel.randomize_va_space",
+      "expected_value": "2"
+    },
+    {
+      "id": "1.4.2",
+      "title": "Ensure ptrace_scope is restricted",
+      "section": "1.4 Configure Additional Process Hardening",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "cis_reference": "CIS Amazon Linux 2 - 1.4.2 | Level1",
+      "description": "The ptrace() system call provides a means by which one process may observe and control the execution of another process. Restricting ptrace to only child processes prevents processes from being able to observe and manipulate arbitrary processes.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: kernel.yama.ptrace_scope = 1",
+      "parameter_name": "kernel.yama.ptrace_scope",
+      "expected_value": "1"
+    },
+    {
+      "id": "1.4.3",
+      "title": "Ensure core dump backtraces are disabled",
+      "section": "1.4 Configure Additional Process Hardening",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "cis_reference": "CIS Amazon Linux 2 - 1.4.3 | Level1",
+      "description": "A core dump includes a memory image taken at the time the operating system terminates an application. The memory image could contain sensitive data and is generally useful only for developers trying to debug problems.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: kernel.core_pattern = |/bin/false",
+      "parameter_name": "kernel.core_pattern",
+      "expected_value": "|/bin/false"
+    },
+    {
+      "id": "1.4.4",
+      "title": "Ensure core dump storage is disabled",
+      "section": "1.4 Configure Additional Process Hardening",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "cis_reference": "CIS Amazon Linux 2 - 1.4.4 | Level1",
+      "description": "A core dump includes a memory image taken at the time the operating system terminates an application. The memory image could contain sensitive data and is generally useful only for developers trying to debug problems.",
+      "remediation": "Add the following line to /etc/security/limits.conf or a file in /etc/security/limits.d/: * hard core 0",
+      "file_path": "/etc/security/limits.conf",
+      "pattern": "\\*\\s+hard\\s+core\\s+0",
+      "expected_result": "found"
+    }
+  ]
+}
