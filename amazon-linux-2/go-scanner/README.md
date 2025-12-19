@@ -16,23 +16,42 @@ This scanner automates the assessment of Amazon Linux 2 systems against the CIS 
 
 ## Installation
 
-### Prerequisites
+### Quick Start (No Go Required!)
 
-- Go 1.21 or later
+The scanner is a **standalone binary** - no dependencies needed!
+
+```bash
+# Use the smart wrapper script
+chmod +x vijenex-cis
+sudo ./vijenex-cis --output-dir /tmp/scan-results
+```
+
+The wrapper automatically:
+- ✅ Uses pre-built binary if available (no Go needed)
+- ✅ Builds automatically if Go is installed
+- ✅ Shows clear instructions if neither is available
+
+**See [INSTALL.md](INSTALL.md) for detailed installation options.**
+
+### Prerequisites for Building
+
+- Go 1.21 or later (only needed if building from source)
 - Root or sudo access (for complete scanning)
 
 ### Build from Source
 
 ```bash
 cd amazon-linux-2/go-scanner
-make deps
-make build
+./build.sh
+# Creates: bin/vijenex-cis-amd64 and bin/vijenex-cis-arm64
 ```
 
 ### Install System-Wide
 
 ```bash
-make install
+# Copy pre-built binary
+sudo cp bin/vijenex-cis-amd64 /usr/local/bin/vijenex-cis
+sudo chmod +x /usr/local/bin/vijenex-cis
 ```
 
 ## Usage

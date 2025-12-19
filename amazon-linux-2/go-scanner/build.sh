@@ -1,5 +1,6 @@
 #!/bin/bash
 # Build standalone binary for Amazon Linux 2
+# This script requires Go to be installed
 
 set -e
 
@@ -11,7 +12,16 @@ echo "=========================================="
 # Check Go installation
 if ! command -v go &> /dev/null; then
     echo "❌ Go is not installed"
-    echo "Install from: https://go.dev/dl/"
+    echo ""
+    echo "📋 To build the binary:"
+    echo "  1. Install Go from: https://go.dev/dl/"
+    echo "  2. Or use pre-built binary (no Go needed)"
+    echo ""
+    echo "💡 Tip: Use './vijenex-cis' wrapper script which will:"
+    echo "  - Use pre-built binary if available (no Go needed)"
+    echo "  - Build automatically if Go is installed"
+    echo "  - Show instructions if neither is available"
+    echo ""
     exit 1
 fi
 
