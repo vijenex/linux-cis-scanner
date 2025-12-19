@@ -2,6 +2,7 @@ package controls
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -393,6 +394,7 @@ func buildKernelContext() KernelContext {
 	}
 
 	// Read loaded modules from /proc/modules
+	// Loaded modules are definitely available (they're currently in use)
 	if data, err := os.ReadFile("/proc/modules"); err == nil {
 		lines := strings.Split(string(data), "\n")
 		for _, line := range lines {
@@ -400,6 +402,7 @@ func buildKernelContext() KernelContext {
 			if len(fields) > 0 {
 				moduleName := fields[0]
 				ctx.LoadedModules[moduleName] = true
+				// If module is loaded, it definitely exists - mark as available
 				ctx.Available[moduleName] = true
 			}
 		}
@@ -433,8 +436,70 @@ func buildKernelContext() KernelContext {
 		}
 	}
 
+	// Get kernel version to check correct /lib/modules path
+	kernelVersion := ""
+	if data, err := os.ReadFile("/proc/version"); err == nil {
+		// Extract kernel version from /proc/version
+		// Format: Linux version 5.10.xxx
+		parts := strings.Fields(string(data))
+		for i, part := range parts {
+			if part == "version" && i+1 < len(parts) {
+				kernelVersion = strings.TrimSpace(parts[i+1])
+				break
+			}
+		}
+	}
+	
+	// If kernel version not found, try uname
+	if kernelVersion == "" {
+		if data, err := os.ReadFile("/proc/sys/kernel/osrelease"); err == nil {
+			kernelVersion = strings.TrimSpace(string(data))
+		}
+	}
+	
 	// Check module availability in /lib/modules
-	// Note: In cloud AMIs, modules may be compiled out or in different locations
+	// Use modules.dep as primary source (most reliable)
+	if kernelVersion != "" {
+		modulesDepPath := fmt.Sprintf("/lib/modules/%s/modules.dep", kernelVersion)
+		if data, err := os.ReadFile(modulesDepPath); err == nil {
+			lines := strings.Split(string(data), "\n")
+			for _, line := range lines {
+				line = strings.TrimSpace(line)
+				if line == "" || !strings.Contains(line, ".ko:") {
+					continue
+				}
+				// Format: /path/to/module.ko: dependency1.ko dependency2.ko
+				parts := strings.Fields(line)
+				if len(parts) > 0 {
+					modulePath := parts[0]
+					// Extract module name from full path
+					moduleName := strings.TrimSuffix(filepath.Base(modulePath), ".ko")
+					ctx.Available[moduleName] = true
+				}
+			}
+		}
+		
+		// Also check modules.alias for module aliases
+		modulesAliasPath := fmt.Sprintf("/lib/modules/%s/modules.alias", kernelVersion)
+		if data, err := os.ReadFile(modulesAliasPath); err == nil {
+			lines := strings.Split(string(data), "\n")
+			for _, line := range lines {
+				line = strings.TrimSpace(line)
+				if line == "" || strings.HasPrefix(line, "#") {
+					continue
+				}
+				// Format: alias <alias> <module-name>
+				fields := strings.Fields(line)
+				if len(fields) >= 3 && fields[0] == "alias" {
+					moduleName := fields[2]
+					ctx.Available[moduleName] = true
+				}
+			}
+		}
+	}
+	
+	// Fallback: Check all /lib/modules/*/kernel directories
+	// This is slower but catches modules in non-standard locations
 	if entries, err := filepath.Glob("/lib/modules/*/kernel"); err == nil {
 		for _, kernelPath := range entries {
 			filepath.Walk(kernelPath, func(path string, info os.FileInfo, err error) error {
@@ -445,26 +510,24 @@ func buildKernelContext() KernelContext {
 					// Extract module name from path
 					// Path format: /lib/modules/X.X.X/kernel/drivers/.../module.ko
 					moduleName := strings.TrimSuffix(filepath.Base(path), ".ko")
-					// Also check for module aliases (some modules have different names)
 					ctx.Available[moduleName] = true
-					
-					// Try to find module aliases in modules.alias or modules.dep
-					// This helps with modules that might be referenced differently
 				}
 				return nil
 			})
 		}
 	}
 	
-	// Also check /lib/modules/*/modules.dep for module dependencies
-	// This helps find modules that might not be in standard kernel/ subdirectories
-	if depFiles, err := filepath.Glob("/lib/modules/*/modules.dep"); err == nil {
-		for _, depFile := range depFiles {
-			if data, err := os.ReadFile(depFile); err == nil {
-				lines := strings.Split(string(data), "\n")
-				for _, line := range lines {
-					if strings.Contains(line, ".ko:") {
-						// Extract module name from dependency line
+	// Also check /lib/modules/*/modules.dep as fallback (if kernel version detection failed)
+	if len(ctx.Available) == 0 {
+		if depFiles, err := filepath.Glob("/lib/modules/*/modules.dep"); err == nil {
+			for _, depFile := range depFiles {
+				if data, err := os.ReadFile(depFile); err == nil {
+					lines := strings.Split(string(data), "\n")
+					for _, line := range lines {
+						line = strings.TrimSpace(line)
+						if line == "" || !strings.Contains(line, ".ko:") {
+							continue
+						}
 						parts := strings.Fields(line)
 						if len(parts) > 0 {
 							modulePath := parts[0]
