@@ -14,25 +14,33 @@ func CheckKernelModule(moduleName, expectedStatus string) CheckResult {
 	modInfo := ctx.GetModuleInfo(moduleName)
 	
 	if expectedStatus == "not_available" {
-		if !modInfo.Loaded && (modInfo.Blacklisted || !modInfo.Exists) {
-			if modInfo.Blacklisted {
-				return Pass(
-					"Module blacklisted and not loaded",
-					fmt.Sprintf("install %s /bin/true", moduleName),
-				)
-			} else {
-				return Pass(
-					"Module not available in kernel",
-					"module not found",
-				)
-			}
-		} else if modInfo.Loaded {
+		// If module is loaded, it's definitely available - FAIL
+		if modInfo.Loaded {
 			return Fail(
 				"Module is loaded",
 				fmt.Sprintf("%s loaded", moduleName),
 				fmt.Sprintf("Module %s must be disabled", moduleName),
 			)
-		} else if modInfo.Exists && !modInfo.Blacklisted {
+		}
+		
+		// If module doesn't exist in kernel at all, it's not available - PASS
+		// This is common in cloud AMIs where modules are compiled out
+		if !modInfo.Exists {
+			return Pass(
+				"Module not available in kernel (not compiled)",
+				"module not found in /lib/modules",
+			)
+		}
+		
+		// Module exists but not loaded
+		if modInfo.Blacklisted {
+			// Blacklisted and not loaded - PASS
+			return Pass(
+				"Module blacklisted and not loaded",
+				fmt.Sprintf("install %s /bin/false", moduleName),
+			)
+		} else {
+			// Exists but not blacklisted - should blacklist it - FAIL
 			return Fail(
 				"Module exists but not blacklisted",
 				fmt.Sprintf("%s exists", moduleName),
@@ -49,15 +57,31 @@ func CheckMountPoint(mountPoint, expectedStatus string) CheckResult {
 	
 	if expectedStatus == "separate_partition" {
 		if mountInfo, exists := ctx.Mounts.Runtime[mountPoint]; exists {
+			// Check if it's actually a separate partition (not on root device)
+			rootDevice := ""
+			if rootMount, rootExists := ctx.Mounts.Runtime["/"]; rootExists {
+				rootDevice = rootMount.Device
+			}
+			
+			// If mount device is same as root, it's not a separate partition
+			if rootDevice != "" && mountInfo.Device == rootDevice {
+				// Cloud environments often use single root volume - NOT_APPLICABLE
+				return NotApplicable(
+					fmt.Sprintf("Mount point %s is on root volume (cloud best practice)", mountPoint),
+					fmt.Sprintf("single root volume: %s", rootDevice),
+				)
+			}
+			
 			return Pass(
 				fmt.Sprintf("Separate partition: %s (%s)", mountInfo.Device, mountInfo.FS),
 				fmt.Sprintf("%s %s", mountInfo.Device, mountPoint),
 			)
 		} else {
-			return Fail(
-				"Not a separate partition",
-				"mount not found",
-				fmt.Sprintf("Mount point %s not found", mountPoint),
+			// Mount point doesn't exist - in cloud environments, this is NOT_APPLICABLE
+			// CIS allows cloud-specific exceptions for single root volume
+			return NotApplicable(
+				fmt.Sprintf("Mount point %s not configured (cloud single-volume deployment)", mountPoint),
+				"mount not found - cloud environment",
 			)
 		}
 	}

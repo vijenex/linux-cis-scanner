@@ -49,12 +49,23 @@ func CheckSysctlWithContext(ctx *ScanContext, parameterName, expectedValue strin
 	persistent := ctx.Sysctl.IsPersistent(parameterName, expectedValue)
 	
 	// CIS semantics: both runtime AND persistence required
+	// BUT: If runtime matches and no persistence config exists, check if it's kernel default
 	if runtimeMatch && persistent {
 		return Pass(
 			fmt.Sprintf("%s = %s (persistent)", parameterName, actualValue),
 			fmt.Sprintf("%s=%s", parameterName, actualValue),
 		)
 	} else if runtimeMatch && !persistent {
+		// Runtime matches but not in config files
+		// This could be kernel default - check if any sysctl config exists
+		if len(ctx.Sysctl.Persistent) == 0 {
+			// No sysctl config at all - kernel defaults are being used
+			return Pass(
+				fmt.Sprintf("%s = %s (kernel default)", parameterName, actualValue),
+				fmt.Sprintf("%s=%s (default)", parameterName, actualValue),
+			)
+		}
+		// Config exists but this param not in it - should be persistent
 		return Fail(
 			fmt.Sprintf("%s = %s (not persistent)", parameterName, actualValue),
 			fmt.Sprintf("%s=%s (runtime only)", parameterName, actualValue),

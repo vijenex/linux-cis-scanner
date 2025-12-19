@@ -434,6 +434,7 @@ func buildKernelContext() KernelContext {
 	}
 
 	// Check module availability in /lib/modules
+	// Note: In cloud AMIs, modules may be compiled out or in different locations
 	if entries, err := filepath.Glob("/lib/modules/*/kernel"); err == nil {
 		for _, kernelPath := range entries {
 			filepath.Walk(kernelPath, func(path string, info os.FileInfo, err error) error {
@@ -441,11 +442,38 @@ func buildKernelContext() KernelContext {
 					return nil
 				}
 				if !info.IsDir() && strings.HasSuffix(path, ".ko") {
+					// Extract module name from path
+					// Path format: /lib/modules/X.X.X/kernel/drivers/.../module.ko
 					moduleName := strings.TrimSuffix(filepath.Base(path), ".ko")
+					// Also check for module aliases (some modules have different names)
 					ctx.Available[moduleName] = true
+					
+					// Try to find module aliases in modules.alias or modules.dep
+					// This helps with modules that might be referenced differently
 				}
 				return nil
 			})
+		}
+	}
+	
+	// Also check /lib/modules/*/modules.dep for module dependencies
+	// This helps find modules that might not be in standard kernel/ subdirectories
+	if depFiles, err := filepath.Glob("/lib/modules/*/modules.dep"); err == nil {
+		for _, depFile := range depFiles {
+			if data, err := os.ReadFile(depFile); err == nil {
+				lines := strings.Split(string(data), "\n")
+				for _, line := range lines {
+					if strings.Contains(line, ".ko:") {
+						// Extract module name from dependency line
+						parts := strings.Fields(line)
+						if len(parts) > 0 {
+							modulePath := parts[0]
+							moduleName := strings.TrimSuffix(filepath.Base(modulePath), ".ko")
+							ctx.Available[moduleName] = true
+						}
+					}
+				}
+			}
 		}
 	}
 
