@@ -405,6 +405,10 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		}
 		// LogFilePermissions might have expected_file_permissions instead of expected_permissions
 		expectedPerms := ctrl.ExpectedPermissions
+		// Also check expected_mode (alternative field name)
+		if expectedPerms == "" && ctrl.ExpectedMode != "" {
+			expectedPerms = ctrl.ExpectedMode
+		}
 		if expectedPerms == "" && ctrl.ExpectedFilePerms != "" {
 			expectedPerms = ctrl.ExpectedFilePerms
 		}
@@ -413,7 +417,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			// Common defaults based on file path
 			if strings.Contains(filePath, "/etc/motd") || strings.Contains(filePath, "/etc/issue") {
 				expectedPerms = "644"
-			} else if strings.Contains(filePath, "/etc/cron") {
+			} else if strings.Contains(filePath, "/etc/cron") || strings.Contains(filePath, "/etc/at.allow") {
 				expectedPerms = "600"
 			} else {
 				expectedPerms = "644" // Default
@@ -695,7 +699,11 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
 			// Default: check if ufw service is active
+			// Handle both expected_status and expected_state (normalized in Normalize())
 			expectedStatus := ctrl.ExpectedStatus
+			if expectedStatus == "" && ctrl.ExpectedState != "" {
+				expectedStatus = ctrl.ExpectedState
+			}
 			if expectedStatus == "" {
 				expectedStatus = "active"
 			}
@@ -1396,9 +1404,13 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.EvidenceCommand
-		// Strategy 2: FilePermissions (file_path + expected_permissions)
-		} else if ctrl.FilePath != "" && ctrl.ExpectedPermissions != "" {
-			checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
+		// Strategy 2: FilePermissions (file_path + expected_permissions or expected_mode)
+		} else if ctrl.FilePath != "" && (ctrl.ExpectedPermissions != "" || ctrl.ExpectedMode != "") {
+			expectedPerms := ctrl.ExpectedPermissions
+			if expectedPerms == "" && ctrl.ExpectedMode != "" {
+				expectedPerms = ctrl.ExpectedMode
+			}
+			checkResult := controls.CheckFilePermissions(ctrl.FilePath, expectedPerms, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.EvidenceCommand
