@@ -794,8 +794,79 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 
+	case "BootParameter":
+		// Check boot parameters - BootParameter uses BootParametersArray (array of strings like "apparmor=1")
+		// The parameters field is unmarshaled into BootParametersArray by UnmarshalJSON
+		bootParams := ctrl.BootParametersArray
+		if len(bootParams) == 0 {
+			// If BootParametersArray is empty, try to read from the raw Parameters field
+			// This shouldn't happen if UnmarshalJSON worked, but handle it as fallback
+			var params []string
+			if err := json.Unmarshal(ctrl.Parameters, &params); err == nil && len(params) > 0 {
+				bootParams = params
+			}
+		}
+		
+		if len(bootParams) > 0 {
+			allPass := true
+			var failedParams []string
+			var evidence []string
+			
+			// Check /proc/cmdline first (runtime)
+			cmdlineContent := ""
+			if cmdlineBytes, err := os.ReadFile("/proc/cmdline"); err == nil {
+				cmdlineContent = string(cmdlineBytes)
+			}
+			
+			// Also check /etc/default/grub (persistent config)
+			grubContent := ""
+			if grubBytes, err := os.ReadFile("/etc/default/grub"); err == nil {
+				grubContent = string(grubBytes)
+			}
+			
+			for _, param := range bootParams {
+				// Extract parameter name (before =)
+				paramName := param
+				if idx := strings.Index(param, "="); idx > 0 {
+					paramName = param[:idx]
+				}
+				
+				// Check if parameter exists in /proc/cmdline or /etc/default/grub
+				foundInCmdline := strings.Contains(cmdlineContent, paramName)
+				foundInGrub := strings.Contains(grubContent, paramName)
+				
+				if foundInCmdline || foundInGrub {
+					evidence = append(evidence, fmt.Sprintf("%s: found", paramName))
+				} else {
+					allPass = false
+					failedParams = append(failedParams, paramName)
+					evidence = append(evidence, fmt.Sprintf("%s: not found", paramName))
+				}
+			}
+			
+			if allPass {
+				result.Status = "PASS"
+				result.ActualValue = "All boot parameters configured"
+			} else {
+				result.Status = "FAIL"
+				result.ActualValue = fmt.Sprintf("Missing parameters: %s", strings.Join(failedParams, ", "))
+			}
+			result.EvidenceCommand = strings.Join(evidence, "; ")
+		} else if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			// FileContent check
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else {
+			// Default: check /proc/cmdline for common boot parameters
+			result.Status = "MANUAL"
+			result.ActualValue = "Boot parameter check requires manual verification"
+			result.EvidenceCommand = "Check /proc/cmdline and /etc/default/grub"
+		}
+
 	case "JournaldConfig", "RsyslogConfig", "CronJob", "MTALocalOnly", "CoreDumpRestriction",
-		 "BootParameter", "AppArmorProfile", "AIDEConfig", "SingleLoggingSystem", "SingleFirewall", "WirelessInterface":
+		 "AppArmorProfile", "AIDEConfig", "SingleLoggingSystem", "SingleFirewall", "WirelessInterface":
 		// These use FileContent, FilePermissions, or CommandOutputEmpty
 		// Try FileContent first
 		if ctrl.FilePath != "" && ctrl.Pattern != "" {

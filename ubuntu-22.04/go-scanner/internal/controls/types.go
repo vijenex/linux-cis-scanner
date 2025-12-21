@@ -75,7 +75,8 @@ type LegacyControl struct {
 	ParameterName       string   `json:"parameter_name,omitempty"`
 	Parameter           string   `json:"parameter,omitempty"`
 	Parameters          json.RawMessage `json:"parameters,omitempty"` // For MultiKernelParameter - use RawMessage to handle both string and array
-	ParametersArray     []KernelParameter `json:"-"` // Parsed parameters array
+	ParametersArray     []KernelParameter `json:"-"` // Parsed parameters array (for MultiKernelParameter)
+	BootParametersArray []string `json:"-"` // Parsed boot parameters array (for BootParameter)
 	ExpectedValue       string   `json:"expected_value,omitempty"`
 	FilePath            string   `json:"file_path,omitempty"`
 	PasswdFile          string   `json:"passwd_file,omitempty"` // Alternative field name for /etc/passwd checks
@@ -181,15 +182,22 @@ func (lc *LegacyControl) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	
-	// Parse parameters if present and type is MultiKernelParameter
-	if len(aux.Parameters) > 0 && temp.Type == "MultiKernelParameter" {
-		// Try to unmarshal as array of KernelParameter objects
-		var params []KernelParameter
-		if err := json.Unmarshal(aux.Parameters, &params); err == nil {
-			lc.ParametersArray = params
+	// Parse parameters based on type
+	if len(aux.Parameters) > 0 {
+		switch temp.Type {
+		case "MultiKernelParameter":
+			// Try to unmarshal as array of KernelParameter objects
+			var params []KernelParameter
+			if err := json.Unmarshal(aux.Parameters, &params); err == nil {
+				lc.ParametersArray = params
+			}
+		case "BootParameter":
+			// Try to unmarshal as array of strings
+			var bootParams []string
+			if err := json.Unmarshal(aux.Parameters, &bootParams); err == nil {
+				lc.BootParametersArray = bootParams
+			}
 		}
-		// If it fails (e.g., string or array of strings), ignore it
-		// ParametersArray will remain empty - other types handle parameters differently
 	}
 	
 	return nil
