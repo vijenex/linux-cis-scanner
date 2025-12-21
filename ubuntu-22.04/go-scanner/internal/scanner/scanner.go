@@ -351,7 +351,53 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			result.EvidenceCommand = strings.Join(evidence, "; ")
 		}
 
-	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
+	case "SSHPrivateKeys":
+		// Check SSH private host key files - default to /etc/ssh/ssh_host_*_key if not specified
+		filePath := ctrl.FilePath
+		if filePath == "" {
+			filePath = "/etc/ssh/ssh_host_*_key"
+		}
+		expectedPerms := ctrl.ExpectedPermissions
+		if expectedPerms == "" {
+			expectedPerms = "600"
+		}
+		expectedOwner := ctrl.ExpectedOwner
+		if expectedOwner == "" {
+			expectedOwner = "root"
+		}
+		expectedGroup := ctrl.ExpectedGroup
+		if expectedGroup == "" {
+			expectedGroup = "root"
+		}
+		checkResult := controls.CheckFilePermissions(filePath, expectedPerms, expectedOwner, expectedGroup)
+		result.Status = string(checkResult.Status)
+		result.ActualValue = checkResult.ActualValue
+		result.EvidenceCommand = checkResult.EvidenceCommand
+
+	case "SSHPublicKeys":
+		// Check SSH public host key files - default to /etc/ssh/ssh_host_*_key.pub if not specified
+		filePath := ctrl.FilePath
+		if filePath == "" {
+			filePath = "/etc/ssh/ssh_host_*_key.pub"
+		}
+		expectedPerms := ctrl.ExpectedPermissions
+		if expectedPerms == "" {
+			expectedPerms = "644"
+		}
+		expectedOwner := ctrl.ExpectedOwner
+		if expectedOwner == "" {
+			expectedOwner = "root"
+		}
+		expectedGroup := ctrl.ExpectedGroup
+		if expectedGroup == "" {
+			expectedGroup = "root"
+		}
+		checkResult := controls.CheckFilePermissions(filePath, expectedPerms, expectedOwner, expectedGroup)
+		result.Status = string(checkResult.Status)
+		result.ActualValue = checkResult.ActualValue
+		result.EvidenceCommand = checkResult.EvidenceCommand
+
+	case "FilePermissions", "FilePermission", "LogFilePermissions":
 		// LogFilePermissions might have log_directory instead of file_path
 		filePath := ctrl.FilePath
 		if filePath == "" && ctrl.LogDirectory != "" {
