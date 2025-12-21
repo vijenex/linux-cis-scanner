@@ -79,10 +79,12 @@ type LegacyControl struct {
 	BootParametersArray []string `json:"-"` // Parsed boot parameters array (for BootParameter)
 	ExpectedValue       string   `json:"expected_value,omitempty"`
 	FilePath            string   `json:"file_path,omitempty"`
+	KeyPattern          string   `json:"key_pattern,omitempty"` // Alternative field name for SSH key patterns
 	PasswdFile          string   `json:"passwd_file,omitempty"` // Alternative field name for /etc/passwd checks
 	ShadowFile          string   `json:"shadow_file,omitempty"` // Alternative field name for /etc/shadow checks
 	LogDirectory        string   `json:"log_directory,omitempty"` // Alternative field name for log directory checks
 	ExpectedPermissions string   `json:"expected_permissions,omitempty"`
+	ExpectedMode        string   `json:"expected_mode,omitempty"` // Alternative field name for expected_permissions
 	ExpectedFilePerms   string   `json:"expected_file_permissions,omitempty"` // For LogFilePermissions
 	ExpectedDirPerms    string   `json:"expected_dir_permissions,omitempty"` // For LogFilePermissions
 	ExpectedOwner       string   `json:"expected_owner,omitempty"`
@@ -249,9 +251,17 @@ func (lc *LegacyControl) Normalize() {
 	if lc.FilePath == "" && lc.LogDirectory != "" {
 		lc.FilePath = lc.LogDirectory
 	}
+	// Normalize key_pattern -> file_path (for SSHPrivateKeys/SSHPublicKeys)
+	if lc.FilePath == "" && lc.KeyPattern != "" {
+		lc.FilePath = lc.KeyPattern
+	}
 	// Normalize expected_file_permissions -> expected_permissions (for LogFilePermissions)
 	if lc.ExpectedPermissions == "" && lc.ExpectedFilePerms != "" {
 		lc.ExpectedPermissions = lc.ExpectedFilePerms
+	}
+	// Normalize expected_mode -> expected_permissions (for FilePermission)
+	if lc.ExpectedPermissions == "" && lc.ExpectedMode != "" {
+		lc.ExpectedPermissions = lc.ExpectedMode
 	}
 }
 
@@ -294,9 +304,9 @@ func (lc LegacyControl) Validate() error {
 			return fmt.Errorf("missing package_name, package, or package_names for %s", lc.ID)
 		}
 	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
-		// FilePath can be empty if log_directory is set (for LogFilePermissions)
-		if lc.FilePath == "" && lc.LogDirectory == "" {
-			return fmt.Errorf("missing file_path or log_directory for %s", lc.ID)
+		// FilePath can be empty if log_directory, key_pattern, or passwd_file/shadow_file is set
+		if lc.FilePath == "" && lc.LogDirectory == "" && lc.KeyPattern == "" && lc.PasswdFile == "" && lc.ShadowFile == "" {
+			return fmt.Errorf("missing file_path, log_directory, key_pattern, passwd_file, or shadow_file for %s", lc.ID)
 		}
 	case "FileContent", "ConfigFile":
 		// For FileContent, we need both file_path and pattern
