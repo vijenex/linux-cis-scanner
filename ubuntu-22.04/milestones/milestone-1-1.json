@@ -84,7 +84,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.6",
       "description": "The Linux overlay kernel module, commonly referred to as Overlayfs, is a union mount filesystem. It allows the user to overlay one file system on top of another, and creates a single, unified view.",
-      "remediation": "Unload and disable the overlay kernel module.\n1. Run the following commands to unload the overlay kernel module:\n# modprobe -r overlay 2>/dev/null\n# rmmod overlay 2>/dev/null 2. Perform the following to disable the overlay kernel module:\nCreate a file ending in .conf with install overlay /bin/false in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"install overlay /bin/false\" >> /etc/modprobe.d/60 - overlay.conf\nCreate a file ending in .conf with blacklist overlay in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"blacklist overlay\" >> /etc/modprobe.d/60 -overlay.conf Internal Only - General"
+      "remediation": "Unload and disable the overlay kernel module.\n1. Run the following commands to unload the overlay kernel module:\n# modprobe -r overlay 2>/dev/null\n# rmmod overlay 2>/dev/null 2. Perform the following to disable the overlay kernel module:\nCreate a file ending in .conf with install overlay /bin/false in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"install overlay /bin/false\" >> /etc/modprobe.d/60 - overlay.conf\nCreate a file ending in .conf with blacklist overlay in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"blacklist overlay\" >> /etc/modprobe.d/60 -overlay.conf Internal Only - General",
+      "automated": true
     },
     {
       "id": "1.1.1.7",
@@ -97,7 +98,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.7",
       "description": "The squashfs filesystem type is a compressed read -only Linux filesystem embedded in small footprint systems. A squashfs image can be used without having to first decompress the image.",
-      "remediation": "Unload and disable the squashfs kernel module.\n1. Run the following commands to unload the squashfs kernel module:\n# modprobe -r squashfs 2>/dev/null\n# rmmod squashfs 2>/dev/null 2. Perform the following to disable the squashfs kernel module:\nCreate a file ending in .conf with install squashfs /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install squashfs /bin/false\" >> /etc/modprobe.d/60 - squashfs.conf\nCreate a file ending in .conf with blacklist squashfs in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist squashfs\" >> /etc/modprobe.d/60 -squashfs.conf"
+      "remediation": "Unload and disable the squashfs kernel module.\n1. Run the following commands to unload the squashfs kernel module:\n# modprobe -r squashfs 2>/dev/null\n# rmmod squashfs 2>/dev/null 2. Perform the following to disable the squashfs kernel module:\nCreate a file ending in .conf with install squashfs /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install squashfs /bin/false\" >> /etc/modprobe.d/60 - squashfs.conf\nCreate a file ending in .conf with blacklist squashfs in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist squashfs\" >> /etc/modprobe.d/60 -squashfs.conf",
+      "automated": true
     },
     {
       "id": "1.1.1.8",
@@ -164,7 +166,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.1.1",
       "description": "The /tmp directory is a world -writable directory used for temporary storage by all users and some applications.\nNote: If an entry for /tmp exists in /etc/fstab it will take precedence over entries in a systemd unit file. There is an exception to this when a system is diskless and connected to iSCSI, entries in /etc/fstab may not take precedence over a systemd unit file.",
-      "remediation": "First ensure that systemd is correctly configured to ensure that /tmp will be mounted at boot time.\n# systemctl unmask tmp.mount For specific configuration requirements of the /tmp mount for your environment, modify /etc/fstab .\nExample of using tmpfs with specific mount options:\ntmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0 Note: the size=2G is an example of setting a specific size for tmpfs .\nExample of using a volume or disk with specific mount options. The source location of the volume or disk will vary depending on your environment:\n<device> /tmp <fstype> defaults,nodev,nosuid,noexec 0 0"
+      "remediation": "First ensure that systemd is correctly configured to ensure that /tmp will be mounted at boot time.\n# systemctl unmask tmp.mount For specific configuration requirements of the /tmp mount for your environment, modify /etc/fstab .\nExample of using tmpfs with specific mount options:\ntmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0 Note: the size=2G is an example of setting a specific size for tmpfs .\nExample of using a volume or disk with specific mount options. The source location of the volume or disk will vary depending on your environment:\n<device> /tmp <fstype> defaults,nodev,nosuid,noexec 0 0",
+      "automated": true
     },
     {
       "id": "1.1.2.1.2",
@@ -275,7 +278,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.3.1",
       "description": "The /home directory is used to support disk storage needs of local users.",
-      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /home .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General"
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /home .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General",
+      "automated": true
     },
     {
       "id": "1.1.2.3.2",

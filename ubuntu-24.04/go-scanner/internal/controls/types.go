@@ -49,7 +49,7 @@ type LegacyControl struct {
 	Section        string `json:"section"`
 	Type           string `json:"type"`
 	Profile        string `json:"profile"`
-	Automated      bool   `json:"automated"`
+	Automated      *bool  `json:"automated,omitempty"` // Pointer to detect missing vs false
 	CISReference   string `json:"cis_reference"`
 	Description    string `json:"description"`
 	Remediation    string `json:"remediation"`

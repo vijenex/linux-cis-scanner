@@ -126,7 +126,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.3.1",
       "description": "The /home directory is used to support disk storage needs of local users.",
-      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /home .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General"
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /home .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General",
+      "automated": true
     },
     {
       "id": "1.1.2.3.2",
@@ -167,7 +168,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.4.1",
       "description": "The /var directory is used by daemons and other system services to temporarily store dynamic data. Some directories created by these processes may be world -writable.",
-      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate."
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+      "automated": true
     },
     {
       "id": "1.1.2.4.2",
@@ -208,7 +210,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.5.1",
       "description": "The /var/tmp directory is a world -writable directory used for temporary storage by all users and some applications. Temporary files residing in /var/tmp are to be preserved between reboots.",
-      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/tmp .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General"
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/tmp .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General",
+      "automated": true
     },
     {
       "id": "1.1.2.5.2",
@@ -263,7 +266,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.6.1",
       "description": "The /var/log directory is used by system services to store log data.",
-      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/log .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General"
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/log .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General",
+      "automated": true
     },
     {
       "id": "1.1.2.6.2",
@@ -318,7 +322,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.7.1",
       "description": "The auditing daemon, auditd , stores log data in the /var/log/audit directory.",
-      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/log/audit .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate."
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/log/audit .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+      "automated": true
     },
     {
       "id": "1.1.2.7.2",

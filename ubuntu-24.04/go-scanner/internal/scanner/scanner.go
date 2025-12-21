@@ -113,20 +113,21 @@ func (s *Scanner) ExecuteControls() []Result {
 			}
 			
 			// Determine if control is automated
-			// Logic: If type is "Manual", always manual. Otherwise, check automated field.
-			// If automated field is missing (defaults to false), but type is not "Manual", assume automated.
+			// Logic: 
+			// 1. If type is "Manual", always manual
+			// 2. If automated field is explicitly set to false, manual
+			// 3. If automated field is missing or true, automated (default to automated)
 			isAutomated := false
 			
 			if ctrl.Type == "Manual" {
 				// Explicitly manual type - always manual
 				isAutomated = false
-			} else if ctrl.Automated {
-				// Explicitly set to automated
-				isAutomated = true
+			} else if ctrl.Automated != nil && *ctrl.Automated == false {
+				// Explicitly set to false - manual
+				isAutomated = false
 			} else {
-				// automated field is false or missing, but type is not "Manual"
-				// Assume automated (most control types are automated)
-				// Only truly manual controls should have type "Manual"
+				// automated field is missing (nil) or explicitly true
+				// Default to automated (most control types are automated)
 				isAutomated = true
 			}
 			

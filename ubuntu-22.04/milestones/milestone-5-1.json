@@ -156,7 +156,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.8",
       "description": "The DisableForwarding parameter disables all forwarding features, including X11, ssh-agent(1), TCP and StreamLocal. This option overrides all other forwarding -related options and may simplify restricted configurations.\n\u2022 X11Forwarding provides the ability to tunnel X11 traffic through the connection to enable remote graphic connections.\n\u2022 ssh-agent is a program to hold private keys used for public key authentication.\nThrough use of environment variables the agent can be located and automatically used for authentication when logging in to other machines using ssh.\n\u2022 SSH port forwarding is a mechanism in SSH for tunneling application ports from the client to the server, or servers to clients. It can be used for adding encryption to legacy applications, going through firewalls, and some system administrators and IT prof essionals use it for opening backdoors into the internal network from their home machines.",
-      "remediation": "Edit the /etc/ssh/sshd_config file to set the DisableForwarding parameter to yes above any Include and Match entries as follows:\nDisableForwarding yes Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location."
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the DisableForwarding parameter to yes above any Include and Match entries as follows:\nDisableForwarding yes Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location.",
+      "automated": true
     },
     {
       "id": "5.1.9",
