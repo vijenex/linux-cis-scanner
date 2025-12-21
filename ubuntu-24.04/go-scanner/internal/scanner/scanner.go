@@ -352,10 +352,26 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		}
 
 	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
-		checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
-		result.Status = string(checkResult.Status)
-		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		// LogFilePermissions might have log_directory instead of file_path
+		filePath := ctrl.FilePath
+		if filePath == "" && ctrl.LogDirectory != "" {
+			filePath = ctrl.LogDirectory
+		}
+		// LogFilePermissions might have expected_file_permissions instead of expected_permissions
+		expectedPerms := ctrl.ExpectedPermissions
+		if expectedPerms == "" && ctrl.ExpectedFilePerms != "" {
+			expectedPerms = ctrl.ExpectedFilePerms
+		}
+		if filePath == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing file_path or log_directory"
+			result.EvidenceCommand = "N/A"
+		} else {
+			checkResult := controls.CheckFilePermissions(filePath, expectedPerms, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
 
 	case "FileContent", "ConfigFile":
 		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
@@ -417,8 +433,14 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		// Check for duplicate UIDs in /etc/passwd
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
-			// Default audit command if not specified
-			auditCmd = "cut -d: -f3 /etc/passwd | sort | uniq -d"
+			// Check control ID to determine the right command
+			if ctrl.ID == "5.4.2.1" {
+				// Ensure root is the only UID 0 account
+				auditCmd = "awk -F: '($3 == 0) {print $1}' /etc/passwd | grep -v '^root$'"
+			} else {
+				// Default: check for duplicate UIDs
+				auditCmd = "cut -d: -f3 /etc/passwd | sort | uniq -d"
+			}
 		}
 		// CheckCommandOutputEmptyWithControl already handles pipes - just pass the command directly
 		// It will detect pipes and use shell execution automatically
@@ -499,13 +521,62 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			result.EvidenceCommand = auditCmd
 		}
 
-	case "WorldWritableFiles", "OrphanedFiles":
-		// These use CommandOutputEmpty internally
+	case "WorldWritableFiles":
+		// Check for world writable files
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
+			// Default audit command: find world writable files (excluding proc, sys, dev)
+			auditCmd = "find / -xdev -type f -perm -0002 ! -path '/proc/*' ! -path '/sys/*' ! -path '/dev/*' 2>/dev/null"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
 			result.Status = "ERROR"
-			result.ActualValue = "Missing audit command"
-			result.EvidenceCommand = "N/A"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "OrphanedFiles":
+		// Check for files without owner/group
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			// Default audit command: find files without owner or group
+			auditCmd = "find / -xdev \\( -nouser -o -nogroup \\) 2>/dev/null"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "UFWStatus":
+		// Check UFW service status
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			// Default: check if ufw service is active
+			expectedStatus := ctrl.ExpectedStatus
+			if expectedStatus == "" {
+				expectedStatus = "active"
+			}
+			// Use service check instead of command
+			checkResult := controls.CheckServiceStatus("ufw", expectedStatus)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
 		} else {
 			parts := strings.Fields(auditCmd)
 			if len(parts) > 0 {
@@ -522,7 +593,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			}
 		}
 
-	case "UFWStatus", "UFWLoopback", "UFWOpenPorts", "UFWDefaultPolicy", "UFWWithNftables":
+	case "UFWLoopback", "UFWOpenPorts", "UFWDefaultPolicy", "UFWWithNftables":
 		// UFW checks use CommandOutputEmpty
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
@@ -545,7 +616,28 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			}
 		}
 
-	case "NftablesTable", "NftablesBaseChains", "NftablesLoopback", "NftablesDefaultPolicy", "NftablesPersistent":
+	case "NftablesTable":
+		// Check if nftables table exists
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			// Default: check if nftables has any tables
+			auditCmd = "nft list tables"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "NftablesBaseChains", "NftablesLoopback", "NftablesDefaultPolicy", "NftablesPersistent":
 		// Nftables checks use CommandOutputEmpty
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
