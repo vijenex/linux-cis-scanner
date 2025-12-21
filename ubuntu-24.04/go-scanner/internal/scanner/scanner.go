@@ -323,7 +323,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 	case "MultiKernelParameter":
 		// MultiKernelParameter has a parameters array - check each one
 		// If any fails, the whole control fails
-		if len(ctrl.Parameters) == 0 {
+		if len(ctrl.ParametersArray) == 0 {
 			result.Status = "ERROR"
 			result.ActualValue = "Missing parameters array"
 			result.EvidenceCommand = "N/A"
@@ -332,7 +332,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			var failedParams []string
 			var evidence []string
 			
-			for _, param := range ctrl.Parameters {
+			for _, param := range ctrl.ParametersArray {
 				checkResult := controls.CheckSysctlParameter(param.Name, param.ExpectedValue)
 				evidence = append(evidence, fmt.Sprintf("%s=%s (%s)", param.Name, checkResult.ActualValue, checkResult.Status))
 				if checkResult.Status != controls.StatusPass {

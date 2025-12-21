@@ -74,7 +74,8 @@ type LegacyControl struct {
 	ShouldBeInstalled   *bool    `json:"should_be_installed,omitempty"` // Boolean variant
 	ParameterName       string   `json:"parameter_name,omitempty"`
 	Parameter           string   `json:"parameter,omitempty"`
-	Parameters          []KernelParameter `json:"parameters,omitempty"` // For MultiKernelParameter
+	Parameters          json.RawMessage `json:"parameters,omitempty"` // For MultiKernelParameter - use RawMessage to handle both string and array
+	ParametersArray     []KernelParameter `json:"-"` // Parsed parameters array
 	ExpectedValue       string   `json:"expected_value,omitempty"`
 	FilePath            string   `json:"file_path,omitempty"`
 	PasswdFile          string   `json:"passwd_file,omitempty"` // Alternative field name for /etc/passwd checks
@@ -156,6 +157,44 @@ type CheckResult struct {
 	Description     string
 }
 
+// UnmarshalJSON custom unmarshaler to handle parameters as both string and array
+func (lc *LegacyControl) UnmarshalJSON(data []byte) error {
+	// First, extract the type to know how to handle parameters
+	var temp struct {
+		Type       string          `json:"type"`
+		Parameters json.RawMessage `json:"parameters,omitempty"`
+	}
+	if err := json.Unmarshal(data, &temp); err != nil {
+		return err
+	}
+	
+	// Create a temporary type to avoid recursion
+	type Alias LegacyControl
+	aux := &struct {
+		Parameters json.RawMessage `json:"parameters,omitempty"`
+		*Alias
+	}{
+		Alias: (*Alias)(lc),
+	}
+	
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	
+	// Parse parameters if present and type is MultiKernelParameter
+	if len(aux.Parameters) > 0 && temp.Type == "MultiKernelParameter" {
+		// Try to unmarshal as array of KernelParameter objects
+		var params []KernelParameter
+		if err := json.Unmarshal(aux.Parameters, &params); err == nil {
+			lc.ParametersArray = params
+		}
+		// If it fails (e.g., string or array of strings), ignore it
+		// ParametersArray will remain empty - other types handle parameters differently
+	}
+	
+	return nil
+}
+
 // Normalize legacy controls for backward compatibility
 func (lc *LegacyControl) Normalize() {
 	// Normalize parameter fields
@@ -218,7 +257,7 @@ func (lc LegacyControl) Validate() error {
 		}
 	case "MultiKernelParameter":
 		// MultiKernelParameter uses parameters array, not single parameter_name
-		if len(lc.Parameters) == 0 {
+		if len(lc.ParametersArray) == 0 {
 			return fmt.Errorf("missing parameters array for %s", lc.ID)
 		}
 	case "ServiceStatus", "Service", "ServiceNotInUse":
