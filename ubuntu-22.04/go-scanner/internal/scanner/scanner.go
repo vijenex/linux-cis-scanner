@@ -408,6 +408,17 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if expectedPerms == "" && ctrl.ExpectedFilePerms != "" {
 			expectedPerms = ctrl.ExpectedFilePerms
 		}
+		// If expected_permissions is missing, try to infer from control ID or title
+		if expectedPerms == "" {
+			// Common defaults based on file path
+			if strings.Contains(filePath, "/etc/motd") || strings.Contains(filePath, "/etc/issue") {
+				expectedPerms = "644"
+			} else if strings.Contains(filePath, "/etc/cron") {
+				expectedPerms = "600"
+			} else {
+				expectedPerms = "644" // Default
+			}
+		}
 		if filePath == "" {
 			result.Status = "ERROR"
 			result.ActualValue = "Missing file_path or log_directory"
@@ -420,10 +431,30 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		}
 
 	case "FileContent", "ConfigFile":
-		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
-		result.Status = string(checkResult.Status)
-		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		// ConfigFile might not have expected_result - try to infer from pattern or description
+		expectedResult := ctrl.ExpectedResult
+		if expectedResult == "" {
+			// Infer from pattern or description
+			pattern := strings.ToLower(ctrl.Pattern)
+			desc := strings.ToLower(ctrl.Description)
+			if strings.Contains(pattern, "nologin") || strings.Contains(desc, "not listed") || strings.Contains(desc, "not be") || strings.Contains(desc, "should not") {
+				expectedResult = "not_found"
+			} else if strings.Contains(desc, "not exist") || strings.Contains(desc, "missing") {
+				expectedResult = "not_found"
+			} else {
+				expectedResult = "found"
+			}
+		}
+		if ctrl.FilePath == "" || ctrl.Pattern == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing file_path or pattern"
+			result.EvidenceCommand = "N/A"
+		} else {
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
 
 	case "SSHConfig", "SSHDConfig":
 		checkResult := controls.CheckSSHConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
@@ -432,10 +463,60 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "PAMConfig":
-		checkResult := controls.CheckPAMConfig(ctrl.FilePath, ctrl.ModuleName, ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
-		result.Status = string(checkResult.Status)
-		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		// PAMConfig might not have file_path - try to infer from control ID or description
+		filePath := ctrl.FilePath
+		if filePath == "" {
+			// Try to infer PAM file from control ID or description
+			if strings.Contains(ctrl.Description, "su command") || ctrl.ID == "5.2.7" {
+				filePath = "/etc/pam.d/su"
+			} else if strings.Contains(ctrl.Description, "pam_unix") || ctrl.ID == "5.3.2.1" {
+				filePath = "/etc/pam.d/common-auth /etc/pam.d/common-account"
+			} else if strings.Contains(ctrl.Description, "pam_faillock") || ctrl.ID == "5.3.2.2" {
+				filePath = "/etc/pam.d/common-auth /etc/pam.d/common-account"
+			} else if strings.Contains(ctrl.Description, "pam_pwquality") || ctrl.ID == "5.3.2.3" {
+				filePath = "/etc/pam.d/common-password"
+			} else if strings.Contains(ctrl.Description, "pam_pwhistory") || ctrl.ID == "5.3.2.4" {
+				filePath = "/etc/pam.d/common-password"
+			} else {
+				// Default to common-auth
+				filePath = "/etc/pam.d/common-auth"
+			}
+		}
+		// Try to infer module_name and parameter from description if missing
+		moduleName := ctrl.ModuleName
+		param := ctrl.Parameter
+		expectedValue := ctrl.ExpectedValue
+		
+		if moduleName == "" {
+			if strings.Contains(ctrl.Description, "pam_unix") {
+				moduleName = "pam_unix.so"
+			} else if strings.Contains(ctrl.Description, "pam_faillock") {
+				moduleName = "pam_faillock.so"
+			} else if strings.Contains(ctrl.Description, "pam_pwquality") {
+				moduleName = "pam_pwquality.so"
+			} else if strings.Contains(ctrl.Description, "pam_pwhistory") {
+				moduleName = "pam_pwhistory.so"
+			} else if strings.Contains(ctrl.Description, "pam_wheel") {
+				moduleName = "pam_wheel.so"
+			}
+		}
+		
+		// For PAM module enabled checks, expected_value should be "enabled" if not specified
+		if expectedValue == "" && strings.Contains(ctrl.Description, "enabled") {
+			expectedValue = "enabled"
+		}
+		
+		// If still missing critical fields, mark as MANUAL
+		if moduleName == "" && param == "" {
+			result.Status = "MANUAL"
+			result.ActualValue = "PAM configuration check requires manual verification"
+			result.EvidenceCommand = "Check PAM configuration files manually"
+		} else {
+			checkResult := controls.CheckPAMConfig(filePath, moduleName, param, expectedValue, ctrl.Description)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
 
 	case "SudoConfig":
 		checkResult := controls.CheckSudoConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
@@ -683,27 +764,84 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			result.EvidenceCommand = auditCmd
 		}
 
-	case "NftablesBaseChains", "NftablesLoopback", "NftablesDefaultPolicy", "NftablesPersistent":
-		// Nftables checks use CommandOutputEmpty
+	case "NftablesBaseChains":
+		// Check if nftables base chains exist
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
-			result.Status = "ERROR"
-			result.ActualValue = "Missing audit command"
-			result.EvidenceCommand = "N/A"
+			auditCmd = "nft list chains | grep -E '(input|forward|output)'"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "NftablesLoopback":
+		// Check nftables loopback traffic
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "nft list ruleset | grep -E '(iif.*lo|127.0.0.0/8)'"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "NftablesDefaultPolicy":
+		// Check nftables default policy
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "nft list chains | grep -E 'policy drop'"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "NftablesPersistent":
+		// Check if nftables rules are persistent
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "grep -E 'include.*nftables' /etc/nftables.conf"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "ShadowedPasswords":
@@ -865,17 +1003,18 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			result.EvidenceCommand = "Check /proc/cmdline and /etc/default/grub"
 		}
 
-	case "JournaldConfig", "RsyslogConfig", "CronJob", "MTALocalOnly", "CoreDumpRestriction",
-		 "AppArmorProfile", "AIDEConfig", "SingleLoggingSystem", "SingleFirewall", "WirelessInterface":
-		// These use FileContent, FilePermissions, or CommandOutputEmpty
-		// Try FileContent first
+	case "AppArmorProfile":
+		// Check AppArmor profiles - use aa-status command
 		if ctrl.FilePath != "" && ctrl.Pattern != "" {
-			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.EvidenceCommand
 		} else if ctrl.AuditCommand != "" {
-			// Fall back to CommandOutputEmpty
 			parts := strings.Fields(ctrl.AuditCommand)
 			if len(parts) > 0 {
 				cmdName := parts[0]
@@ -890,9 +1029,354 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 				result.EvidenceCommand = "N/A"
 			}
 		} else {
-			result.Status = "ERROR"
-			result.ActualValue = "Missing required fields (file_path/pattern or audit_command)"
-			result.EvidenceCommand = "N/A"
+			// Default: check if AppArmor is enabled and profiles exist
+			auditCmd := "aa-status --enabled 2>/dev/null && aa-status 2>/dev/null | grep -E '(enforce|complain)'"
+			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		}
+
+	case "CoreDumpRestriction":
+		// Check core dump restrictions - check /etc/security/limits.conf and sysctl
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check sysctl fs.suid_dumpable and /etc/security/limits.conf
+			sysctlResult := controls.CheckSysctlParameter("fs.suid_dumpable", "0")
+			if sysctlResult.Status == controls.StatusPass {
+				result.Status = "PASS"
+				result.ActualValue = sysctlResult.ActualValue
+			} else {
+				// Also check limits.conf
+				limitsResult := controls.CheckFileContent("/etc/security/limits.conf", "\\*.*hard.*core.*0", "found")
+				if limitsResult.Status == controls.StatusPass {
+					result.Status = "PASS"
+					result.ActualValue = "Core dump restricted in limits.conf"
+				} else {
+					result.Status = "FAIL"
+					result.ActualValue = "Core dump restrictions not configured"
+				}
+			}
+			result.EvidenceCommand = "Check sysctl fs.suid_dumpable and /etc/security/limits.conf"
+		}
+
+	case "MTALocalOnly":
+		// Check MTA local-only mode - check postfix main.cf
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else {
+			// Default: check /etc/postfix/main.cf for inet_interfaces
+			checkResult := controls.CheckFileContent("/etc/postfix/main.cf", "inet_interfaces.*localhost", "found")
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
+
+	case "WirelessInterface":
+		// Check for wireless interfaces
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "not_found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check for wireless interfaces using ip/iw
+			auditCmd := "ip link show | grep -i wireless || iw dev 2>/dev/null | grep -i interface"
+			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		}
+
+	case "SingleLoggingSystem":
+		// Check that only one logging system is in use
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check if both rsyslog and journald are active (should fail)
+			rsyslogActive := controls.CheckServiceStatus("rsyslog", "active")
+			journaldActive := controls.CheckServiceStatus("systemd-journald", "active")
+			if rsyslogActive.Status == controls.StatusPass && journaldActive.Status == controls.StatusPass {
+				result.Status = "FAIL"
+				result.ActualValue = "Both rsyslog and journald are active"
+			} else {
+				result.Status = "PASS"
+				result.ActualValue = "Only one logging system active"
+			}
+			result.EvidenceCommand = fmt.Sprintf("rsyslog: %s, journald: %s", rsyslogActive.ActualValue, journaldActive.ActualValue)
+		}
+
+	case "SingleFirewall":
+		// Check that only one firewall is in use
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check if multiple firewalls are active (ufw, nftables, iptables)
+			ufwActive := controls.CheckServiceStatus("ufw", "active")
+			nftActive := controls.CheckServiceStatus("nftables", "active")
+			activeCount := 0
+			if ufwActive.Status == controls.StatusPass {
+				activeCount++
+			}
+			if nftActive.Status == controls.StatusPass {
+				activeCount++
+			}
+			if activeCount > 1 {
+				result.Status = "FAIL"
+				result.ActualValue = fmt.Sprintf("Multiple firewalls active (%d)", activeCount)
+			} else {
+				result.Status = "PASS"
+				result.ActualValue = "Only one firewall active"
+			}
+			result.EvidenceCommand = fmt.Sprintf("ufw: %s, nftables: %s", ufwActive.ActualValue, nftActive.ActualValue)
+		}
+
+	case "JournaldConfig":
+		// Check journald configuration
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check /etc/systemd/journald.conf
+			// Try to infer from control ID
+			var filePath, pattern string
+			if ctrl.ID == "6.1.2.2" {
+				filePath = "/etc/systemd/journald.conf"
+				pattern = "ForwardToSyslog=no"
+			} else if ctrl.ID == "6.1.2.3" {
+				filePath = "/etc/systemd/journald.conf"
+				pattern = "Compress=yes"
+			} else if ctrl.ID == "6.1.2.4" {
+				filePath = "/etc/systemd/journald.conf"
+				pattern = "Storage=persistent"
+			} else {
+				filePath = "/etc/systemd/journald.conf"
+				pattern = "."
+			}
+			checkResult := controls.CheckFileContent(filePath, pattern, "found")
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
+
+	case "RsyslogConfig":
+		// Check rsyslog configuration
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check /etc/rsyslog.conf
+			checkResult := controls.CheckFileContent("/etc/rsyslog.conf", ".", "found")
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
+
+	case "CronJob":
+		// Check cron job configuration
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check if cron service is enabled and AIDE cron job exists
+			cronEnabled := controls.CheckServiceStatus("cron", "enabled")
+			if cronEnabled.Status == controls.StatusPass {
+				// Check for AIDE cron job
+				aideCron := controls.CheckFileContent("/etc/cron.daily/aide", ".", "found")
+				if aideCron.Status == controls.StatusPass {
+					result.Status = "PASS"
+					result.ActualValue = "Cron enabled and AIDE job configured"
+				} else {
+					result.Status = "FAIL"
+					result.ActualValue = "Cron enabled but AIDE job not found"
+				}
+			} else {
+				result.Status = "FAIL"
+				result.ActualValue = "Cron service not enabled"
+			}
+			result.EvidenceCommand = fmt.Sprintf("cron: %s", cronEnabled.ActualValue)
+		}
+
+	case "AIDEConfig":
+		// Check AIDE configuration
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			expectedResult := ctrl.ExpectedResult
+			if expectedResult == "" {
+				expectedResult = "found"
+			}
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, expectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			// Default: check if AIDE config exists
+			checkResult := controls.CheckFileExists("/etc/aide/aide.conf", ctrl.Description)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
 		}
 
 	case "Manual":
