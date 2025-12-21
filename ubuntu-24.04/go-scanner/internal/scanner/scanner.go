@@ -389,26 +389,20 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			// Default audit command if not specified
 			auditCmd = "cut -d: -f3 /etc/passwd | sort | uniq -d"
 		}
-		// Commands with pipes need shell execution - pass full command
-		if strings.Contains(auditCmd, "|") {
-			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+		// CheckCommandOutputEmptyWithControl already handles pipes - just pass the command directly
+		// It will detect pipes and use shell execution automatically
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "DuplicateGIDs":
@@ -417,26 +411,19 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "cut -d: -f3 /etc/group | sort | uniq -d"
 		}
-		// Commands with pipes need shell execution
-		if strings.Contains(auditCmd, "|") {
-			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+		// CheckCommandOutputEmptyWithControl already handles pipes
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "DuplicateUsernames":
@@ -445,26 +432,19 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "cut -d: -f1 /etc/passwd | sort | uniq -d"
 		}
-		// Commands with pipes need shell execution
-		if strings.Contains(auditCmd, "|") {
-			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+		// CheckCommandOutputEmptyWithControl already handles pipes
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "DuplicateGroupnames":
@@ -473,26 +453,19 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "cut -d: -f1 /etc/group | sort | uniq -d"
 		}
-		// Commands with pipes need shell execution
-		if strings.Contains(auditCmd, "|") {
-			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+		// CheckCommandOutputEmptyWithControl already handles pipes
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "WorldWritableFiles", "OrphanedFiles":
@@ -600,26 +573,19 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "awk -F: '($1==\"shadow\") {print $NF}' /etc/group"
 		}
-		// Commands with quotes/special chars need shell execution
-		if strings.Contains(auditCmd, "'") || strings.Contains(auditCmd, "|") {
-			checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
+		// CheckCommandOutputEmptyWithControl handles shell constructs
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "GroupConsistency":
@@ -628,7 +594,8 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "for i in $(cut -s -d: -f4 /etc/passwd | sort -u); do grep -q -P \"^.*?:[^:]*:$i:\" /etc/group || echo \"Group $i is referenced by /etc/passwd but does not exist in /etc/group\"; done"
 		}
-		// Shell scripts with loops need shell execution
+		// CheckCommandOutputEmptyWithControl handles shell constructs - pass as single command
+		// For shell scripts, we need to pass via sh -c
 		checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
@@ -640,7 +607,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^\\/sbin\\/nologin$/ && $7!~/^\\/bin\\/false$/ && $3<1000) {print $1\":\"$6}' /etc/passwd | while IFS=: read -r user dir; do if [ ! -d \"$dir\" ]; then echo \"User $user home directory $dir does not exist\"; fi; done"
 		}
-		// Shell scripts with pipes and conditionals need shell execution
+		// Shell scripts with pipes and conditionals - pass via sh -c
 		checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
@@ -652,7 +619,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		if auditCmd == "" {
 			auditCmd = "awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^\\/sbin\\/nologin$/ && $7!~/^\\/bin\\/false$/ && $3<1000) {print $6}' /etc/passwd | while read -r dir; do if [ -d \"$dir\" ]; then for file in \"$dir\"/.[^.]*; do if [ ! -h \"$file\" ] && [ -f \"$file\" ]; then perms=$(stat -L -c \"%a\" \"$file\"); if [ \"$perms\" -gt 750 ]; then echo \"$file has permissions $perms\"; fi; fi; done; fi; done"
 		}
-		// Shell scripts with pipes, loops, and conditionals need shell execution
+		// Shell scripts with pipes, loops, and conditionals - pass via sh -c
 		checkResult := controls.CheckCommandOutputEmptyWithControl("sh", []string{"-c", auditCmd}, ctrl.Description, ctrl.ID)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue

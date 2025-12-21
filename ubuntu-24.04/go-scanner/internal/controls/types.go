@@ -72,7 +72,10 @@ type LegacyControl struct {
 	FilePath            string   `json:"file_path,omitempty"`
 	PasswdFile          string   `json:"passwd_file,omitempty"` // Alternative field name for /etc/passwd checks
 	ShadowFile          string   `json:"shadow_file,omitempty"` // Alternative field name for /etc/shadow checks
+	LogDirectory        string   `json:"log_directory,omitempty"` // Alternative field name for log directory checks
 	ExpectedPermissions string   `json:"expected_permissions,omitempty"`
+	ExpectedFilePerms   string   `json:"expected_file_permissions,omitempty"` // For LogFilePermissions
+	ExpectedDirPerms    string   `json:"expected_dir_permissions,omitempty"` // For LogFilePermissions
 	ExpectedOwner       string   `json:"expected_owner,omitempty"`
 	ExpectedGroup       string   `json:"expected_group,omitempty"`
 	Pattern             string   `json:"pattern,omitempty"`
@@ -187,6 +190,14 @@ func (lc *LegacyControl) Normalize() {
 	// Normalize shadow_file -> file_path (for controls that use shadow_file)
 	if lc.FilePath == "" && lc.ShadowFile != "" {
 		lc.FilePath = lc.ShadowFile
+	}
+	// Normalize log_directory -> file_path (for LogFilePermissions)
+	if lc.FilePath == "" && lc.LogDirectory != "" {
+		lc.FilePath = lc.LogDirectory
+	}
+	// Normalize expected_file_permissions -> expected_permissions (for LogFilePermissions)
+	if lc.ExpectedPermissions == "" && lc.ExpectedFilePerms != "" {
+		lc.ExpectedPermissions = lc.ExpectedFilePerms
 	}
 }
 
