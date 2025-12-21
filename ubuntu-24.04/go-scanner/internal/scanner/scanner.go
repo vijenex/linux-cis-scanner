@@ -119,6 +119,15 @@ func (s *Scanner) ExecuteControls() []Result {
 			// 3. If automated field is missing or true, automated (default to automated)
 			isAutomated := false
 			
+			// Debug: Log first few controls to verify parsing
+			if len(results) < 3 {
+				automatedStr := "nil"
+				if ctrl.Automated != nil {
+					automatedStr = fmt.Sprintf("%v", *ctrl.Automated)
+				}
+				fmt.Printf("  [DEBUG] %s: type=%s, automated=%s\n", ctrl.ID, ctrl.Type, automatedStr)
+			}
+			
 			if ctrl.Type == "Manual" {
 				// Explicitly manual type - always manual
 				isAutomated = false
