@@ -248,25 +248,60 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 
 	case "ServiceStatus", "Service", "ServiceNotInUse":
 		// Handle service checks - ServiceNotInUse expects "disabled" or "inactive"
+		// ServiceNotInUse may have service_names array - use first one
+		serviceName := ctrl.ServiceName
+		if serviceName == "" && len(ctrl.ServiceNames) > 0 {
+			serviceName = ctrl.ServiceNames[0]
+		}
 		expectedStatus := ctrl.ExpectedStatus
 		if expectedStatus == "" && ctrl.Type == "ServiceNotInUse" {
 			expectedStatus = "disabled"
 		}
-		checkResult := controls.CheckServiceStatus(ctrl.ServiceName, expectedStatus)
-		result.Status = string(checkResult.Status)
-		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		if serviceName == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing service_name or service_names"
+			result.EvidenceCommand = "N/A"
+		} else {
+			checkResult := controls.CheckServiceStatus(serviceName, expectedStatus)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
 
 	case "PackageInstalled", "Package", "MultiPackage":
 		// Handle package checks - default to "installed" if not specified
+		// Package may use "package" field or "package_names" array
+		packageName := ctrl.PackageName
+		if packageName == "" && ctrl.Package != "" {
+			packageName = ctrl.Package
+		}
+		if packageName == "" && len(ctrl.PackageNames) > 0 {
+			packageName = ctrl.PackageNames[0]
+		}
 		expectedStatus := ctrl.ExpectedStatus
+		if expectedStatus == "" && ctrl.ExpectedState != "" {
+			expectedStatus = ctrl.ExpectedState
+		}
+		if expectedStatus == "" && ctrl.ShouldBeInstalled != nil {
+			if *ctrl.ShouldBeInstalled {
+				expectedStatus = "installed"
+			} else {
+				expectedStatus = "not_installed"
+			}
+		}
 		if expectedStatus == "" {
 			expectedStatus = "installed"
 		}
-		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, expectedStatus)
-		result.Status = string(checkResult.Status)
-		result.ActualValue = checkResult.ActualValue
-		result.EvidenceCommand = checkResult.EvidenceCommand
+		if packageName == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing package_name, package, or package_names"
+			result.EvidenceCommand = "N/A"
+		} else {
+			checkResult := controls.CheckPackageInstalled(packageName, expectedStatus)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		}
 
 	case "PackageNotInstalled":
 		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, "not_installed")

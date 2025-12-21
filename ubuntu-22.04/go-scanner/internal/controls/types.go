@@ -55,22 +55,27 @@ type LegacyControl struct {
 	Remediation    string `json:"remediation"`
 	
 	// Legacy fields - will be migrated
-	ModuleName          string `json:"module_name,omitempty"`
-	MountPoint          string `json:"mount_point,omitempty"`
-	RequiredOption      string `json:"required_option,omitempty"`
-	ServiceName         string `json:"service_name,omitempty"`
-	PackageName         string `json:"package_name,omitempty"`
-	ExpectedStatus      string `json:"expected_status,omitempty"`
-	ParameterName       string `json:"parameter_name,omitempty"`
-	Parameter           string `json:"parameter,omitempty"`
-	ExpectedValue       string `json:"expected_value,omitempty"`
-	FilePath            string `json:"file_path,omitempty"`
-	ExpectedPermissions string `json:"expected_permissions,omitempty"`
-	ExpectedOwner       string `json:"expected_owner,omitempty"`
-	ExpectedGroup       string `json:"expected_group,omitempty"`
-	Pattern             string `json:"pattern,omitempty"`
-	ExpectedResult      string `json:"expected_result,omitempty"`
-	AuditCommand        string `json:"audit_command,omitempty"` // DEPRECATED - never execute
+	ModuleName          string   `json:"module_name,omitempty"`
+	MountPoint          string   `json:"mount_point,omitempty"`
+	RequiredOption      string   `json:"required_option,omitempty"`
+	ServiceName         string   `json:"service_name,omitempty"`
+	ServiceNames        []string `json:"service_names,omitempty"` // Array variant for ServiceNotInUse
+	PackageName         string   `json:"package_name,omitempty"`
+	Package             string   `json:"package,omitempty"`        // Alternative field name
+	PackageNames        []string `json:"package_names,omitempty"`  // Array variant
+	ExpectedStatus      string   `json:"expected_status,omitempty"`
+	ExpectedState       string   `json:"expected_state,omitempty"` // Alternative field name
+	ShouldBeInstalled   *bool    `json:"should_be_installed,omitempty"` // Boolean variant
+	ParameterName       string   `json:"parameter_name,omitempty"`
+	Parameter           string   `json:"parameter,omitempty"`
+	ExpectedValue       string   `json:"expected_value,omitempty"`
+	FilePath            string   `json:"file_path,omitempty"`
+	ExpectedPermissions string   `json:"expected_permissions,omitempty"`
+	ExpectedOwner       string   `json:"expected_owner,omitempty"`
+	ExpectedGroup       string   `json:"expected_group,omitempty"`
+	Pattern             string   `json:"pattern,omitempty"`
+	ExpectedResult      string   `json:"expected_result,omitempty"`
+	AuditCommand        string   `json:"audit_command,omitempty"` // DEPRECATED - never execute
 }
 
 // Typed CheckSpecs - one per control type
@@ -141,46 +146,83 @@ type CheckResult struct {
 
 // Normalize legacy controls for backward compatibility
 func (lc *LegacyControl) Normalize() {
+	// Normalize parameter fields
 	if lc.ParameterName == "" {
 		lc.ParameterName = lc.Parameter
+	}
+	
+	// Normalize package fields - handle "package" -> "package_name"
+	if lc.PackageName == "" && lc.Package != "" {
+		lc.PackageName = lc.Package
+	}
+	// Handle package_names array - use first element
+	if lc.PackageName == "" && len(lc.PackageNames) > 0 {
+		lc.PackageName = lc.PackageNames[0]
+	}
+	
+	// Normalize service fields - handle "service_names" array -> "service_name"
+	if lc.ServiceName == "" && len(lc.ServiceNames) > 0 {
+		lc.ServiceName = lc.ServiceNames[0]
+	}
+	
+	// Normalize expected_status from expected_state
+	if lc.ExpectedStatus == "" && lc.ExpectedState != "" {
+		lc.ExpectedStatus = lc.ExpectedState
+	}
+	// Handle should_be_installed boolean -> expected_status
+	if lc.ExpectedStatus == "" && lc.ShouldBeInstalled != nil {
+		if *lc.ShouldBeInstalled {
+			lc.ExpectedStatus = "installed"
+		} else {
+			lc.ExpectedStatus = "not_installed"
+		}
 	}
 }
 
 // Validate control before execution
 func (lc LegacyControl) Validate() error {
-	switch lc.Type {
-	case "SysctlParameter":
-		if lc.ParameterName == "" || lc.ExpectedValue == "" {
-			return fmt.Errorf("missing parameter_name or expected_value for %s", lc.ID)
+	// Normalize first to map alternative field names
+	normalized := lc
+	normalized.Normalize()
+	
+	switch normalized.Type {
+	case "SysctlParameter", "KernelParameter", "MultiKernelParameter":
+		if normalized.ParameterName == "" || normalized.ExpectedValue == "" {
+			return fmt.Errorf("missing parameter_name or expected_value for %s", normalized.ID)
 		}
-	case "ServiceStatus":
-		if lc.ServiceName == "" || lc.ExpectedStatus == "" {
-			return fmt.Errorf("missing service_name or expected_status for %s", lc.ID)
+	case "ServiceStatus", "Service", "ServiceNotInUse":
+		if normalized.ServiceName == "" {
+			return fmt.Errorf("missing service_name for %s", normalized.ID)
 		}
-	case "PackageInstalled", "PackageNotInstalled":
-		if lc.PackageName == "" {
-			return fmt.Errorf("missing package_name for %s", lc.ID)
+		// ExpectedStatus is optional for ServiceNotInUse (defaults to "disabled")
+		if normalized.Type != "ServiceNotInUse" && normalized.ExpectedStatus == "" {
+			return fmt.Errorf("missing expected_status for %s", normalized.ID)
 		}
-	case "FilePermissions":
-		if lc.FilePath == "" {
-			return fmt.Errorf("missing file_path for %s", lc.ID)
+	case "PackageInstalled", "PackageNotInstalled", "Package", "MultiPackage":
+		if normalized.PackageName == "" {
+			return fmt.Errorf("missing package_name for %s", normalized.ID)
 		}
-	case "FileContent":
-		if lc.FilePath == "" || lc.Pattern == "" {
-			return fmt.Errorf("missing file_path or pattern for %s", lc.ID)
+	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
+		if normalized.FilePath == "" {
+			return fmt.Errorf("missing file_path for %s", normalized.ID)
+		}
+	case "FileContent", "ConfigFile":
+		if normalized.FilePath == "" || normalized.Pattern == "" {
+			return fmt.Errorf("missing file_path or pattern for %s", normalized.ID)
 		}
 	case "MountPoint":
-		if lc.MountPoint == "" {
-			return fmt.Errorf("missing mount_point for %s", lc.ID)
+		if normalized.MountPoint == "" {
+			return fmt.Errorf("missing mount_point for %s", normalized.ID)
 		}
 	case "MountOption":
-		if lc.MountPoint == "" || lc.RequiredOption == "" {
-			return fmt.Errorf("missing mount_point or required_option for %s", lc.ID)
+		if normalized.MountPoint == "" || normalized.RequiredOption == "" {
+			return fmt.Errorf("missing mount_point or required_option for %s", normalized.ID)
 		}
 	case "KernelModule":
-		if lc.ModuleName == "" {
-			return fmt.Errorf("missing module_name for %s", lc.ID)
+		if normalized.ModuleName == "" {
+			return fmt.Errorf("missing module_name for %s", normalized.ID)
 		}
+	// For other types, validation is lenient - let execution handle it
 	}
 	return nil
 }

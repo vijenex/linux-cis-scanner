@@ -126,6 +126,10 @@ func runScan(cmd *cobra.Command, args []string) {
 	color.Red("Failed: %d\n", s.CountStatus(results, "FAIL"))
 	yellow.Printf("Manual: %d\n", s.CountStatus(results, "MANUAL"))
 	yellow.Printf("Not Applicable: %d\n", s.CountStatus(results, "NOT_APPLICABLE"))
+	errorCount := s.CountStatus(results, "ERROR")
+	if errorCount > 0 {
+		color.Red("Errors: %d\n", errorCount)
+	}
 	fmt.Printf("Duration: %v\n", duration.Round(time.Second))
 	cyan.Println("=============================================================")
 	fmt.Println()
