@@ -57,7 +57,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.6.4",
       "description": "The contents of the /etc/motd file are displayed to users after login and function as a message of the day for authenticated users.",
-      "remediation": "Run the following commands to set mode, owner, and group on /etc/motd :\n# chown root:root $(readlink -e /etc/motd)\n# chmod u -x,go-wx $(readlink -e /etc/motd) - OR -\nRun the following command to remove the /etc/motd file:\n# rm /etc/motd"
+      "remediation": "Run the following commands to set mode, owner, and group on /etc/motd :\n# chown root:root $(readlink -e /etc/motd)\n# chmod u -x,go-wx $(readlink -e /etc/motd) - OR -\nRun the following command to remove the /etc/motd file:\n# rm /etc/motd",
+      "automated": true
     },
     {
       "id": "1.6.5",
@@ -71,7 +72,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.6.5",
       "description": "The contents of the /etc/issue file are displayed to users prior to login for local terminals.",
-      "remediation": "Run the following commands to set mode, owner, and group on /etc/issue :\n# chown root:root $(readlink -e /etc/issue)\n# chmod u -x,go-wx $(readlink -e /etc/issue)"
+      "remediation": "Run the following commands to set mode, owner, and group on /etc/issue :\n# chown root:root $(readlink -e /etc/issue)\n# chmod u -x,go-wx $(readlink -e /etc/issue)",
+      "automated": true
     },
     {
       "id": "1.6.6",
@@ -85,7 +87,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.6.6",
       "description": "The contents of the /etc/issue.net file are displayed to users prior to login for remote connections from configured services.",
-      "remediation": "Run the following commands to set mode, owner, and group on /etc/issue.net :\n# chown root:root $(readlink -e /etc/issue.net)\n# chmod u -x,go-wx $(readlink -e /etc/issue.net)"
+      "remediation": "Run the following commands to set mode, owner, and group on /etc/issue.net :\n# chown root:root $(readlink -e /etc/issue.net)\n# chmod u -x,go-wx $(readlink -e /etc/issue.net)",
+      "automated": true
     }
   ]
 }

@@ -14,7 +14,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.1",
       "description": "The /dev/shm directory is a world -writable directory that can function as shared memory that facilitates inter process communication (IPC).",
-      "remediation": "For specific configuration requirements of the /dev/shm mount for your environment,\nmodify /etc/fstab .\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0"
+      "remediation": "For specific configuration requirements of the /dev/shm mount for your environment,\nmodify /etc/fstab .\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0",
+      "automated": true
     },
     {
       "id": "2.2.2",
@@ -27,7 +28,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.2",
       "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
-      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications.",
+      "automated": true
     },
     {
       "id": "2.2.3",
@@ -40,7 +42,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.3",
       "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
-      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications.",
+      "automated": true
     },
     {
       "id": "2.2.4",
@@ -53,7 +56,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.4",
       "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
-      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /dev/shm partition.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /dev/shm partition.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications.",
+      "automated": true
     },
     {
       "id": "2.2.5",
@@ -66,7 +70,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.5",
       "description": "The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for NIS/YP. It is a service that provides a method for looking up information from a central database.",
-      "remediation": "Uninstall ldap-utils :\n# apt purge ldap -utils"
+      "remediation": "Uninstall ldap-utils :\n# apt purge ldap -utils",
+      "automated": true
     },
     {
       "id": "2.2.6",
@@ -79,7 +84,8 @@
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.6",
       "description": "tnftp an enhanced FTP client, is the user interface to the Internet standard File Transfer Protocol. The program allows a user to transfer files to and from a remote network site.",
-      "remediation": "Run the following commands to uninstall tnftp & ftp:\n# apt purge ftp\n# apt purge tnftp"
+      "remediation": "Run the following commands to uninstall tnftp & ftp:\n# apt purge ftp\n# apt purge tnftp",
+      "automated": true
     }
   ]
 }
