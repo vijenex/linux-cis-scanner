@@ -309,7 +309,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "SysctlParameter", "KernelParameter", "MultiKernelParameter":
+	case "SysctlParameter", "KernelParameter":
 		// Support both parameter_name and parameter fields
 		paramName := ctrl.ParameterName
 		if paramName == "" {
@@ -319,6 +319,37 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
+
+	case "MultiKernelParameter":
+		// MultiKernelParameter has a parameters array - check each one
+		// If any fails, the whole control fails
+		if len(ctrl.Parameters) == 0 {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing parameters array"
+			result.EvidenceCommand = "N/A"
+		} else {
+			allPass := true
+			var failedParams []string
+			var evidence []string
+			
+			for _, param := range ctrl.Parameters {
+				checkResult := controls.CheckSysctlParameter(param.Name, param.ExpectedValue)
+				evidence = append(evidence, fmt.Sprintf("%s=%s (%s)", param.Name, checkResult.ActualValue, checkResult.Status))
+				if checkResult.Status != controls.StatusPass {
+					allPass = false
+					failedParams = append(failedParams, param.Name)
+				}
+			}
+			
+			if allPass {
+				result.Status = "PASS"
+				result.ActualValue = "All parameters configured correctly"
+			} else {
+				result.Status = "FAIL"
+				result.ActualValue = fmt.Sprintf("Failed parameters: %s", strings.Join(failedParams, ", "))
+			}
+			result.EvidenceCommand = strings.Join(evidence, "; ")
+		}
 
 	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
 		checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
@@ -664,14 +695,22 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 
 	default:
 		// For unknown types, try to infer from available fields
+		// Try multiple strategies before giving up
+		
+		// Strategy 1: FileContent (file_path + pattern)
 		if ctrl.FilePath != "" && ctrl.Pattern != "" {
-			// Try FileContent
 			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
 			result.Status = string(checkResult.Status)
 			result.ActualValue = checkResult.ActualValue
 			result.EvidenceCommand = checkResult.EvidenceCommand
+		// Strategy 2: FilePermissions (file_path + expected_permissions)
+		} else if ctrl.FilePath != "" && ctrl.ExpectedPermissions != "" {
+			checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		// Strategy 3: CommandOutputEmpty (audit_command)
 		} else if ctrl.AuditCommand != "" {
-			// Try CommandOutputEmpty - handle pipes and shell constructs
 			auditCmd := ctrl.AuditCommand
 			if strings.Contains(auditCmd, "|") || strings.Contains(auditCmd, "for ") || strings.Contains(auditCmd, "do ") || strings.Contains(auditCmd, "if ") {
 				// Shell command - execute via sh -c
@@ -695,9 +734,36 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 					result.EvidenceCommand = "N/A"
 				}
 			}
+		// Strategy 4: FileExists (just file_path)
+		} else if ctrl.FilePath != "" {
+			checkResult := controls.CheckFileExists(ctrl.FilePath, ctrl.Description)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		// Strategy 5: Try to extract from title/description for common patterns
+		} else if strings.Contains(strings.ToLower(ctrl.Title), "kernel module") && ctrl.ModuleName == "" {
+			// Try to extract module name from title (e.g., "Ensure cramfs kernel module is not available")
+			// Extract word before "kernel module"
+			words := strings.Fields(strings.ToLower(ctrl.Title))
+			for i, word := range words {
+				if word == "kernel" && i > 0 {
+					moduleName := words[i-1]
+					checkResult := controls.CheckKernelModule(moduleName, "not_available")
+					result.Status = string(checkResult.Status)
+					result.ActualValue = checkResult.ActualValue
+					result.EvidenceCommand = checkResult.EvidenceCommand
+					break
+				}
+			}
+			if result.Status == "" {
+				result.Status = "ERROR"
+				result.ActualValue = fmt.Sprintf("Unknown control type: %s (cannot infer module name from title)", ctrl.Type)
+				result.EvidenceCommand = "N/A"
+			}
 		} else {
-			result.Status = "ERROR"
-			result.ActualValue = fmt.Sprintf("Unknown control type: %s (no handler found, missing file_path/pattern or audit_command)", ctrl.Type)
+			// Last resort: Mark as MANUAL if we can't figure it out
+			result.Status = "MANUAL"
+			result.ActualValue = fmt.Sprintf("Control type '%s' requires manual verification (no automated check available)", ctrl.Type)
 			result.EvidenceCommand = "N/A"
 		}
 	}

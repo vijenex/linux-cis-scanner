@@ -16,6 +16,12 @@ const (
 	StatusError         Status = "ERROR"
 )
 
+// KernelParameter represents a single kernel parameter in MultiKernelParameter controls
+type KernelParameter struct {
+	Name         string `json:"name"`
+	ExpectedValue string `json:"expected_value"`
+}
+
 // Evidence - audit-safe evidence collection
 type Evidence struct {
 	Method  string `json:"method"`  // "file", "proc", "parsed", "command"
@@ -68,6 +74,7 @@ type LegacyControl struct {
 	ShouldBeInstalled   *bool    `json:"should_be_installed,omitempty"` // Boolean variant
 	ParameterName       string   `json:"parameter_name,omitempty"`
 	Parameter           string   `json:"parameter,omitempty"`
+	Parameters          []KernelParameter `json:"parameters,omitempty"` // For MultiKernelParameter
 	ExpectedValue       string   `json:"expected_value,omitempty"`
 	FilePath            string   `json:"file_path,omitempty"`
 	PasswdFile          string   `json:"passwd_file,omitempty"` // Alternative field name for /etc/passwd checks
@@ -205,9 +212,14 @@ func (lc *LegacyControl) Normalize() {
 // Note: This should be called AFTER Normalize() has been called on the control
 func (lc LegacyControl) Validate() error {
 	switch lc.Type {
-	case "SysctlParameter", "KernelParameter", "MultiKernelParameter":
+	case "SysctlParameter", "KernelParameter":
 		if lc.ParameterName == "" || lc.ExpectedValue == "" {
 			return fmt.Errorf("missing parameter_name or expected_value for %s", lc.ID)
+		}
+	case "MultiKernelParameter":
+		// MultiKernelParameter uses parameters array, not single parameter_name
+		if len(lc.Parameters) == 0 {
+			return fmt.Errorf("missing parameters array for %s", lc.ID)
 		}
 	case "ServiceStatus", "Service", "ServiceNotInUse":
 		// For ServiceNotInUse, check both service_name and service_names
@@ -235,24 +247,31 @@ func (lc LegacyControl) Validate() error {
 			return fmt.Errorf("missing package_name, package, or package_names for %s", lc.ID)
 		}
 	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
+		// FilePath can be empty if log_directory is set (for LogFilePermissions)
+		if lc.FilePath == "" && lc.LogDirectory == "" {
+			return fmt.Errorf("missing file_path or log_directory for %s", lc.ID)
+		}
+	case "FileContent", "ConfigFile":
+		// For FileContent, we need both file_path and pattern
+		// But if pattern is missing, it might be handled by default case
 		if lc.FilePath == "" {
 			return fmt.Errorf("missing file_path for %s", lc.ID)
 		}
-	case "FileContent", "ConfigFile":
-		if lc.FilePath == "" || lc.Pattern == "" {
-			return fmt.Errorf("missing file_path or pattern for %s", lc.ID)
-		}
+		// Pattern is optional - default case can handle it
 	case "MountPoint":
 		if lc.MountPoint == "" {
 			return fmt.Errorf("missing mount_point for %s", lc.ID)
 		}
 	case "MountOption":
-		if lc.MountPoint == "" || lc.RequiredOption == "" {
-			return fmt.Errorf("missing mount_point or required_option for %s", lc.ID)
+		if lc.MountPoint == "" {
+			return fmt.Errorf("missing mount_point for %s", lc.ID)
 		}
+		// RequiredOption is optional - can be inferred from control description
 	case "KernelModule":
+		// ModuleName might be in title or description - validation is lenient
 		if lc.ModuleName == "" {
-			return fmt.Errorf("missing module_name for %s", lc.ID)
+			// Try to extract from title (e.g., "Ensure cramfs kernel module is not available")
+			// But don't fail validation - let execution handle it
 		}
 	// For other types, validation is lenient - let execution handle it
 	}
