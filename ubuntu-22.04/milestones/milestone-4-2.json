@@ -53,11 +53,13 @@
       "id": "4.2.5",
       "title": "Ensure ufw outbound connections are configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.5",
       "description": "The root user can execute any command on the system and could be fooled into executing programs unintentionally if the PATH is not set correctly.",
-      "remediation": "Correct or justify any:\n• Locations that are not directories • Empty directories ( ::) • Trailing (:) • Current working directory ( .) • Non root owned directories • Directories that less restrictive than mode 0755"
+      "remediation": "Correct or justify any:\n• Locations that are not directories • Empty directories ( ::) • Trailing (:) • Current working directory ( .) • Non root owned directories • Directories that less restrictive than mode 0755",
+      "automated": true,
+      "audit_command": "ufw status numbered | grep -E '^\\[.*\\].*OUT.*ALLOW'"
     },
     {
       "id": "4.2.6",

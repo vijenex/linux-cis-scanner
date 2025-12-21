@@ -68,13 +68,14 @@
       "title": "Ensure ufw outbound connections are configured",
       "section": "4.2 Configure UncomplicatedFirewall",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "expected": "UFW outbound connections configured according to site policy",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.5",
       "description": "Configure the firewall rules for new outbound connections.\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system.\n• Unlike iptables, when a new outbound rule is added, ufw automatically takes care of associated established connections, so no rules for the latter kind are required.",
-      "remediation": "Configure ufw in accordance with site policy. The following commands will implement a policy to allow all outbound connections on all interfaces:\n# ufw allow out on all"
+      "remediation": "Configure ufw in accordance with site policy. The following commands will implement a policy to allow all outbound connections on all interfaces:\n# ufw allow out on all",
+      "audit_command": "ufw status numbered | grep -E '^\\[.*\\].*OUT.*ALLOW'"
     },
     {
       "id": "4.2.6",

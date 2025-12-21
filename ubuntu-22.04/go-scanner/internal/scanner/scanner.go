@@ -112,17 +112,26 @@ func (s *Scanner) ExecuteControls() []Result {
 				continue
 			}
 			
-			// Handle missing "automated" field - if missing, infer from type
-			// Most control types are automated, except "Manual" type
-			isAutomated := ctrl.Automated
-			if !isAutomated && ctrl.Type != "Manual" {
-				// If automated field is missing but type is not "Manual", assume automated
-				// This handles legacy milestone files without "automated" field
+			// Determine if control is automated
+			// Logic: If type is "Manual", always manual. Otherwise, check automated field.
+			// If automated field is missing (defaults to false), but type is not "Manual", assume automated.
+			isAutomated := false
+			
+			if ctrl.Type == "Manual" {
+				// Explicitly manual type - always manual
+				isAutomated = false
+			} else if ctrl.Automated {
+				// Explicitly set to automated
+				isAutomated = true
+			} else {
+				// automated field is false or missing, but type is not "Manual"
+				// Assume automated (most control types are automated)
+				// Only truly manual controls should have type "Manual"
 				isAutomated = true
 			}
 			
 			// Skip non-automated controls
-			if !isAutomated || ctrl.Type == "Manual" {
+			if !isAutomated {
 				results = append(results, Result{
 					ID:          ctrl.ID,
 					Title:       ctrl.Title,

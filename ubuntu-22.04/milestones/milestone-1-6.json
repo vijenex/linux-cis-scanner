@@ -7,31 +7,43 @@
       "id": "1.6.1",
       "title": "Ensure /etc/motd is configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "FileContent",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.6.1",
       "description": "The contents of the /etc/motd file are displayed to users after login and function as a message of the day for authenticated users.\nUnix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information: - machine architecture - operating system release - operating system name - operating system version",
-      "remediation": "Edit the file found in /etc/motd.d/* with the appropriate contents according to your site policy, remove any instances of , , , or references to the OS platform - OR - - IF - the motd is not used, this file can be removed.\nRun the following command to remove the motd file:\n# rm /etc/motd\nRun the following script and review and/or update all returned files' contents to:\n• Remove all system information ( , ; , ) • Remove any refence to the operating system • Ensure contents follow local site policy\n#!/usr/bin/env bash a_files=() for l_file in /etc/motd,.d/*; do if grep -Psqi -- \"(\\\\|\\\\|\\\\|\\\\|$(grep ^ID= /etc/os -release | cut -d= -f2 | sed -e 's/\"//g') )\" \"$l_file\"; then echo -e \"- File: \\\"$l_file \\\" includes system information. Edit this file to remove these entries\" else a_files+=(\"$l_file\") fi done if [ \"$#a_files[@]\" -gt 0 ]; then echo -e \"- ** Please review the following files and verify their contents follow local site policy ** \" printf '%s ' \"$a_files[@]\" fi"
+      "remediation": "Edit the file found in /etc/motd.d/* with the appropriate contents according to your site policy, remove any instances of , , , or references to the OS platform - OR - - IF - the motd is not used, this file can be removed.\nRun the following command to remove the motd file:\n# rm /etc/motd\nRun the following script and review and/or update all returned files' contents to:\n• Remove all system information ( , ; , ) • Remove any refence to the operating system • Ensure contents follow local site policy\n#!/usr/bin/env bash a_files=() for l_file in /etc/motd,.d/*; do if grep -Psqi -- \"(\\\\|\\\\|\\\\|\\\\|$(grep ^ID= /etc/os -release | cut -d= -f2 | sed -e 's/\"//g') )\" \"$l_file\"; then echo -e \"- File: \\\"$l_file \\\" includes system information. Edit this file to remove these entries\" else a_files+=(\"$l_file\") fi done if [ \"$#a_files[@]\" -gt 0 ]; then echo -e \"- ** Please review the following files and verify their contents follow local site policy ** \" printf '%s ' \"$a_files[@]\" fi",
+      "automated": true,
+      "file_path": "/etc/motd",
+      "pattern": "(Linux|Ubuntu|kernel|release|version|\\d+\\.\\d+)",
+      "expected_result": "not_found"
     },
     {
       "id": "1.6.2",
       "title": "Ensure /etc/issue is configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "FileContent",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.6.2",
       "description": "The contents of the /etc/issue file are displayed to users prior to login for local terminals.\nUnix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information: - machine architecture - operating system release - operating system name - operating system version - or the operating system's name",
-      "remediation": "Edit the /etc/issue file with the appropriate contents according to your site policy,\nremove any instances of , , , or references to the OS platform Example:\n# echo \"Authorized users only. All activity may be monitored and reported.\" > /etc/issue"
+      "remediation": "Edit the /etc/issue file with the appropriate contents according to your site policy,\nremove any instances of , , , or references to the OS platform Example:\n# echo \"Authorized users only. All activity may be monitored and reported.\" > /etc/issue",
+      "automated": true,
+      "file_path": "/etc/issue",
+      "pattern": "(Linux|Ubuntu|kernel|release|version|\\d+\\.\\d+)",
+      "expected_result": "not_found"
     },
     {
       "id": "1.6.3",
       "title": "Ensure /etc/issue.net is configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "FileContent",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.6.3",
       "description": "The contents of the /etc/issue.net file are displayed to users prior to login for remote connections from configured services.\nUnix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information: - machine architecture - operating system release - operating system name - operating system version",
-      "remediation": "Edit the /etc/issue.net file with the appropriate contents according to your site policy,\nremove any instances of , , , or references to the OS platform Example:\n# echo \"Authorized users only. All activity may be monitored and reported.\" > /etc/issue.net"
+      "remediation": "Edit the /etc/issue.net file with the appropriate contents according to your site policy,\nremove any instances of , , , or references to the OS platform Example:\n# echo \"Authorized users only. All activity may be monitored and reported.\" > /etc/issue.net",
+      "automated": true,
+      "file_path": "/etc/issue.net",
+      "pattern": "(Linux|Ubuntu|kernel|release|version|\\d+\\.\\d+)",
+      "expected_result": "not_found"
     },
     {
       "id": "1.6.4",

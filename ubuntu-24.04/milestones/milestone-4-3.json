@@ -36,13 +36,14 @@
       "title": "Ensure iptables are flushed with nftables",
       "section": "4.3 Configure nftables",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "expected": "iptables rules flushed when using nftables",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.3",
       "description": "nftables is a replacement for iptables, ip6tables, ebtables and arptables",
-      "remediation": "Run the following commands to flush iptables:\nFor iptables:\n# iptables -F For ip6tables:\n# ip6tables -F"
+      "remediation": "Run the following commands to flush iptables:\nFor iptables:\n# iptables -F For ip6tables:\n# ip6tables -F",
+      "audit_command": "iptables -L -n | grep -v '^Chain' | grep -v '^target' | grep -v '^$' | grep -v '^\\s*$'"
     },
     {
       "id": "4.3.4",
@@ -100,13 +101,14 @@
       "title": "Ensure nftables outbound and established connections are configured",
       "section": "4.3 Configure nftables",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "expected": "nftables outbound and established connections configured according to site policy",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.7",
       "description": "Configure the firewall rules for new outbound, and established connections",
-      "remediation": "Configure nftables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# nft add rule inet filter input ip protocol tcp ct state established accept\n# nft add rule inet filter input ip protocol udp ct state established accept\n# nft add rule inet filter output ip protocol tcp ct state new,related,established accept\n# nft add rule inet filter output ip protocol udp ct state new,related,established accept"
+      "remediation": "Configure nftables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# nft add rule inet filter input ip protocol tcp ct state established accept\n# nft add rule inet filter input ip protocol udp ct state established accept\n# nft add rule inet filter output ip protocol tcp ct state new,related,established accept\n# nft add rule inet filter output ip protocol udp ct state new,related,established accept",
+      "audit_command": "nft list ruleset | grep -E '(output|ct state established|ct state new)'"
     },
     {
       "id": "4.3.8",

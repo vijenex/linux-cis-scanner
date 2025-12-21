@@ -23,13 +23,16 @@
       "title": "Ensure journald log file access is configured",
       "section": "6.1.1.2 Configure systemd-journald service",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "FileContent",
       "expected": "Journald log file access properly configured",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.1.2",
       "description": "Journald will create logfiles that do not already exist on the system. This setting controls what permissions will be applied to these newly created files.",
-      "remediation": "If the default configuration is not appropriate for the site specific requirements, copy /usr/lib/tmpfiles.d/systemd.conf to /etc/tmpfiles.d/systemd.conf and\nmodify as required. Recommended mode for logfiles is 0640 or more restrictive."
+      "remediation": "If the default configuration is not appropriate for the site specific requirements, copy /usr/lib/tmpfiles.d/systemd.conf to /etc/tmpfiles.d/systemd.conf and\nmodify as required. Recommended mode for logfiles is 0640 or more restrictive.",
+      "file_path": "/etc/systemd/journald.conf",
+      "pattern": "Storage=(persistent|volatile|auto|none)",
+      "expected_result": "found"
     },
     {
       "id": "6.1.1.4",

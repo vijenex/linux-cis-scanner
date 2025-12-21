@@ -214,13 +214,14 @@
       "title": "Ensure SUID and SGID files are reviewed",
       "section": "7.1 System File Permissions",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "expected": "SUID and SGID files reviewed and verified as legitimate",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "7.1.13",
       "description": "The owner of a file can set the file's permissions to run with the owner's or group's permissions, even if the user running the program is not the owner or a member of the group. The most common reason for a SUID or SGID program is to enable users to perfo rm functions (such as changing their password) that require root privileges.",
-      "remediation": "Ensure that no rogue SUID or SGID programs have been introduced into the system.\nReview the files returned by the action in the Audit section and confirm the integrity of these binaries."
+      "remediation": "Ensure that no rogue SUID or SGID programs have been introduced into the system.\nReview the files returned by the action in the Audit section and confirm the integrity of these binaries.",
+      "audit_command": "df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f \\( -perm -4000 -o -perm -2000 \\) 2>/dev/null"
     }
   ]
 }

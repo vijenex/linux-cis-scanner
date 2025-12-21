@@ -43,81 +43,97 @@
       "id": "4.4.2.1",
       "title": "Ensure iptables default deny firewall policy",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.2.1",
       "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.\nNotes:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well",
-      "remediation": "Run the following commands to implement a default DROP policy:\n# iptables -P INPUT DROP\n# iptables -P OUTPUT DROP\n# iptables -P FORWARD DROP"
+      "remediation": "Run the following commands to implement a default DROP policy:\n# iptables -P INPUT DROP\n# iptables -P OUTPUT DROP\n# iptables -P FORWARD DROP",
+      "automated": true,
+      "audit_command": "iptables -L | grep -E 'Chain (INPUT|OUTPUT|FORWARD).*policy (DROP|REJECT)'"
     },
     {
       "id": "4.4.2.2",
       "title": "Ensure iptables loopback traffic is configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.2.2",
       "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network (127.0.0.0/8).\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well",
-      "remediation": "Run the following commands to implement the loopback rules:\n# iptables -A INPUT -i lo -j ACCEPT\n# iptables -A OUTPUT -o lo -j ACCEPT\n# iptables -A INPUT -s 127.0.0.0/8 -j DROP"
+      "remediation": "Run the following commands to implement the loopback rules:\n# iptables -A INPUT -i lo -j ACCEPT\n# iptables -A OUTPUT -o lo -j ACCEPT\n# iptables -A INPUT -s 127.0.0.0/8 -j DROP",
+      "automated": true,
+      "audit_command": "iptables -L INPUT -v -n | grep -E 'lo.*ACCEPT'"
     },
     {
       "id": "4.4.2.3",
       "title": "Ensure iptables outbound and established connections are configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.2.3",
       "description": "Configure the firewall rules for new outbound, and established connections.\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well",
-      "remediation": "Configure iptables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# iptables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT\n# iptables -A OUTPUT -p udp -m state --state NEW,ESTABLISHED -j ACCEPT\n# iptables -A INPUT -p tcp -m state --state ESTABLISHED -j ACCEPT\n# iptables -A INPUT -p udp -m state --state ESTA BLISHED -j ACCEPT"
+      "remediation": "Configure iptables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# iptables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT\n# iptables -A OUTPUT -p udp -m state --state NEW,ESTABLISHED -j ACCEPT\n# iptables -A INPUT -p tcp -m state --state ESTABLISHED -j ACCEPT\n# iptables -A INPUT -p udp -m state --state ESTA BLISHED -j ACCEPT",
+      "automated": true,
+      "audit_command": "iptables -L OUTPUT -v -n | grep -E '(ESTABLISHED|NEW).*ACCEPT'"
     },
     {
       "id": "4.4.2.4",
       "title": "Ensure iptables firewall rules exist for all open ports",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.2.4",
       "description": "Any ports that have been opened on non -loopback addresses need firewall rules to govern traffic.\nNotes:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well • The remediation command opens up the port to traffic from all sources. Consult iptables documentation and set any restrictions in compliance with site policy",
-      "remediation": "For each port identified in the audit which does not have a firewall rule establish a proper rule for accepting inbound connections:\n# iptables -A INPUT -p <protocol> --dport <port> -m state --state NEW -j ACCEPT"
+      "remediation": "For each port identified in the audit which does not have a firewall rule establish a proper rule for accepting inbound connections:\n# iptables -A INPUT -p <protocol> --dport <port> -m state --state NEW -j ACCEPT",
+      "automated": true,
+      "audit_command": "ss -tuln | awk '{print $5}' | cut -d: -f2 | sort -u | while read port; do iptables -L INPUT -v -n | grep -q \":$port\" || echo \"Port $port not in iptables\"; done"
     },
     {
       "id": "4.4.3.1",
       "title": "Ensure ip6tables default deny firewall policy",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.3.1",
       "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well",
-      "remediation": "- IF - IPv6 is enabled on your system:\nRun the following commands to implement a default DROP policy:\n# ip6tables -P INPUT DROP\n# ip6tables -P OUTPUT DROP\n# ip6tables -P FORWARD DROP"
+      "remediation": "- IF - IPv6 is enabled on your system:\nRun the following commands to implement a default DROP policy:\n# ip6tables -P INPUT DROP\n# ip6tables -P OUTPUT DROP\n# ip6tables -P FORWARD DROP",
+      "automated": true,
+      "audit_command": "ip6tables -L | grep -E 'Chain (INPUT|OUTPUT|FORWARD).*policy (DROP|REJECT)'"
     },
     {
       "id": "4.4.3.2",
       "title": "Ensure ip6tables loopback traffic is configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.3.2",
       "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network (::1).\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well",
-      "remediation": "Run the following commands to implement the loopback rules:\n# ip6tables -A INPUT -i lo -j ACCEPT\n# ip6tables -A OUTPUT -o lo -j ACCEPT\n# ip6tables -A INPUT -s ::1 -j DROP"
+      "remediation": "Run the following commands to implement the loopback rules:\n# ip6tables -A INPUT -i lo -j ACCEPT\n# ip6tables -A OUTPUT -o lo -j ACCEPT\n# ip6tables -A INPUT -s ::1 -j DROP",
+      "automated": true,
+      "audit_command": "ip6tables -L INPUT -v -n | grep -E 'lo.*ACCEPT'"
     },
     {
       "id": "4.4.3.3",
       "title": "Ensure ip6tables outbound and established connections are configured",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.3.3",
       "description": "Configure the firewall rules for new outbound, and established IPv6 connections.\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well",
-      "remediation": "Configure iptables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# ip6tables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT\n# ip6tables -A OUTPUT -p udp -m state --state NEW,ESTABLISHED -j ACCEPT\n# ip6tables -A INPUT -p tcp -m state --state ESTABLISHED -j ACCEPT\n# ip6tables -A INPUT -p udp -m state --state ESTABLISHED -j ACCEPT"
+      "remediation": "Configure iptables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# ip6tables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT\n# ip6tables -A OUTPUT -p udp -m state --state NEW,ESTABLISHED -j ACCEPT\n# ip6tables -A INPUT -p tcp -m state --state ESTABLISHED -j ACCEPT\n# ip6tables -A INPUT -p udp -m state --state ESTABLISHED -j ACCEPT",
+      "automated": true,
+      "audit_command": "ip6tables -L OUTPUT -v -n | grep -E '(ESTABLISHED|NEW).*ACCEPT'"
     },
     {
       "id": "4.4.3.4",
       "title": "Ensure ip6tables firewall rules exist for all open ports",
       "profile": "Level1",
-      "type": "Manual",
+      "type": "CommandOutputEmpty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.4.3.4",
       "description": "Any ports that have been opened on non -loopback addresses need firewall rules to govern traffic.\nNotes:\n• Changing firewall settings while connected over network can result in being locked out of the system • Remediation will only affect the active system firewall, be sure to configure the default policy in your firewall management to apply on boot as well • The remediation command opens up the port to traffic from all sources. Consult iptables documentation and set any restrictions in compliance with site policy",
-      "remediation": "For each port identified in the audit which does not have a firewall rule establish a proper rule for accepting inbound connections:\n# ip6tables -A INPUT -p <protocol> --dport <port> -m state --state NEW -j ACCEPT"
+      "remediation": "For each port identified in the audit which does not have a firewall rule establish a proper rule for accepting inbound connections:\n# ip6tables -A INPUT -p <protocol> --dport <port> -m state --state NEW -j ACCEPT",
+      "automated": true,
+      "audit_command": "ss -tuln | awk '{print $5}' | grep '\\[.*\\]' | cut -d: -f2 | sort -u | while read port; do ip6tables -L INPUT -v -n | grep -q \":$port\" || echo \"Port $port not in ip6tables\"; done"
     }
   ]
 }
