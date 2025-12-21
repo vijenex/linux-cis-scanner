@@ -237,14 +237,24 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "ServiceStatus":
-		checkResult := controls.CheckServiceStatus(ctrl.ServiceName, ctrl.ExpectedStatus)
+	case "ServiceStatus", "Service", "ServiceNotInUse":
+		// Handle service checks - ServiceNotInUse expects "disabled" or "inactive"
+		expectedStatus := ctrl.ExpectedStatus
+		if expectedStatus == "" && ctrl.Type == "ServiceNotInUse" {
+			expectedStatus = "disabled"
+		}
+		checkResult := controls.CheckServiceStatus(ctrl.ServiceName, expectedStatus)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "PackageInstalled":
-		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, ctrl.ExpectedStatus)
+	case "PackageInstalled", "Package", "MultiPackage":
+		// Handle package checks - default to "installed" if not specified
+		expectedStatus := ctrl.ExpectedStatus
+		if expectedStatus == "" {
+			expectedStatus = "installed"
+		}
+		checkResult := controls.CheckPackageInstalled(ctrl.PackageName, expectedStatus)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
@@ -255,7 +265,7 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "SysctlParameter":
+	case "SysctlParameter", "KernelParameter", "MultiKernelParameter":
 		// Support both parameter_name and parameter fields
 		paramName := ctrl.ParameterName
 		if paramName == "" {
@@ -266,19 +276,19 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "FilePermissions":
+	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
 		checkResult := controls.CheckFilePermissions(ctrl.FilePath, ctrl.ExpectedPermissions, ctrl.ExpectedOwner, ctrl.ExpectedGroup)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "FileContent":
+	case "FileContent", "ConfigFile":
 		checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "SSHConfig":
+	case "SSHConfig", "SSHDConfig":
 		checkResult := controls.CheckSSHConfig(ctrl.Parameter, ctrl.ExpectedValue, ctrl.Description)
 		result.Status = string(checkResult.Status)
 		result.ActualValue = checkResult.ActualValue
@@ -328,11 +338,164 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	default:
+	case "DuplicateUIDs", "DuplicateGIDs", "DuplicateUsernames", "DuplicateGroupnames":
+		// These use CommandOutputEmpty internally
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing audit command"
+			result.EvidenceCommand = "N/A"
+		} else {
+			parts := strings.Fields(auditCmd)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid command format"
+				result.EvidenceCommand = auditCmd
+			}
+		}
+
+	case "WorldWritableFiles", "OrphanedFiles":
+		// These use CommandOutputEmpty internally
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing audit command"
+			result.EvidenceCommand = "N/A"
+		} else {
+			parts := strings.Fields(auditCmd)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid command format"
+				result.EvidenceCommand = auditCmd
+			}
+		}
+
+	case "UFWStatus", "UFWLoopback", "UFWOpenPorts", "UFWDefaultPolicy", "UFWWithNftables":
+		// UFW checks use CommandOutputEmpty
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing audit command"
+			result.EvidenceCommand = "N/A"
+		} else {
+			parts := strings.Fields(auditCmd)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid command format"
+				result.EvidenceCommand = auditCmd
+			}
+		}
+
+	case "NftablesTable", "NftablesBaseChains", "NftablesLoopback", "NftablesDefaultPolicy", "NftablesPersistent":
+		// Nftables checks use CommandOutputEmpty
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing audit command"
+			result.EvidenceCommand = "N/A"
+		} else {
+			parts := strings.Fields(auditCmd)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid command format"
+				result.EvidenceCommand = auditCmd
+			}
+		}
+
+	case "JournaldConfig", "RsyslogConfig", "CronJob", "MTALocalOnly", "EmptyPasswords", "EmptyGroup", 
+		 "ShadowedPasswords", "GroupConsistency", "UserHomeDirs", "UserDotFiles", "CoreDumpRestriction",
+		 "BootParameter", "AppArmorProfile", "AIDEConfig", "SingleLoggingSystem", "SingleFirewall", "WirelessInterface":
+		// These use FileContent, FilePermissions, or CommandOutputEmpty
+		// Try FileContent first
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			// Fall back to CommandOutputEmpty
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid control configuration"
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Missing required fields (file_path/pattern or audit_command)"
+			result.EvidenceCommand = "N/A"
+		}
+
+	case "Manual":
+		// Explicitly manual - should have been caught earlier, but handle it here too
 		result.Status = "MANUAL"
 		result.ActualValue = "Manual verification required"
 		result.EvidenceCommand = "N/A"
 		result.Description = "This control requires manual verification"
+
+	default:
+		// For unknown types, try to infer from available fields
+		if ctrl.FilePath != "" && ctrl.Pattern != "" {
+			// Try FileContent
+			checkResult := controls.CheckFileContent(ctrl.FilePath, ctrl.Pattern, ctrl.ExpectedResult)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.EvidenceCommand
+		} else if ctrl.AuditCommand != "" {
+			// Try CommandOutputEmpty
+			parts := strings.Fields(ctrl.AuditCommand)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = fmt.Sprintf("Unknown control type: %s (no handler found)", ctrl.Type)
+				result.EvidenceCommand = "N/A"
+			}
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = fmt.Sprintf("Unknown control type: %s (no handler found)", ctrl.Type)
+			result.EvidenceCommand = "N/A"
+		}
 	}
 
 	return result
