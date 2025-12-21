@@ -15,7 +15,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "sudo allows a permitted user to execute a command as the superuser or another user, as specified by the security policy. The invoking user's real (not effective) user ID is used to determine the user name with which to query the security policy.",
+      "remediation": "First determine if LDAP functionality is required. If so, then install sudo-ldap , else install sudo .\nExample:\n# apt install sudo"
     },
     {
       "id": "5.2.2",
@@ -31,7 +32,8 @@
       "required_setting": "Defaults use_pty",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "sudo can be configured to run only from a pseudo terminal ( pseudo-pty).",
+      "remediation": "Edit the file /etc/sudoers with visudo or a file in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and add the following line:\nDefaults use_pty\nEdit the file /etc/sudoers with visudo and any files in /etc/sudoers.d/ with visudo -f <PATH TO FILE> and remove any occurrence of !use_pty Note:\n• sudo will read each file in /etc/sudoers.d , skipping file names that end in ~ or contain a . character to avoid causing problems with package manager or editor temporary/backup files.\n• Files are parsed in sorted lexical order. That is, /etc/sudoers.d/01_first will be parsed before /etc/sudoers.d/10_second .\n• Be aware that because the sorting is lexical, not numeric, /etc/sudoers.d/1_whoops would be loaded after /etc/sudoers.d/10_second .\n• Using a consistent number of leading zeroes in the file names can be used to avoid such problems."
     },
     {
       "id": "5.2.3",
@@ -47,7 +49,8 @@
       "required_setting": "Defaults logfile=",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "sudo can use a custom log file",
+      "remediation": "Edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo or visudo -f <PATH TO FILE> and add the following line:\nExample:\nDefaults logfile=\"/var/log/sudo.log\" Note:\n• sudo will read each file in /etc/sudoers.d , skipping file names that end in ~ or contain a . character to avoid causing problems with package manager or editor temporary/backup files.\n• Files are parsed in sorted lexical order. That is, /etc/sudoers.d/01_first will be parsed before /etc/sudoers.d/10_second .\n• Be aware that because the sorting is lexical, not numeric, /etc/sudoers.d/1_whoops would be loaded after /etc/sudoers.d/10_second .\n• Using a consistent number of leading zeroes in the file names can be used to avoid such problems."
     },
     {
       "id": "5.2.4",
@@ -63,7 +66,8 @@
       "prohibited_setting": "NOPASSWD",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The operating system must be configured so that users must provide a password for privilege escalation.",
+      "remediation": "Based on the outcome of the audit procedure, use visudo -f <PATH TO FILE> to edit the relevant sudoers file.\nRemove any line with occurrences of NOPASSWD tags in the file."
     },
     {
       "id": "5.2.5",
@@ -79,7 +83,8 @@
       "prohibited_setting": "!authenticate",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The operating system must be configured so that users must re -authenticate for privilege escalation.",
+      "remediation": "Configure the operating system to require users to reauthenticate for privilege escalation.\nBased on the outcome of the audit procedure, use visudo -f <PATH TO FILE> to edit the relevant sudoers file.\nRemove any occurrences of !authenticate tags in the file(s)."
     },
     {
       "id": "5.2.6",
@@ -95,7 +100,8 @@
       "required_setting": "Defaults timestamp_timeout=15",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "sudo caches used credentials for a default of 15 minutes. This is for ease of use when there are multiple administrative tasks to perform. The timeout can be modified to suit local security policies.\nThis default is distribution specific. See audit section for further information.",
+      "remediation": "If the currently configured timeout is larger than 15 minutes, edit the file listed in the audit section with visudo -f <PATH TO FILE> and modify the entry timestamp_timeout= to 15 minutes or less as per your site policy. The value is in minutes. This particular entry may appear on it's own, or on the same line as env_reset . See the following two examples:\nDefaults env_reset, timestamp_timeout=15 Defaults timestamp_timeout=15 Defaults env_reset"
     },
     {
       "id": "5.2.7",
@@ -108,7 +114,8 @@
       "required_setting": "auth required pam_wheel.so use_uid group=sudo",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.2.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The su command allows a user to run a command or shell as another user. The program has been superseded by sudo , which allows for more granular control over privileged access. Normally, the su command can be executed by any user. By uncommenting the pam_wheel.so statement in /etc/pam.d/su , the su command will only allow users in a specific groups to execute su. This group should be empty to reinforce the use of sudo for privileged access.",
+      "remediation": "Create an empty group that will be specified for use of the su command. The group should be named according to site policy.\nExample:\n# groupadd sugroup\nAdd the following line to the /etc/pam.d/su file, specifying the empty group:\nauth required pam_wheel.so use_uid group=sugroup"
     }
   ]
 }

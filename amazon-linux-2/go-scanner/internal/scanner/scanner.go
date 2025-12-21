@@ -286,19 +286,29 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
 	case "CommandOutputEmpty":
-		// Parse command safely - expect "find /path -args"
-		parts := strings.Fields(ctrl.AuditCommand)
-		if len(parts) == 0 {
+		// Parse command - supports both simple commands and shell pipes
+		auditCmd := strings.TrimSpace(ctrl.AuditCommand)
+		if auditCmd == "" {
 			result.Status = "ERROR"
 			result.ActualValue = "Empty command"
 			result.EvidenceCommand = ctrl.AuditCommand
 		} else {
-			cmdName := parts[0]
-			args := parts[1:]
-			checkResult := controls.CheckCommandOutputEmpty(cmdName, args, ctrl.Description)
-			result.Status = string(checkResult.Status)
-			result.ActualValue = checkResult.ActualValue
-			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			// Split command into parts (preserving pipe characters in args)
+			parts := strings.Fields(auditCmd)
+			if len(parts) > 0 {
+				cmdName := parts[0]
+				args := parts[1:]
+				// CheckCommandOutputEmpty will reconstruct full command and detect pipes
+				// Pass control ID for nftables-specific logic
+				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+				result.Status = string(checkResult.Status)
+				result.ActualValue = checkResult.ActualValue
+				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+			} else {
+				result.Status = "ERROR"
+				result.ActualValue = "Invalid command format"
+				result.EvidenceCommand = ctrl.AuditCommand
+			}
 		}
 
 	case "FileExists":

@@ -1,0 +1,90 @@
+#!/bin/bash
+# Vijenex CIS Scanner - Smart wrapper that works without Go
+# Auto-detects and runs pre-built binary, or provides instructions
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Detect architecture
+ARCH=$(uname -m)
+case "$ARCH" in
+    x86_64|amd64)
+        BINARY_NAME="vijenex-cis-amd64"
+        ;;
+    aarch64|arm64)
+        BINARY_NAME="vijenex-cis-arm64"
+        ;;
+    *)
+        BINARY_NAME="vijenex-cis"
+        ;;
+esac
+
+# Check for binary in multiple locations
+BINARY_PATHS=(
+    "$SCRIPT_DIR/bin/$BINARY_NAME"
+    "$SCRIPT_DIR/bin/vijenex-cis"
+    "$SCRIPT_DIR/$BINARY_NAME"
+    "$SCRIPT_DIR/vijenex-cis"
+    "/usr/local/bin/vijenex-cis"
+    "$(which vijenex-cis 2>/dev/null)"
+)
+
+BINARY=""
+for path in "${BINARY_PATHS[@]}"; do
+    if [ -f "$path" ] && [ -x "$path" ]; then
+        BINARY="$path"
+        break
+    fi
+done
+
+# If binary found, run it
+if [ -n "$BINARY" ]; then
+    exec "$BINARY" "$@"
+fi
+
+# No binary found - check if we can build
+if command -v go &> /dev/null; then
+    echo "⚠️  Binary not found, but Go is available."
+    echo "🔨 Building binary now..."
+    echo ""
+    
+    if [ -f "$SCRIPT_DIR/build.sh" ]; then
+        bash "$SCRIPT_DIR/build.sh"
+        # Try to find the newly built binary
+        if [ -f "$SCRIPT_DIR/bin/$BINARY_NAME" ]; then
+            exec "$SCRIPT_DIR/bin/$BINARY_NAME" "$@"
+        elif [ -f "$SCRIPT_DIR/bin/vijenex-cis" ]; then
+            exec "$SCRIPT_DIR/bin/vijenex-cis" "$@"
+        fi
+    fi
+fi
+
+# No binary and can't build - show instructions
+echo "❌ Vijenex CIS Scanner binary not found"
+echo ""
+echo "📋 To get the scanner running:"
+echo ""
+echo "Option 1: Use pre-built binary (Recommended)"
+echo "  # Download pre-built binary for $ARCH:"
+echo "  # Place it in: $SCRIPT_DIR/bin/$BINARY_NAME"
+echo "  # Or copy to: /usr/local/bin/vijenex-cis"
+echo "  chmod +x $SCRIPT_DIR/bin/$BINARY_NAME"
+echo ""
+echo "Option 2: Build on another machine with Go"
+echo "  # On a machine with Go installed:"
+echo "  cd $SCRIPT_DIR"
+echo "  ./build.sh"
+echo "  # Then copy bin/$BINARY_NAME to this server"
+echo ""
+echo "Option 3: Install Go and build here"
+echo "  # Install Go: https://go.dev/dl/"
+echo "  cd $SCRIPT_DIR"
+echo "  ./build.sh"
+echo ""
+echo "📦 Binary locations checked:"
+for path in "${BINARY_PATHS[@]}"; do
+    echo "  - $path"
+done
+echo ""
+exit 1
+

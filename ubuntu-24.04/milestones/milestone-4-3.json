@@ -15,7 +15,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "nftables provides a new in -kernel packet classification framework that is based on a network -specific Virtual Machine (VM) and a new nft userspace command line tool.\nnftables reuses the existing Netfilter subsystems such as the existing hook infrastructure , the connection tracking system, NAT, userspace queuing and logging subsystem.\nNotes:\n• nftables is available in Linux kernel 3.13 and newer • Only one firewall utility should be installed and configured • Changing firewall settings while connected over the network can result in being locked out of the system",
+      "remediation": "Run the following command to install nftables :\n# apt install nftables"
     },
     {
       "id": "4.3.2",
@@ -27,7 +28,8 @@
       "expected_status": "ufw_disabled_or_removed",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Uncomplicated Firewall (UFW) is a program for managing a netfilter firewall designed to be easy to use.",
+      "remediation": "Run one of the following to either remove ufw or disable ufw and mask ufw.service :\nRun the following command to remove ufw:\n# apt purge ufw -OR-\nRun the following commands to disable ufw and mask ufw.service :\n# ufw disable\n# systemctl stop ufw.service\n# systemctl mask ufw.service Note: ufw disable needs to be run before systemctl mask ufw.service in order to correctly disable UFW"
     },
     {
       "id": "4.3.3",
@@ -39,7 +41,8 @@
       "expected": "iptables rules flushed when using nftables",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "nftables is a replacement for iptables, ip6tables, ebtables and arptables",
+      "remediation": "Run the following commands to flush iptables:\nFor iptables:\n# iptables -F For ip6tables:\n# ip6tables -F"
     },
     {
       "id": "4.3.4",
@@ -55,7 +58,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Tables hold chains. Each table only has one address family and only applies to packets of this family. Tables can have one of five families.",
+      "remediation": "Run the following command to create a table in nftables\n# nft create table inet <table name> Example:\n# nft create table inet filter"
     },
     {
       "id": "4.3.5",
@@ -71,7 +75,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Chains are containers for rules. They exist in two kinds, base chains and regular chains.\nA base chain is an entry point for packets from the networking stack, a regular chain may be used as jump target and is used for better rule organization.",
+      "remediation": "Run the following command to create the base chains:\n# nft create chain inet <table name> <base chain name> type filter hook <(input|forward|output)> priority 0 \\;\nExample:\n# nft create chain inet filter input type filter hook input priority 0 \\;\n# nft create chain inet filter forward type filter hook forward priority 0 \\;\n# nft create chain inet filter output type filter hook output priority 0 \\;"
     },
     {
       "id": "4.3.6",
@@ -87,7 +92,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network",
+      "remediation": "Run the following commands to implement the loopback rules:\n# nft add rule inet filter input iif lo accept\n# nft add rule inet filter input ip saddr 127.0.0.0/8 counter drop - IF - IPv6 is enabled on the system:\nRun the following command to implement the IPv6 loopback rule:\n# nft add rule inet filter input ip6 saddr ::1 counter drop"
     },
     {
       "id": "4.3.7",
@@ -99,7 +105,8 @@
       "expected": "nftables outbound and established connections configured according to site policy",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Configure the firewall rules for new outbound, and established connections",
+      "remediation": "Configure nftables in accordance with site policy. The following commands will implement a policy to allow all outbound connections and all established connections:\n# nft add rule inet filter input ip protocol tcp ct state established accept\n# nft add rule inet filter input ip protocol udp ct state established accept\n# nft add rule inet filter output ip protocol tcp ct state new,related,established accept\n# nft add rule inet filter output ip protocol udp ct state new,related,established accept"
     },
     {
       "id": "4.3.8",
@@ -116,7 +123,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.8",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Base chain policy is the default verdict that will be applied to packets reaching the end of the chain.",
+      "remediation": "Run the following command for the base chains with the input, forward, and output hooks to implement a default DROP policy:\n# nft chain <table family> <table name> <chain name> policy drop \\;\nExample:\n# nft chain inet filter input policy drop \\;\n# nft chain inet filter forward policy drop \\;\n# nft chain inet filter output policy drop \\;"
     },
     {
       "id": "4.3.9",
@@ -129,7 +137,8 @@
       "expected_status": "enabled",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.9",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The nftables service allows for the loading of nftables rulesets during boot, or starting on the nftables service",
+      "remediation": "Run the following command to enable the nftables service:\n# systemctl enable nftables"
     },
     {
       "id": "4.3.10",
@@ -144,7 +153,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.3.10",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "nftables is a subsystem of the Linux kernel providing filtering and classification of network packets/datagrams/frames.\nThe nftables service reads the /etc/nftables.conf file for a nftables file or files to include in the nftables ruleset.\nA nftables ruleset containing the input, forward, and output base chains allow network traffic to be filtered.\nNote: Saving the script and following the instruction in the Configure nftables section overview will implement the rules in the configure nftable section, open port 22(ssh) from anywhere, and applies nftables ruleset on boot.",
+      "remediation": "Edit the /etc/nftables.conf file and un -comment or add a line with include <Absolute path to nftables rules file> for each nftables file you want included in the nftables ruleset on boot Example:\n# vi /etc/nftables.conf\nAdd the line:\ninclude \"/etc/nftables.rules\""
     }
   ]
 }

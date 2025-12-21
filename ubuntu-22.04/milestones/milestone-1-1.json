@@ -13,7 +13,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The cramfs filesystem type is a compressed read -only Linux filesystem embedded in small footprint systems. A cramfs image can be used without having to first decompress the image.",
+      "remediation": "Unload and disable the cramfs kernel module.\n1. Run the following commands to unload the cramfs kernel module:\n# modprobe -r cramfs 2>/dev/null\n# rmmod cramfs 2>/dev/null 2. Perform the following to disable the cramfs kernel module:\nCreate a file ending in .conf with install cramfs /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install cramfs /bin/false\" >> /etc/modprobe.d/60 - cramfs.conf\nCreate a file ending in .conf with blacklist cramfs in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist cramfs\" >> /etc/modprobe.d/60 -cramfs.conf Internal Only - General"
     },
     {
       "id": "1.1.1.2",
@@ -25,7 +26,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The freevxfs filesystem type is a free version of the Veritas type filesystem. This is the primary filesystem type for HP -UX operating systems.",
+      "remediation": "Unload and disable the freevxfs kernel module.\n1. Run the following commands to unload the freevxfs kernel module:\n# modprobe -r freevxfs 2>/dev/null\n# rmmod freevxfs 2>/dev/null 2. Perform the following to disable the freevxfs kernel module:\nCreate a file ending in .conf with install freevxfs /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install freevxfs /bin/false\" >> /etc/modprobe.d/60 - freevxfs.conf\nCreate a file ending in .conf with blacklist freevxfs in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist freevxfs\" >> /etc/modprobe.d/60 -freevxfs.conf"
     },
     {
       "id": "1.1.1.3",
@@ -37,7 +39,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The hfs filesystem type is a hierarchical filesystem that allows you to mount Mac OS filesystems.",
+      "remediation": "Unload and disable the hfs kernel module.\n1. Run the following commands to unload the hfs kernel module:\nmodprobe -r hfs 2>/dev/null rmmod hfs 2>/dev/null 2. Perform the following to disable the hfs kernel module:\nCreate a file ending in .conf with install hfs /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install hfs /bin/false\" >> /etc/modprobe.d/60 -hfs.conf\nCreate a file ending in .conf with blacklist hfs in the /etc/modprobe.d/ directory.\nExample:\nprintf '%s ' \"\" \"blacklist hfs\" >> /etc/modprobe.d/60 -hfs.conf"
     },
     {
       "id": "1.1.1.4",
@@ -49,7 +52,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The hfsplus filesystem type is a hierarchical filesystem designed to replace hfs that allows you to mount Mac OS filesystems.",
+      "remediation": "Unload and disable the hfsplus kernel module.\n1. Run the following commands to unload the hfsplus kernel module:\n# modprobe -r hfsplus 2>/dev/null\n# rmmod hfsplus 2>/dev/null 2. Perform the following to disable the hfsplus kernel module:\nCreate a file ending in .conf with install hfsplus /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install hfsplus /bin/false\" >> /etc/modprobe.d/60 - hfsplus.conf\nCreate a file ending in .conf with blacklist hfsplus in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist hfsplus\" >> /etc/modprobe.d/60 -hfsplus.conf"
     },
     {
       "id": "1.1.1.5",
@@ -61,7 +65,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The jffs2 (journaling flash filesystem 2) filesystem type is a log -structured filesystem used in flash memory devices.",
+      "remediation": "Unload and disable the jffs2 kernel module.\n1. Run the following commands to unload the jffs2 kernel module:\n# modprobe -r jffs2 2>/dev/null\n# rmmod jffs2 2>/dev/null 2. Perform the following to disable the jffs2 kernel module:\nCreate a file ending in .conf with install jffs2 /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install jffs2 /bin/false\" >> /etc/modprobe.d/60 - jffs2.conf\nCreate a file ending in .conf with blacklist jffs2 in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist jffs2\" >> /etc/modprobe.d/60 -jffs2.conf"
     },
     {
       "id": "1.1.1.6",
@@ -73,7 +78,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The Linux overlay kernel module, commonly referred to as Overlayfs, is a union mount filesystem. It allows the user to overlay one file system on top of another, and creates a single, unified view.",
+      "remediation": "Unload and disable the overlay kernel module.\n1. Run the following commands to unload the overlay kernel module:\n# modprobe -r overlay 2>/dev/null\n# rmmod overlay 2>/dev/null 2. Perform the following to disable the overlay kernel module:\nCreate a file ending in .conf with install overlay /bin/false in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"install overlay /bin/false\" >> /etc/modprobe.d/60 - overlay.conf\nCreate a file ending in .conf with blacklist overlay in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"blacklist overlay\" >> /etc/modprobe.d/60 -overlay.conf Internal Only - General"
     },
     {
       "id": "1.1.1.7",
@@ -85,7 +91,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The squashfs filesystem type is a compressed read -only Linux filesystem embedded in small footprint systems. A squashfs image can be used without having to first decompress the image.",
+      "remediation": "Unload and disable the squashfs kernel module.\n1. Run the following commands to unload the squashfs kernel module:\n# modprobe -r squashfs 2>/dev/null\n# rmmod squashfs 2>/dev/null 2. Perform the following to disable the squashfs kernel module:\nCreate a file ending in .conf with install squashfs /bin/false in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"install squashfs /bin/false\" >> /etc/modprobe.d/60 - squashfs.conf\nCreate a file ending in .conf with blacklist squashfs in the /etc/modprobe.d/ directory.\nExample:\n# printf '%s ' \"\" \"blacklist squashfs\" >> /etc/modprobe.d/60 -squashfs.conf"
     },
     {
       "id": "1.1.1.8",
@@ -97,7 +104,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.8",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and ECMA -167 specifications. This is an open vendor filesystem type for data storage on a broad range of media. This filesystem type is necessary to support writing DVDs and newer optical disc formats.",
+      "remediation": "Unload and disable the udf kernel module.\n1. Run the following commands to unload the udf kernel module:\n# modprobe -r udf 2>/dev/null\n# rmmod udf 2>/dev/null 2. Perform the following to disable the udf kernel module:\nCreate a file ending in .conf with install udf /bin/false in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"install udf /bin/false\" >> /etc/modprobe.d/60 -udf.conf\nCreate a file ending in .conf with blacklist udf in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"blacklist udf\" >> /etc/modprobe.d/60 -udf.conf"
     },
     {
       "id": "1.1.1.9",
@@ -109,7 +117,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.9",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "USB storage provides a means to transfer and store files ensuring persistence and availability of the files independent of network connection status. Its popularity and utility has led to USB -based malware being a simple and common means for network infiltration and a first step to establishing a persistent threat within a networked environment.",
+      "remediation": "Unload and disable the usb-storage kernel module.\n1. Run the following commands to unload the usb-storage kernel module:\n# modprobe -r usb-storage 2>/dev/null\n# rmmod usb -storage 2>/dev/null 2. Perform the following to disable the usb-storage kernel module:\nCreate a file ending in .conf with install usb_storage /bin/false in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"install usb_storage /bin/false\" >> /etc/modprobe.d/60 - usb-storage.conf\nCreate a file ending in .conf with blacklist usb_storage in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"blacklist usb_storage\" >> /etc/modprobe.d/60 -usb- storage.conf"
     },
     {
       "id": "1.1.1.10",
@@ -119,7 +128,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.10",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Filesystem kernel modules are pieces of code that can be dynamically loaded into the Linux kernel to extend its filesystem capabilities, or so -called base kernel, of an operating system. Filesystem kernel modules are typically used to add support for new hardware (as device drivers), or for adding system calls.",
+      "remediation": "- IF - the module is available in the running kernel:\n• Unload the filesystem kernel module from the kernel • Create a file ending in .conf with install filesystem kernel modules /bin/false in the /etc/modprobe.d/ directory • Create a file ending in .conf with deny list filesystem kernel modules in the /etc/modprobe.d/ directory WARNING : unloading, disabling or denylisting filesystem modules that are in use on the system may be FATAL. It is extremely important to thoroughly review the filesystems returned by the audit before following the remediation procedure.\nExample of unloading the gfs2 kernel module:\nmodprobe -r gfs2 2>/dev/null rmmod gfs2 2>/dev/null Example of fully disabling the gfs2 kernel module:\nprintf '%s ' \"\" \"blacklist gfs2\" \"install gfs2 /bin/false\" >> /etc/modprobe.d/gfs2.conf Note:\n• Disable a kernel module by modifying the command above for each unused filesystem kernel module • The example gfs2 must be updated with the appropriate module name for the command or example script bellow to run correctly.\nBelow is an example script that can be modified to use on various filesystem kernel modules manual remediation process:\nExample Script Internal Only - General #!/usr/bin/env bash a_output2=(); a_output3=(); l_dl=\"\" # Initialize arrays and clear variables l_mod_name=\"gfs2\" # set module name l_mod_type=\"fs\" # set module type l_mod_path=\"$(readlink -f /usr/lib/modules/**/kernel/$l_mod_type || readlink -f /lib/modules/**/kernel/$l_mod_type)\" f_module_fix() l_dl=\"y\" # Set to ignore duplicate checks a_showconfig=() # Create array with modprobe output while IFS= read -r l_showconfig; do a_showconfig+=(\"$l_showconfig\") done < <(modprobe --showconfig | grep -P -- '(install|blacklist) +'\"$l_mod_name// -/_\"'') if lsmod | grep \"$l_mod_name\" &> /dev/null; then # Check if the module is currently loaded a_output2+=(\" - unloading kernel module: \\\"$l_mod_name \\\"\") modprobe -r \"$l_mod_name\" 2>/dev/null; rmmod \"$l_mod_name\" 2>/dev/null fi if ! grep -Pq -- '+'\"$l_mod_name// - /_\"'+(\\/usr)?\\/bin\\/(true|false) ' <<< \"$a_showconfig[*]\"; then a_output2+=(\" - setting kernel module: \\\"$l_mod_name \\\" to \\\"$(readlink -f /bin/false) \\\"\") printf '%s ' \"install $l_mod_name $(readlink -f /bin/false)\" >> /etc/modprobe.d/\"$l_mod_name\".conf fi if ! grep -Pq -- '+'\"$l_mod_name// -/_\"'' <<< \"$a_showconfig[*]\"; then a_output2+=(\" - denylisting kernel module: \\\"$l_mod_name \\\"\") printf '%s ' \"blacklist $l_mod_name\" >> /etc/modprobe.d/\"$l_mod_name\".conf fi for l_mod_base_directory in $l_mod_path; do # Check if the module exists on the system if [ -d \"$l_mod_base_directory/$l_mod_name/ -/\\/\" ] && [ -n \"$(ls -A \"$l_mod_base_directory/$l_mod_name/ -/\\/\")\" ]; then a_output3+=(\" - \\\"$l_mod_base_directory \\\"\") [[ \"$l_mod_name\" =~ overlay ]] && l_mod_name=\"$l_mod_name:: -2\" [ \"$l_dl\" != \"y\" ] && f_module_fix else echo -e \" - kernel module: \\\"$l_mod_name \\\" doesn't exist in \\\"$l_mod_base_directory \\\"\" fi done [ \"$#a_output3[@]\" -gt 0 ] && printf '%s ' \"\" \" -- INFO --\" \" - module:\n\\\"$l_mod_name \\\" exists in:\" \"$a_output3[@]\" [ \"$#a_output2[@]\" -gt 0 ] && printf '%s ' \"\" \"$a_output2[@]\" || printf '%s ' \"\" \" - No changes needed\" printf '%s ' \"\" \" - remediation of kernel module: \\\"$l_mod_name \\\" complete\" \"\" Internal Only - General"
     },
     {
       "id": "1.1.1.11",
@@ -131,7 +141,8 @@
       "expected_status": "not_available",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.1.11",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The IEEE 1394 (FireWire) is a serial bus standard for high -speed real -time communication.",
+      "remediation": "Unload and disable the firewire -core kernel module.\n1. Run the following commands to unload the firewire -core kernel module:\n# modprobe -r firewire -core 2>/dev/null\n# rmmod firewire -core 2>/dev/null 2. Perform the following to disable the firewire -core kernel module:\nCreate a file ending in .conf with install firewire -core /bin/false in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"install firewire -core /bin/false\" >> /etc/modprobe.d/60 - firewire -core.conf\nCreate a file ending in .conf with blacklist firewire -core in the /etc/modprobe.d/ directory Example:\n# printf '%s ' \"\" \"blacklist firewire -core\" >> /etc/modprobe.d/60 -firewire - core.conf Internal Only - General"
     },
     {
       "id": "1.1.2.1.1",
@@ -143,7 +154,8 @@
       "expected_status": "separate_partition",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /tmp directory is a world -writable directory used for temporary storage by all users and some applications.\nNote: If an entry for /tmp exists in /etc/fstab it will take precedence over entries in a systemd unit file. There is an exception to this when a system is diskless and connected to iSCSI, entries in /etc/fstab may not take precedence over a systemd unit file.",
+      "remediation": "First ensure that systemd is correctly configured to ensure that /tmp will be mounted at boot time.\n# systemctl unmask tmp.mount For specific configuration requirements of the /tmp mount for your environment, modify /etc/fstab .\nExample of using tmpfs with specific mount options:\ntmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0 Note: the size=2G is an example of setting a specific size for tmpfs .\nExample of using a volume or disk with specific mount options. The source location of the volume or disk will vary depending on your environment:\n<device> /tmp <fstype> defaults,nodev,nosuid,noexec 0 0"
     },
     {
       "id": "1.1.2.1.2",
@@ -155,7 +167,8 @@
       "required_option": "nodev",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "remediation": "- IF - a separate partition exists for /tmp .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /tmp partition.\nExample:\n<device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /tmp with the configured options:\n# mount -o remount /tmp"
     },
     {
       "id": "1.1.2.1.3",
@@ -167,7 +180,8 @@
       "required_option": "nosuid",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.1.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+      "remediation": "- IF - a separate partition exists for /tmp .\nEdit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /tmp partition.\nExample:\n<device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /tmp with the configured options:\n# mount -o remount /tmp"
     },
     {
       "id": "1.1.2.1.4",
@@ -179,7 +193,8 @@
       "required_option": "noexec",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.1.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+      "remediation": "- IF - a separate partition exists for /tmp .\nEdit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /tmp partition.\nExample:\n<device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /tmp with the configured options:\n# mount -o remount /tmp Internal Only - General"
     },
     {
       "id": "1.1.2.2.1",
@@ -191,7 +206,8 @@
       "expected_status": "separate_partition",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /dev/shm directory is a world -writable directory that can function as shared memory that facilitates inter process communication (IPC).",
+      "remediation": "For specific configuration requirements of the /dev/shm mount for your environment,\nmodify /etc/fstab .\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0"
     },
     {
       "id": "1.1.2.2.2",
@@ -203,7 +219,8 @@
       "required_option": "nodev",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
     },
     {
       "id": "1.1.2.2.3",
@@ -215,7 +232,8 @@
       "required_option": "nosuid",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
     },
     {
       "id": "1.1.2.2.4",
@@ -227,7 +245,8 @@
       "required_option": "noexec",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /dev/shm partition.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
     },
     {
       "id": "1.1.2.3.1",
@@ -239,7 +258,8 @@
       "expected_status": "separate_partition",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.3.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /home directory is used to support disk storage needs of local users.",
+      "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /home .\nFor systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.\nInternal Only - General"
     },
     {
       "id": "1.1.2.3.2",
@@ -251,7 +271,8 @@
       "required_option": "nodev",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.3.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "remediation": "- IF - a separate partition exists for /home .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /home partition.\nExample:\n<device> /home <fstype> defaults,rw,nosuid,nodev,relatime 0 0\nRun the following command to remount /home with the configured options:\n# mount -o remount /home"
     },
     {
       "id": "1.1.2.3.3",
@@ -263,7 +284,8 @@
       "required_option": "nosuid",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.1.2.3.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+      "remediation": "- IF - a separate partition exists for /home .\nEdit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /home partition.\nExample:\n<device> /home <fstype> defaults,rw,nosuid,nodev,relatime 0 0\nRun the following command to remount /home with the configured options:\n# mount -o remount /home"
     }
   ]
 }

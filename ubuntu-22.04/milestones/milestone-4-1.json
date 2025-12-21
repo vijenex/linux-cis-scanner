@@ -13,7 +13,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The cron daemon is used to execute batch jobs on the system.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to unmask, enable, and start cron :\n# systemctl unmask \"$(systemctl list -unit-files | awk '$1~/^crond? \\.service/print $1')\"\n# systemctl --now enable \"$(systemctl list -unit-files | awk '$1~/^crond? \\.service/print $1')\""
     },
     {
       "id": "4.1.2",
@@ -24,7 +25,8 @@
       "expected_status": "active",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /etc/crontab file is used by cron to control its own jobs. The commands in this item make sure that root is the user and group owner of the file and that only the owner can access the file.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to set ownership and permissions on /etc/crontab :\n# chown root:root /etc/crontab\n# chmod og -rwx /etc/crontab"
     },
     {
       "id": "4.1.3",
@@ -37,7 +39,8 @@
       },
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "This directory contains system cron jobs that need to run on an hourly basis. The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor. The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to set ownership and permissions on the /etc/cron.hourly directory:\n# chown root:root /etc/cron.hourly/\n# chmod og -rwx /etc/cron.hourly/"
     },
     {
       "id": "4.1.4",
@@ -50,7 +53,8 @@
       },
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /etc/cron.daily directory contains system cron jobs that need to run on a daily basis. The files in this directory cannot be manipulated by the crontab command, but are instead edited by system administrators using a text editor. The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to set ownership and permissions on the /etc/cron.daily directory:\n# chown root:root /etc/cron.daily/\n# chmod og -rwx /etc/cron.daily/"
     },
     {
       "id": "4.1.5",
@@ -63,7 +67,8 @@
       },
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /etc/cron.weekly directory contains system cron jobs that need to run on a weekly basis. The files in this directory cannot be manipulated by the crontab command but are instead edited by system administrators using a text editor. The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to set ownership and permissions on the /etc/cron.weekly directory:\n# chown root:root /etc/cron.weekly/\n# chmod og -rwx /etc/cron.weekly/"
     },
     {
       "id": "4.1.6",
@@ -79,7 +84,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /etc/cron.monthly directory contains system cron jobs that need to run on a monthly basis. The files in this directory cannot be manipulated by the crontab command but are instead edited by system administrators using a text editor. The commands below restrict read/write and search access to user and group root, preventing regular users from accessing this directory.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to set ownership and permissions on the /etc/cron.monthly directory:\n# chown root:root /etc/cron.monthly/\n# chmod og -rwx /etc/cron.monthly/"
     },
     {
       "id": "4.1.7",
@@ -90,7 +96,8 @@
       "check_open_ports": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /etc/cron.yearly directory contains system cron jobs that need to run on an annual basis. The files in this directory cannot be manipulated by the crontab command but are instead edited by system administrators using a text editor. The commands below restrict read/write a nd search access to user and group root, preventing regular users from accessing this directory.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to set ownership and permissions on the /etc/cron.yearly directory:\n# chown root:root /etc/cron.yearly/\n# chmod og -rwx /etc/cron.yearly/"
     }
   ]
 }

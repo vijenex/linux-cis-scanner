@@ -15,7 +15,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The /dev/shm directory is a world -writable directory that can function as shared memory that facilitates inter process communication (IPC).",
+      "remediation": "For specific configuration requirements of the /dev/shm mount for your environment,\nmodify /etc/fstab .\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0"
     },
     {
       "id": "2.2.2",
@@ -28,7 +29,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
     },
     {
       "id": "2.2.3",
@@ -41,7 +43,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
     },
     {
       "id": "2.2.4",
@@ -54,7 +57,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+      "remediation": "- IF - a separate partition exists for /dev/shm .\nEdit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /dev/shm partition.\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /dev/shm with the configured options:\n# mount -o remount /dev/shm Note: It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications."
     },
     {
       "id": "2.2.5",
@@ -67,7 +71,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for NIS/YP. It is a service that provides a method for looking up information from a central database.",
+      "remediation": "Uninstall ldap-utils :\n# apt purge ldap -utils"
     },
     {
       "id": "2.2.6",
@@ -80,7 +85,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "2.2.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "tnftp an enhanced FTP client, is the user interface to the Internet standard File Transfer Protocol. The program allows a user to transfer files to and from a remote network site.",
+      "remediation": "Run the following commands to uninstall tnftp & ftp:\n# apt purge ftp\n# apt purge tnftp"
     }
   ]
 }

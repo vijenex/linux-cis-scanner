@@ -14,8 +14,8 @@
       "cis_reference": "CIS Amazon Linux 2 - 4.5.1.1 | Level1",
       "description": "Use SHA-512 for password hashing instead of weaker algorithms.",
       "remediation": "Edit /etc/login.defs and set: ENCRYPT_METHOD SHA512",
-      "file_path": "/etc/login.defs",
-      "pattern": "^ENCRYPT_METHOD\\s+SHA512",
+      "file_path": "/etc/pam.d/password-auth /etc/pam.d/system-auth",
+      "pattern": "^\\s*password\\s+sufficient\\s+pam_unix.so.*(sha512|yescrypt)",
       "expected_result": "found"
     },
     {

@@ -12,7 +12,8 @@
       "expected_state": "installed",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "at allows fairly complex time specifications, extending the POSIX.2 standard. It accepts times of the form HH:MM to run a job at a specific time of day. (If that time is already past, the next day is assumed.) You may also specify midnight, noon, or teatime ( 4pm) and you can have a time -of-day suffixed with AM or PM for running in the morning or the evening. You can also say what day the job will be run, by giving a date in the form month -name day with an optional year, or giving a date of the form MMDD[CC]YY, MM/DD/[CC]YY, DD.MM.[CC]YY or [CC]YY -MM-DD. The specification of a date must follow the specification of the time of day. You can also give times like now + count time-units, where the time -units can be minutes, hours, days, or weeks and you can tell at to run the job today by suffixing the time with today and to run the job tomorrow by suffixing the time with tomorrow.\nThe /etc/at.allow and /etc/at.deny files determine which user can submit commands for later execution via at or batch. The format of the files is a list of usernames, one on each line. Whitespace is not permitted. If the file /etc/at.allow exists, only usernames mentioned in it are allowed to use at. If /etc/at.allow does not exist, /etc/at.deny is checked, every username not mentioned in it is then allowed to use at. An empty /etc/at.deny means that every user may use at. If neither file exists, only the s uperuser is allowed to use at.",
+      "remediation": "- IF - at is installed on the system:\nRun the following script to:\n• /etc/at.allow :\no Create the file if it doesn't exist o Change owner or user root o If group daemon exists, change to group daemon , else change group to root o Change mode to 640 or more restrictive • - IF - /etc/at.deny exists:\no Change owner or user root o If group daemon exists, change to group daemon , else change group to root o Change mode to 640 or more restrictive\n#!/usr/bin/env bash grep -Pq -- '^daemon ' /etc/group && l_group=\"daemon\" || l_group=\"root\" [ ! -e \"/etc/at.allow\" ] && touch /etc/at.allow chown root:\"$l_group\" /etc/at.allow chmod u-x,g-wx,o-rwx /etc/at.allow [ -e \"/etc/at.deny\" ] && chown root:\"$l_group\" /etc/at.deny [ -e \"/etc/at.deny\" ] && chmod u -x,g-wx,o-rwx /etc/at.deny"
     },
     {
       "id": "4.2.2",
@@ -23,7 +24,8 @@
       "expected_state": "not_installed",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The usermod command can be used to specify which group the root account belongs to. This affects permissions of files that are created by the root account.",
+      "remediation": "Run the following command to set the root user's GID to 0:\n# usermod -g 0 root\nRun the following command to set the root group's GID to 0:\n# groupmod -g 0 root\nRemove any users other than the root user with GID 0 or assign them a new GID if appropriate."
     },
     {
       "id": "4.2.3",
@@ -33,7 +35,8 @@
       "expected_state": "active",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The groupmod command can be used to specify which group the root group belongs to. This affects permissions of files that are group owned by the root group.",
+      "remediation": "Run the following command to set the root group's GID to 0:\n# groupmod -g 0 root\nRemove any groups other than the root group with GID 0 or assign them a new GID if appropriate."
     },
     {
       "id": "4.2.4",
@@ -43,7 +46,8 @@
       "expected_state": "configured",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "There are a number of methods to access the root account directly. Without a password set any user would be able to gain access and thus control over the entire system.",
+      "remediation": "Run the following command to set a password for the root user:\n# passwd root - OR -\nRun the following command to lock the root user account:\n# usermod -L root Internal Only - General"
     },
     {
       "id": "4.2.5",
@@ -52,7 +56,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The root user can execute any command on the system and could be fooled into executing programs unintentionally if the PATH is not set correctly.",
+      "remediation": "Correct or justify any:\n• Locations that are not directories • Empty directories ( ::) • Trailing (:) • Current working directory ( .) • Non root owned directories • Directories that less restrictive than mode 0755"
     },
     {
       "id": "4.2.6",
@@ -61,7 +66,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The user file -creation mode mask ( umask ) is used to determine the file permission for newly created directories and files. In Linux, the default permissions for any newly created directory is 0777 ( rwxrwxrwx ), and for any newly created file it is 0666 ( rw-rw- rw-). The umask modifies the default Linux permissions by restricting (masking) these permissions. The umask is not simply subtracted, but is processed bitwise. Bits set in the umask are cleared in the resulting file mode.\numask can be set with either Octal or Symbolic values:\n• Octal (Numeric) Value - Represented by either three or four digits. ie umask 0027 or umask 027 . If a four digit umask is used, the first digit is ignored. The remaining three digits effect the resulting permissions for user, group, and world/other respectively.\n• Symbolic Value - Represented by a comma separated list for User u, group g, and world/other o. The permissions listed are not masked by umask . ie a umask set by umask u=rwx,g=rx,o= is the Symbolic equivalent of the Octal umask 027. This umask would set a newly created directory with file mode drwxr-x--- and a newly created file with file mode rw-r----- .\nroot user Shell Configuration Files:\n• /root/.profile - Is executed to configure the root users' shell before the initial command prompt. Is only read by login shells.\n• /root/.bashrc - Is executed for interactive shells. only read by a shell that's both interactive and non -login umask is set by order of precedence. If umask is set in multiple locations, this order of precedence will determine the system's default umask .\nOrder of precedence:\n1. /root/.profile 2. /root/.bashrc 3. The system default umask  Internal Only - General",
+      "remediation": "Edit /root/.profile and /root/.bashrc and either:\n• remove, comment out, or update any line with umask .\n- OR - • update any line that includes umask to a value of 0027 or more restrictive.\nExample:\numask 027 Note: the Recommendation \"Ensure default user umask is configured\" includes guidance to set the default umask"
     },
     {
       "id": "4.2.7",
@@ -72,7 +78,8 @@
       "expected_policy": "deny",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "There are a number of accounts provided with most distributions that are used to manage applications and are not intended to provide an interactive shell. Furthermore, a user may add special accounts that are not intended to provide an interactive shell.",
+      "remediation": "Run the following command to set the shell for any service accounts returned by the audit to nologin :\n# usermod -s $(command -v nologin) <user> Example script:\n#!/usr/bin/env bash l_valid_shells=\"^($( awk -F\\/ '$NF != \"nologin\" print' /etc/shells | sed -rn '/^\\//s,/,\\\\\\\\/,g;p' | paste -s -d '|' - ))$\" awk -v pat=\"$l_valid_shells\" -F:\n'($1!~/^(root|halt|sync|shutdown|nfsnobody)$/ && ($3<'\"$(awk '/^*UID_MIN/print $2' /etc/login.defs)\"' || $3 == 65534) && $(NF) ~ pat) system (\"usermod -s '\"$(command -v nologin)\"' \" $1)' /etc/passwd"
     }
   ]
 }

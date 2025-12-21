@@ -12,7 +12,8 @@
       "expected_state": "not_installed",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The GNOME Display Manager (GDM) is a program that manages graphical display servers and handles graphical user logins.",
+      "remediation": "Run the following commands to uninstall gdm3 and remove unused dependencies:\n# apt purge gdm3\n# apt autoremove gdm3"
     },
     {
       "id": "1.7.2",
@@ -21,7 +22,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "GDM is the GNOME Display Manager which handles graphical login for GNOME based systems.",
+      "remediation": "- IF - A user profile is already created run the following commands to set and enable the text banner message on the login screen:\n# gsettings set org.gnome.login -screen banner -message-text 'Authorized uses only. All activity may be monitored and reported'\n# gsettings set org.gnome.login -screen banner -message-enable true Note:\n• banner-message-text may be set in accordance with local site policy • gsettings commands in this section MUST be done from a command window on a graphical desktop or an error will be returned.\n• The system must be restarted after all gsettings configurations have been set in order for CIS -CAT Assessor to appropriately assess.\n- OR/IF - A user profile does not exist:\n1. Create or edit the gdm profile in the /etc/dconf/profile/gdm with the following lines:\nuser-db:user system-db:gdm file-db:/usr/share/gdm/greeter -dconf-defaults Note: gdm is the name of a dconf database.\n2. Create a gdm keyfile for machine -wide settings in /etc/dconf/db/gdm.d/01 - banner-message :\n[org/gnome/login -screen] banner-message-enable=true banner-message-text='Type the banner message here.' 3. Update the system databases\n# dconf update Note:\n• Users must log out and back in again before the system -wide settings take effect.\n• There is no character limit for the banner message. gnome -shell autodetects longer stretches of text and enters two column mode.\n• The banner message cannot be read from an external file."
     },
     {
       "id": "1.7.3",
@@ -30,7 +32,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "GDM is the GNOME Display Manager which handles graphical login for GNOME based systems.\nThe disable-user-list option controls if a list of users is displayed on the login screen",
+      "remediation": "- IF - A user profile exists run the following command to enable the disable-user- list :\n# gsettings set org.gnome.login -screen disable -user-list true Note:\n• gsettings commands in this section MUST be done from a command window on a graphical desktop or an error will be returned.\n• The system must be restarted after all gsettings configurations have been set in order for CIS -CAT Assessor to appropriately assess.\n- OR/IF - A user profile does not exist:\n1. Create or edit the gdm profile in /etc/dconf/profile/gdm with the following lines:\nuser-db:user system-db:gdm file-db:/usr/share/gdm/greeter -dconf-defaults Note: gdm is the name of a dconf database.\n2. Create a gdm keyfile for machine -wide settings in /etc/dconf/db/gdm.d/00 - login-screen :\n[org/gnome/login -screen]\n# Do not show the user list disable-user-list=true 3. Update the system databases:\n# dconf update Note: When the user profile is created or changed, the user will need to log out and log in again before the changes will be applied."
     },
     {
       "id": "1.7.4",
@@ -39,7 +42,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "GNOME Desktop Manager can make the screen lock automatically whenever the user is idle for some amount of time.",
+      "remediation": "- IF - A user profile is already created run the following commands to enable screen locks when the user is idle:\n# gsettings set org.gnome.desktop.screensaver lock -delay 5\n# gsettings set org.gnome.desktop.session idle -delay 900\n# gsettings set org.gnome.desktop.screensaver lock -enabled true Note:\n• gsettings commands in this section MUST be done from a command window on a graphical desktop or an error will be returned.\n• The system must be restarted after all gsettings configurations have been set in order for CIS -CAT Assessor to appropriately assess.\n- OR/IF - A user profile does not exist:\n1. Create or edit the user profile in the /etc/dconf/profile/ and verify it includes the following:\nuser-db:user system-db:NAME_OF_DCONF_DATABASE Note: local is the name of a dconf database used in the examples.\n2. Create the directory /etc/dconf/db/local.d/ if it doesn't already exist:\n3. Create the key file /etc/dconf/db/local.d/00 -screensaver to provide information for the local database:\nExample key file:\n# Specify the dconf path [org/gnome/desktop/session]\n# Number of seconds of inactivity before the screen goes blank\n# Set to 0 seconds if you want to deactivate the screensaver.\nidle-delay=uint32 180\n# Specify the dconf path [org/gnome/desktop/screensaver]\n# Number of seconds after the screen is blank before locking the screen lock-delay=uint32 0\n# Ensure screen locks after inactivity lock-enabled=true Note: You must include the uint32 along with the integer key values as shown.\n4. Run the following command to update the system databases:\n# dconf update Internal Only - General 5. Users must log out and back in again before the system -wide settings take effect."
     },
     {
       "id": "1.7.5",
@@ -48,7 +52,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "GNOME Desktop Manager can lock down specific settings by using the lockdown mode in dconf to prevent users from changing specific settings.\nTo lock down a dconf key or subpath, create a locks subdirectory in the keyfile directory.\nThe files inside this directory contain a list of keys or subpaths to lock. Just as with the keyfiles, you may add any number of files to this directory.",
+      "remediation": "1. To prevent the user from overriding these settings, create the file /etc/dconf/db/local.d/locks/00 -screensaver with the following content:\n# Lock desktop screensaver settings /org/gnome/desktop/session/idle -delay /org/gnome/desktop/screensaver/lock -delay /org/gnome/desktop/screensaver/lock -enabled 2. Update the system databases:\n# dconf update Note:\n• A user profile must exist in order to apply locks. If a user profile does not exist review the remediation steps in the previous recommendation.\n• Users must log out and back in again before the system -wide settings take effect."
     },
     {
       "id": "1.7.6",
@@ -57,7 +62,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "By default GNOME automatically mounts removable media when inserted as a convenience to the user.",
+      "remediation": "- IF - A user profile exists run the following commands to ensure automatic mounting is disabled:\n# gsettings set org.gnome.desktop.media -handling automount false\n# gsettings set org.gnome.desktop.media -handling automount -open false Note:\n• gsettings commands in this section MUST be done from a command window on a graphical desktop or an error will be returned.\n• The system must be restarted after all gsettings configurations have been set in order for CIS -CAT Assessor to appropriately assess.\n- OR/IF - A user profile does not exist:\n1. Create a file /etc/dconf/db/local.d/00 -media-automount with following content:\n[org/gnome/desktop/media -handling] automount=false automount -open=false 2. After creating the file, apply the changes using below command :\n# dconf update Note: Users must log out and back in again before the system -wide settings take effect."
     },
     {
       "id": "1.7.7",
@@ -66,7 +72,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "By default GNOME automatically mounts removable media when inserted as a convenience to the user.\nBy using the lockdown mode in dconf, you can prevent users from changing specific settings. To lock down a dconf key or subpath, create a locks subdirectory in the keyfile directory. The files inside this directory contain a list of keys or subpaths to loc k. Just as with the keyfiles, you may add any number of files to this directory.",
+      "remediation": "1. To prevent the user from overriding these settings, create the file /etc/dconf/db/local.d/locks/00 -media-automount with the following content:\n[org/gnome/desktop/media -handling] automount=false automount -open=false 2. Update the systems databases:\n# dconf update Note:\n• A user profile must exist in order to apply locks. If a user profile does not exist review the remediation steps in the previous recommendation.\n• Users must log out and back in again before the system -wide settings take effect."
     },
     {
       "id": "1.7.8",
@@ -75,7 +82,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.8",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The autorun-never setting allows the GNOME Desktop Display Manager to disable autorun through GDM.",
+      "remediation": "- IF - A user profile exist run the following command to set autorun-never to true for GDM users:\n# gsettings set org.gnome.desktop.media -handling autorun -never true Note:\n• gsettings commands in this section MUST be done from a command window on a graphical desktop or an error will be returned.\n• The system must be restarted after all gsettings configurations have been set in order for CIS -CAT Assessor to appropriately assess.\n- OR/IF - A user profile does not exist:\n1. create the file /etc/dconf/db/local.d/locks/00 -media-autorun with the following content:\n[org/gnome/desktop/media -handling] autorun-never=true 2. Update the systems databases:\n# dconf update Note: Users must log out and back in again before the system -wide settings take effect."
     },
     {
       "id": "1.7.9",
@@ -84,7 +92,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.9",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The autorun -never setting allows the GNOME Desktop Display Manager to disable autorun through GDM.\nBy using the lockdown mode in dconf, you can prevent users from changing specific settings.\nTo lock down a dconf key or subpath, create a locks subdirectory in the keyfile directory.\nThe files inside this directory contain a list of keys or subpaths to lock. Just as with the keyfiles, you may add any number of files to this directory.",
+      "remediation": "1. To prevent the user from overriding these settings, create the file /etc/dconf/db/local.d/locks/00 -media-autorun with the following content:\n[org/gnome/desktop/media -handling] autorun-never=true 2. Update the systems databases:\n# dconf update Note:\n• A user profile must exist in order to apply locks. If a user profile does not exist review the remediation steps in the previous recommendation.\n• Users must log out and back in again before the system -wide settings take effect.\nInternal Only - General"
     },
     {
       "id": "1.7.10",
@@ -93,7 +102,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.10",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "X Display Manager Control Protocol (XDMCP) is designed to provide authenticated access to display management services for remote displays",
+      "remediation": "Edit all files returned by the audit and remove or comment out the Enable=true line in the [xdmcp] block:\nExample file:\n# GDM configuration storage\n#\n# See /usr/share/gdm/gdm.schemas for a list of available options.\n[daemon]\n# Uncomment the line below to force the login screen to use Xorg\n#WaylandEnable=false\n# Enabling automatic login\n# AutomaticLoginEnable = true\n# AutomaticLogin = user1\n# Enabling timed login\n# TimedLoginEnable = true\n# TimedLogin = user1\n# TimedLoginDelay = 10 [security] [xdmcp]\n# Enable=true < - **This line should be removed or commented out** [chooser] [debug]\n# Uncomment the line below to turn on debugging\n# More verbose logs\n# Additionally lets the X server dump core if it crashes\n# Enable=true"
     },
     {
       "id": "1.7.11",
@@ -102,7 +112,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.7.11",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Xwayland is a compatibility layer that allows legacy X11 applications to run within a Wayland environment. It's effectively an X server that runs as a Wayland client, enabling existing X11 software to be displayed on a Wayland compositor.",
+      "remediation": "Edit the file /etc/gdm/custom.conf and uncomment or add the following line in the [daemon] block:\nWaylandEnable=false Example:\n# GDM configuration storage [daemon] WaylandEnable=false [security] [xdmcp] [chooser] [debug]\n# Uncomment the line below to turn on debugging\n#Enable=true"
     }
   ]
 }

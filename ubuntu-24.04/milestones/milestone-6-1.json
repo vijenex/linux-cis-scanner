@@ -15,7 +15,8 @@
       "expected_status": "enabled",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Ensure that the systemd-journald service is enabled to allow capturing of logging events.",
+      "remediation": "Run the following commands to unmask and start systemd-journald.service\n# systemctl unmask systemd -journald.service\n# systemctl start systemd -journald.service"
     },
     {
       "id": "6.1.1.2",
@@ -27,7 +28,8 @@
       "expected": "Journald log file access properly configured",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Journald will create logfiles that do not already exist on the system. This setting controls what permissions will be applied to these newly created files.",
+      "remediation": "If the default configuration is not appropriate for the site specific requirements, copy /usr/lib/tmpfiles.d/systemd.conf to /etc/tmpfiles.d/systemd.conf and\nmodify as required. Recommended mode for logfiles is 0640 or more restrictive."
     },
     {
       "id": "6.1.1.4",
@@ -43,7 +45,7 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.1.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Best practices recommend that a single centralized logging system be used for log management, choose a single service either rsyslog - OR - journald to be used as a single centralized logging system."
     },
     {
       "id": "6.1.2.2",
@@ -57,7 +59,8 @@
       "expected_value": "no",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Data from journald should be kept in the confines of the service and not forwarded to other services.",
+      "remediation": "- IF - rsyslog is the preferred method for capturing logs, this section and Recommendation should be skipped and the \"Configure rsyslog\" section followed.\n- IF - journald is the preferred method for capturing logs:\nSet the following parameter in the [Journal] section in /etc/systemd/journald.conf or a file in /etc/systemd/journald.conf.d/ ending in .conf :\nForwardToSyslog=no Example script to create systemd drop -in configuration file:\n#!/usr/bin/env bash a_settings=(\"ForwardToSyslog=no\") [ ! -d /etc/systemd/journald.conf.d/ ] && mkdir /etc/systemd/journald.conf.d/ if grep -Psq -- '^*\\[Journal \\]' /etc/systemd/journald.conf.d/60 - journald.conf; then printf '%s ' \"\" \"$ a_settings[@]\" >> /etc/systemd/journald.conf.d/60 - journald.conf else printf '%s ' \"\" \"[Journal]\" \"$a_settings[@]\" >> /etc/systemd/journald.conf.d/60 -journald.conf fi Note: If this setting appears in a canonically later file, or later in the same file, the\nsetting will be overwritten\nRun to following command to update the parameters in the service:\n# systemctl reload -or-restart systemd -journald"
     },
     {
       "id": "6.1.2.3",
@@ -71,7 +74,8 @@
       "expected_value": "yes",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The journald system includes the capability of compressing overly large files to avoid filling up the system with logs or making the logs unmanageably large.",
+      "remediation": "- IF - rsyslog is the preferred method for capturing logs, this section and Recommendation should be skipped and the \"Configure rsyslog\" section followed.\n- IF - journald is the preferred method for capturing logs:\nSet the following parameter in the [Journal] section in /etc/systemd/journald.conf or a file in /etc/systemd/journald.conf.d/ ending in .conf :\nCompress=yes Example script to create systemd drop -in configuration file:\n#!/usr/bin/env bash a_settings=(\"Compress=yes\") [ ! -d /etc/systemd/journald.conf.d/ ] && mkdir /etc/systemd/journald.conf.d/ if grep -Psq -- '^*\\[Journal \\]' /etc/systemd/journald.conf.d/60 - journald.conf; then printf '%s ' \"\" \"$a_sett ings[@]\" >> /etc/systemd/journald.conf.d/60 - journald.conf else printf '%s ' \"\" \"[Journal]\" \"$a_settings[@]\" >> /etc/systemd/journald.conf.d/60 -journald.conf fi Note: If this setting appears in a canonically later file, or later in the same file, the\nsetting will be overwritten\nRun to following command to update the parameters in the service:\n# systemctl reload -or-restart systemd -journald"
     },
     {
       "id": "6.1.2.4",
@@ -85,7 +89,8 @@
       "expected_value": "persistent",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Data from journald may be stored in volatile memory or persisted locally on the server.\nLogs in memory will be lost upon a system reboot. By persisting logs to local disk on the server they are protected from loss due to a reboot.",
+      "remediation": "- IF - rsyslog is the preferred method for capturing logs, this section and Recommendation should be skipped and the \"Configure rsyslog\" section followed.\n- IF - journald is the preferred method for capturing logs:\nSet the following parameter in the [Journal] section in /etc/systemd/journald.conf or a file in /etc/systemd/journald.conf.d/ ending in .conf :\nStorage=persistent Example script to create systemd drop -in configuration file:\n#!/usr/bin/env bash a_settings=(\"Storage=persistent\") [ ! -d /etc/systemd/journald.conf.d/ ] && mkdir /etc/systemd/journald.conf.d/ if grep -Psq -- '^*\\[Journal \\]' /etc/systemd/journald.conf.d/60 - journald.conf; then printf '%s ' \"\" \"$a_settings[@]\" >> /etc/systemd/journald.conf.d/60 - journald.con f else printf '%s ' \"\" \"[Journal]\" \"$a_settings[@]\" >> /etc/systemd/journald.conf.d/60 -journald.conf fi Note: If this setting appears in a canonically later file, or later in the same file, the\nsetting will be overwritten\nRun to following command to update the parameters in the service:\n# systemctl reload -or-restart systemd -journald"
     },
     {
       "id": "6.1.3.1",
@@ -98,7 +103,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.3.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The rsyslog software is recommended in environments where journald does not meet operation requirements.",
+      "remediation": "Run the following command to install rsyslog :\n# apt install rsyslog"
     },
     {
       "id": "6.1.3.2",
@@ -111,7 +117,8 @@
       "expected_status": "enabled",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.3.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Once the rsyslog package is installed, ensure that the service is enabled.",
+      "remediation": "- IF - rsyslog is being used for logging on the system:\nRun the following commands to unmask, enable, and start rsyslog.service :\n# systemctl unmask rsyslog.service\n# systemctl enable rsyslog.service\n# systemctl start rsyslog.service"
     },
     {
       "id": "6.1.3.7",
@@ -132,7 +139,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.3.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "rsyslog supports the ability to receive messages from remote hosts, thus acting as a log server. Clients should not receive data from other hosts.",
+      "remediation": "Unless the system's primary function is to serve as a logfile server , modify the files returned by the Audit Procedure and remove the specific lines highlighted by the audit.\nVerify none of the following entries are present in the rsyslog configuration.\nadvanced format module(load=\"imtcp\") input(type=\"imtcp\" port=\"514\") deprecated legacy format\n$ModLoad imtcp\n$InputTCPServerRun Reload the service:\n# systemctl reload -or-restart rsyslog"
     },
     {
       "id": "6.1.4.1",
@@ -146,7 +154,8 @@
       "expected_dir_permissions": "750",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "6.1.4.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Log files contain information from many services on the the local system, or in the event of a centralized log server, others systems logs as well.\nIn general log files are found in /var/log/ , although application can be configured to store logs elsewhere. Should your application store logs in another, ensure to run the same test on that location.",
+      "remediation": "Run the following script to update permissions and ownership on files in /var/log .\nAlthough the script is not destructive, ensure that the output of the audit procedure is captured in the event that the remediation causes issues.\n#!/usr/bin/env bash a_output2=() f_file_test_fix() a_out2=() maxperm=\"$( printf '%o' $(( 0777 & ~$perm_mask)) )\" if [ $(( $l_mode & $perm_mask )) -gt 0 ]; then a_out2+=(\" o Mode: \\\"$l_mode \\\" should be \\\"$maxperm \\\" or more restrictive\" \" x Removing excess permissions\") chmod \"$l_rperms\" \"$l_fname\" fi if [[ ! \"$l_user\" =~ $l_auser ]]; then a_out2+=(\" o Owned by: \\\"$l_user \\\" and should be owned by \\\"$l_auser//|/ or \\\"\" \" x Cha nging ownership to: \\\"$l_fix_account \\\"\") chown \"$l_fix_account\" \"$l_fname\" fi if [[ ! \"$l_group\" =~ $l_agroup ]]; then a_out2+=(\" o Group owned by: \\\"$l_group \\\" and should be group owned by \\\"$l_agroup//|/ or \\\"\" \" x C hanging group ownership to:\n\\\"$l_fix_account \\\"\") chgrp \"$l_fix_account\" \"$l_fname\" fi [ \"$#a_out2[@]\" -gt 0 ] && a_output2+=(\" - File: \\\"$l_fname \\\" is:\" \"$a_out2[@]\") l_fix_account='root' while IFS= read -r -d $'\\0' l_file; do while IFS=: read -r l_fname l_mode l_user l_group; do if grep -Pq -- '\\/(apt)*$' <<< \"$(dirname \"$l_fname\")\"; then perm_mask='0133' l_rperms=\"u -x,go-wx\" l_auser=\"root\" l_agroup=\"(root|adm)\"; f_file_test_fix else case \"$(basename \"$l_fname\")\" in lastlog | lastlog.* | wtmp | wtmp.* | wtmp -* | btmp | btmp.* | btmp-* | README) perm_mask='0113' l_rperms=\"ug -x,o-wx\" l_auser=\"root\" l_agroup=\"(root|utmp)\" f_file_test_fix ;;\ncloud-init.log* | localmessages* | waagent.log*) perm_mask='0133' l_rperms=\"u -x,go-wx\" l_auser=\"(root|syslog)\" l_agroup=\"(root|adm)\" file_test_fix ;;\nsecure | auth.log | syslo g | messages) perm_mask='0137' l_rperms=\"u -x,g-wx,o-rwx\" l_auser=\"(root|syslog)\" l_agroup=\"(root|adm)\" f_file_test_fix ;;\nSSSD | sssd) perm_mask='0117' l_rperms=\"ug -x,o-rwx\" l_auser=\"(roo t|SSSD)\" l_agroup=\"(root|SSSD)\" f_file_test_fix ;;\ngdm | gdm3) perm_mask='0117' l_rperms=\"ug -x,o-rwx\" l_auser=\"root\" l_agroup=\"(root|gdm|gdm3)\" f_file_test_fix ;;\n*.journal | *.journal~) perm_mask='0137' l_rperms=\"u -x,g-wx,o-rwx\" l_auser=\"root\" l_agroup=\"(root|systemd -journal)\" f_file_test_fix ;;\n*) perm_mask='0137' l_rperms=\"u -x,g-wx,o-rwx\" l_auser=\"(root|syslog)\" l_agroup=\"(root|adm)\" if [ \"$l_user\" = \"root\" ] || ! grep -Pq -- \"^*$(awk -F:\n'$1==\"'\"$l_user\"'\" print $7' /etc/passwd) \" /etc/shells; then ! grep -Pq -- \"$l_auser\" <<< \"$l_user\" && l_auser=\"(root|syslog|$l_user )\" ! grep -Pq -- \"$l_agroup\" <<< \"$l_group\" && l_agroup=\"(root|adm|$l_group)\" fi f_file_test_fix ;;\nesac fi done < <(stat -Lc '%n:%#a:%U:%G' \"$l_file\") done < <(find -L /var/log -type f \\( -perm /0137 -o ! -user root -o ! - group root \\) -print0) if [ \"$#a_output2[@]\" -le 0 ]; then # If all files passed, then we report no changes a_output+=(\" - All files in \\\"/var/log/ \\\" have appropriate permissions and ownersh ip\") printf ' %s' \"- All files in \\\"/var/log/ \\\" have appropriate permissions and ownership\" \" o No changes required\" \"\" else printf ' %s' \"$a_output2[@]\" \"\" fi Note: You may also need to change the configuration for your logging software or services for any logs that had incorrect permissions.\nIf there are services that log to other locations, ensure that those log files have the appropriate permissions."
     }
   ]
 }

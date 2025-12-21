@@ -12,7 +12,8 @@
       "expected_value": "2",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Address space layout randomization (ASLR) is an exploit mitigation technique which randomly arranges the address space of key data areas of a process.",
+      "remediation": "1. Review all files ending in .conf in the /etc/sysctl.d directory and comment out or remove all kernel.randomize_va_space lines that are not kernel.randomize_va_spacee=2 .\nExample script:\n#!/usr/bin/env bash l_option=\"kernel.randomize_va_space\" l_grep=\"$l_option//./ \\\\.\" l_value=\"2\" while IFS= read -r -d $'\\0' l_file; do grep -Poi '*'\"$l_option\"' *=*\\H+' \"$l_file\" \\ | grep -Pivq '^*'\"$l_grep\"' *=*'\"$l_value\"' ' && \\ sed -ri '/^*kernel.yama.ptrace_scope *=/s/^/# /' \"$l_file\" done < <(find /etc/sysctl.d/ -type f -name '*.conf' -print0) 2. Create or edit a file in the /etc/sysctl.d/ directory ending in .conf and edit or\nadd the following line:\nkernel.randomize_va_space = 2 Example:\n# [ ! -d \"/etc/sysctl.d/\" ] && mkdir -p /etc/sysctl.d/\n# printf '%s ' \"\" \"kernel.randomize_va_space = 2\" >> /etc/sysctl.d/60 - kernel_sysctl.conf 3. Run the following command to load all system configuration filles:\n# sysctl --system"
     },
     {
       "id": "1.5.2",
@@ -23,7 +24,8 @@
       "expected_value": "1",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The ptrace() system call provides a means by which one process (the \"tracer\") may observe and control the execution of another process (the \"tracee\"), and examine and change the tracee's memory and registers.\nThe sysctl settings (writable only with CAP_SYS_PTRACE) are:\n• 0 - classic ptrace permissions: a process can PTRACE_ATTACH to any other process running under the same uid, as long as it is dumpable (i.e. did not transition uids, start privileged, or have called prctl(PR_SET_DUMPABLE...) already). Similarly, PTRACE_TRAC EME is unchanged.\n• 1 - restricted ptrace: a process must have a predefined relationship with the inferior it wants to call PTRACE_ATTACH on. By default, this relationship is that of only its descendants when the above classic criteria is also met. To change the relationship, an inferior can call prctl(PR_SET_PTRACER, debugger, ...) to declare an allowed debugger PID to call PTRACE_ATTACH on the inferior.\nUsing PTRACE_TRACEME is unchanged.\n• 2 - admin -only attach: only processes with CAP_SYS_PTRACE may use ptrace with PTRACE_ATTACH, or through children calling PTRACE_TRACEME.\n• 3 - no attach: no processes may use ptrace with PTRACE_ATTACH nor via PTRACE_TRACEME. Once set, this sysctl value cannot be changed.",
+      "remediation": "1. Review all files ending in .conf in the /etc/sysctl.d directory and comment out or remove all kernel.yama.ptrace_scope lines that are not kernel.yama.ptrace_scope=1 , kernel.yama.ptrace_scope=2 , or kernel.yama.ptrace_scope=3 .\nExample script:\n#!/usr/bin/env bash l_option=\"kernel.yama.ptrace_scope\" l_grep=\"$l_option//./ \\\\.\" l_value=\"(1|2|3)\" while IFS= read -r -d $'\\0' l_file; do grep -Poi '*'\"$l_option\"' *=*\\H+' \"$l_file\" \\ | grep -Pivq '^*'\"$l_grep\"' *=*'\"$l_value\"' ' && \\ sed -ri '/^*kernel.yama.ptrace_scope *=/s/^/# /' \"$l_file\" done < <(find /etc/sysctl.d/ -type f -name '*.conf' -print0) 2. Create or edit a file in the /etc/sysctl.d/ directory ending in .conf and edit or\nadd the following line:\nkernel.yama.ptrace_scope = 1 Example:\n# [ ! -d \"/etc/sysctl.d/\" ] && mkdir -p /etc/sysctl.d/\n# printf '%s ' \"\" \"kernel.yama.ptrace_scope = 1\" >> /etc/sysctl.d/60 - kernel_sysctl.conf Note: The example uses kernel.yama.ptrace_scope = 1 but value may be set to 1, 2, or 3 3. Run the following command to load all system configuration filles:\n# sysctl --system"
     },
     {
       "id": "1.5.3",
@@ -34,7 +36,8 @@
       "expected_value": "0",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "fs.suid_dumpable governs whether a privileged process (with the setuid bit) can generate a core dump, regardless of other configurations.\nfs.suid_dumpable values:\n• 0 (default) - Any process that has changed privilege levels (like SUID programs) or is execute -only will not dump core.\n• 1 (debug) - All processes dump core if possible. The core dump is owned by the current user and security is not applied. This is primarily intended for system debugging.\n• 2 (suidsafe) - Any binary that normally wouldn't be dumped is dumped, but only if the core_pattern is set to a pipe handler or a fully qualified path. This mode is suitable for administrators debugging in a production environment.",
+      "remediation": "1. Review all files ending in .conf in the /etc/sysctl.d directory and comment out or remove all fs.suid_dumpable lines that are not fs.suid_dumpable=0 .\nExample script:\n#!/usr/bin/env bash l_option=\"fs.suid_dumpable\" l_grep=\"$l_option//./ \\\\.\" l_value=\"0\" while IFS= read -r -d $'\\0' l_file; do grep -Poi '*'\"$l_option\"' *=*\\H+' \"$l_file\" \\ | grep -Pivq '^*'\"$l_grep\"' *=*'\"$l_value\"' ' && \\ sed -ri '/^*kernel.yama.ptrace_scope *=/s/^/# /' \"$l_file\" done < <(find /etc/sysctl.d/ -type f -name '*.conf' -print0) 2. Create or edit a file in the /etc/sysctl.d/ directory ending in .conf and edit or\nadd the following line:\nfs.suid_dumpable = 0 Example:\n# [ ! -d \"/etc/sysctl.d/\" ] && mkdir -p /etc/sysctl.d/\n# printf '%s ' \"\" \"fs.suid_dumpable = 0\" >> /etc/sysctl.d/60 - kernel_sysctl.conf 3. Run the following command to load all system configuration filles:\n# sysctl --system Internal Only - General"
     },
     {
       "id": "1.5.4",
@@ -45,7 +48,8 @@
       "expected_state": "not_installed",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "core - limits the core file size hard - for enforcing hard resource limits. These limits are set by the superuser and enforced by the Kernel. The user cannot raise their requirement of system resources above such values.",
+      "remediation": "1. Run the following command to comment out any entries that include a hard value for core greater than 0 in /etc/security/limits.conf and and file in the /etc/security/limits.d/ directory.\nExample:\n# sed -ri '/^*[#]++hard+core+([1-9][0-9]*)/s/^/# /' /etc/security/limits.conf /etc/security/limits.d/* 2. Create or edit a file in /etc/security/limits.d/ and add the following line:\n* hard core 0 Example:\n# printf '%s ' \"\" \"* hard core 0\" >> /etc/security/limits.d/60 -limits.conf Internal Only - General"
     },
     {
       "id": "1.5.5",
@@ -56,7 +60,8 @@
       "expected_state": "disabled",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "prelink is a program that modifies ELF shared libraries and ELF dynamically linked binaries in such a way that the time needed for the dynamic linker to perform relocations at startup significantly decreases.",
+      "remediation": "Run the following command to restore binaries to normal:\n# prelink -ua Uninstall prelink using the appropriate package manager or manual installation:\n# apt purge prelink"
     }
   ]
 }

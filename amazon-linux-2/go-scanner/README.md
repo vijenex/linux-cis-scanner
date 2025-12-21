@@ -2,6 +2,20 @@
 
 Automated CIS Benchmark compliance scanner for Amazon Linux 2, built with Go.
 
+## ⚠️ IMPORTANT: Audit-Only Scanner
+
+**This scanner is 100% READ-ONLY and performs AUDIT ONLY.**
+
+- ✅ **Reads** system configuration files
+- ✅ **Checks** compliance status
+- ✅ **Generates** reports
+- ❌ **NEVER modifies** system files
+- ❌ **NEVER executes** remediation commands
+- ❌ **NEVER installs/removes** packages
+- ❌ **NEVER changes** system configuration
+
+**Safe to run on production systems.** See [AUDIT_ONLY.md](AUDIT_ONLY.md) for details.
+
 ## Overview
 
 This scanner automates the assessment of Amazon Linux 2 systems against the CIS Amazon Linux 2 Benchmark. It provides comprehensive security compliance checking with detailed reporting in HTML and CSV formats.
@@ -9,10 +23,11 @@ This scanner automates the assessment of Amazon Linux 2 systems against the CIS 
 ## Features
 
 - ✅ Automated compliance checking for CIS Amazon Linux 2 Benchmark
+- ✅ **Audit-only** - No system modifications
 - 📊 HTML and CSV report generation
 - 🔍 Real-time scanning with progress indicators
 - 🎯 Profile-based scanning (Level 1, Level 2)
-- 📋 Detailed control descriptions and remediation steps
+- 📋 Detailed control descriptions and remediation steps (information only)
 
 ## Installation
 

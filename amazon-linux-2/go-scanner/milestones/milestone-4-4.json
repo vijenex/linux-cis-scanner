@@ -271,13 +271,13 @@
       "section": "4.4.2.4 Configure pam_unix module",
       "profile": "Level1",
       "automated": true,
-      "type": "PAMConfig",
+      "type": "FileContent",
       "cis_reference": "CIS Amazon Linux 2 - 4.4.2.4.3 | Level1",
       "description": "Use SHA-512 for password hashing instead of weaker algorithms.",
       "remediation": "Edit /etc/pam.d/system-auth and ensure: password sufficient pam_unix.so sha512",
-      "file_path": "/etc/pam.d/system-auth",
-      "parameter": "sha512",
-      "expected_value": "enabled"
+      "file_path": "/etc/pam.d/password-auth /etc/pam.d/system-auth",
+      "pattern": "^\\s*password\\s+sufficient\\s+pam_unix.so.*(sha512|yescrypt)",
+      "expected_result": "found"
     },
     {
       "id": "4.4.2.4.4",
@@ -285,13 +285,13 @@
       "section": "4.4.2.4 Configure pam_unix module",
       "profile": "Level1",
       "automated": true,
-      "type": "PAMConfig",
+      "type": "FileContent",
       "cis_reference": "CIS Amazon Linux 2 - 4.4.2.4.4 | Level1",
       "description": "The use_authtok option ensures the password from the previous module is used.",
       "remediation": "Edit /etc/pam.d/system-auth and configure: password sufficient pam_unix.so use_authtok",
-      "file_path": "/etc/pam.d/system-auth",
-      "parameter": "use_authtok",
-      "expected_value": "enabled"
+      "file_path": "/etc/pam.d/password-auth /etc/pam.d/system-auth",
+      "pattern": "^\\s*password\\s+sufficient\\s+pam_unix.so.*use_authtok",
+      "expected_result": "found"
     }
   ]
 }

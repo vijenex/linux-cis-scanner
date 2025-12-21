@@ -13,7 +13,7 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Linux Pluggable Authentication Modules (PAM) is a suite of libraries that allow a Linux system administrator to configure methods to authenticate users. It provides a flexible and centralized way to switch authentication methods for secured applications by using configuration files instead of changing application code The libpam-runtime provides the runtime support for the PAM library"
     },
     {
       "id": "5.3.1.2",
@@ -25,7 +25,7 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "libpam-modules is a package containing a set of Pluggable Authentication Modules (PAM) which allows system administrators to configure different authentication methods for user logins, providing flexibility in how users can access applications by using various authentica tion modules to include password checks and other security mechanisms."
     },
     {
       "id": "5.3.1.3",
@@ -37,7 +37,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.1.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "libpwquality provides common functions for password quality checking and scoring them based on their apparent randomness. The library also provides a function for generating random passwords with good pronounceability.\nThis module can be plugged into the password stack of a given service to provide some plug-in strength -checking for passwords. The code was originally based on pam_cracklib module and the module is backwards compatible with its options.",
+      "remediation": "Run the following command to install the latest version of libpam-pwquality :\n# apt install libpam -pwquality"
     },
     {
       "id": "5.3.2.1",
@@ -49,7 +50,8 @@
       "required_setting": "pam_unix.so",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "pam_unix is the standard Unix authentication module. It uses standard calls from the system's libraries to retrieve and set account information as well as authentication.\nUsually this is obtained from the /etc/passwd and if shadow is enabled, the /etc/shadow file as well.\nThe account component performs the task of establishing the status of the user's account and password based on the following shadow elements: expire , last_change , max_change , min_change , warn_change . In the case of the latter, it may offer advice to the user on changing their password or, through the PAM_AUTHTOKEN_REQD return, delay giving service to the user until they have established a new password. The entries listed above are documented in the shadow(5) manual page. Should the user's record not contain one or more of these entries, the corresponding shadow check is not performed.\nThe authentication component performs the task of checking the users credentials (password). The default action of this module is to not permit the user access to a service if their official password is blank.",
+      "remediation": "Run the following command to enable the pam_unix module:\n# pam-auth-update --enable unix Note: If a site specific custom profile is being used in your environment to configure PAM that includes the configuration for the pam_unix module, enable that module instead"
     },
     {
       "id": "5.3.2.2",
@@ -61,7 +63,8 @@
       "required_setting": "pam_faillock.so",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The pam_faillock.so module maintains a list of failed authentication attempts per user during a specified interval and locks the account in case there were more than the configured number of consecutive failed authentications (this is defined by the deny parameter in the faillock configuration). It stores the failure records into per -user files in the tally directory.",
+      "remediation": "Create two pam -auth-update profiles in /usr/share/pam -configs/ :\n1. Create the faillock profile in /usr/share/pam -configs/ with the following lines:\nName: Enable pam_faillock to deny access Default: yes Priority: 0 Auth-Type: Primary Auth:\n[default=die] pam_faillock.so authfail Example Script:\n#!/usr/bin/env bash arr=('Name: Enable pam_faillock to deny access' 'Default: yes' 'Priority:\n0' 'Auth -Type: Primary' 'Auth:' ' [default=die] pam_faillock.so authfail') printf '%s ' \"$arr[@]\" > /usr/share/pam -configs/faillock 2. Create the faillock_notify profile in /usr/share/pam -configs/ with the following lines:\nName: Notify of failed login attempts and reset count upon success Default: yes Priority: 1024 Auth-Type: Primary Auth:\nrequisite pam_faillock.so preauth Account-Type: Primary Account:\nrequired pam_faillock.so Example Script:\n#!/usr/bin/env bash arr=('Name: Notify of failed login attempts and reset count upon success' 'Default: yes' 'Priority: 1024' 'Auth -Type: Primary' 'Auth:' ' requisite pam_faillock.so preauth' 'Account -Type:\nPrimary' 'Account:' ' required pam_faillock.so') printf '%s ' \"$arr[@]\" > /usr/share/pam -configs/faillock_notify\nRun the following command to update the common-auth and common-account PAM files with the new profiles:\n# pam-auth-update --enable <profile_filename> Example:\n# pam-auth-update --enable faillock\n# pam-auth-update --enable faillock_notify Internal Only - General Note:\n• The name used for the file must be used in the pam-auth-update --enable command • The Name: line should be easily recognizable and understood • The Priority: Line is important as it effects the order of the lines in the /etc/pam.d/ files • If a site specific custom profile is being used in your environment to configure PAM that includes the configuration for the pam_faillock module, enable that module instead"
     },
     {
       "id": "5.3.2.3",
@@ -73,7 +76,8 @@
       "required_setting": "pam_pwquality.so",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The pam_pwquality.so module performs password quality checking. This module can be plugged into the password stack of a given service to provide strength -checking for passwords. The code was originally based on pam_cracklib module and the module is backwards compatible with it s options.\nThe action of this module is to prompt the user for a password and check its strength against a system dictionary and a set of rules for identifying poor choices.\nThe first action is to prompt for a single password, check its strength and then, if it is considered strong, prompt for the password a second time (to verify that it was typed correctly on the first occasion). All being well, the password is passed on to subsequent modules to be installed as the new authentication token.",
+      "remediation": "Run the following script to verify the pam_pwquality.so line exists in a pam-auth- update profile:\n# grep -P -- '_pwquality \\.so' /usr/share/pam -configs/* Output should be similar to:\n/usr/share/pam -configs/pwquality: requisite pam_pwquality.so retry=3 /usr/share/pam -configs/pwquality: requisite pam_pwquality.so retry=3 - IF - similar output is returned:\nRun the following command to update /etc/pam.d/common -password with the returned profile:\n# pam-auth-update --enable PROFILE_NAME Example:\n# pam-auth-update pwquality - IF - similar output is NOT returned:\nCreate a pam -auth-update profile in /usr/share/pam -configs/ with the following lines:\nName: Pwquality password strength checking Default: yes Priority: 1024 Conflicts: cracklib Password -Type: Primary Password:\nrequisite pam_pwquality.so retry=3 Example:\n#!/usr/bin/env bash arr=('Name: Pwquality password strength checking' 'Default: yes' 'Priority: 1024' 'Conflicts: cracklib' 'Password -Type: Primary' 'Password:' ' requisite pam_pwquality.so retry=3') printf '%s ' \"$arr[@]\" > /usr/share/pam -configs/pwquality\nRun the following command to update /etc/pam.d/common -password with the pwquality profile:\n# pam-auth-update --enable pwquality Internal Only - General Note:\n• The name used for the file must be used in the pam-auth-update --enable command • The Name: line should be easily recognizable and understood • The Priority: Line is important as it effects the order of the lines in the /etc/pam.d/ files • If a site specific custom profile is being used in your environment to configure PAM that includes the configuration for the pam_pwquality module, enable that module instead"
     },
     {
       "id": "5.3.2.4",
@@ -85,7 +89,8 @@
       "required_setting": "pam_pwhistory.so",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The pam_pwhistory.so module saves the last passwords for each user in order to force password change history and keep the user from alternating between the same password too frequently.\nThis module does not work together with kerberos. In general, it does not make much sense to use this module in conjunction with NIS or LDAP , since the old passwords are stored on the local machine and are not available on another machine for password history checking.",
+      "remediation": "Run the following script to verify the pam_pwhistory.so line exists in a pam-auth- update profile:\n# grep -P -- '_pwhistory \\.so' /usr/share/pam -configs/* Output should be similar to:\n/usr/share/pam -configs/pwhistory: requisite pam_pwhistory.so remember=24 enforce_for_root use_authtok - IF - similar output is returned:\nRun the following command to update /etc/pam.d/common -password with the returned profile:\n# pam-auth-update --enable PROFILE_NAME Example:\n# pam-auth-update pwhistory - IF - similar output is NOT returned:\nCreate a pwhistory profile in /usr/share/pam -configs/ with the following lines:\nName: pwhistory password history checking Default: yes Priority: 1024 Password -Type: Primary Password: requisite pam_pwhistory.so remember=24 enforce_for_root use_authtok Example Script:\n#!/usr/bin/env bash arr=('Name: pwhistory password history checking' 'Default: yes' 'Priority:\n1024' 'Password -Type: Primary' 'Password:' ' requisite pam_pwhistory.so remember=24 enforce_for_root use_authtok') printf '%s ' \"$arr[@]\" > /usr/share/pam -configs/pwhistory\nRun the following command to update /etc/pam.d/common -password with the pwhistory profile:\n# pam-auth-update --enable pwhistory Note:\n• The name used for the file must be used in the pam-auth-update --enable command • The Name: line should be easily recognizable and understood • The Priority: Line is important as it effects the order of the lines in the /etc/pam.d/ files • If a site specific custom profile is being used in your environment to configure PAM that includes the configuration for the pam_pwhistory module, enable that module instead Internal Only - General"
     },
     {
       "id": "5.3.3.1.1",
@@ -98,7 +103,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.3.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The deny=<n> option will deny access if the number of consecutive authentication failures for this user during the recent interval exceeds .",
+      "remediation": "Create or edit the following line in /etc/security/faillock.conf setting the deny option to 5 or less:\ndeny = 5\nRun the following command:\n# grep -Pl -- '_faillock \\.so+([^#]++)?deny ' /usr/share/pam - configs/*\nEdit any returned files and remove the deny=<N> arguments from the pam_faillock.so line(s):"
     },
     {
       "id": "5.3.3.1.2",
@@ -111,7 +117,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.3.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "unlock_time=<n> - The access will be re -enabled after seconds after the lock out. The value 0 has the same meaning as value never - the access will not be re -enabled without resetting the faillock entries by the faillock(8) command.\nNote:\n• The default directory that pam_faillock uses is usually cleared on system boot so the access will be also re -enabled after system reboot. If that is undesirable a different tally directory must be set with the dir option.\n• It is usually undesirable to permanently lock out users as they can become easily a target of denial of service attack unless the usernames are random and kept secret to potential attackers.\n• The maximum configurable value for unlock_time is 604800",
+      "remediation": "Set password unlock time to conform to site policy. unlock_time should be 0 (never), or 900 seconds or greater.\nEdit /etc/security/faillock.conf and update or add the following line:\nunlock_time = 900\nRun the following command: remove the unlock_time argument from the pam_faillock.so module in the PAM files:\n# grep -Pl -- '_faillock \\.so+([^#]++)?unlock_time ' /usr/share/pam -configs/*\nEdit any returned files and remove the unlock_time=<N> argument from the pam_faillock.so line(s):"
     },
     {
       "id": "5.3.3.2.1",
@@ -124,7 +131,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.3.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The pwquality difok option sets the number of characters in a password that must not be present in the old password.",
+      "remediation": "Create or modify a file ending in .conf in the /etc/security/pwquality.conf.d/ directory or the file /etc/security/pwquality.conf and add or modify the following line to set difok to 2 or more. Ensure setting conforms to local site policy:\nExample:\n#!/usr/bin/env bash sed -ri 's/^*difok*=/# &/' /etc/security/pwquality.conf [ ! -d /etc/security/pwquality.conf.d/ ] && mkdir /etc/security/pwquality.conf.d/ printf ' %s' \"difok = 2\" > /etc/security/pwquality.conf.d/50 -pwdifok.conf\nRun the following command:\n# grep -Pl -- '_pwquality \\.so+([^#]++)?difok ' /usr/share/pam - configs/*\nEdit any returned files and remove the difok argument from the pam_pwquality.so line(s):"
     },
     {
       "id": "5.3.3.2.2",
@@ -137,7 +145,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.3.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The minimum password length setting determines the lowers number of characters that make up a password for a user account. There are many different theories about how to determine the best password length for an organization, but perhaps \"passphrase\" is a better term than \"password\".\nThe minlen option sets the minimum acceptable size for the new password (plus one if credits are not disabled which is the default). Cannot be set to lower value than 6.",
+      "remediation": "Create or modify a file ending in .conf in the /etc/security/pwquality.conf.d/ directory or the file /etc/security/pwquality.conf and add or modify the following line to set password length of 14 or more characters. Ensure that password length conforms to local site policy:\nExample:\n#!/usr/bin/env bash sed -ri 's/^*minlen *=/# &/' /etc/security/pwquality.conf [ ! -d /etc/security/pwquality.conf.d/ ] && mkdir /etc/security/pwquality.conf.d/ printf ' %s' \"minlen = 14\" > /etc/security/pwquality.conf.d/50 - pwlength.conf\nRun the following command:\n# grep -Pl -- '_pwquality \\.so+([^#]++)?minlen ' /usr/share/pam - configs/*\nEdit any returned files and remove the minlen argument from the pam_pwquality.so line(s):"
     },
     {
       "id": "5.3.3.2.6",
@@ -150,7 +159,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.3.2.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The pwquality dictcheck option sets whether to check for the words from the cracklib dictionary.",
+      "remediation": "Edit any file ending in .conf in the /etc/security/pwquality.conf.d/ directory and/or the file /etc/security/pwquality.conf and comment out or remove any instance of dictcheck = 0 :\nExample:\n# sed -ri 's/^*dictcheck *=/# &/' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf\nRun the following command:\n# grep -Pl -- '_pwquality \\.so+([^#]++)?dictcheck ' /usr/share/pam -configs/*\nEdit any returned files and remove the dictcheck argument from the pam_pwquality.so line(s)"
     },
     {
       "id": "5.3.3.3.1",
@@ -163,7 +173,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.3.3.3.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /etc/security/opasswd file stores the users' old passwords and can be checked to ensure that users are not recycling recent passwords. The number of passwords remembered is set via the remember argument value in set for the pam_pwhistory module.\n• remember=<N> - <N> is the number of old passwords to remember",
+      "remediation": "Run the following command:\n# awk '/Password -Type:/ f = 1;next / -Type:/ f = 0 f if (/pam_pwhistory \\.so/) print FILENAME' /usr/share/pam -configs/*\nEdit any returned files and edit or add the remember= argument, with a value of 24 or more, that meets local site policy to the pam_pwhistory line in the Password section:\nExample File:\nName: pwhistory password history checking Default: yes Priority: 1024 Password -Type: Primary Password:\nrequisite pam_pwhistory.so remember=24 enforce_for_root use_authtok # < - **ensure line includes remember=<N>**\nRun the following command to update the files in the /etc/pam.d/ directory:\n# pam-auth-update --enable <MODIFIED_PROFILE_NAME> Example:\n# pam-auth-update --enable pwhistory"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "expected_value": "2",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Address space layout randomization (ASLR) is an exploit mitigation technique which randomly arranges the address space of key data areas of a process.",
+      "remediation": "Set the following parameter in /etc/sysctl.conf or a file in /etc/sysctl.d/ ending in .conf :\n• kernel.randomize_va_space = 2 Example:\n# printf \"%s \" \"kernel.randomize_va_space = 2\" >> /etc/sysctl.d/60 - kernel_sysctl.conf\nRun the following command to set the active kernel parameter:\n# sysctl -w kernel.randomize_va_space=2 Note: If these settings appear in a canonically later file, or later in the same file, these\nsettings will be overwritten"
     },
     {
       "id": "1.5.2",
@@ -28,7 +29,8 @@
       "expected_value": "1",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The ptrace() system call provides a means by which one process (the \"tracer\") may observe and control the execution of another process (the \"tracee\"), and examine and change the tracee's memory and registers.\nThe sysctl settings (writable only with CAP_SYS_PTRACE) are:\n• 0 - classic ptrace permissions: a process can PTRACE_ATTACH to any other process running under the same uid, as long as it is dumpable (i.e. did not transition uids, start privileged, or have called prctl(PR_SET_DUMPABLE...) already). Similarly, PTRACE_TRAC EME is unchanged.\n• 1 - restricted ptrace: a process must have a predefined relationship with the inferior it wants to call PTRACE_ATTACH on. By default, this relationship is that of only its descendants when the above classic criteria is also met. To change the relationship, an inferior can call prctl(PR_SET_PTRACER, debugger, ...) to declare an allowed debugger PID to call PTRACE_ATTACH on the inferior.\nUsing PTRACE_TRACEME is unchanged.\n• 2 - admin -only attach: only processes with CAP_SYS_PTRACE may use ptrace with PTRACE_ATTACH, or through children calling PTRACE_TRACEME.\n• 3 - no attach: no processes may use ptrace with PTRACE_ATTACH nor via PTRACE_TRACEME. Once set, this sysctl value cannot be changed.",
+      "remediation": "Set the kernel.yama.ptrace_scope parameter in /etc/sysctl.conf or a file in /etc/sysctl.d/ ending in .conf to a value of 1, 2, or 3:\nkernel.yama.ptrace_scope = 1 - OR - kernel.yama.ptrace_scope = 2 - OR - kernel.yama.ptrace_scope = 3 Example:\n# printf \"%s \" \"kernel.yama.ptrace_scope = 1\" >> /etc/sysctl.d/60 - kernel_sysctl.conf\nRun the following command to set the active kernel parameter:\n# sysctl -w kernel.yama.ptrace_scope=1 Note:\n• If a value of 2 or 3 is preferred, or required by local site policy, replace the 1 with the desired value of 2 or 3 in the example above • If this setting appears in a canonically later file, or later in the same file, the\nsetting will be overwritten"
     },
     {
       "id": "1.5.3",
@@ -44,7 +46,8 @@
       "expected_setting": "* hard core 0",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "A core dump is the memory of an executable program. It is generally used to determine why a program aborted. It can also be used to glean confidential information from a core file. The system provides the ability to set a soft limit for core dumps, but thi s can be overridden by the user.",
+      "remediation": "Add the following line to /etc/security/limits.conf or a /etc/security/limits.d/* file:\n* hard core 0\nSet the following parameter in /etc/sysctl.conf or a file in /etc/sysctl.d/ ending in .conf :\n• fs.suid_dumpable = 0 Example:\n# printf \" %s\" \"fs.suid_dumpable = 0\" >> /etc/sysctl.d/60 -fs_sysctl.conf\nRun the following command to set the active kernel parameter:\n# sysctl -w fs.suid_dumpable=0 Note: If these settings appear in a canonically later file, or later in the same file, these\nsettings will be overwritten -IF- systemd -coredump is installed:\nedit /etc/systemd/coredump.conf and add/modify the following lines:\nStorage=none ProcessSizeMax=0\nRun the command:\nsystemctl daemon -reload"
     },
     {
       "id": "1.5.4",
@@ -57,7 +60,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "prelink is a program that modifies ELF shared libraries and ELF dynamically linked binaries in such a way that the time needed for the dynamic linker to perform relocations at startup significantly decreases.",
+      "remediation": "Run the following command to restore binaries to normal:\n# prelink -ua Uninstall prelink using the appropriate package manager or manual installation:\n# apt purge prelink"
     },
     {
       "id": "1.5.5",
@@ -71,7 +75,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.5.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The Apport Error Reporting Service automatically generates crash reports for debugging",
+      "remediation": "Edit /etc/default/apport and add or edit the enabled parameter to equal 0:\nenabled=0\nRun the following commands to stop and mask the apport service\n# systemctl stop apport.service\n# systemctl mask apport.service - OR -\nRun the following command to remove the apport package:\n# apt purge apport"
     }
   ]
 }

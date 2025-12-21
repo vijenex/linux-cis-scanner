@@ -15,7 +15,8 @@
       "expected_group": "root",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The file /etc/ssh/sshd_config , and files ending in .conf in the /etc/ssh/sshd_config.d directory, contain configuration specifications for sshd .",
+      "remediation": "Run the following script to set ownership and permissions on /etc/ssh/sshd_config and files ending in .conf in the /etc/ssh/sshd_config.d directory:\n#!/usr/bin/env bash chmod u-x,og-rwx /etc/ssh/sshd_config chown root:root /etc/ssh/sshd_config while IFS= read -r -d $'\\0' l_file; do if [ -e \"$l_file\" ]; then chmod u-x,og-rwx \"$l_file\" chown root:root \"$l_file\" fi done < <(find /etc/ssh/sshd_config.d -type f -print0 2>/dev/null) - IF - other locations are listed in an Include statement, *.conf files in these locations access should also be modified."
     },
     {
       "id": "5.1.2",
@@ -29,7 +30,8 @@
       "expected_group": "root",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "An SSH private key is one of two files used in SSH public key authentication. In this authentication method, the possession of the private key is proof of identity. Only a private key that corresponds to a public key will be able to authenticate successful ly.\nThe private keys need to be stored and handled carefully, and no copies of the private key should be distributed.",
+      "remediation": "Run the following script to set mode, ownership, and group on the private SSH host key files:\n#!/usr/bin/env bash a_output2=() l_pmask=\"0177\" l_maxperm=\"$( printf '%o' $(( 0777 & ~$l_pmask )) )\" f_file_access_fix() while IFS=: read -r l_file_mode l_file_owner l_file_group; do a_out2=() if [ $(( $l_file_mode & $l_pmask )) -gt 0 ]; then a_out2+=(\"\" \" Mode: \\\"$l_file_mode \\\"\" \\ \" should be mode: \\\"$l_maxperm \\\" or more restrictive\" \\ \" updating to mode: \\\"$l_maxperm \\\"\") chmod u-x,go-rwx \"$l_file\" fi if [ \"$l_file_owner\" != \"root\" ]; then a_out2+=(\"\" \" Owned by: \\\"$l_file_owner \\\"\" \\ \" should be owned by \\\"root\\\"\" \\ \" Changing ownership to \\\"root\\\"\") chown root \"$l_file\" fi if [ \"$l_file_group\" != \"root\" ]; then a_out2+=(\"\" \" Owned by group \\\"$l_file_group \\\"\" \\ \" should be group owned by: \\\"root\\\"\" \\ \" Changing group ownership to group: \\\"root\\\"\") chgrp root \"$l_file\" fi if [ \"$#a_out2[@]\" -gt \"0\" ]; then a_output2+=(\"\" \" - File: \\\"$l_file \\\"\" \"$a_out2[@]\") fi done < <(stat -Lc '%#a:%U:%G' \"$l_file\") while IFS= read -r -d $'\\0' l_file; do if ssh-keygen -lf &>/dev/null \"$l_file\"; then file \"$l_file\" | grep -Piq -- \\ '+([^#]++)?private +key' && f_file_access_fix fi done < <(find -L /etc/ssh -xdev -type f -print0 2>/dev/null) if [ \"$#a_output2[@]\" -le \"0\" ]; then printf '%s ' \"\" \" - No access changes required\" \"\" else printf '%s ' \"\" \" - Remediation results:\" \"$a_output2[@]\" \"\" fi Internal Only - General"
     },
     {
       "id": "5.1.3",
@@ -43,7 +45,8 @@
       "expected_group": "root",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "An SSH public key is one of two files used in SSH public key authentication. In this authentication method, a public key is a key that can be used for verifying digital signatures generated using a corresponding private key. Only a public key that correspo nds to a private key will be able to authenticate successfully.",
+      "remediation": "Run the following script to set mode, ownership, and group on the public SSH host key files:\n#!/usr/bin/env bash a_output=(); a_output2=() l_pmask=\"0133\"; l_maxperm=\"$( printf '%o' $(( 0777 & ~$l_pmask )) )\" f_file_access_fix() while IFS=: read -r l_file_mode l_file_owner l_file_group; do a_out2=() [ $(( $l_file_mode & $l_pmask )) -gt 0 ] && \\ a_out2+=(\" Mode: \\\"$l_file_mode \\\" should be mode:\n\\\"$l_maxperm \\\" or more restrictive\" \\ \" updating to mode: \\\"$l_maxperm \\\"\") && chmod u -x,go-wx \"$l_file\" [ \"$l_file_owner\" != \"root\" ] && \\ a_out2+=(\" Owned by: \\\"$l_file_owner \\\" should be owned by \\\"root\\\"\" \\ \" Changing ownership to \\\"root\\\"\") && chown root \"$l_file\" [ \"$l_file_group\" != \"root\" ] && \\ a_out2+=(\" Owned by group \\\"$l_file_group \\\" should be group owned by: \\\"root\\\"\" \\ \" Changing group ownership to \\\"root\\\"\") && chgrp root \"$l_file\" if [ \"$#a_out2[@]\" -gt \"0\" ]; then a_output2+=(\" - File: \\\"$l_file \\\"\" \"$a_out2[@]\") else a_output+=(\" - File: \\\"$l_file \\\"\" \\ \" Correct: mode: \\\"$l_file_mode \\\", owner: \\\"$l_file_owner \\\", and group owner: \\\"$l_file_group \\\" configured\") fi done < <(stat -Lc '%#a:%U:%G' \"$l_file\") while IFS= read -r -d $'\\0' l_file; do if ssh-keygen -lf &>/dev/null \"$l_file\"; then file \"$l_file\" | grep -Piq -- '+([^#]++)?public +key' && f_file_access_fix fi done < <(find -L /etc/ssh -xdev -type f -print0 2>/dev/null) if [ \"$#a_output2[@]\" -le \"0\" ]; then printf '%s ' \"\" \" - No access changes required\" \"\" else printf '%s ' \" - Remediation results:\" \"$a_output2[@]\" \"\" fi"
     },
     {
       "id": "5.1.4",
@@ -63,7 +66,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "There are several options available to limit which users and group can access the system via SSH. It is recommended that at least one of the following options be leveraged:\n• AllowUsers :\no The AllowUsers variable gives the system administrator the option of allowing specific users to ssh into the system. The list consists of space separated user names. Numeric user IDs are not recognized with this variable. If a system administrator wants to restrict user access further by only allowing the allowed users to log in from a particular host, the entry can be specified in the form of user@host.\n• AllowGroups :\no The AllowGroups variable gives the system administrator the option of allowing specific groups of users to ssh into the system. The list consists of space separated group names. Numeric group IDs are not recognized with this variable.\n• DenyUsers :\no The DenyUsers variable gives the system administrator the option of denying specific users to ssh into the system. The list consists of space separated user names. Numeric user IDs are not recognized with this variable. If a system administrator wants to restrict user access further by specifically denying a user's access from a particular host, the e ntry can be specified in the form of user@host.\n• DenyGroups :\no The DenyGroups variable gives the system administrator the option of denying specific groups of users to ssh into the system. The list consists of space separated group names. Numeric group IDs are not recognized with this variable.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set one or more of the parameters above any Include and Match set statements as follows:\nAllowUsers <userlist> - AND/OR - AllowGroups <grouplist> Note:\n• First occurrence of a option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a .conf file in a Include directory.\n• Be advised that these options are \"ANDed\" together. If both AllowUsers and AllowGroups are set, connections will be limited to the list of users that are also a member of an allowed group. It is recommended that only one be set for clarity and ease of administration.\n• It is easier to manage an allow list than a deny list. In a deny list, you could potentially add a user or group and forget to add it to the deny list.\nInternal Only - General"
     },
     {
       "id": "5.1.5",
@@ -82,7 +86,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The Banner parameter specifies a file whose contents must be sent to the remote user before authentication is permitted. By default, no banner is displayed.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the Banner parameter above any Include and Match entries as follows:\nBanner /etc/issue.net Note: First occurrence of a option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location.\nEdit the file being called by the Banner argument with the appropriate contents according to your site policy, remove any instances of , , , or references to the OS platform Example:\n# printf '%s ' \"Authorized users only. All activity may be monitored and reported.\" > \"$(sshd -T | awk '$1 == \"banner\" print $2')\""
     },
     {
       "id": "5.1.6",
@@ -101,7 +106,8 @@
       "validate_crypto": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "This variable limits the ciphers that SSH can use during communication.\nNotes:\n• Some organizations may have stricter requirements for approved ciphers.\n• Ensure that ciphers used are in compliance with site policy.\n• The only \"strong\" ciphers currently FIPS 140 compliant are:\no aes256 -gcm@openssh.com o aes128 -gcm@openssh.com o aes256 -ctr o aes192 -ctr o aes128 -ctr",
+      "remediation": "Edit the /etc/ssh/sshd_config file and add/modify the Ciphers line to contain a comma separated list of the site unapproved (weak) Ciphers preceded with a - above any Include entries:\nExample:\nCiphers -3des-cbc,aes128 -cbc,aes192 -cbc,aes256 -cbc,chacha20 - poly1305@openssh.com - IF - CVE-2023-48795 has been addressed, and it meets local site policy, chacha20 - poly1305@openssh.com may be removed from the list of excluded ciphers.\nNote: First occurrence of an option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.7",
@@ -122,7 +128,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Note: To clarify, the two settings described below are only meant for idle connections from a protocol perspective and are not meant to check if the user is active or not. An idle user does not mean an idle connection. SSH does not and never had, intentionally, the capability to drop idle users. In SSH versions before 8.2p1 there was a bug that caused these values to behave in such a manner that they were abused to disconnect idle users. This bug has been resolved in 8.2p1 and thus it can no longer be abuse d disconnect idle users.\nThe two options ClientAliveInterval and ClientAliveCountMax control the timeout of SSH sessions. Taken directly from man 5 sshd_config :\n• ClientAliveInterval Sets a timeout interval in seconds after which if no data has been received from the client, sshd(8) will send a message through the encrypted channel to request a response from the client. The default is 0, indicating that these messages will not be sent to the client.\n• ClientAliveCountMax Sets the number of client alive messages which may be sent without sshd(8) receiving any messages back from the client. If this threshold is reached while client alive messages are being sent, sshd will disconnect the client, terminating the session. It i s important to note that the use of client alive messages is very different from TCPKeepAlive. The client alive messages are sent through the encrypted channel and therefore will not be spoofable. The TCP keepalive option en ‐abled by TCPKeepAlive is spoofable.\nThe client alive mechanism is valuable when the client or server depend on knowing when a connection has become unresponsive.\nThe default value is 3. If ClientAliveInterval is set to 15, and ClientAliveCountMax is left at the default, unresponsive SSH clients will be disconnected after approximately 45 seconds. Setting a zero ClientAliveCountMax disables connection termination.\n Internal Only - General",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the ClientAliveInterval and ClientAliveCountMax parameters above any Include and Match entries according to site policy.\nExample:\nClientAliveInterval 15 ClientAliveCountMax 3 Note: First occurrence of a option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location.\nInternal Only - General"
     },
     {
       "id": "5.1.8",
@@ -141,7 +148,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.8",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The DisableForwarding parameter disables all forwarding features, including X11, ssh-agent(1), TCP and StreamLocal. This option overrides all other forwarding -related options and may simplify restricted configurations.\n• X11Forwarding provides the ability to tunnel X11 traffic through the connection to enable remote graphic connections.\n• ssh-agent is a program to hold private keys used for public key authentication.\nThrough use of environment variables the agent can be located and automatically used for authentication when logging in to other machines using ssh.\n• SSH port forwarding is a mechanism in SSH for tunneling application ports from the client to the server, or servers to clients. It can be used for adding encryption to legacy applications, going through firewalls, and some system administrators and IT prof essionals use it for opening backdoors into the internal network from their home machines.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the DisableForwarding parameter to yes above any Include and Match entries as follows:\nDisableForwarding yes Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location."
     },
     {
       "id": "5.1.9",
@@ -160,7 +168,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.9",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The GSSAPIAuthentication parameter specifies whether user authentication based on GSSAPI is allowed",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the GSSAPIAuthentication parameter to no above any Include and Match entries as follows:\nGSSAPIAuthentication no Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location."
     },
     {
       "id": "5.1.10",
@@ -179,7 +188,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.10",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The HostbasedAuthentication parameter specifies if authentication is allowed through trusted hosts via the user of .rhosts , or /etc/hosts.equiv , along with successful public key client host authentication.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the HostbasedAuthentication parameter to no above any Include and Match entries as follows:\nHostbasedAuthentication no Note: First occurrence of a option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location.\nInternal Only - General"
     },
     {
       "id": "5.1.11",
@@ -198,7 +208,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.11",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The IgnoreRhosts parameter specifies that .rhosts and .shosts files will not be used in RhostsRSAAuthentication or HostbasedAuthentication .",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the IgnoreRhosts parameter to yes above any Include entry as follows:\nIgnoreRhosts yes Note: First occurrence of a option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.12",
@@ -217,7 +228,8 @@
       "validate_crypto": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.12",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Key exchange is any method in cryptography by which cryptographic keys are exchanged between two parties, allowing use of a cryptographic algorithm. If the sender and receiver wish to exchange encrypted messages, each must be equipped to encrypt messages t o be sent and decrypt messages received Notes:\n• Kex algorithms have a higher preference the earlier they appear in the list • Some organizations may have stricter requirements for approved Key exchange algorithms • Ensure that Key exchange algorithms used are in compliance with site policy • The only Key Exchange Algorithms currently FIPS 140 approved are:\no ecdh -sha2 -nistp256 o ecdh -sha2 -nistp384 o ecdh -sha2 -nistp521 o diffie -hellman -group -exchange -sha256 o diffie -hellman -group16 -sha512 o diffie -hellman -group18 -sha512 o diffie -hellman -group14 -sha256",
+      "remediation": "Edit the /etc/ssh/sshd_config file and add/modify the KexAlgorithms line to contain a comma separated list of the site unapproved (weak) KexAlgorithms preceded with a - above any Include entries:\nExample:\nKexAlgorithms -diffie-hellman-group1-sha1,diffie -hellman-group14-sha1,diffie - hellman-group-exchange -sha1 Note: First occurrence of an option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.13",
@@ -236,7 +248,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.13",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The LoginGraceTime parameter specifies the time allowed for successful authentication to the SSH server. The longer the Grace period is the more open unauthenticated connections can exist. Like other session controls in this session the Grace Period should be limited to appr opriate organizational limits to ensure the service is available for needed access.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the LoginGraceTime parameter to 60 seconds or less above any Include entry as follows:\nLoginGraceTime 60 Note: First occurrence of a option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.14",
@@ -255,7 +268,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.14",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "SSH provides several logging levels with varying amounts of verbosity. The DEBUG options are specifically not recommended other than strictly for debugging SSH communications. These levels provide so much data that it is difficult to identify important security information, and may violate the privacy of users.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the LogLevel parameter to VERBOSE or INFO above any Include and Match entries as follows:\nLogLevel VERBOSE - OR - LogLevel INFO Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location."
     },
     {
       "id": "5.1.15",
@@ -274,7 +288,8 @@
       "validate_crypto": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.15",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "This variable limits the types of MAC algorithms that SSH can use during communication.\nNotes:\n• Some organizations may have stricter requirements for approved MACs.\n• Ensure that MACs used are in compliance with site policy.\n• The only \"strong\" MACs currently FIPS 140 approved are:\no HMAC -SHA1 o HMAC -SHA2 -256 o HMAC -SHA2 -384 o HMAC -SHA2 -512",
+      "remediation": "Edit the /etc/ssh/sshd_config file and add/modify the MACs line to contain a comma separated list of the site unapproved (weak) MACs preceded with a - above any Include entries:\nExample:\nMACs -hmac-md5,hmac -md5-96,hmac-ripemd160,hmac -sha1-96,umac- 64@openssh.com,hmac -md5-etm@openssh.com,hmac -md5-96-etm@openssh.com,hmac - ripemd160 -etm@openssh.com,hmac -sha1-96-etm@openssh.com,umac -64- etm@openssh.com,umac -128-etm@openssh.com - IF - CVE-2023-48795 has not been reviewed and addressed, the following etm MACs should be added to the exclude list: hmac -sha1 -etm@openssh.com ,hmac -sha2 -256- etm@openssh.com ,hmac -sha2 -512-etm@openssh.com Note: First occurrence of an option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.16",
@@ -293,7 +308,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.16",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The MaxAuthTries parameter specifies the maximum number of authentication attempts permitted per connection. When the login failure count reaches half the number, error messages will be written to the syslog file detailing the login failure.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the MaxAuthTries parameter to 4 or less above any Include and Match entries as follows:\nMaxAuthTries 4 Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location.\nInternal Only - General"
     },
     {
       "id": "5.1.17",
@@ -312,7 +328,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.17",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The MaxSessions parameter specifies the maximum number of open sessions permitted from a given connection.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the MaxSessions parameter to 10 or less above any Include and Match entries as follows:\nMaxSessions 10 Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location."
     },
     {
       "id": "5.1.18",
@@ -331,7 +348,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.18",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The MaxStartups parameter specifies the maximum number of concurrent unauthenticated connections to the SSH daemon.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the MaxStartups parameter to 10:30:60 or more restrictive above any Include entries as follows:\nMaxStartups 10:30:60 Note: First occurrence of a option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.19",
@@ -350,7 +368,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.19",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The PermitEmptyPasswords parameter specifies if the SSH server allows login to accounts with empty password strings.",
+      "remediation": "Edit /etc/ssh/sshd_config and set the PermitEmptyPasswords parameter to no above any Include and Match entries as follows:\nPermitEmptyPasswords no Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location.\nInternal Only - General"
     },
     {
       "id": "5.1.20",
@@ -369,7 +388,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.20",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The PermitRootLogin parameter specifies if the root user can log in using SSH. The default is prohibit -password .",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the PermitRootLogin parameter to no above any Include and Match entries as follows:\nPermitRootLogin no Note: First occurrence of an option takes precedence, Match set statements withstanding. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in Include location."
     },
     {
       "id": "5.1.21",
@@ -388,7 +408,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.21",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The PermitUserEnvironment option allows users to present environment options to the SSH daemon.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the PermitUserEnvironment parameter to no above any Include entries as follows:\nPermitUserEnvironment no Note: First occurrence of an option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     },
     {
       "id": "5.1.22",
@@ -407,7 +428,8 @@
       "validate_crypto": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "5.1.22",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The UsePAM directive enables the Pluggable Authentication Module (PAM) interface. If set to yes this will enable PAM authentication using ChallengeResponseAuthentication and PasswordAuthentication directives in addition to PAM account and session module processing for all authentication types.",
+      "remediation": "Edit the /etc/ssh/sshd_config file to set the UsePAM parameter to yes above any Include entries as follows:\nUsePAM yes Note: First occurrence of an option takes precedence. If Include locations are enabled, used, and order of precedence is understood in your environment, the entry may be\ncreated in a file in Include location."
     }
   ]
 }

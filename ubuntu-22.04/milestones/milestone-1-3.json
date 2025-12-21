@@ -11,7 +11,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.2.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /tmp directory is a world -writable directory used for temporary storage by all users and some applications.\nNote: If an entry for /tmp exists in /etc/fstab it will take precedence over entries in a systemd unit file. There is an exception to this when a system is diskless and connected to iSCSI, entries in /etc/fstab may not take precedence over a systemd unit file.",
+      "remediation": "First ensure that systemd is correctly configured to ensure that /tmp will be mounted at boot time.\n# systemctl unmask tmp.mount For specific configuration requirements of the /tmp mount for your environment, modify /etc/fstab .\nExample of using tmpfs with specific mount options:\ntmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0 Note: the size=2G is an example of setting a specific size for tmpfs .\nExample of using a volume or disk with specific mount options. The source location of the volume or disk will vary depending on your environment:\n<device> /tmp <fstype> defaults,nodev,nosuid,noexec 0 0"
     },
     {
       "id": "1.2.1.2",
@@ -21,7 +22,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.2.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+      "remediation": "- IF - a separate partition exists for /tmp .\nEdit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /tmp partition.\nExample:\n<device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0\nRun the following command to remount /tmp with the configured options:\n# mount -o remount /tmp"
     },
     {
       "id": "1.2.2.1",
@@ -31,7 +33,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.2.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The /dev/shm directory is a world -writable directory that can function as shared memory that facilitates inter process communication (IPC).",
+      "remediation": "For specific configuration requirements of the /dev/shm mount for your environment,\nmodify /etc/fstab .\nExample:\ntmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0"
     },
     {
       "id": "1.3.1.1",
@@ -46,7 +49,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.3.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "AppArmor provides Mandatory Access Controls.",
+      "remediation": "Run the following command to install apparmor and apparmor -utils :\n# apt install apparmor apparmor -utils"
     },
     {
       "id": "1.3.1.2",
@@ -61,7 +65,8 @@
       "config_file": "/etc/default/grub",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.3.1.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "AppArmor is a kernel enhancement to confine programs to a limited set of resources.\nAppArmor is enabled by default.\nNote: This recommendation is designed around the grub bootloader, if LILO or another bootloader is in use in your environment enact equivalent settings.",
+      "remediation": "Edit /etc/default/grub of file in /etc/default/grub.d and remove the apparmor=0 parameters to the GRUB_CMDLINE_LINUX= line\nRun the following commands to update the grub2 configuration and reboot the system:\n# update -grub\n# reboot"
     },
     {
       "id": "1.3.1.3",
@@ -76,7 +81,8 @@
       "check_unconfined": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.3.1.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "AppArmor profiles define what resources applications are able to access.",
+      "remediation": "Run the following command to set all profiles to enforce mode:\n# aa-enforce /etc/apparmor.d/* - OR -\nRun the following command to set all profiles to complain mode:\n# aa-complain /etc/apparmor.d/* Note: Any unconfined processes may need to have a profile created or activated for them and then be restarted Internal Only - General"
     },
     {
       "id": "1.3.1.4",
@@ -90,7 +96,8 @@
       "check_unconfined": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.3.1.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "AppArmor profiles define what resources applications are able to access.",
+      "remediation": "Run the following command to set all profiles to enforce mode:\n# aa-enforce /etc/apparmor.d/* Note: Any unconfined processes may need to have a profile created or activated for them and then be restarted"
     },
     {
       "id": "1.4.1",
@@ -100,7 +107,8 @@
       "type": "Manual",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.4.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters",
+      "remediation": "Create an encrypted password with grub-mkpasswd -pbkdf2 :\n# grub-mkpasswd -pbkdf2 --iteration -count=600000 --salt=64 Enter password: <password> Reenter password: <password> PBKDF2 hash of your password is < encrypted -password>\nAdd the following into a custom /etc/grub.d configuration file:\nset superusers=\"<username>\" password_pbkdf2 <username> <encrypted -password> The superuser/user information and password should not be contained in the /etc/grub.d/00_header file as this file could be overwritten in a package update.\nIf there is a requirement to be able to boot/reboot without entering the password, edit /etc/grub.d/10_linux and add --unrestricted to the line CLASS= Example:\nCLASS=\"--class gnu -linux --class gnu --class os --unrestricted\"\nRun the following command to update the grub2 configuration:\n# update -grub"
     },
     {
       "id": "1.4.2",
@@ -114,7 +122,8 @@
       "expected_group": "root",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.4.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 22.04 Benchmark document at the above URL."
+      "description": "The grub configuration file contains information on boot settings and passwords for unlocking boot options.",
+      "remediation": "Run the following commands to set permissions on your grub configuration:\n# chown root:root /boot/grub/grub.cfg\n# chmod u -x,go-rwx /boot/grub/grub.cfg"
     }
   ]
 }

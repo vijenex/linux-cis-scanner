@@ -18,7 +18,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.1.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The cron daemon is used to execute batch jobs on the system.",
+      "remediation": "- IF - cron is installed on the system:\nRun the following commands to unmask, enable, and start cron :\n# systemctl unmask \"$(systemctl list -unit-files | awk '$1~/^crond? \\.service/print $1')\"\n# systemctl --now enable \"$(systemctl list -unit-files | awk '$1~/^crond? \\.service/print $1')\""
     }
   ]
 }

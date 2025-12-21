@@ -16,7 +16,8 @@
       "expected_match": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.4.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters",
+      "remediation": "Create an encrypted password with grub-mkpasswd -pbkdf2 :\n# grub-mkpasswd -pbkdf2 --iteration -count=600000 --salt=64 Enter password: <password> Reenter password: <password> PBKDF2 hash of your password is <encrypted -password>\nAdd the following into a custom /etc/grub.d configuration file:\ncat <<EOF exec tail -n +2 $0\nset superusers=\"<username>\" password_pbkdf2 <username> <encrypted -password> EOF The superuser/user information and password should not be contained in the /etc/grub.d/00_header file as this file could be overwritten in a package update.\nIf there is a requirement to be able to boot/reboot without entering the password, edit /etc/grub.d/10_linux and add --unrestricted to the line CLASS= Example:\nCLASS=\"--class gnu -linux --class gnu --class os --unrestricted\"\nRun the following command to update the grub2 configuration:\n# update -grub"
     },
     {
       "id": "1.4.2",
@@ -31,7 +32,8 @@
       "expected_group": "root",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "1.4.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The grub configuration file contains information on boot settings and passwords for unlocking boot options.",
+      "remediation": "Run the following commands to set permissions on your grub configuration:\n# chown root:root /boot/grub/grub.cfg\n# chmod u -x,go-rwx /boot/grub/grub.cfg"
     }
   ]
 }

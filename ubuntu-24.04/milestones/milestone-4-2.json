@@ -15,7 +15,8 @@
       "should_be_installed": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.1",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "at allows fairly complex time specifications, extending the POSIX.2 standard. It accepts times of the form HH:MM to run a job at a specific time of day. (If that time is already past, the next day is assumed.) You may also specify midnight, noon, or teatime (4pm) and you can have a time -of-day suffixed with AM or PM for running in the morning or the evening. You can also say what day the job will be run, by giving a date in the form month -name day with an optional year, or giving a date of the form MMDD[CC] YY, MM/DD/[CC]YY, DD.MM.[CC]YY or [CC]YY -MM-DD. The specification of a date must follow the specification of the time of day. You can also give times like now + count time-units, where the time -units can be minutes, hours, days, or weeks and you can tell at to run the job today by suffixing the time with today and to run the job tomorrow by suffixing the time with tomorrow.\nThe /etc/at.allow and /etc/at.deny files determine which user can submit commands for later execution via at or batch. The format of the files is a list of usernames, one on each line. Whitespace is not permitted. If the file /etc/at.allow exists, only usernames mentioned in it are allowed to use at. If /etc/at.allow does not exist, /etc/at.deny is checked, every username not mentioned in it is then allowed to use at. An empty /etc/at.deny means that every user may use at. If neither file exists, only the s uperuser is allowed to use at.",
+      "remediation": "- IF - at is installed on the system:\nRun the following script to:\n• /etc/at.allow :\no Create the file if it doesn't exist o Change owner or user root o If group daemon exists, change to group daemon , else change group to root o Change mode to 640 or more restrictive • - IF - /etc/at.deny exists:\no Change owner or user root o If group daemon exists, change to group daemon , else change group to root o Change mode to 640 or more restrictive\n#!/usr/bin/env bash grep -Pq -- '^daemon ' /etc/group && l_group=\"daemon\" || l_group=\"root\" [ ! -e \"/etc/at.allow\" ] && touch /etc/at.allow chown root:\"$l_group\" /etc/at.allow chmod u-x,g-wx,o-rwx /etc/at.allow [ -e \"/etc/at.deny\" ] && c hown root:\"$l_group\" /etc/at.deny [ -e \"/etc/at.deny\" ] && chmod u -x,g-wx,o-rwx /etc/at.deny"
     },
     {
       "id": "4.2.2",
@@ -28,7 +29,8 @@
       "should_be_installed": false,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.2",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "The iptables -persistent is a boot -time loader for netfilter rules, iptables plugin",
+      "remediation": "Run the following command to remove the iptables -persistent package:\n# apt purge iptables -persistent"
     },
     {
       "id": "4.2.3",
@@ -40,7 +42,8 @@
       "expected_status": "active",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.3",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "UncomplicatedFirewall (ufw) is a frontend for iptables. ufw provides a framework for managing netfilter, as well as a command -line and available graphical user interface for manipulating the firewall.\nNote:\n• When running ufw enable or starting ufw via its initscript, ufw will flush its chains.\nThis is required so ufw can maintain a consistent state, but it may drop existing connections (eg ssh). ufw does support adding rules before enabling the firewall.\n• Run the following command before running ufw enable .\n# ufw allow proto tcp from any to any port 22 • The rules will still be flushed, but the ssh port will be open after enabling the firewall. Please note that once ufw is 'enabled', ufw will not flush the chains when adding or removing rules (but will when modifying a rule or changing the default policy) • By default, ufw will prompt when enabling the firewall while running under ssh.\nThis can be disabled by using ufw --force enable",
+      "remediation": "Run the following command to unmask the ufw daemon:\n# systemctl unmask ufw.service\nRun the following command to enable and start the ufw daemon:\n# systemctl --now enable ufw.service active\nRun the following command to enable ufw:\n# ufw enable"
     },
     {
       "id": "4.2.4",
@@ -57,7 +60,8 @@
       ],
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.4",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Configure the loopback interface to accept traffic. Configure all other interfaces to deny traffic to the loopback network (127.0.0.0/8 for IPv4 and ::1/128 for IPv6).",
+      "remediation": "Run the following commands to configure the loopback interface to accept traffic:\n# ufw allow in on lo\n# ufw allow out on lo\nRun the following commands to configure all other interfaces to deny traffic to the loopback network:\n# ufw deny in from 127.0.0.0/8\n# ufw deny in from ::1"
     },
     {
       "id": "4.2.5",
@@ -69,7 +73,8 @@
       "expected": "UFW outbound connections configured according to site policy",
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.5",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Configure the firewall rules for new outbound connections.\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system.\n• Unlike iptables, when a new outbound rule is added, ufw automatically takes care of associated established connections, so no rules for the latter kind are required.",
+      "remediation": "Configure ufw in accordance with site policy. The following commands will implement a policy to allow all outbound connections on all interfaces:\n# ufw allow out on all"
     },
     {
       "id": "4.2.6",
@@ -81,7 +86,8 @@
       "check_open_ports": true,
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.6",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "Services and ports can be accepted or explicitly rejected.\nNote:\n• Changing firewall settings while connected over network can result in being locked out of the system • The remediation command opens up the port to traffic from all sources. Consult ufw documentation and set any restrictions in compliance with site policy",
+      "remediation": "For each port identified in the audit which does not have a firewall rule, evaluate the service listening on the port and add a rule for accepting or denying inbound connections in accordance with local site policy:\nExamples:\n# ufw allow in <port>/<tcp or udp protocol>\n# ufw deny in <port>/<tcp or udp protocol> Note: Examples create rules for from any, to any. More specific rules should be concentered when allowing inbound traffic e.g only traffic from this network.\nExample to allow traffic on port 443 using the tcp protocol from the 192.168.1.0 network:\nufw allow from 192.168.1.0/24 to any proto tcp port 443"
     },
     {
       "id": "4.2.7",
@@ -97,7 +103,8 @@
       },
       "cis_reference": "https://www.cisecurity.org/benchmark/ubuntu_linux",
       "cis_control_id": "4.2.7",
-      "reference_note": "For detailed description, rationale, impact assessment, and remediation steps, please refer to the official CIS Ubuntu Linux 24.04 Benchmark document at the above URL."
+      "description": "A default deny policy on connections ensures that any unconfigured network usage will be rejected.\nNote: Any port or protocol without a explicit allow before the default deny will be blocked",
+      "remediation": "Run the following commands to implement a default deny policy:\n# ufw default deny incoming\n# ufw default deny outgoing\n# ufw default deny routed"
     }
   ]
 }
