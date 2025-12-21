@@ -382,27 +382,85 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 		result.ActualValue = checkResult.ActualValue
 		result.EvidenceCommand = checkResult.EvidenceCommand
 
-	case "DuplicateUIDs", "DuplicateGIDs", "DuplicateUsernames", "DuplicateGroupnames":
-		// These use CommandOutputEmpty internally
+	case "DuplicateUIDs":
+		// Check for duplicate UIDs in /etc/passwd
 		auditCmd := ctrl.AuditCommand
 		if auditCmd == "" {
-			result.Status = "ERROR"
-			result.ActualValue = "Missing audit command"
-			result.EvidenceCommand = "N/A"
+			// Default audit command if not specified
+			auditCmd = "cut -d: -f3 /etc/passwd | sort | uniq -d"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
 		} else {
-			parts := strings.Fields(auditCmd)
-			if len(parts) > 0 {
-				cmdName := parts[0]
-				args := parts[1:]
-				checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
-				result.Status = string(checkResult.Status)
-				result.ActualValue = checkResult.ActualValue
-				result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
-			} else {
-				result.Status = "ERROR"
-				result.ActualValue = "Invalid command format"
-				result.EvidenceCommand = auditCmd
-			}
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "DuplicateGIDs":
+		// Check for duplicate GIDs in /etc/group
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "cut -d: -f3 /etc/group | sort | uniq -d"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "DuplicateUsernames":
+		// Check for duplicate usernames in /etc/passwd
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "cut -d: -f1 /etc/passwd | sort | uniq -d"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "DuplicateGroupnames":
+		// Check for duplicate group names in /etc/group
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "cut -d: -f1 /etc/group | sort | uniq -d"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
 		}
 
 	case "WorldWritableFiles", "OrphanedFiles":
@@ -474,8 +532,117 @@ func (s *Scanner) executeControl(ctrl controls.LegacyControl) Result {
 			}
 		}
 
-	case "JournaldConfig", "RsyslogConfig", "CronJob", "MTALocalOnly", "EmptyPasswords", "EmptyGroup", 
-		 "ShadowedPasswords", "GroupConsistency", "UserHomeDirs", "UserDotFiles", "CoreDumpRestriction",
+	case "ShadowedPasswords":
+		// Check if /etc/passwd uses shadowed passwords (x in second field)
+		filePath := ctrl.FilePath
+		if filePath == "" && ctrl.PasswdFile != "" {
+			filePath = ctrl.PasswdFile
+		}
+		if filePath == "" {
+			filePath = "/etc/passwd"
+		}
+		// Check that all entries have 'x' in the password field (shadowed)
+		checkResult := controls.CheckFileContent(filePath, "^[^:]+:x:", "found")
+		result.Status = string(checkResult.Status)
+		result.ActualValue = checkResult.ActualValue
+		result.EvidenceCommand = checkResult.EvidenceCommand
+
+	case "EmptyPasswords":
+		// Check for empty password fields in /etc/shadow
+		filePath := ctrl.FilePath
+		if filePath == "" && ctrl.ShadowFile != "" {
+			filePath = ctrl.ShadowFile
+		}
+		if filePath == "" {
+			filePath = "/etc/shadow"
+		}
+		// Check that no entries have empty password field (second field should not be empty)
+		checkResult := controls.CheckFileContent(filePath, "^[^:]+::", "not_found")
+		result.Status = string(checkResult.Status)
+		result.ActualValue = checkResult.ActualValue
+		result.EvidenceCommand = checkResult.EvidenceCommand
+
+	case "EmptyGroup":
+		// Check that shadow group is empty
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "awk -F: '($1==\"shadow\") {print $NF}' /etc/group"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "GroupConsistency":
+		// Check that all groups in /etc/passwd exist in /etc/group
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "for i in $(cut -s -d: -f4 /etc/passwd | sort -u); do grep -q -P \"^.*?:[^:]*:$i:\" /etc/group || echo \"Group $i is referenced by /etc/passwd but does not exist in /etc/group\"; done"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "UserHomeDirs":
+		// Check that user home directories exist and have correct permissions
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^\\/sbin\\/nologin$/ && $7!~/^\\/bin\\/false$/ && $3<1000) {print $1\":\"$6}' /etc/passwd | while IFS=: read -r user dir; do if [ ! -d \"$dir\" ]; then echo \"User $user home directory $dir does not exist\"; fi; done"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "UserDotFiles":
+		// Check that user dot files have correct permissions
+		auditCmd := ctrl.AuditCommand
+		if auditCmd == "" {
+			auditCmd = "awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^\\/sbin\\/nologin$/ && $7!~/^\\/bin\\/false$/ && $3<1000) {print $6}' /etc/passwd | while read -r dir; do if [ -d \"$dir\" ]; then for file in \"$dir\"/.[^.]*; do if [ ! -h \"$file\" ] && [ -f \"$file\" ]; then perms=$(stat -L -c \"%a\" \"$file\"); if [ \"$perms\" -gt 750 ]; then echo \"$file has permissions $perms\"; fi; fi; done; fi; done"
+		}
+		parts := strings.Fields(auditCmd)
+		if len(parts) > 0 {
+			cmdName := parts[0]
+			args := parts[1:]
+			checkResult := controls.CheckCommandOutputEmptyWithControl(cmdName, args, ctrl.Description, ctrl.ID)
+			result.Status = string(checkResult.Status)
+			result.ActualValue = checkResult.ActualValue
+			result.EvidenceCommand = checkResult.Evidence.Source + ": " + checkResult.Evidence.Snippet
+		} else {
+			result.Status = "ERROR"
+			result.ActualValue = "Invalid command format"
+			result.EvidenceCommand = auditCmd
+		}
+
+	case "JournaldConfig", "RsyslogConfig", "CronJob", "MTALocalOnly", "CoreDumpRestriction",
 		 "BootParameter", "AppArmorProfile", "AIDEConfig", "SingleLoggingSystem", "SingleFirewall", "WirelessInterface":
 		// These use FileContent, FilePermissions, or CommandOutputEmpty
 		// Try FileContent first

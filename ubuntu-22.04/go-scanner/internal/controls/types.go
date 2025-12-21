@@ -70,6 +70,8 @@ type LegacyControl struct {
 	Parameter           string   `json:"parameter,omitempty"`
 	ExpectedValue       string   `json:"expected_value,omitempty"`
 	FilePath            string   `json:"file_path,omitempty"`
+	PasswdFile          string   `json:"passwd_file,omitempty"` // Alternative field name for /etc/passwd checks
+	ShadowFile          string   `json:"shadow_file,omitempty"` // Alternative field name for /etc/shadow checks
 	ExpectedPermissions string   `json:"expected_permissions,omitempty"`
 	ExpectedOwner       string   `json:"expected_owner,omitempty"`
 	ExpectedGroup       string   `json:"expected_group,omitempty"`
@@ -177,50 +179,69 @@ func (lc *LegacyControl) Normalize() {
 			lc.ExpectedStatus = "not_installed"
 		}
 	}
+	
+	// Normalize passwd_file -> file_path (for controls that use passwd_file)
+	if lc.FilePath == "" && lc.PasswdFile != "" {
+		lc.FilePath = lc.PasswdFile
+	}
+	// Normalize shadow_file -> file_path (for controls that use shadow_file)
+	if lc.FilePath == "" && lc.ShadowFile != "" {
+		lc.FilePath = lc.ShadowFile
+	}
 }
 
 // Validate control before execution
+// Note: This should be called AFTER Normalize() has been called on the control
 func (lc LegacyControl) Validate() error {
-	// Normalize first to map alternative field names
-	normalized := lc
-	normalized.Normalize()
-	
-	switch normalized.Type {
+	switch lc.Type {
 	case "SysctlParameter", "KernelParameter", "MultiKernelParameter":
-		if normalized.ParameterName == "" || normalized.ExpectedValue == "" {
-			return fmt.Errorf("missing parameter_name or expected_value for %s", normalized.ID)
+		if lc.ParameterName == "" || lc.ExpectedValue == "" {
+			return fmt.Errorf("missing parameter_name or expected_value for %s", lc.ID)
 		}
 	case "ServiceStatus", "Service", "ServiceNotInUse":
-		if normalized.ServiceName == "" {
-			return fmt.Errorf("missing service_name for %s", normalized.ID)
+		// For ServiceNotInUse, check both service_name and service_names
+		serviceName := lc.ServiceName
+		if serviceName == "" && len(lc.ServiceNames) > 0 {
+			serviceName = lc.ServiceNames[0]
+		}
+		if serviceName == "" {
+			return fmt.Errorf("missing service_name or service_names for %s", lc.ID)
 		}
 		// ExpectedStatus is optional for ServiceNotInUse (defaults to "disabled")
-		if normalized.Type != "ServiceNotInUse" && normalized.ExpectedStatus == "" {
-			return fmt.Errorf("missing expected_status for %s", normalized.ID)
+		if lc.Type != "ServiceNotInUse" && lc.ExpectedStatus == "" {
+			return fmt.Errorf("missing expected_status for %s", lc.ID)
 		}
 	case "PackageInstalled", "PackageNotInstalled", "Package", "MultiPackage":
-		if normalized.PackageName == "" {
-			return fmt.Errorf("missing package_name for %s", normalized.ID)
+		// Check all possible package field names
+		packageName := lc.PackageName
+		if packageName == "" && lc.Package != "" {
+			packageName = lc.Package
+		}
+		if packageName == "" && len(lc.PackageNames) > 0 {
+			packageName = lc.PackageNames[0]
+		}
+		if packageName == "" {
+			return fmt.Errorf("missing package_name, package, or package_names for %s", lc.ID)
 		}
 	case "FilePermissions", "FilePermission", "SSHPrivateKeys", "SSHPublicKeys", "LogFilePermissions":
-		if normalized.FilePath == "" {
-			return fmt.Errorf("missing file_path for %s", normalized.ID)
+		if lc.FilePath == "" {
+			return fmt.Errorf("missing file_path for %s", lc.ID)
 		}
 	case "FileContent", "ConfigFile":
-		if normalized.FilePath == "" || normalized.Pattern == "" {
-			return fmt.Errorf("missing file_path or pattern for %s", normalized.ID)
+		if lc.FilePath == "" || lc.Pattern == "" {
+			return fmt.Errorf("missing file_path or pattern for %s", lc.ID)
 		}
 	case "MountPoint":
-		if normalized.MountPoint == "" {
-			return fmt.Errorf("missing mount_point for %s", normalized.ID)
+		if lc.MountPoint == "" {
+			return fmt.Errorf("missing mount_point for %s", lc.ID)
 		}
 	case "MountOption":
-		if normalized.MountPoint == "" || normalized.RequiredOption == "" {
-			return fmt.Errorf("missing mount_point or required_option for %s", normalized.ID)
+		if lc.MountPoint == "" || lc.RequiredOption == "" {
+			return fmt.Errorf("missing mount_point or required_option for %s", lc.ID)
 		}
 	case "KernelModule":
-		if normalized.ModuleName == "" {
-			return fmt.Errorf("missing module_name for %s", normalized.ID)
+		if lc.ModuleName == "" {
+			return fmt.Errorf("missing module_name for %s", lc.ID)
 		}
 	// For other types, validation is lenient - let execution handle it
 	}
