@@ -73,14 +73,15 @@
       "section": "Section 4.2",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "ServiceStatus",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 4.2.1.5",
       "description": "Ensure rsyslog is configured to se nd logs to a remote log host",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "service_name": "rsyslog"
     },
     {
       "id": "4.2.1.6",

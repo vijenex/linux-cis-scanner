@@ -79,10 +79,11 @@ func CheckMountOption(mountPoint, requiredOption string) CheckResult {
 	
 	mountInfo, runtimeExists := ctx.Mounts.Runtime[mountPoint]
 	if !runtimeExists {
-		// CIS semantics: if partition doesn't exist, it's NOT_APPLICABLE
-		return NotApplicable(
+		// Partition doesn't exist - return FAIL (control requires separate partition)
+		return Fail(
 			fmt.Sprintf("Mount point %s not configured as separate partition", mountPoint),
 			"mount not found",
+			fmt.Sprintf("Mount point %s should be configured as a separate partition", mountPoint),
 		)
 	}
 	

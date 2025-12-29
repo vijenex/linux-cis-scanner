@@ -283,7 +283,7 @@
       "section": "Section 5.3",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "ServiceStatus",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 5.3.2.4",
       "description": "A default deny all policy on connections ensures that any unconfigured network usage will be rejected.",

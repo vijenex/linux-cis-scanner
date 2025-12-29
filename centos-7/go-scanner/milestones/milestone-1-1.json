@@ -168,7 +168,7 @@
       "section": "Section 1.1",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.1.22",
       "description": "Ensure sticky bit is set on all world -writable directories",

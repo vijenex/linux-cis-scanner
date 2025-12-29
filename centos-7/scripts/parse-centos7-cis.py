@@ -196,13 +196,75 @@ def parse_controls(pdf_text):
         # Detect control type
         control_type = detect_control_type(title, audit, remediation, description)
         
-        # Improve type detection for kernel modules
-        if "kernel module" in title.lower() or "filesystem" in title.lower() and "disabled" in title.lower():
-            if control_type == "Manual":
-                # Try to extract module name
-                module_match = re.search(r'(\w+)\s+(?:kernel module|filesystem)', title.lower())
-                if module_match:
-                    control_type = "KernelModule"
+        # Post-process type detection improvements for automated controls
+        if control_type == "Manual" and automated:
+            title_lower = title.lower()
+            desc_lower = description.lower() if description else ""
+            combined_lower = f"{title_lower} {desc_lower}"
+            
+            # Kernel modules/filesystems - improved patterns
+            if (("kernel module" in title_lower or "filesystem" in title_lower or any(fs in title_lower for fs in ["cramfs", "squashfs", "udf", "freevxfs", "jffs2", "hfs", "hfsplus", "fat"])) and 
+                ("disabled" in title_lower or "not available" in title_lower or "not loaded" in title_lower or "mounting" in title_lower)):
+                control_type = "KernelModule"
+            
+            # Sticky bit checks
+            elif "sticky bit" in title_lower and ("world-writable" in title_lower or "directories" in title_lower):
+                control_type = "FilePermissions"
+            
+            # GPG check / yum configuration
+            elif "gpgcheck" in title_lower or ("yum" in title_lower and "gpg" in title_lower):
+                control_type = "FileContent"
+            
+            # ASLR / kernel.randomize_va_space
+            elif "aslr" in title_lower or "address space layout" in title_lower or "randomize" in title_lower:
+                control_type = "SysctlParameter"
+            
+            # Authentication/single user mode / sulogin
+            elif ("authentication" in title_lower and "single user" in title_lower) or "sulogin" in combined_lower:
+                control_type = "FileContent"
+            
+            # Filesystem integrity check / AIDE
+            elif "filesystem integrity" in title_lower or "aide" in combined_lower:
+                control_type = "ServiceStatus"  # Usually a cron job or service
+            
+            # SELinux checks
+            elif "selinux" in title_lower:
+                if "enabled" in title_lower or "state" in title_lower:
+                    control_type = "FileContent"  # Check /etc/selinux/config
+            
+            # Bootloader password
+            elif "bootloader" in title_lower and "password" in title_lower:
+                control_type = "FileContent"
+            
+            # Core dumps
+            elif "core dumps" in title_lower or "core dump" in title_lower:
+                control_type = "SysctlParameter"
+            
+            # Logging / rsyslog
+            elif "logging" in title_lower or "rsyslog" in title_lower:
+                control_type = "ServiceStatus"
+            
+            # NTP / chrony
+            elif "ntp" in title_lower or "chrony" in title_lower:
+                control_type = "ServiceStatus"
+            
+            # Firewall / firewalld
+            elif "firewall" in title_lower or "firewalld" in title_lower:
+                control_type = "ServiceStatus"
+            
+            # If still Manual but automated, try to detect from audit command patterns
+            if control_type == "Manual" and audit and audit != "Manual review required":
+                audit_lower = audit.lower()
+                if "find" in audit_lower and ("-perm" in audit_lower or "writable" in audit_lower):
+                    control_type = "FilePermissions"
+                elif "grep" in audit_lower or "awk" in audit_lower:
+                    control_type = "FileContent"
+                elif "systemctl" in audit_lower:
+                    control_type = "ServiceStatus"
+                elif "rpm" in audit_lower:
+                    control_type = "PackageInstalled"
+                elif "sysctl" in audit_lower:
+                    control_type = "SysctlParameter"
         
         # Build section
         section_parts = control_id.split('.')

@@ -13,14 +13,12 @@ func CheckFilePermissions(filePath, expectedPerms, expectedOwner, expectedGroup 
 	// Use Lstat to detect symlinks
 	fileInfo, err := os.Lstat(filePath)
 	if err != nil {
-		// For cron files and optional configs, missing = NOT_APPLICABLE
-		if strings.Contains(filePath, "cron") || strings.Contains(filePath, "/etc/issue") {
-			return NotApplicable(
-				fmt.Sprintf("File %s does not exist", filePath),
-				"file not found",
-			)
-		}
-		return Error(err, filePath)
+		// File doesn't exist - return FAIL (control requires file to exist)
+		return Fail(
+			fmt.Sprintf("File %s does not exist", filePath),
+			"file not found",
+			fmt.Sprintf("File %s should exist with proper permissions", filePath),
+		)
 	}
 	
 	// Reject symlinks for security

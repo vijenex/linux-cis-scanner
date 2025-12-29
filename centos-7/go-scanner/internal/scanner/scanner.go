@@ -117,17 +117,9 @@ func (s *Scanner) ExecuteControls() []Result {
 			}
 			
 			// Skip Level 2 controls if running Level 1 profile
+			// (These should be excluded from milestones, but if they appear, skip them)
 			if s.Profile == "Level1" && ctrl.Profile == "Level2" {
-				results = append(results, Result{
-					ID:          ctrl.ID,
-					Title:       ctrl.Title,
-					Section:     ctrl.Section,
-					Status:      "NOT_APPLICABLE",
-					CISReference: ctrl.CISReference,
-					Remediation: ctrl.Remediation,
-					Description: fmt.Sprintf("Not applicable for profile %s", s.Profile),
-				})
-				continue
+				continue // Skip silently - should not be in milestones
 			}
 
 			// Normalize and validate control
@@ -137,7 +129,7 @@ func (s *Scanner) ExecuteControls() []Result {
 					ID:          ctrl.ID,
 					Title:       ctrl.Title,
 					Section:     ctrl.Section,
-					Status:      "ERROR",
+					Status:      "FAIL",
 					CISReference: ctrl.CISReference,
 					Remediation: ctrl.Remediation,
 					Description: fmt.Sprintf("Validation failed: %v", err),
@@ -323,15 +315,20 @@ func (s *Scanner) CountStatus(results []Result, status string) int {
 	return count
 }
 
-// NormalizeStatus - eliminate SKIPPED and handle legacy statuses
+// NormalizeStatus - only allow PASS, FAIL, and MANUAL
 func NormalizeStatus(status string) string {
 	switch status {
-	case "SKIPPED":
-		return "NOT_APPLICABLE" // CIS compliance: no SKIPPED
-	case "PASS", "FAIL", "MANUAL", "NOT_APPLICABLE", "ERROR":
+	case "PASS", "FAIL", "MANUAL":
 		return status // Valid statuses
+	case "SKIPPED", "NOT_APPLICABLE":
+		// Convert to FAIL - if control is in milestone, it should be applicable
+		return "FAIL"
+	case "ERROR":
+		// Convert errors to FAIL
+		return "FAIL"
 	default:
-		return "ERROR" // Unknown status becomes ERROR
+		// Unknown status becomes FAIL
+		return "FAIL"
 	}
 }
 
@@ -356,10 +353,8 @@ func getStatusSymbol(status string) string {
 		return "✗"
 	case "MANUAL":
 		return "⚠"
-	case "NOT_APPLICABLE":
-		return "○"
-	case "ERROR":
-		return "✖"
+	case "NOT_APPLICABLE", "ERROR":
+		return "✗" // Both become FAIL
 	default:
 		return "?"
 	}

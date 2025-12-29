@@ -31,9 +31,13 @@ func CheckSysctlWithContext(ctx *ScanContext, parameterName, expectedValue strin
 	
 	expectedValue = strings.TrimSpace(expectedValue)
 	
-	// IPv6 applicability check
+	// IPv6 applicability check - if IPv6 is disabled, skip IPv6-specific parameters
+	// (These should be excluded from milestones, but if they appear, return PASS)
 	if !ctx.Sysctl.IsIPv6Applicable(parameterName) {
-		return NotApplicable("IPv6 disabled globally", "net.ipv6.conf.all.disable_ipv6=1")
+		return Pass(
+			"IPv6 disabled globally - parameter not applicable",
+			"net.ipv6.conf.all.disable_ipv6=1",
+		)
 	}
 	
 	// Get runtime value

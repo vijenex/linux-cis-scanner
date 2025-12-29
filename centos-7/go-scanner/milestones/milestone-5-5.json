@@ -84,7 +84,7 @@
       "section": "Section 5.5",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "FileContent",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 5.5.2",
       "description": "There are a number of accounts provided with most distributions that are used to manage applications and are not intended to provide an interactive shell.",

@@ -75,14 +75,15 @@
       "section": "Section 3.5",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "ServiceStatus",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.5.1.5",
       "description": "A firewall zone defines the trust level for a connection, interface or source address binding. This is a one to many relation, which means that a connection, interface or source can only be part of one zone, but a zone can be used for many network connections, interfaces and sources. \uf0b7 The default zone is the zone that is used for everything that is not explicitly bound/assigned to another zone. \uf0b7 If no zone assigned to a connection, interface or source, only the default zone is used. \uf0b7 The default zone is not always listed as being used for an interface or source as it will be used for it either way. This depends on the manager of the interfaces. Connections handled by NetworkManager are listed as NetworkManager requests to add the zone binding for the interface used by the connection. Also interfaces under control of the network service are listed also because the service requests it. Note: \uf0b7 A firewalld zone configuration file contains the information for a zone. o These are the zone description, services, ports, protocols, icmp -blocks, masquerade, forward -ports and rich language rules in an XML file format. o The file name has to be zone_name.xml where length of zone_name is currently limited to 17 chars. \uf0b7 NetworkManager binds interfaces to zones automatically",
       "rationale": "Because the default zone is the zone th at is used for everything that is not explicitly bound/assigned to another zone, it is important for the default zone to set",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": ": Run the following command and verify that the default zone adheres to company policy: # firewall -cmd --get-default-zone 265 | P a g e Reme diation: Run the following command to set the default zone: # firewall -cmd --set-default-zone=<NAME_OF_ZONE> Example: # firewall -cmd --set-default-zone=public"
+      "audit_command": ": Run the following command and verify that the default zone adheres to company policy: # firewall -cmd --get-default-zone 265 | P a g e Reme diation: Run the following command to set the default zone: # firewall -cmd --set-default-zone=<NAME_OF_ZONE> Example: # firewall -cmd --set-default-zone=public",
+      "service_name": "zone"
     },
     {
       "id": "3.5.1.6",

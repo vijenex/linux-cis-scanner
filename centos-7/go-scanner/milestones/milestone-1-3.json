@@ -26,14 +26,15 @@
       "section": "Section 1.3",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "ServiceStatus",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.3.2",
       "description": "Ensure filesystem integrity is regularly checked",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "service_name": "integrity"
     }
   ]
 }

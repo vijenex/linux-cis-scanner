@@ -42,7 +42,7 @@
       "section": "Section 1.5",
       "profile": "Level1",
       "automated": true,
-      "type": "Manual",
+      "type": "SysctlParameter",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.5.3",
       "description": "Ensure address space layout randomization (ASLR) is enabled",
