@@ -1,0 +1,23 @@
+{
+  "milestone": "2.1",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 2.1",
+  "controls": [
+    {
+      "id": "2.1.1",
+      "title": "Ensure xinetd is not installed",
+      "section": "Section 2.1",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 2.1.1",
+      "description": "Ensure xinetd is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
+    }
+  ]
+}

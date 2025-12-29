@@ -1,0 +1,71 @@
+{
+  "milestone": "1.5",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 1.5",
+  "controls": [
+    {
+      "id": "1.5.1",
+      "title": "Ensure core dumps are restricted",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.5.1",
+      "description": "A core dump is the memory of an executable program. It is generally used to determine why a program aborted. It can also be used to glean confidential information from a core file. The system provides the ability to set a soft limit for core d umps, but this can be overridden by the user.",
+      "rationale": "Setting a hard limit on core dumps prevents users from overriding the soft variable. If core dumps are required, consider setting limits for user groups (see limits.conf(5) ). In addition, setting th e fs.suid_dumpable variable to 0 will prevent setuid programs from dumping core.",
+      "remediation": ": Add the following line to /etc/security/limits.conf or a /etc/security/limits.d/* file: * hard core 0 Set the following parameter in /etc/sysctl.conf or a /etc/sysctl.d/* file: fs.suid_dumpable = 0 Run the following command to set the active kernel parameter: # sysctl -w fs.suid_dumpable=0 If systemd -coredump is installed: edit /etc/systemd/coredump.conf and add/modify the following lines: Storage=none ProcessSizeMax=0 Run the command: systemctl daemon-reload CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non-computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 100 | P a g e",
+      "impact": "None",
+      "audit_command": "Run the following commands and verify output matches: # grep -E \"^\\s*\\*\\s+hard\\s+core\" /etc/security/limits.conf /etc/security/limits.d/* * hard core 0 # sysctl fs.sui d_dumpable fs.suid_dumpable = 0 # grep \"fs \\.suid_dumpable\" /etc/sysctl.conf /etc/sysctl.d/* fs.suid_dumpable = 0 Run the following command to check if systemd -coredump is installed: # systemctl is -enabled coredump.service If enabled or disabled is return ed systemd -coredump is installed 99 | P a g e",
+      "parameter_name": "fs.suid_dumpable",
+      "expected_value": "0"
+    },
+    {
+      "id": "1.5.2",
+      "title": "Ensure XD/NX support is enabled",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.5.2",
+      "description": "Recent processors in the x86 family support the ability to prevent code execution on a per memory page basis. Generically and on AMD processors, this ability is called No Execute (NX), while on Intel processors it is called Execute Disable (XD). This ability can help prevent exploitation of buffer overflow vulnerabilities and should be activated whenever possible. Extra steps must be taken to ensure that this protection is enabled, particularly on 32-bit x86 systems. Other processors, such a s Itanium and POWER, have included such support since inception and the standard kernel for those platforms supports the feature.",
+      "rationale": "Enabling any feature that can protect against buffer overflow attacks enhances the security of the system. Note: En sure your system supports the XD or NX bit and has PAE support before implementing this recommendation as this may prevent it from booting if these are not supported by your hardware.",
+      "remediation": ": On 32 bit systems install a kernel with PAE support, no installation is required on 64 bit systems: If necessary configure your bootloader to load the new kernel and reboot the system. You may need to enable NX or XD support in your bios. CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 10.5 Enable Anti -Exploitation Features Enable anti-exploitation features on enterprise assets and software, where possible, such as Microsoft\u00ae Data Execution Prevention (DEP), Windows\u00ae Defender Exploit Guard (WDEG), or Apple\u00ae System Integrity Protection (SIP) and Gatekeeper\u2122. \u25cf \u25cf v7 8.3 Enable Operating System Anti -Exploitation Features/ Deploy Anti -Exploit Technologies Enable anti -exploitation features such as Data Execution Prevention (DEP) or Address Space Layout Randomization (ASLR) that are available in an operating system or deploy approp riate toolkits that can be configured to apply protection to a broader set of applications and executables. \u25cf \u25cf 102 | P a g e",
+      "impact": "None",
+      "audit_command": "Run the following command and verify your kernel has identified a nd activated NX/XD protection. # journalctl | grep 'protection: active' kernel: NX (Execute Disable) protection: active OR on systems without journalctl: # [[ -n $(grep noexec[0 -9]*=off /proc/cmdline) || -z $(grep -E -i ' (pae|nx) ' /proc/cpuinfo) || -n $(grep '\\sNX\\s.*\\sprotection: \\s' /var/log/dmesg | grep -v active) ]] && echo \"NX Protection is not active\" Nothing should be returned 101 | P a g e",
+      "file_path": "/NX"
+    },
+    {
+      "id": "1.5.3",
+      "title": "Ensure address space layout randomization (ASLR) is enabled",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.5.3",
+      "description": "Ensure address space layout randomization (ASLR) is enabled",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    },
+    {
+      "id": "1.5.4",
+      "title": "Ensure prelink is not installed",
+      "section": "Section 1.5",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.5.4",
+      "description": "Ensure prelink is not installed",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required",
+      "expected_status": "installed"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "milestone": "1.8",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 1.8",
+  "controls": [
+    {
+      "id": "1.8.2",
+      "title": "Ensure GDM login banner is configured",
+      "section": "Section 1.8",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.8.2",
+      "description": "GDM is the GNOME Display Manager which handles graphical login for GNOME based systems.",
+      "rationale": "Warning messages inform users who are attempting to login to the system of their legal status regarding the system and must include the name of the organization that owns the system and any monitoring policies that are in place. Note: If a graphical login is not required, it should be removed to reduce the attack surface of the system.",
+      "remediation": ": Edit or create the file /etc/dconf/profile/gdm and add the following: user-db:user system-db:gdm file-db:/usr/share/gdm/greeter -dconf-defaults Edit or create the file /etc/dconf/db/gdm.d/ and add the following: (This is typically /etc/dconf/db/gdm.d/01 -banner-message ) [org/gnome/login -screen] banner-message-enable=true banner-message-text='<banner message>' Example Banner Text: 'Authorized users only. A ll activity may be monitored and reported.' Run the following command to update the system databases: # dconf update Additional Information: Additional options and sections may appear in the /etc/dconf/db/gdm.d/01 -banner- message file. If a different GUI lo gin service is in use and required on the system, consult your documentation to disable displaying the last logged on user and apply an equivalent banner. CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and updat e documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 143 | P a g e",
+      "impact": "None",
+      "audit_command": "Verify that /etc/dconf/profile /gdm exists and includes the following: user-db:user system-db:gdm file-db:/usr/share/gdm/greeter -dconf-defaults Verify that a file exists in /etc/dconf/db/gdm.d/ and includes the following: (This is typically /etc/dconf/db/gdm.d/01 -banner-message ) [org/gnome/login -screen] banner-message-enable=true banner-message-text='<banner message>' 142 | P a g e"
+    },
+    {
+      "id": "1.8.3",
+      "title": "Ensure last logged in user display is disabled",
+      "section": "Section 1.8",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.8.3",
+      "description": "GDM is the GNOME Display Manager which handles graphical login for GNOME based systems.",
+      "rationale": "Displaying the last logged in user eliminates half of the Userid/Password equation that an unauthorized person would need to log on. Warning messages inform users who are attempting to login to the system of their legal status regarding the syst em and must include the name of the organization that owns the system and any monitoring policies that are in place. Notes: \uf0b7 If a graphical login is not required, it should be removed to reduce the attack surface of the system. \uf0b7 If a different GUI login ser vice is in use and required on the system, consult your documentation to disable displaying the last logged on user",
+      "remediation": ": Edit or create the file /etc/dconf/profile/gdm and add the following: user-db:user system-db:gdm file-db:/usr/share/gdm/greeter -dconf-defaults Edit or create the file /etc/dconf/db/gdm.d/ and add the following: (This is typically /etc/dconf/db/gdm.d/00 -login-screen ) [org/gnome/login -screen] # Do not s how the user list disable-user-list=true Run the following command to update the system databases: # dconf update CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant en terprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 145 | P a g e",
+      "impact": "None",
+      "audit_command": "Verify that /etc/dconf/profile/gdm exists and includes the following: user-db:user system-db:gdm file-db:/usr/share/gdm/greeter -dconf-defaults Verify that a file exists in /etc/dconf/db/gdm.d/ and includes the following: (This is typically /etc/dconf/db/gdm.d/00 -login-screen ) [org/gnome/login -screen] disable-user-list=true 144 | P a g e"
+    },
+    {
+      "id": "1.8.4",
+      "title": "Ensure XDCMP is not enabled",
+      "section": "Section 1.8",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.8.4",
+      "description": "Ensure XDCMP is not enabled",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

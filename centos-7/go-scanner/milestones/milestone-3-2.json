@@ -1,0 +1,39 @@
+{
+  "milestone": "3.2",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 3.2",
+  "controls": [
+    {
+      "id": "3.2.1",
+      "title": "Ensure IP forwarding is disabled",
+      "section": "Section 3.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "SysctlParameter",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.2.1",
+      "description": "The net.ipv4.ip_forward and net.ipv6.conf.all.forwarding flags are used to tell the system whether it can forward packets or not.",
+      "rationale": "Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router. 222 | P a g e",
+      "remediation": ": Run the following commands to restore the default parameters and set the active kernel parameters: # grep -Els \"^\\s*net\\.ipv4\\.ip_forward \\s*=\\s*1\" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri \"s/^\\s*(net\\.ipv4\\.ip_forward \\s*)(=)(\\s*\\S+\\b).*$/# *REMOVED* \\1/\" $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1 # grep -Els \"^\\s*net\\.ipv6\\.conf\\.all\\.forwarding \\s*=\\s*1\" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri \"s/^\\s*(net\\.ipv6\\.conf\\.all\\.forwarding \\s*)(=)(\\s*\\S+\\b).*$/# *REMOVED* \\1/\" $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1 CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant en terprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 224 | P a g e",
+      "impact": "None",
+      "audit_command": "Run the following commands and verify output matches: # sysctl net.ipv4.ip_forward net.ipv4.ip_forward = 0 # grep -E -s \"^\\s*net\\.ipv4\\.ip_forward \\s*=\\s*1\" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf No value should be returned IFIPv6 is enabled: Run the following command s and verify output matches: # sysctl net.ipv6.conf.all.forwarding net.ipv6.conf.all.forwarding = 0 # grep -E -s \"^\\s*net\\.ipv6\\.conf\\.all\\.forwarding \\s*=\\s*1\" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf No value s hould be returned OR Verify that IPv6 is disabled: Run the following script. Output will confirm if IPv6 is disabled on the system. #!/bin/bash [ -n \"$passing\" ] && passing=\"\" [ -z \"$(grep \"^ \\s*linux\" /boot/grub2/grub.cfg | grep -v ipv6.disable=1)\" ] && passing=\"true\" grep -Eq \"^\\s*net\\.ipv6\\.conf\\.all\\.disable_ipv6 \\s*=\\s*1\\b(\\s+#.*)?$\" /etc/sysctl.conf \\ /etc/sysctl.d/*.conf && grep -Eq \"^\\s*net\\.ipv6\\.conf\\.default \\.disable_ipv6 \\s*=\\s*1\\b(\\s+#.*)?$\" \\ /etc/sysctl.conf /etc/sysctl.d/*.conf && sysctl net.ipv6.conf.all.disable_ipv6 | \\ grep -Eq \"^\\s*net\\.ipv6\\.conf\\.all\\.disable_ipv6 \\s*=\\s*1\\b(\\s+#.*)?$\" && \\ sysctl net.ipv6.conf.default.disable_ipv6 | \\ grep -Eq \"^\\s*net\\.ipv6\\.conf\\.default \\.disable_ipv6 \\s*=\\s*1\\b(\\s+#.*)?$\" && passing=\"true\" if [ \"$passin g\" = true ] ; then echo \"IPv6 is disabled on the system\" else echo \"IPv6 is enabled on the system\" fi 223 | P a g e",
+      "parameter_name": "net.ipv4.ip_forward",
+      "expected_value": "0"
+    },
+    {
+      "id": "3.2.2",
+      "title": "Ensure packet redirect sending is disabled",
+      "section": "Section 3.2",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.2.2",
+      "description": "Ensure packet redirect sending is disabled",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

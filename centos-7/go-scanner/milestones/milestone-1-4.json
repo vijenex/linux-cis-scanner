@@ -1,0 +1,52 @@
+{
+  "milestone": "1.4",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 1.4",
+  "controls": [
+    {
+      "id": "1.4.1",
+      "title": "Ensure bootloader password is set",
+      "section": "Section 1.4",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FileContent",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.4.1",
+      "description": "Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters",
+      "rationale": "Requiring a boot password upon execution of the boot loader will prevent an u nauthorized user from entering boot parameters or changing the boot partition. This prevents users from weakening security (e.g. turning off SELinux at boot time). Impact: \uf0b7 If password protection is enabled, only the designated superuser can edit a Grub 2 menu item by pressing \"e\" or access the GRUB 2 command line by pressing \"c\" \uf0b7 If GRUB 2 is set up to boot automatically to a password -protected menu entry the user has no option to back out of the password prompt to select another menu entry. Holding the SHIF T key will not display the menu in this case. The user must enter the correct username and password. If unable, the configuration files will have to be edited via the LiveCD or other means to fix the problem \uf0b7 You can add --unrestricted to the menu entries t o allow the system to boot without entering a password. Password will still be required to edit menu items. 89 | P a g e",
+      "remediation": ": For newer grub2 based systems (Release 7.2 and newer), create an encrypted password with grub2-setpassword : # grub2-setpassword Enter passwo rd: <password> Confirm password: <password> OR For older grub2 based systems, create an encrypted password with grub2-mkpasswd - pbkdf2 : # grub2-mkpasswd -pbkdf2 Enter password: <password> Reenter password: <password> Your PBKDF2 is <encrypted -password> Add the following into /etc/grub.d/01_users or a custom /etc/grub.d configuration file: cat <<EOF set superusers=\"<username>\" password_pbkdf2 <username> <encrypted -password> EOF Note: \uf0b7 If placing the information in a custom file, do not include the \"cat << EOF\" and \"EOF\" lines as the content is automatically added from these files \uf0b7 The superuser/user information and password should not be contained in the /etc/grub.d/00_header file. The information can be placed in any /etc/grub.d file as long as that file is incorporated into grub.cfg . It is preferable to enter this data into a custom file, such as /etc/grub.d/40_custom , so it is not overwritten should the Grub package be updated Run the following command to update the grub2 configuration: # grub2-mkconfig -o /boot/grub2/grub.cfg 91 | P a g e Additional Information: The older method will also work on Release 7.2 and newer systems This recommendation is designed around the grub2 bootloader, if LILO or another bootloader is in use in your environment enact equivalent set tings. Replace /boot/grub2/grub.cfg with the appropriate grub configuration file for your environment CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterpris e changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 92 | P a g e",
+      "impact": "None",
+      "audit_command": "Run the following script to verify the bootloader password has been set: #!/bin/bash tst1=\"\" tst2=\"\" output=\"\" efidir=$(find /boot/efi/EFI /* -type d -not -name 'BOOT') gbdir=$(find /boot -maxdepth 1 -type d -name 'grub*') if [ -f \"$efidir\"/grub.cfg ]; then grubdir=\"$efidir\" && grubfile=\"$efidir/grub.cfg\" elif [ -f \"$gbdir\"/grub.cfg ]; then grubdir=\"$gbdir\" && grubfile=\"$gbdir/grub.cfg\" fi userfile=\"$grubdir/user.cfg\" [ -f \"$userfile\" ] && grep -Pq '^\\h*GRUB2_PASSWORD \\h*=\\h*.+$' \"$userfile\" && output=\" \\n PASSED: bootloader password set in \\\"$userfile \\\"\\n\\n\" if [ -z \"$output\" ] && [ -f \"$grubfile\" ]; then grep -Piq '^\\h*set\\h+superuser s\\h*=\\h*\"?[^\"\\n\\r]+\"?(\\h+.*)?$' \"$grubfile\" && tst1=pass grep -Piq '^\\h*password \\h+\\H+\\h+.+$' \"$grubfile\" && tst2=pass [ \"$tst1\" = pass ] && [ \"$tst2\" = pass ] && output=\" \\n\\n*** PASSED: bootloader password set in \\\"$grubfile \\\" ***\\n\\n\" fi [ -n \"$output\" ] && echo -e \"$output\" || echo -e \"\\n\\n *** FAILED: bootloader password is not set *** \\n\\n\" 90 | P a g e"
+    },
+    {
+      "id": "1.4.2",
+      "title": "Ensure permissions on bootloader config are configured",
+      "section": "Section 1.4",
+      "profile": "Level1",
+      "automated": true,
+      "type": "FilePermissions",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.4.2",
+      "description": "The grub configuration file contains information on boot settings and passwords for unlocking boot options. The grub2 configuration is usually grub.cfg . On newer grub2 systems the encrypted bootloader password is contained in user.cfg . If the system uses U EFI, /boot/efi is a vfat filesystem. The vfat filesystem itself doesn't have the concept of permissions but can be mounted under Linux with whatever permissions desired.",
+      "rationale": "Setting the permissions to read and write for root only prevents non -root u sers from seeing the boot parameters or changing them. Non -root users who read the boot parameters may be able to identify weaknesses in security upon boot and be able to exploit them. 93 | P a g e",
+      "remediation": ": Run the following commands to set ownership and permissions on your grub configuration file(s): # chown root:root /boot/grub2/gru b.cfg # test -f /boot/grub2/user.cfg && chown root:root /boot/grub2/user.cfg # chmod og -rwx /boot/grub2/grub.cfg # test -f /boot/grub2/user.cfg && chmod og -rwx /boot/grub2/user.cfg OR If the system uses UEFI, edit /etc/fstab and add the fmask=0077 option: Example: <device> /boot/efi vfat defaults,umask=0027,fmask=0077,uid=0,gid=0 0 0 Note: This may require a re -boot to enable the change Additional Information: \uf0b7 This recommendation is designed around the grub2 bootloader. \uf0b7 If LILO or another bootloader is in u se in your environment: o Enact equivalent settings o Replace /boot/grub2/grub.cfg and /boot/grub2/user.cfg with the appropriate boot configuration files for your environment CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 95 | P a g e",
+      "impact": "None",
+      "audit_command": "Run the following script to verify correct permissions, ownership, and group for grub.cfg and if it exists, user.cfg : #!/bin/bash tst1=\"\" tst2=\"\" tst3=\"\" tst4=\"\" test1=\"\" test2=\"\" efidir=\"\" gbdir=\"\" grubdir=\"\" grubfile=\"\" userfile=\"\" efidir=$(find /boot/e fi/EFI/* -type d -not -name 'BOOT') gbdir=$(find /boot -maxdepth 1 -type d -name 'grub*') for file in \"$efidir\"/grub.cfg \"$efidir\"/grub.conf; do [ -f \"$file\" ] && grubdir=\"$efidir\" && grubfile=$file done if [ -z \"$grubdir\" ]; then for file in \"$gbdir \"/grub.cfg \"$gbdir\"/grub.conf; do [ -f \"$file\" ] && grubdir=\"$gbdir\" && grubfile=$file done fi userfile=\"$grubdir/user.cfg\" stat -c \"%a\" \"$grubfile\" | grep -Pq '^\\h*[0-7]00$' && tst1=pass output=\"Permissions on \\\"$grubfile \\\" are \\\"$(stat -c \"%a\" \" $grubfile\") \\\"\" stat -c \"%u:%g\" \"$grubfile\" | grep -Pq '^\\h*0:0$' && tst2=pass output2=\" \\\"$grubfile \\\" is owned by \\\"$(stat -c \"%U\" \"$grubfile\") \\\" and belongs to group \\\"$(stat -c \"%G\" \"$grubfile\") \\\"\" [ \"$tst1\" = pass ] && [ \"$tst2\" = pass ] && test1=pass if [ -f \"$userfile\" ]; then stat -c \"%a\" \"$userfile\" | grep -Pq '^\\h*[0-7]00$' && tst3=pass output3=\"Permissions on \\\"$userfile \\\" are \\\"$(stat -c \"%a\" \"$userfile\") \\\"\" stat -c \"%u:%g\" \"$userfile\" | grep -Pq '^\\h*0:0$' && tst4=pass output4=\" \\\"$userfile\\\" is owned by \\\"$(stat -c \"%U\" \"$userfile\") \\\" and belongs to group \\\"$(stat -c \"%G\" \"$userfile\") \\\"\" [ \"$tst3\" = pass ] && [ \"$tst4\" = pass ] && test2=pass else test2=pass fi [ \"$test1\" = pass ] && [ \"$test2\" = pass ] && passing=true # If passing is true we pass if [ \"$passing\" = true ] ; then echo \"PASSED:\" echo \"$output\" echo \"$output2\" [ -n \"$output3\" ] && echo \"$output3\" [ -n \"$output4\" ] && echo \"$output4\" else # print the reason why we are failing echo \"FAILED:\" echo \"$output\" echo \"$output2\" [ -n \"$output3\" ] && echo \"$output3\" [ -n \"$output4\" ] && echo \"$output4\" fi 94 | P a g e"
+    },
+    {
+      "id": "1.4.3",
+      "title": "Ensure authentication required for single user mode",
+      "section": "Section 1.4",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.4.3",
+      "description": "Ensure authentication required for single user mode",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

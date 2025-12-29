@@ -1,0 +1,39 @@
+{
+  "milestone": "1.3",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 1.3",
+  "controls": [
+    {
+      "id": "1.3.1",
+      "title": "Ensure AIDE is installed",
+      "section": "Section 1.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "PackageInstalled",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.3.1",
+      "description": "AIDE takes a snapshot of filesystem state including modification times, permissions, and file hashes which can then be used to compare against the current state of the filesystem to detect modifications to the system. Note: The prelinking feature can interfere with AIDE because it alters binaries to speed up their start up times. Run prelink -ua to restore the binaries to their prelinked state, t hus avoiding false positives from AIDE.",
+      "rationale": "By monitoring the filesystem state compromised files can be detected to prevent or limit the exposure of accidental or malicious misconfigurations or modified binaries.",
+      "remediation": "Run the following command to install AIDE: # yum install aide Configure AIDE as appropriate for your environment. Consult the AIDE documentation for options. Initialize AIDE: Run the following commands: # aide --init # mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz 83 | P a g e",
+      "impact": "None",
+      "audit_command": "Run the following command and verify aide is installed: # rpm -q aide aide-<version>",
+      "package_name": "aide",
+      "expected_status": "installed"
+    },
+    {
+      "id": "1.3.2",
+      "title": "Ensure filesystem integrity is regularly checked",
+      "section": "Section 1.3",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.3.2",
+      "description": "Ensure filesystem integrity is regularly checked",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}

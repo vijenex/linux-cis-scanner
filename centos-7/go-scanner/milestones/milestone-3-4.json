@@ -1,0 +1,22 @@
+{
+  "milestone": "3.4",
+  "version": "1.0.0",
+  "description": "CentOS Linux 7 CIS Benchmark v3.1.2 - Section 3.4",
+  "controls": [
+    {
+      "id": "3.4.2",
+      "title": "Ensure SCTP is disabled",
+      "section": "Section 3.4",
+      "profile": "Level1",
+      "automated": true,
+      "type": "Manual",
+      "severity": "medium",
+      "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.4.2",
+      "description": "Ensure SCTP is disabled",
+      "rationale": "Refer to CIS Benchmark documentation",
+      "remediation": "Refer to CIS Benchmark documentation",
+      "impact": "None",
+      "audit_command": "Manual review required"
+    }
+  ]
+}
