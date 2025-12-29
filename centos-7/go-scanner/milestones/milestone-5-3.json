@@ -82,7 +82,9 @@
       "rationale": "Disallowing root logins over SSH requires system admins to authenticate using their own individual account, then escalating to root via sudo . This in turn limits opportunity for non - repudiation and provides a clear audit trail in the event of a security incident",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: PermitRootLogin no Default Value: PermitRootLogin without -passw ord",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep permitrootlogin permitrootlogin no Run the following command and verify the output: # grep -Ei '^\\s*PermitRootLogin \\s+yes' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep permitrootlogin permitrootlogin no Run the following command and verify the output: # grep -Ei '^\\s*PermitRootLogin \\s+yes' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.11",
@@ -97,7 +99,9 @@
       "rationale": "Disallowing remote shell access to accounts that have an empty password reduces the probability of unauthorized access to the system",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: PermitEmptyPasswords no Default Value: PermitEmptyPasswords no",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep permitemptypasswords permitemptypasswords no Run the following command and verify the output: # grep -Ei '^\\s*PermitEmptyPasswords \\s+yes' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep permitemptypasswords permitemptypasswords no Run the following command and verify the output: # grep -Ei '^\\s*PermitEmptyPasswords \\s+yes' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.12",
@@ -112,7 +116,9 @@
       "rationale": "Permitting users the ability to set environment variables through the SSH daemon could potentially allow users to bypass security controls (e.g. setting an execution path tha t has ssh executing a Trojan\u2019s programs)",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: PermitUserEnvironment no Default Value: PermitUserEnvironment no",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep permituserenvironment permituserenvir onment no Run the following command and verify the output: # grep -Ei '^\\s*PermitUserEnvironment \\s+yes' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep permituserenvironment permituserenvir onment no Run the following command and verify the output: # grep -Ei '^\\s*PermitUserEnvironment \\s+yes' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.13",
@@ -127,7 +133,9 @@
       "rationale": "Weak ciphers that are used for authentication to the cryptographic module cannot be relied upon to provide conf identiality or integrity, and system data may be compromised. \uf0b7 The DES, Triple DES, and Blowfish ciphers, as used in SSH, have a birthday bound of approximately four billion blocks, which makes it easier for remote attackers to obtain cleartext data via a b irthday attack against a long -duration encrypted session, aka a \"Sweet32\" attack \uf0b7 The RC4 algorithm, as used in the TLS protocol and SSL protocol, does not properly combine state data with key data during the initialization phase, which makes it easier for remote attackers to conduct plaintext -recovery attacks against the initial bytes of a stream by sniffing network traffic that occasionally relies on keys affected by the Invariance Weakness, and then using a brute -force approach involving LSB values, aka t he \"Bar Mitzvah\" issue \uf0b7 The passwords used during an SSH session encrypted with RC4 can be recovered by an attacker who is able to capture and replay the session \uf0b7 Error handling in the SSH protocol; Client and Server, when using a block cipher algorithm in C ipher Block Chaining (CBC) mode, makes it easier for remote attackers to recover certain plaintext data from an arbitrary block of ciphertext in an SSH session via unknown vectors 474 | P a g e",
       "remediation": "Edit the /etc/ssh/sshd_config file add/modify the Ciphers line to contain a comma separated list of the site approved ciphers Example: Ciphers chacha20 -poly1305@openssh.com,aes256 -gcm@openssh.com,aes128 - gcm@openssh.com,aes256 -ctr,aes192 -ctr,aes128 -ctr Default Value: Ciphers chacha20 -poly1305@openssh.com,aes128 -ctr,aes192 -ctr,aes256 -ctr,aes128 - gcm@openssh.com,aes256 -gcm@openssh.com,aes128 -cbc,aes1 92-cbc,aes256 - cbc,blowfish -cbc,cast128 -cbc,3des -cbc",
       "impact": "None",
-      "audit_command": "Run the following command and verify the output: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep -Ei '^\\s*ciphers \\s+([^#]+,)?(3des - cbc|aes128 -cbc|aes192 -cbc|aes256 -cbc|arcfour|arcfour128|arcfour256|blowfish - cbc|cast128 -cbc|rijndael -cbc@lysator.liu.se) \\b' Nothing should be returned Run the following command and verify the output: grep -Ei '^\\s*ciphers \\s+([^#]+,)?(3des -cbc|aes128 -cbc|aes192 -cbc|aes256 - cbc|arcfour|arcfour128|arcfour256|blowfish -cbc|cast128 -cbc|rijndael - cbc@lysator.liu.se) \\b' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify the output: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep -Ei '^\\s*ciphers \\s+([^#]+,)?(3des - cbc|aes128 -cbc|aes192 -cbc|aes256 -cbc|arcfour|arcfour128|arcfour256|blowfish - cbc|cast128 -cbc|rijndael -cbc@lysator.liu.se) \\b' Nothing should be returned Run the following command and verify the output: grep -Ei '^\\s*ciphers \\s+([^#]+,)?(3des -cbc|aes128 -cbc|aes192 -cbc|aes256 - cbc|arcfour|arcfour128|arcfour256|blowfish -cbc|cast128 -cbc|rijndael - cbc@lysator.liu.se) \\b' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.14",
@@ -142,7 +150,9 @@
       "rationale": "MD5 and 96 -bit MAC algorit hms are considered weak and have been shown to increase exploitability in SSH downgrade attacks. Weak algorithms continue to have a great deal of attention as a weak spot that can be exploited with expanded computing power. An attacker that breaks the algo rithm could take advantage of a MiTM position to decrypt the SSH tunnel and capture credentials and information",
       "remediation": "Edit the /etc/ssh/sshd_config file and add/modify the MACs line to contain a comma separated list of the site approved MACs Example: MACs hmac -sha2-512-etm@openssh.com,hmac -sha2-256-etm@openssh.com,hmac -sha2- 512,hmac -sha2-256 Default Value: MACs umac -64-etm@openssh.com,umac -128 -etm@openssh.com,hmac -sha2 -256 - etm@openssh.com,hmac -sha2 -512 -etm@openssh.com,hmac -sha1 - etm@openssh.com,umac -64@openssh.com,umac -128@openssh.com,hmac -sha2 - 256,hmac -sha2 -512,hmac -sha1,hmac -sha1 -etm@openssh.com",
       "impact": "None",
-      "audit_command": "Run the following command and verify the output: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | aw k '{print $1}')\" | grep -Ei '^\\s*macs\\s+([^#]+,)?(hmac - md5|hmac -md5-96|hmac-ripemd160|hmac -sha1|hmac -sha1-96|umac- 64@openssh \\.com|hmac -md5-etm@openssh \\.com|hmac -md5-96-etm@openssh \\.com|hmac - ripemd160 -etm@openssh \\.com|hmac -sha1-etm@openssh \\.com|hmac -sha1-96- etm@openssh \\.com|umac -64-etm@openssh \\.com|umac -128-etm@openssh \\.com)\\b' Nothing should be returned Run the following command and verify the output: # grep -Ei '^\\s*macs\\s+([^#]+,)?(hmac -md5|hmac -md5-96|hmac-ripemd160|hmac - sha1|hmac -sha1-96|umac-64@openssh \\.com|hmac -md5-etm@openssh \\.com|hmac -md5-96- etm@openssh \\.com|hmac -ripemd160 -etm@openssh \\.com|hmac -sha1- etm@openssh \\.com|hmac -sha1-96-etm@openssh \\.com|umac -64-etm@openssh \\.com|umac - 128-etm@openssh \\.com)\\b' /etc/ssh/sshd_config Nothing should be returned 477 | P a g e"
+      "audit_command": "Run the following command and verify the output: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | aw k '{print $1}')\" | grep -Ei '^\\s*macs\\s+([^#]+,)?(hmac - md5|hmac -md5-96|hmac-ripemd160|hmac -sha1|hmac -sha1-96|umac- 64@openssh \\.com|hmac -md5-etm@openssh \\.com|hmac -md5-96-etm@openssh \\.com|hmac - ripemd160 -etm@openssh \\.com|hmac -sha1-etm@openssh \\.com|hmac -sha1-96- etm@openssh \\.com|umac -64-etm@openssh \\.com|umac -128-etm@openssh \\.com)\\b' Nothing should be returned Run the following command and verify the output: # grep -Ei '^\\s*macs\\s+([^#]+,)?(hmac -md5|hmac -md5-96|hmac-ripemd160|hmac - sha1|hmac -sha1-96|umac-64@openssh \\.com|hmac -md5-etm@openssh \\.com|hmac -md5-96- etm@openssh \\.com|hmac -ripemd160 -etm@openssh \\.com|hmac -sha1- etm@openssh \\.com|hmac -sha1-96-etm@openssh \\.com|umac -64-etm@openssh \\.com|umac - 128-etm@openssh \\.com)\\b' /etc/ssh/sshd_config Nothing should be returned 477 | P a g e",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | aw k"
     },
     {
       "id": "5.3.15",
@@ -157,7 +167,9 @@
       "rationale": "Key exchange methods that are considered weak should be removed. A key exchange method may be weak because too few bits are used or the hashing algorithm is considered too weak. Using weak algorithms could expose conn ections to man -in-the-middle attacks",
       "remediation": "Edit the /etc/ssh/sshd_config file add/modify the KexAlgorithms lin e to contain a comma separated list of the site approved key exchange algorithms Example: KexAlgorithms curve25519 -sha256,curve25519 -sha256@libssh.org,ecdh -sha2- nistp521,ecdh -sha2-nistp384,ecdh -sha2-nistp256,diffie -hellman-group-exchange - sha256 Default Val ue: kexalgorithms curve25519 -sha256,curve25519 -sha256@libssh.org,ecdh -sha2 - nistp256,ecdh -sha2 -nistp384,ecdh -sha2 -nistp521,diffie -hellman -group -exchange - sha256,diffie -hellman -group14 -sha1,diffie -hellman -group1 -sha1",
       "impact": "None",
-      "audit_command": "Run the following command and verify the output: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep -Ei '^\\s*kexalgorithms \\s+([^#]+,)?(diffie -hellman-group1-sha1|diffie -hellman- group14-sha1|diffie -hellman-group-exchange -sha1)\\b' Nothing should be returned Run the following command and verify the output: # grep -Ei '^\\s*kexalgorithms \\s+([^#]+,)?(diffie -hellman-group1-sha1|diffie - hellman-group14-sha1|diffie -hellman-group-exchange -sha1)\\b' /etc/ssh/sshd_config Nothing should be returned 481 | P a g e"
+      "audit_command": "Run the following command and verify the output: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep -Ei '^\\s*kexalgorithms \\s+([^#]+,)?(diffie -hellman-group1-sha1|diffie -hellman- group14-sha1|diffie -hellman-group-exchange -sha1)\\b' Nothing should be returned Run the following command and verify the output: # grep -Ei '^\\s*kexalgorithms \\s+([^#]+,)?(diffie -hellman-group1-sha1|diffie - hellman-group14-sha1|diffie -hellman-group-exchange -sha1)\\b' /etc/ssh/sshd_config Nothing should be returned 481 | P a g e",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.16",
@@ -172,7 +184,9 @@
       "rationale": "Having no timeout value associated with a connection could allow an unauthorized user access to another user's ssh session (e. g. user walks away from their computer and doesn't lock the screen). Setting a timeout value reduces this risk. \uf0b7 The recommended ClientAliveInterval setting is no greater than 900 seconds (15 minutes) \uf0b7 The recommended ClientAliveCountMax setting is 0 \uf0b7 At the 15 minute interval, if the ssh session is inactive, the session will be terminated. 484 | P a g e Impact: In some cases this setting may cause termination of long -running scripts over SSH or remote automation tools which rely on SSH. In developing the local site policy, the requirements of such scripts should be considered and appropriate ServerAliveInterval and ClientAliveInterval settings should be calculated to insure operational continuity.",
       "remediation": ": Edit the /etc/ssh/sshd_config file to set the parameters according to site policy. This should include ClientAliveInterval between 1 and 900 and ClientAliveCountMax of 0: ClientAliveInterval 900 ClientAliveCountMax 0 Default Value: ClientAliveInterval 0 ClientAliveCountMax 3 485 | P a g e Reference s: 1. https://man.openbsd.org/sshd_config CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occu r that could impact this Safeguard. \u25cf \u25cf \u25cf v7 16.11 Lock Workstation Sessions After Inactivity Automatically lock workstation sessions after a standard period of inactivity. \u25cf \u25cf \u25cf 486 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following commands and verify ClientAliveInterval is be tween 1 and 900: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep clientaliveinterval clientaliveinterval 900 Run the following command and verify ClientAliveCountMax is 0: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep clientalivecountmax clientalivecountmax 3 Run the following commands and verify the output: # grep -Ei '^\\s*ClientAliveInterval \\s+(0|9[0 -9][1-9]|[1-9][0-9][0-9][0- 9]+|1[6-9]m|[2-9][0-9]m|[1-9][0-9][0-9]+m)\\b' /etc/ssh/sshd_config Nothing should be returned # grep -Ei '^\\s*ClientAliveCountMax \\s+([1-9]|[1-9][0-9]+)\\b' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following commands and verify ClientAliveInterval is be tween 1 and 900: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep clientaliveinterval clientaliveinterval 900 Run the following command and verify ClientAliveCountMax is 0: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep clientalivecountmax clientalivecountmax 3 Run the following commands and verify the output: # grep -Ei '^\\s*ClientAliveInterval \\s+(0|9[0 -9][1-9]|[1-9][0-9][0-9][0- 9]+|1[6-9]m|[2-9][0-9]m|[1-9][0-9][0-9]+m)\\b' /etc/ssh/sshd_config Nothing should be returned # grep -Ei '^\\s*ClientAliveCountMax \\s+([1-9]|[1-9][0-9]+)\\b' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.17",
@@ -187,7 +201,9 @@
       "rationale": "Setting the LoginGraceTime parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. It will also limit the number o f concurrent unauthenticated connections While the recommended setting is 60 seconds (1 Minute), set the number based on site policy.",
       "remediation": ": Edit the /etc/ssh/sshd_config file to set the parameter as follows: LoginGraceTime 60 487 | P a g e Default Value: LoginGraceTime 2m Referen ces: 1. SSHD_CONFIG(5) CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 488 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output LoginGraceTime is between 1 and 60 seconds or 1m: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep logingracetime logingracetime 60 Run the following command and verify the output: # grep -Ei '^\\s*LoginGraceTime \\s+(0|6[1 -9]|[7-9][0-9]|[1-9][0-9][0- 9]+|[^1]m)' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify that output LoginGraceTime is between 1 and 60 seconds or 1m: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep logingracetime logingracetime 60 Run the following command and verify the output: # grep -Ei '^\\s*LoginGraceTime \\s+(0|6[1 -9]|[7-9][0-9]|[1-9][0-9][0- 9]+|[^1]m)' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.18",
@@ -202,7 +218,9 @@
       "rationale": "Banners are used to warn connecting users of the particular site's policy regarding connection. Presenting a warning message prior to the normal user login may assist the prosecution of trespassers on the computer system.",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: Banner /etc/issue.net",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(h ostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep banner banner /etc/issue.net"
+      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(h ostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep banner banner /etc/issue.net",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.19",
@@ -217,7 +235,9 @@
       "rationale": "When useP AM is set to yes, PAM runs through account and session types properly. This is important if you want to restrict access to services based off of IP, time or other factors of the account. Additionally, you can make sure users inherit certain environment var iables on login or disallow access to the server Impact: If UsePAM is enabled, you will not be able to run sshd(5) as a non -root user.",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: UsePAM yes 491 | P a g e Default Value: usePAM yes",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$( grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep -i usepam usepam yes Run the following command and verify the output: # grep -Ei '^\\s*UsePAM \\s+no' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$( grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep -i usepam usepam yes Run the following command and verify the output: # grep -Ei '^\\s*UsePAM \\s+no' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.2",
@@ -293,7 +313,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Run the following command and verify that the policy for the INPUT , OUTPUT , and FORWARD chains is DROP or REJECT : # iptables -L Chain INPUT (policy DROP) Chain FORWARD (policy DROP) Chain OUTPUT (policy DROP)",
-      "expected_status": "enabled"
+      "expected_status": "disabled",
+      "service_name": "xinetd"
     },
     {
       "id": "5.3.2.5",
@@ -316,14 +337,16 @@
       "section": "Section 5.3",
       "profile": "Level1",
       "automated": true,
-      "type": "FileContent",
+      "type": "ServiceStatus",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 5.3.2.6",
       "description": "iptables.service is a utility for configuring and maintaining iptables .",
       "rationale": "iptables.service will load the iptables rules saved in the file /etc/sysconfig/iptables at boot, otherwise the iptables rules will be cleared during a re -boot of the system.",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Run the following commands to verify iptables is enabl ed: # systemctl is -enabled iptables enabled Run the following command to verify iptables.service is active and running or exited # systemctl status iptables | grep -E \" Active: active \\((running|exited) \\) \" Active: active (exited) since <day date and time>"
+      "audit_command": "Run the following commands to verify iptables is enabl ed: # systemctl is -enabled iptables enabled Run the following command to verify iptables.service is active and running or exited # systemctl status iptables | grep -E \" Active: active \\((running|exited) \\) \" Active: active (exited) since <day date and time>",
+      "service_name": "iptables",
+      "expected_status": "enabled"
     },
     {
       "id": "5.3.21",
@@ -331,7 +354,7 @@
       "section": "Section 5.3",
       "profile": "Level1",
       "automated": true,
-      "type": "FileContent",
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 5.3.21",
       "description": "The MaxStartups parameter specifies the maximum number of concurrent unauthenticated connections to the SSH daemon.",
@@ -474,7 +497,7 @@
       "section": "Section 5.3",
       "profile": "Level1",
       "automated": true,
-      "type": "FileContent",
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 5.3.4",
       "description": "There are several options available to limit which users and group can access the system via SSH. It is recommended that at least one of the following options be leveraged: \uf0b7 AllowUsers : o The AllowUsers variable gives the system administrator the option of allowing specific users to ssh into the system. The list consists of space separated user names. Numeric user IDs are not recognized with this variable. If a system administrator wants to restrict user access further by only allowing the allowed users to log in from a particular hos t, the entry can be specified in the form of user@host. \uf0b7 AllowGroups : o The AllowGroups variable gives the system administrator the option of allowing specific groups of users to ssh into the system. The list consists of space separated group names. Numeric group IDs are not recognized with this variable. \uf0b7 DenyUsers : o The DenyUsers variable gives the system administrator the option of denying specific users to ssh into the system. The list consists of space separated user names. Numeric user IDs are not recogn ized with this variable. If a system administrator wants to restrict user access further by specifically denying a user's access from a particular host, the entry can be specified in the form of user@host. \uf0b7 DenyGroups : o The DenyGroups variable gives the sys tem administrator the option of denying specific groups of users to ssh into the system. The list consists of space separated group names. Numeric group IDs are not recognized with this variable.",
@@ -496,7 +519,9 @@
       "rationale": "SSH provides several logging levels with varying amounts of verbosity. DEBUG is specifically not recommended other than strictly for debugging SSH communications since it provides so much data that it is difficult to identify important security in formation.",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: LogLevel VERBOSE OR LogLevel INFO Default Value: LogLevel INFO",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches loglevel VERBOSE or loglevel INFO : # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep loglevel loglevel VERBOSE or logl evel INFO Run the following command and verify the output matches: # grep -i 'loglevel' /etc/ssh/sshd_config | grep -Evi '(VERBOSE|INFO)' Nothing should be returned 458 | P a g e"
+      "audit_command": "Run the following command and verify that output matches loglevel VERBOSE or loglevel INFO : # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep loglevel loglevel VERBOSE or logl evel INFO Run the following command and verify the output matches: # grep -i 'loglevel' /etc/ssh/sshd_config | grep -Evi '(VERBOSE|INFO)' Nothing should be returned 458 | P a g e",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.7",
@@ -511,7 +536,9 @@
       "rationale": "Setting the MaxAuthTries parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. While the recommended setting is 4, set the number based on site policy.",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: MaxAuthTries 4 Default Value: MaxAuthTries 6 462 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output MaxAuthTries is 4 o r less: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep maxauthtries maxauthtries 4 Run the following command and verify that the output: # grep -Ei '^\\s*maxauthtries \\s+([5-9]|[1-9][0-9]+)' /etc/ssh/sshd_config Nothing is returned"
+      "audit_command": "Run the following command and verify that output MaxAuthTries is 4 o r less: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep maxauthtries maxauthtries 4 Run the following command and verify that the output: # grep -Ei '^\\s*maxauthtries \\s+([5-9]|[1-9][0-9]+)' /etc/ssh/sshd_config Nothing is returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.8",
@@ -526,7 +553,9 @@
       "rationale": "Setting this parameter forces users to enter a password when authenticating with ssh.",
       "remediation": "Edit the /etc/ssh/sshd_config file to set the parameter as follows: IgnoreRhosts yes Default Value: IgnoreRhosts yes",
       "impact": "None",
-      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep ignorerhosts ignorerho sts yes Run the following command and verify the output: # grep -Ei '^\\s*ignorerhosts \\s+no\\b' /etc/ssh/sshd_config Nothing should be returned"
+      "audit_command": "Run the following command and verify that output matches: # sshd -T -C user=root -C host=\"$(hostname)\" -C addr=\"$(grep $(hostname) /etc/hosts | awk '{print $1}')\" | grep ignorerhosts ignorerho sts yes Run the following command and verify the output: # grep -Ei '^\\s*ignorerhosts \\s+no\\b' /etc/ssh/sshd_config Nothing should be returned",
+      "file_path": "/etc/hosts",
+      "pattern": "$(hostname) /etc/hosts | awk"
     },
     {
       "id": "5.3.9",

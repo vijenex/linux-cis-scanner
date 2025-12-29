@@ -72,14 +72,14 @@
       "section": "Section 1.6",
       "profile": "Level1",
       "automated": true,
-      "type": "FileContent",
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.6.1.6",
       "description": "Unconfined processes run in unconfined domains Note: Occasionally certain daemons such as backup or centralized management software may require running unconfined. Any such software should be carefully analyzed and documented before such an exception is made.",
       "rationale": "For unconfined processes, SELinux policy rules are applied, but policy rules exist that allow processes running in unconfined domains almost all access. Processes running in unconfined domains fall back to using DAC rules exclusively. If an unconfined process is compromised, SELinux does not prevent an attacker fr om gaining access to system resources and data, but of course, DAC rules are still used. SELinux is a security enhancement on top of DAC rules \u2013 it does not replace them",
       "remediation": ": Investigate any unconfined processes found during the audit action. They may need to have an existing security context assigned to them or a policy built for them. 120 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 3.3 Configure Data Access Control Lists Configure data access control lists based on a user\u2019s need to know. Apply data access control lists, also known as access permissions, to local and remote file systems, databases, and applications. \u25cf \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 121 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following command and verify not output is produced: # ps -eZ | grep un confined_service_t"
+      "audit_command": "ps -eZ | grep unconfined_service_t"
     },
     {
       "id": "1.6.1.7",
@@ -112,7 +112,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "not_installed"
+      "expected_status": "not_installed",
+      "package_name": "mcstrans"
     }
   ]
 }

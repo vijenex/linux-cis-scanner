@@ -178,14 +178,14 @@
       "section": "Section 1.1",
       "profile": "Level1",
       "automated": true,
-      "type": "FilePermissions",
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 1.1.22",
       "description": "Ensure sticky bit is set on all world -writable directories",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "find / -xdev -type d \\( -perm -0002 -a ! -perm -1000 \\) -print"
     },
     {
       "id": "1.1.3",

@@ -237,14 +237,14 @@
       "section": "Section 3.5",
       "profile": "Level1",
       "automated": true,
-      "type": "FileContent",
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.5.2.6",
       "description": "Chains are containers for rules. They exist in two kinds, base chains and regular chains. A base chain is an entry point for packets from the networking stack, a regular chain may be used as jump target and is used for better rule organization.",
       "rationale": "If a base chain doesn't ex ist with a hook for input, forward, and delete, packets that would flow through those chains will not be touched by nftables. Impact: If configuring nftables over ssh, creating a base chain with a policy of drop will cause loss of connectivity. Ensure that a rule allowing ssh has been added to the base chain prior to setting the base chain's policy to drop",
       "remediation": ": Run the following command to create the base chains: # nft cr eate chain inet <table name> <base chain name> { type filter hook <(input|forward|output)> priority 0 \\; } Example: # nft create chain inet filter input { type filter hook input priority 0 \\; } # nft create chain inet filter forward { type filter hook forward priority 0 \\; } # nft create chain inet filter output { type filter hook output priority 0 \\; } CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.4 Implement and Manage a Firewall on Servers Implement and manage a firewall on servers, where supported. Example implementations include a virtual firewall, operating system firewall, or a third - party firewall agent. \u25cf \u25cf \u25cf v7 9.4 Apply Host -based Firewalls or Port Filtering Apply host -based firewalls or port filtering tools on end systems, with a default - deny rule that drops all traffic except those services and ports that are explicitly allowed. \u25cf \u25cf \u25cf 285 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following commands and verify that base chains exist for INPUT , FORWARD , and OUTPUT . # nft list ruleset | grep 'hook input' type filter h ook input priority 0; # nft list ruleset | grep 'hook forward' type filter hook forward priority 0; # nft list ruleset | grep 'hook output' type filter hook output priority 0; 284 | P a g e"
+      "audit_command": "nft list ruleset | grep -E 'hook input|hook forward|hook output'"
     },
     {
       "id": "3.5.2.7",

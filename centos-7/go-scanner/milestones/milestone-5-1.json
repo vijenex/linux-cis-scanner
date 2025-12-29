@@ -9,14 +9,14 @@
       "section": "Section 5.1",
       "profile": "Level1",
       "automated": true,
-      "type": "FileContent",
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 5.1.1",
       "description": "The cron daemon is used to execute batch jobs on the system.",
       "rationale": "While there may not be user jobs that need to be run on the system, the system does have maintenance jo bs that may include security monitoring that have to run. If another method for scheduling tasks is not being used, cron is used to execute them, and needs to be enabled and running.",
       "remediation": ": Run the following command to enable and start cron : # systemctl --now enable crond OR Run the following command to remove cron : # yum remove cronie 421 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 422 | P a g e",
       "impact": "None",
-      "audit_command": "If cron is installed: Run the following commands to verify cron is enabled and running: # systemctl is -enabled crond enabled # systemctl status crond | grep 'Active: active (running) ' Active: active (running) since <Day Date Time>"
+      "audit_command": "crontab -l"
     },
     {
       "id": "5.1.2",

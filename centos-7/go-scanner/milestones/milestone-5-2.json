@@ -78,7 +78,9 @@
       "rationale": "A sudo log file simplifies auditing of sudo commands Impact: Editing the sudo configuration incorrectly can cause sudo to stop functioning",
       "remediation": "edit the file /etc/sudoers or a file in /etc/sudoers.d/ with visudo or visudo -f <PATH TO FILE> and add the following line: Defaults logfile=\"<PATH TO CUSTOM LOG FILE>\" Example: Defaults logfile=\"/var/log/sudo.log\" 444 | P a g e",
       "impact": "None",
-      "audit_command": "Verify that sudo has a custom log file configured Run the following command: # grep -Ei '^\\s*Defaults \\s+([^#;]+, \\s*)?logfile \\s*=\\s*(\")?[^#;]+(\")?' /etc/sudoers /etc/sudoers.d/* Defaults logfile=\"/var/log/sudo.log\""
+      "audit_command": "Verify that sudo has a custom log file configured Run the following command: # grep -Ei '^\\s*Defaults \\s+([^#;]+, \\s*)?logfile \\s*=\\s*(\")?[^#;]+(\")?' /etc/sudoers /etc/sudoers.d/* Defaults logfile=\"/var/log/sudo.log\"",
+      "file_path": "/etc/sudoers",
+      "pattern": "-Ei"
     }
   ]
 }
