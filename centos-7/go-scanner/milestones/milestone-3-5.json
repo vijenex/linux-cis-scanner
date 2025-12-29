@@ -93,30 +93,30 @@
       "title": "Ensure network interfaces are assigned to appropriate zone",
       "section": "Section 3.5",
       "profile": "Level1",
-      "automated": false,
-      "type": "FileContent",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.5.1.6",
       "description": "firewall zones define the trust level of network connections or interfaces.",
       "rationale": "A network interface not assigned to the appropriate zone can allow unexpected or undesired network traffic to be accepted on the interface. Impact: Changing firewall settings while connected over network can result in being locked out of the system.",
       "remediation": "Run the following comman d to assign an interface to the approprate zone. # firewall -cmd --zone=<Zone NAME> --change-interface=<INTERFACE NAME> Example: # firewall -cmd --zone=customezone --change-interface=eth0 267 | P a g e Default Value: default zone defined in the firewalld configuration",
       "impact": "None",
-      "audit_command": "Run the following and verify that the interface(s) follow site policy for zone a ssignment # find /sys/class/net/* -maxdepth 1 | awk -F\"/\" '{print $NF}' | while read -r netint; do [ \"$netint\" != \"lo\" ] && firewall -cmd --get-active-zones | grep - B1 $netint; done Example output: <custom zone> eth0"
+      "audit_command": "firewall-cmd --get-active-zones"
     },
     {
       "id": "3.5.1.7",
       "title": "Ensure firewalld drops unnecessary services and ports",
       "section": "Section 3.5",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.5.1.7",
       "description": "Ensure firewalld drops unnecessary services and ports",
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "firewall-cmd --list-services"
     },
     {
       "id": "3.5.2.1",
@@ -283,15 +283,15 @@
       "title": "Ensure nftables default deny firewall policy (Automat ed)",
       "section": "Section 3.5",
       "profile": "Level1",
-      "automated": false,
-      "type": "FileContent",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 3.5.2.9",
       "description": "Base chain policy is the default verdict that will be applied to packets reaching the end of the chain.",
       "rationale": "There are two policies: accept (Default) and drop. If the policy is set to accept , the firewall will accept any packet that is not configured to be denied and the packet will continue traversing the network stack. It is easier to white list acceptable usag e than to black list unacceptable usage. Note: Changing firewall settings while connected over the network can result in being locked out of the system. Impact: If configuring nftables over ssh, creating a base chain with a policy of drop will cause loss o f connectivity. Ensure that a rule allowing ssh has been added to the base chain prior to setting the base chain's policy to drop",
       "remediation": "Run the f ollowing command for the base chains with the input, forward, and output hooks to implement a default DROP policy: # nft chain <table family> <table name> <chain name> { policy drop \\; } Example: # nft chain inet filter input { policy drop \\; } # nft chain inet filter forward { policy drop \\; } # nft chain inet filter output { policy drop \\; } Default Value: accept",
       "impact": "None",
-      "audit_command": "Run the following commands and verify that base chains contain a policy of DROP . # nft list ruleset | grep 'hook input' type filter hook input priority 0; policy drop; # nft list ruleset | grep 'hook forward' type filter hook forward priority 0; policy drop; # nft list ruleset | grep 'hook output' type filter hook output priority 0; policy drop; 290 | P a g e"
+      "audit_command": "nft list ruleset | grep -E 'policy drop'"
     }
   ]
 }

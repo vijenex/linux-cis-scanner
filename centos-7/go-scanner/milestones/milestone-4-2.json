@@ -155,7 +155,7 @@
       "title": "Ensure permissions on all logfiles are configured",
       "section": "Section 4.2",
       "profile": "Level1",
-      "automated": false,
+      "automated": true,
       "type": "FilePermissions",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 4.2.3",

@@ -8,15 +8,15 @@
       "title": "Ensure time sy nchronization is in use",
       "section": "Section 2.2",
       "profile": "Level1",
-      "automated": false,
-      "type": "Manual",
+      "automated": true,
+      "type": "CommandOutputEmpty",
       "severity": "medium",
       "cis_reference": "CIS CentOS Linux 7 Benchmark v3.1.2 - 2.2.1.1",
       "description": "System time should be synchronized between all systems in an environment. This is typically done by establishing an authoritative time server or set of servers and having all systems synchronize their clocks to them. Note: \uf0b7 If another method for time synchronization is being used, this section may be skipped. \uf0b7 Only one time synchronization package should be installed",
       "rationale": "Time synchronizatio n is important to support time sensitive security mechanisms like Kerberos and also ensures log files have consistent time records across the enterprise, which aids in forensic investigations.",
       "remediation": ": Run One of the following commands to install chrony or NTP: To install chrony, run the following command: # yum install chrony OR To install ntp, run the following command: # yum install ntp Note: On systems where host based time synchronization is available consult your virtualization software documentation and setup host based synchronization. Additional Information: \uf0b7 On systems where host bas ed time synchronization is not available, verify that chrony or NTP is installed. \uf0b7 On systems where host based time synchronization is available consult your documentation and verify that host based synchronization is in use. CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 8.4 Standardize Time Synchronization Standardize time synchronization. Configure at least two synchronized time sources across enterprise assets, where supported. \u25cf \u25cf v7 6.1 Utilize Three Synchronized Time Sources Use at least three synchronized time sources from which all servers and network devices retrieve time information on a regular basis so that timestamps in logs are consistent. \u25cf \u25cf 157 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following commands to verify that a time synchro nization packages is installed: # rpm -q chrony ntp chrony-<version> # rpm -q ntp ntp-<version> 156 | P a g e"
+      "audit_command": "rpm -q chrony || rpm -q ntp"
     },
     {
       "id": "2.2.1.2",
