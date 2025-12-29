@@ -34,7 +34,8 @@
       "remediation": ": On 32 bit systems install a kernel with PAE support, no installation is required on 64 bit systems: If necessary configure your bootloader to load the new kernel and reboot the system. You may need to enable NX or XD support in your bios. CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 10.5 Enable Anti -Exploitation Features Enable anti-exploitation features on enterprise assets and software, where possible, such as Microsoft\u00ae Data Execution Prevention (DEP), Windows\u00ae Defender Exploit Guard (WDEG), or Apple\u00ae System Integrity Protection (SIP) and Gatekeeper\u2122. \u25cf \u25cf v7 8.3 Enable Operating System Anti -Exploitation Features/ Deploy Anti -Exploit Technologies Enable anti -exploitation features such as Data Execution Prevention (DEP) or Address Space Layout Randomization (ASLR) that are available in an operating system or deploy approp riate toolkits that can be configured to apply protection to a broader set of applications and executables. \u25cf \u25cf 102 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command and verify your kernel has identified a nd activated NX/XD protection. # journalctl | grep 'protection: active' kernel: NX (Execute Disable) protection: active OR on systems without journalctl: # [[ -n $(grep noexec[0 -9]*=off /proc/cmdline) || -z $(grep -E -i ' (pae|nx) ' /proc/cpuinfo) || -n $(grep '\\sNX\\s.*\\sprotection: \\s' /var/log/dmesg | grep -v active) ]] && echo \"NX Protection is not active\" Nothing should be returned 101 | P a g e",
-      "file_path": "/NX"
+      "file_path": "/NX",
+      "pattern": "protection:"
     },
     {
       "id": "1.5.3",
@@ -49,7 +50,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "parameter_name": "kernel.randomize_va_space",
+      "expected_value": "2"
     },
     {
       "id": "1.5.4",
@@ -65,7 +68,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "prelink",
+      "expected_status": "not_installed"
     }
   ]
 }

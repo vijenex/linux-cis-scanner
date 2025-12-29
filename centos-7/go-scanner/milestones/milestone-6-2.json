@@ -17,7 +17,8 @@
       "remediation": ": If any accounts in the /etc/passwd file do not have a single x in the password field, run the following command to set these accounts to use s hadowed passwords: # sed -e 's/^\\([a-zA-Z0-9_]*\\):[^:]*:/ \\1:x:/' -i /etc/passwd Investigate to determine if the account is logged in and what it is being used for, to determine if it needs to be forced off. CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 3.11 Encrypt Sensitive Data at Rest Encrypt sensitive data at rest on servers, applications, and databases containing sensitive data. Storage -layer encryption, also known as server -side encryption, meets the minimum requirement of this Safeguard. Additional encryption methods may include application -layer encryption, also known as client -side encryption, where access to the data storage device(s) does not permit access to the plain -text data. \u25cf \u25cf v7 4.4 Use Unique Passwords Where multi -factor authentication is not supported (such as local administrator, root, or service accounts), accounts will use passwords that are unique to that system. \u25cf \u25cf 573 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command and verify that no output is returned: # awk -F: '($2 != \"x\" ) { print $1 \" is not set to shadowed passwords \"}' /etc/passwd 572 | P a g e",
-      "file_path": "/etc/passwd"
+      "file_path": "/etc/passwd",
+      "pattern": "password|authentication"
     },
     {
       "id": "6.2.10",
@@ -47,7 +48,9 @@
       "rationale": "If the user's home directory does not exist or is unassigned, the user will be placed in \"/\" and will not be able to write any files or have local environment variables set.",
       "remediation": ": If any users' home directories do not exist, create them and make sure the respective user owns the d irectory. Users without an assigned home directory should be removed or assigned a home directory as appropriate. The following script will create a home directory for users with an interactive shell whose home directory doesn't exist: #!/bin/bash awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^(\\/usr)?\\/sbin\\/nologin( \\/)?$/ && $7!~/( \\/usr)?\\/bin\\/false(\\/)?$/) { print $1 \" \" $6 }' /etc/passwd | while read -r user dir; do if [ ! -d \"$dir\" ]; then mkdir \"$dir\" chmod g-w,o-wrx \"$dir\" chown \"$user\" \"$dir\" fi done CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 5.1 Establish Secure Configurations Maintain documented, standard security configuration standards for all authorized operating systems and software. \u25cf \u25cf \u25cf 592 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following script and verify no results are returned: #!/bin/bash awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^(\\/usr)?\\/sbin\\/nologin( \\/)?$/ && $7!~/( \\/usr)?\\/bin\\/false(\\/)?$/) { print $1 \" \" $6 }' /etc/passwd | while read -r user dir; do if [ ! -d \"$dir\" ]; then echo \"User: \\\"$user\\\" home directory: \\\"$dir\\\" does not exist.\" fi done Note: The audit script checks all users with interactive shells except halt, sync, shutdown, and nfsnobody. 591 | P a g e"
+      "audit_command": "Run the following script and verify no results are returned: #!/bin/bash awk -F: '($1!~/(halt|sync|shutdown|nfsnobody)/ && $7!~/^(\\/usr)?\\/sbin\\/nologin( \\/)?$/ && $7!~/( \\/usr)?\\/bin\\/false(\\/)?$/) { print $1 \" \" $6 }' /etc/passwd | while read -r user dir; do if [ ! -d \"$dir\" ]; then echo \"User: \\\"$user\\\" home directory: \\\"$dir\\\" does not exist.\" fi done Note: The audit script checks all users with interactive shells except halt, sync, shutdown, and nfsnobody. 591 | P a g e",
+      "file_path": "/etc/passwd",
+      "pattern": ".*"
     },
     {
       "id": "6.2.12",
@@ -153,7 +156,8 @@
       "remediation": ": If any accounts in the /etc/shadow file do not have a password, run the following command to lock the account until it can be determined why it does not have a password: # passwd -l <username> Also, check to see if the account is logged in and investigate what it is being used for to determine if it needs to be forced off. 574 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 5.2 Use Unique Passwords Use unique passwords for all enterprise assets. Best practice implementation includes, at a minimum, an 8 -character password for accounts using MFA and a 14 - character password for accounts not using MFA. \u25cf \u25cf \u25cf v7 4.4 Use Unique Passwords Where multi -factor authentication is not supported (such as local administrator, root, or service accounts), accounts will use passwords that are unique to that system. \u25cf \u25cf 575 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command and verify that no output is returned: # awk -F: '($2 == \"\" ) { print $1 \" does not have a password \"}' /etc/shadow",
-      "file_path": "/etc/shadow"
+      "file_path": "/etc/shadow",
+      "pattern": "password|authentication"
     },
     {
       "id": "6.2.3",
@@ -169,7 +173,8 @@
       "remediation": ": Analyze the output of the Audit step above and perform the appropriate action to correct any discrepancies f ound. 576 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 3.3 Configure Data Access Control Lists Configure data access control lists based on a user\u2019s need to know. Apply data access control lists, also known as access permissions, to local and remote file systems, databases, and applications. \u25cf \u25cf \u25cf v7 16 Account Monitoring and Control Account Monitoring and Control 577 | P a g e",
       "impact": "None",
       "audit_command": "Run the following script and verify no results are returned: #!/bin/bash for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do grep -q -P \"^.*?:[^: ]*:$i:\" /etc/group if [ $? -ne 0 ]; then echo \"Group $i is referenced by /etc/passwd but does not exist in /etc/group\" fi done",
-      "file_path": "/etc/passwd"
+      "file_path": "/etc/passwd",
+      "pattern": "-q"
     },
     {
       "id": "6.2.4",
@@ -229,7 +234,9 @@
       "rationale": "Users must be assigned unique UIDs for accountability and to ensure appropriate acces s protections.",
       "remediation": ": Based on the results of the audit script, establish unique UIDs and review all files owned by the shared UIDs to determine which UID they are su pposed to belong to. 584 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.1 Establish and Maintain a Secure Configuration Process Establish and maintain a secure configuration process for enterprise assets (end - user devices, including portable and mobile, non -computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard. \u25cf \u25cf \u25cf v7 16 Account Monitoring and Control Account Monitoring and Control 585 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following script and verify no results are returned: #!/bin/bash cut -f3 -d\":\" /etc/passwd | sort -n | uniq -c | while read -r x; do [ -z \"$x\" ] && break set - \"$x\" if [ \"$1\" -gt 1 ]; then users=$(awk -F: '($3 == n) { print $1 }' n=\"$2\" /etc/passwd | xargs) echo \"Duplicate UID ($2): $users\" fi done"
+      "audit_command": "Run the following script and verify no results are returned: #!/bin/bash cut -f3 -d\":\" /etc/passwd | sort -n | uniq -c | while read -r x; do [ -z \"$x\" ] && break set - \"$x\" if [ \"$1\" -gt 1 ]; then users=$(awk -F: '($3 == n) { print $1 }' n=\"$2\" /etc/passwd | xargs) echo \"Duplicate UID ($2): $users\" fi done",
+      "file_path": "/etc/passwd",
+      "pattern": ".*"
     },
     {
       "id": "6.2.8",

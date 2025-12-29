@@ -34,7 +34,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "service_name": "integrity"
+      "service_name": "integrity",
+      "expected_status": "enabled"
     }
   ]
 }

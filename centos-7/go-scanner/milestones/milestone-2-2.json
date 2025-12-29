@@ -31,7 +31,9 @@
       "rationale": "If chrony is in use on the system proper configuration is vital to ensuring time synchroni zation is working properly. Note: This recommendation only applies if chrony is in use on the system.",
       "remediation": ": Add or edit server or pool lines to /etc/chrony.conf as appropriate: server <remote -server> Add or edit the OPTIONS in /etc/sysconfig/chronyd to include ' -u chrony ': OPTIONS=\" -u chrony\" CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 8.4 Standardize Time Synchronization Standardize time synchronization. Configure at least two synchronized time sources across enterprise assets, where supported. \u25cf \u25cf v7 6.1 Utilize Three Synchronized Time Sources Use at least three synchronized time sources from which all servers and network devices retrieve time information on a regular basis so that timestamps in logs are consistent. \u25cf \u25cf 159 | P a g e",
       "impact": "None",
-      "audit_command": "IF chrony is installed on the system: Run the following command and verify remote server is configured properly: # grep -E \"^(server|pool)\" /etc/ch rony.conf server <remote -server> Multiple servers may be configured. Run the following command and verify OPTIONS includes ' -u chrony ': # grep ^OPTIONS /etc/sysconfig/chronyd OPTIONS=\" -u chrony\" Additional options may be present. 158 | P a g e"
+      "audit_command": "IF chrony is installed on the system: Run the following command and verify remote server is configured properly: # grep -E \"^(server|pool)\" /etc/ch rony.conf server <remote -server> Multiple servers may be configured. Run the following command and verify OPTIONS includes ' -u chrony ': # grep ^OPTIONS /etc/sysconfig/chronyd OPTIONS=\" -u chrony\" Additional options may be present. 158 | P a g e",
+      "file_path": "//chrony.tuxfamily.org/",
+      "pattern": "-E"
     },
     {
       "id": "2.2.1.3",
@@ -46,7 +48,9 @@
       "rationale": "If ntp is in use on the system proper configuration is vital to en suring time synchronization is working properly. 160 | P a g e",
       "remediation": ": Add or edit restric t lines in /etc/ntp.conf to match the following: restrict -4 default kod nomodify notrap nopeer noquery restrict -6 default kod nomodify notrap nopeer noquery Add or edit server or pool lines to /etc/ntp.conf as appropriate: server <remote -server> Add or edit the OPTIONS in /etc/sysconfig/ntpd to include ' -u ntp:ntp ': OPTIONS=\" -u ntp:ntp\" Reload the systemd daemon: systemctl daemon -reload Enable and start the ntp service: systemctl --now enable ntpd CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 8.4 Standardize Time Synchronization Standardize time synchronization. Configure at least two synchronized time sources across enterprise assets, where supported. \u25cf \u25cf v7 6.1 Utilize Three Synchronized Time Sources Use at least three synchronized time sources from which all servers and network devices retrieve time information on a regular basis so that timestamps in logs are consistent. \u25cf \u25cf 162 | P a g e",
       "impact": "None",
-      "audit_command": "IF NTP is installed on the system: Run the following command and verify ntpd is enabled: # systemctl is -enabled ntpd enabled Run the following command and verify output matches: # grep \"^restrict\" /etc/ntp.conf restrict -4 default kod nomodify notrap nopeer noquery restrict -6 default kod nomodify notrap nopeer noquery The -4 in the first line is optional and options after default can appear in any order. Additional restriction lines may exist. Run the following command and verify remote server is configured properly: # grep -E \"^(server|pool)\" /etc/ntp.conf server <remote -server> Multiple servers may be configured Run the following commands and verify that ' -u ntp:ntp ' is included in OPTIONS OR ExecStart as listed: # grep \"^OPTIONS\" /etc/sysconfig/ntpd OPTIONS=\" -u ntp:ntp\" OR # grep \"^ExecStart\" /usr/lib/systemd/system/ntpd.service ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS Additional options may be present. 161 | P a g e"
+      "audit_command": "IF NTP is installed on the system: Run the following command and verify ntpd is enabled: # systemctl is -enabled ntpd enabled Run the following command and verify output matches: # grep \"^restrict\" /etc/ntp.conf restrict -4 default kod nomodify notrap nopeer noquery restrict -6 default kod nomodify notrap nopeer noquery The -4 in the first line is optional and options after default can appear in any order. Additional restriction lines may exist. Run the following command and verify remote server is configured properly: # grep -E \"^(server|pool)\" /etc/ntp.conf server <remote -server> Multiple servers may be configured Run the following commands and verify that ' -u ntp:ntp ' is included in OPTIONS OR ExecStart as listed: # grep \"^OPTIONS\" /etc/sysconfig/ntpd OPTIONS=\" -u ntp:ntp\" OR # grep \"^ExecStart\" /usr/lib/systemd/system/ntpd.service ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS Additional options may be present. 161 | P a g e",
+      "file_path": "//www.ntp.org",
+      "pattern": "^restrict"
     },
     {
       "id": "2.2.1.4",
@@ -77,7 +81,8 @@
       "remediation": ": Run the following command to remove dovecot : # yum remove dovecot 179 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 180 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify dovecot is not installed: # rpm -q dovecot package dovecot is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.11",
@@ -93,7 +98,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "samba",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.12",
@@ -109,7 +115,8 @@
       "remediation": ": Run the following command to remove the squid package: # yum remove squi d 183 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 184 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify squid is not installed: # rpm -q squid package squid is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.13",
@@ -125,7 +132,8 @@
       "remediation": ": Run the following command to remove net-snmpd : # yum remove net -snmp CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 186 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify net-snmp is not installed: # rpm -q net-snmp package net -snmp is not installed 185 | P a g e",
-      "expected_status": "installed"
+      "package_name": "snmp",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.14",
@@ -141,7 +149,8 @@
       "remediation": ": Run the following command to remove ypserv : # yum remove ypserv 187 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 188 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify ypserv is not installed: # rpm -q ypserv package ypserv is no t installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.15",
@@ -157,7 +166,8 @@
       "remediation": ": Run the following command to remove the telnet -server package: # yum remove telnet-server 189 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 190 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify the telnet-server package is not installed: rpm -q telnet -server package telnet -server is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.16",
@@ -188,7 +198,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "utils",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.18",
@@ -204,7 +215,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "rpcbind",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.19",
@@ -220,7 +232,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "rsync",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.2",
@@ -236,7 +249,7 @@
       "remediation": ": Run the following command to remove the X Windows Server packages: # yum remove xorg -x11-server* 163 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf 164 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to Verify X Windo ws Server is not installed. # rpm -qa xorg-x11-server*",
-      "expected_status": "installed"
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.4",
@@ -252,7 +265,8 @@
       "remediation": "Run the following command to remove cups : # yum remove cups",
       "impact": "None",
       "audit_command": "Run the following command to verify cups is not installed: # rpm -q cups package cups is not installed",
-      "expected_status": "installed"
+      "package_name": "cups",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.5",
@@ -268,7 +282,8 @@
       "remediation": "Run the following command to remove dhcp : # yum remove dhcp",
       "impact": "None",
       "audit_command": "Run the following command to verify dhcp is not installed: # rpm -q dhcp package dhcp is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.6",
@@ -284,7 +299,8 @@
       "remediation": "Run the following command to remove openldap -servers : # yum remove openldap -servers",
       "impact": "None",
       "audit_command": "Run the following command to verify openldap -servers is not installed: # rpm -q openldap -servers package openldap -servers is not i nstalled",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.7",
@@ -300,7 +316,8 @@
       "remediation": ": Run the following command to remove bind : # yum remove bind 173 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 174 | P a g e",
       "impact": "None",
       "audit_command": "Run one of the follow ing commands to verify bind is not installed: # rpm -q bind package bind is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.8",
@@ -316,7 +333,8 @@
       "remediation": ": Run the following command to remove vsftpd : # yum remove vsftpd 175 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 176 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify vsftpd is not installed: # rpm -q vsftpd package vsftpd is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.2.9",
@@ -332,7 +350,8 @@
       "remediation": ": Run the following command to remove httpd : # yum remove httpd 177 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 9.2 Ensure Only Approved Ports, Protocols and Services Are Running Ensure that only network ports, protocols, and services listening on a system with validated business needs, are running on each system. \u25cf \u25cf 178 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to ve rify httpd is not installed: # rpm -q httpd package httpd is not installed",
-      "expected_status": "installed"
+      "package_name": "server",
+      "expected_status": "not_installed"
     }
   ]
 }

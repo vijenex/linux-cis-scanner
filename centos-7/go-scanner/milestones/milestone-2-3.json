@@ -17,7 +17,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": ": Run the following command to verify that the ypbind package is not installed: # rpm -q ypbind package ypbind is not installed Remediatio n: Run the following command to remove the ypbind package: # yum remove ypbind 201 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf 202 | P a g e",
-      "expected_status": "installed"
+      "package_name": "client",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.3.2",
@@ -33,7 +34,8 @@
       "remediation": ": Run the following command to remove the rsh package: # yum remove rsh 203 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf 204 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify that the rsh package is not installed: # rpm -q rsh package rsh is not installed",
-      "expected_status": "installed"
+      "package_name": "client",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.3.3",
@@ -49,7 +51,8 @@
       "remediation": ": Run the following command to remove the talk package: # yum remove talk 205 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf 206 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify that the talk package is not installed: # rpm -q talk package talk is not installed",
-      "expected_status": "installed"
+      "package_name": "client",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.3.4",
@@ -65,7 +68,8 @@
       "remediation": ": Run the following command to remove the telnet package: # yum remove telnet 207 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 2.6 Address unapproved software Ensure that unauthorized software is either removed or the inventory is updated in a timely manner \u25cf \u25cf \u25cf 208 | P a g e",
       "impact": "None",
       "audit_command": "Run the following command to verify that the telnet package is not installed: # rpm -q telnet package telnet is not installed",
-      "expected_status": "installed"
+      "package_name": "client",
+      "expected_status": "not_installed"
     },
     {
       "id": "2.3.5",
@@ -81,7 +85,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "client",
+      "expected_status": "not_installed"
     }
   ]
 }

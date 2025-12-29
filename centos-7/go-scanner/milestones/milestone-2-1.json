@@ -17,7 +17,8 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "package_name": "xinetd",
+      "expected_status": "not_installed"
     }
   ]
 }

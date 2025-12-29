@@ -287,12 +287,41 @@ def parse_controls(pdf_text):
             "audit_command": audit if audit else "Manual review required"
         }
         
-        # Add type-specific fields
+        # Add type-specific fields with improved extraction
         if control_type == "KernelModule":
-            module_match = re.search(r'(\w+)\s+kernel module', title.lower())
+            # Extract module name from title - handle "mounting of X filesystems" pattern
+            module_match = re.search(r'mounting of (\w+)\s+filesystem', title.lower())
+            if not module_match:
+                module_match = re.search(r'(\w+)\s+(?:kernel module|filesystem)', title.lower())
             if module_match:
                 control["module_name"] = module_match.group(1)
                 control["expected_status"] = "not_available"
+            # Also check audit command
+            if "module_name" not in control and audit:
+                audit_module = re.search(r'modprobe.*?(\w+)\s', audit.lower())
+                if audit_module:
+                    control["module_name"] = audit_module.group(1)
+                    control["expected_status"] = "not_available"
+        
+        # Fix misclassified kernel modules (should be KernelModule not FileContent)
+        if control_type == "FileContent" and "filesystem" in title.lower() and "disabled" in title.lower():
+            # Check if this is actually a kernel module check
+            module_match = re.search(r'mounting of (\w+)\s+filesystem', title.lower())
+            if module_match or "modprobe" in audit.lower():
+                control_type = "KernelModule"
+                control["type"] = "KernelModule"
+                if module_match:
+                    control["module_name"] = module_match.group(1)
+                elif "modprobe" in audit.lower():
+                    audit_module = re.search(r'modprobe.*?(\w+)\s', audit.lower())
+                    if audit_module:
+                        control["module_name"] = audit_module.group(1)
+                control["expected_status"] = "not_available"
+                # Remove file_path/pattern if they were added
+                if "file_path" in control:
+                    del control["file_path"]
+                if "pattern" in control:
+                    del control["pattern"]
         
         elif control_type == "MountPoint":
             mount_match = re.search(r'(/[\w/]+)', title)
@@ -301,48 +330,213 @@ def parse_controls(pdf_text):
                 control["expected_status"] = "separate_partition"
         
         elif control_type == "MountOption":
+            # Extract mount point
             mount_match = re.search(r'(/[\w/]+)', title)
-            option_match = re.search(r'(nodev|nosuid|noexec)', title.lower())
-            if mount_match and option_match:
+            # Extract option
+            option_match = re.search(r'\b(nodev|nosuid|noexec|sticky bit)\b', title.lower())
+            option = None
+            if option_match:
+                option = option_match.group(1)
+                if option == "sticky bit":
+                    option = "sticky"  # Normalize
+            else:
+                # Try from description or remediation
+                option_match = re.search(r'\b(nodev|nosuid|noexec)\b', (description + " " + remediation).lower())
+                if option_match:
+                    option = option_match.group(1)
+            
+            if mount_match:
                 control["mount_point"] = mount_match.group(1)
-                control["required_option"] = option_match.group(1)
+                if option:
+                    control["required_option"] = option
+            elif "removable media" in title.lower():
+                # For removable media, we can't specify a single mount point
+                # These controls check multiple mount points, so we'll mark them as manual
+                # or use a placeholder mount point
+                if option:
+                    control["required_option"] = option
+                    # Use a placeholder - the scanner will need to handle this specially
+                    control["mount_point"] = "/media"  # Placeholder
+                    # Actually, better to mark as manual since it requires checking multiple mounts
+                    if automated:
+                        control["automated"] = False
+                        control_type = "Manual"
+                        control["type"] = "Manual"
         
         elif control_type == "ServiceStatus":
+            # Extract service name - improved patterns
             service_match = re.search(r'(\w+)\s+(?:service|is)', title.lower())
-            if service_match:
+            if not service_match:
+                # Try patterns like "Ensure X is enabled"
+                service_match = re.search(r'ensure\s+(\w+)\s+is', title.lower())
+            if not service_match:
+                # Try from audit command (systemctl)
+                if audit:
+                    systemctl_match = re.search(r'systemctl.*?(\w+)', audit.lower())
+                    if systemctl_match:
+                        service_match = systemctl_match
+            if not service_match:
+                # Try common service names from title
+                common_services = ["aide", "rsyslog", "firewalld", "auditd", "chronyd", "ntpd", "gdm"]
+                for svc in common_services:
+                    if svc in title.lower():
+                        control["service_name"] = svc
+                        break
+            else:
                 control["service_name"] = service_match.group(1)
-            if "enabled" in title.lower():
+            if "enabled" in title.lower() or "running" in title.lower():
                 control["expected_status"] = "enabled"
             elif "disabled" in title.lower() or "inactive" in title.lower():
                 control["expected_status"] = "disabled"
+            else:
+                # Default based on context
+                if "filesystem integrity" in title.lower() or "aide" in title.lower():
+                    control["expected_status"] = "enabled"  # Usually cron job
+                else:
+                    control["expected_status"] = "enabled"  # Default
         
         elif control_type == "PackageInstalled":
+            # Extract package name - improved patterns
             package_match = re.search(r'(\w+)\s+(?:package|is installed)', title.lower())
-            if package_match:
+            if not package_match:
+                package_match = re.search(r'ensure\s+(\w+)\s+is\s+installed', title.lower())
+            if not package_match:
+                package_match = re.search(r'(\w+)\s+is\s+not\s+installed', title.lower())
+            if not package_match:
+                # Try from audit command (rpm -q package)
+                if audit:
+                    rpm_match = re.search(r'rpm\s+-q\s+(\w+)', audit.lower())
+                    if rpm_match:
+                        package_match = rpm_match
+            if not package_match:
+                # Try common package names from title
+                common_packages = ["aide", "rsyslog", "firewalld", "audit", "chrony", "ntp", "gdm", "xorg"]
+                for pkg in common_packages:
+                    if pkg in title.lower():
+                        control["package_name"] = pkg
+                        break
+            else:
                 control["package_name"] = package_match.group(1)
-            control["expected_status"] = "installed" if "installed" in title.lower() else "not_installed"
+            control["expected_status"] = "installed" if "installed" in title.lower() and "not installed" not in title.lower() else "not_installed"
         
         elif control_type == "SysctlParameter":
-            # Try to extract parameter from audit or remediation
-            param_match = re.search(r'([\w.]+)\s*=\s*(\d+)', audit + " " + remediation)
-            if param_match:
-                control["parameter_name"] = param_match.group(1)
-                control["expected_value"] = param_match.group(2)
+            # Special case for ASLR - check first
+            if "aslr" in title.lower() or "randomize" in title.lower() or "address space layout" in title.lower():
+                control["parameter_name"] = "kernel.randomize_va_space"
+                control["expected_value"] = "2"
+            else:
+                # Try multiple patterns to extract parameter and value
+                combined_text = audit + " " + remediation + " " + description
+                # Pattern 1: parameter = value
+                param_match = re.search(r'([\w.]+)\s*=\s*(\d+)', combined_text)
+                if not param_match:
+                    # Pattern 2: sysctl parameter value
+                    param_match = re.search(r'sysctl\s+([\w.]+)\s+(\d+)', combined_text, re.IGNORECASE)
+                if not param_match:
+                    # Pattern 3: /proc/sys/... = value
+                    param_match = re.search(r'/proc/sys/([\w/]+)\s*[=:]\s*(\d+)', combined_text)
+                    if param_match:
+                        # Convert path to parameter name
+                        param_name = param_match.group(1).replace('/', '.')
+                        control["parameter_name"] = param_name
+                        control["expected_value"] = param_match.group(2)
+                else:
+                    control["parameter_name"] = param_match.group(1)
+                    control["expected_value"] = param_match.group(2)
         
         elif control_type == "SSHConfig":
-            param_match = re.search(r'(\w+)\s+(?:is|parameter)', title.lower())
-            if param_match:
+            # Extract SSH parameter from title or description
+            param_match = re.search(r'(\w+)\s+(?:is|parameter|setting)', title.lower())
+            if not param_match:
+                # Common SSH parameters
+                ssh_params = ["permitrootlogin", "permitemptypasswords", "protocol", "x11forwarding", "maxauthtries", "clientaliveinterval", "clientalivecountmax", "logingracetime", "allowusers", "denyusers"]
+                for param in ssh_params:
+                    if param in title.lower():
+                        control["parameter"] = param
+                        break
+            else:
                 control["parameter"] = param_match.group(1)
         
         elif control_type == "FilePermissions":
-            file_match = re.search(r'(/[\w/.-]+)', title)
-            if file_match:
-                control["file_path"] = file_match.group(1)
+            # For sticky bit on world-writable directories - this should be CommandOutputEmpty
+            if "sticky bit" in title.lower() and "world-writable" in title.lower():
+                # Change type to CommandOutputEmpty
+                control_type = "CommandOutputEmpty"
+                control["type"] = "CommandOutputEmpty"
+                # Extract find command from audit
+                if audit and "find" in audit.lower():
+                    # Extract the find command
+                    find_match = re.search(r'(find\s+[^\n]+)', audit, re.IGNORECASE)
+                    if find_match:
+                        control["audit_command"] = find_match.group(1)
+            else:
+                # Extract file path - improved patterns
+                file_match = re.search(r'(/[\w/.-]+)', title)
+                if not file_match:
+                    # Try from description
+                    file_match = re.search(r'(/[\w/.-]+)', description)
+                if file_match:
+                    control["file_path"] = file_match.group(1)
         
         elif control_type == "FileContent":
+            # Extract file path and pattern
             file_match = re.search(r'(/[\w/.-]+)', title)
-            if file_match:
+            if not file_match:
+                file_match = re.search(r'(/[\w/.-]+)', description)
+            if not file_match:
+                # Common config files based on title keywords
+                if "gpgcheck" in title.lower():
+                    control["file_path"] = "/etc/yum.conf"
+                    control["pattern"] = "gpgcheck\\s*=\\s*1"
+                elif "bootloader" in title.lower() or "grub" in title.lower():
+                    control["file_path"] = "/boot/grub2/grub.cfg"
+                    control["pattern"] = "password"
+                elif "single user" in title.lower() or "sulogin" in title.lower():
+                    control["file_path"] = "/etc/sysconfig/init"
+                    control["pattern"] = "SINGLE"
+                elif "/dev/shm" in title.lower():
+                    control["file_path"] = "/etc/fstab"
+                    control["pattern"] = "/dev/shm"
+                elif "tmp" in title.lower() and "configured" in title.lower():
+                    control["file_path"] = "/etc/fstab"
+                    control["pattern"] = "/tmp"
+            else:
                 control["file_path"] = file_match.group(1)
+                # Try to extract pattern from title/description/audit
+                if "gpgcheck" in title.lower():
+                    control["pattern"] = "gpgcheck\\s*=\\s*1"
+                elif "password" in title.lower() or "authentication" in title.lower():
+                    control["pattern"] = "password|authentication"
+                elif audit and audit != "Manual review required":
+                    # Try to extract pattern from audit command
+                    grep_match = re.search(r'grep\s+[\'"]?([^\'"\s]+)', audit, re.IGNORECASE)
+                    if grep_match:
+                        control["pattern"] = grep_match.group(1)
+                    else:
+                        # Default pattern based on file
+                        if "/etc/yum.conf" in control["file_path"]:
+                            control["pattern"] = "gpgcheck"
+                        elif "/etc/fstab" in control["file_path"]:
+                            # Extract what we're looking for from title
+                            if "tmp" in title.lower():
+                                control["pattern"] = "/tmp"
+                            elif "shm" in title.lower():
+                                control["pattern"] = "/dev/shm"
+                            else:
+                                control["pattern"] = ".*"
+                        else:
+                            control["pattern"] = ".*"  # Match anything as fallback
+                else:
+                    # No audit command, use default pattern
+                    control["pattern"] = ".*"
+            
+            # For kernel module checks that were misclassified
+            if "filesystem" in title.lower() and "disabled" in title.lower() and "/etc/modprobe.d" in remediation:
+                # This should be KernelModule, but if it's FileContent, add file_path
+                module_match = re.search(r'mounting of (\w+)\s+filesystem', title.lower())
+                if module_match:
+                    control["file_path"] = f"/etc/modprobe.d/{module_match.group(1)}.conf"
+                    control["pattern"] = f"install {module_match.group(1)}"
         
         # Mark as seen and store
         seen_ids[control_id] = control

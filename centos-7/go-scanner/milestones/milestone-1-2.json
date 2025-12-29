@@ -48,7 +48,9 @@
       "rationale": "Refer to CIS Benchmark documentation",
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
-      "audit_command": "Manual review required"
+      "audit_command": "Manual review required",
+      "file_path": "/etc/yum.conf",
+      "pattern": "gpgcheck\\s*=\\s*1"
     }
   ]
 }

@@ -48,7 +48,8 @@
       "rationale": "Security configuration requirements vary from site to site. Some sites may mandat e a policy that is stricter than the default policy, which is perfectly acceptable. This item is intended to ensure that at least the default recommendations are met.",
       "remediation": ": Edit the /etc/selinux/config file to set the SELINUXTYPE parameter: SELINUXTYPE=targeted 113 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 3.3 Configure Data Access Control Lists Configure data access control lists based on a user\u2019s need to know. Apply data access control lists, also known as access permissions, to local and remote file systems, databases, and applications. \u25cf \u25cf \u25cf v7 14.6 Protect Information through Access Control Lists Protect all information stored on systems with file system, network share, claims, application, or database specific access control lists. These controls will enforce the principle that only authorized individuals should have access to the information based on their need to access the information as a part of their responsibilities. \u25cf \u25cf \u25cf 114 | P a g e",
       "impact": "None",
-      "audit_command": "Run the following commands and ensure output matches either \" targeted \" or \" mls \": # grep SELINUXTYPE= /etc/selinux/config SELINUXTYPE=targeted # sestatus | grep 'Loaded policy' Loaded policy name: targeted"
+      "audit_command": "Run the following commands and ensure output matches either \" targeted \" or \" mls \": # grep SELINUXTYPE= /etc/selinux/config SELINUXTYPE=targeted # sestatus | grep 'Loaded policy' Loaded policy name: targeted",
+      "file_path": "/etc/selinux/config"
     },
     {
       "id": "1.6.1.4",
@@ -94,7 +95,8 @@
       "remediation": ": Run the following command to Uninstall setroubleshoot : # yum remove setroubleshoot 122 | P a g e CIS Controls: Controls Version Control IG 1 IG 2 IG 3 v8 4.8 Uninstall or Disable Unnecessary Services on Enterprise Assets and Software Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function. \u25cf \u25cf v7 14.6 Protect Information through Access Control Lists Protect all information stored on systems with file system, network share, claims, application, or database specific access control lists. These controls will enforce the principle that only authorized individuals should have access to the i nformation based on their need to access the information as a part of their responsibilities. \u25cf \u25cf \u25cf 123 | P a g e",
       "impact": "None",
       "audit_command": "Verify setroubleshoot is not installed. Run the following command: # rpm -q setroubleshoot package setroubleshoot is not installed",
-      "expected_status": "installed"
+      "package_name": "setroubleshoot",
+      "expected_status": "not_installed"
     },
     {
       "id": "1.6.1.8",
@@ -110,7 +112,7 @@
       "remediation": "Refer to CIS Benchmark documentation",
       "impact": "None",
       "audit_command": "Manual review required",
-      "expected_status": "installed"
+      "expected_status": "not_installed"
     }
   ]
 }
